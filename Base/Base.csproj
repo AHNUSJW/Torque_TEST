@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BA276100-8C3F-43EB-848E-66723E0DC931}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Base</RootNamespace>
+    <AssemblyName>Base</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GenerateCode, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\GenerateCode.dll</HintPath>
+    </Reference>
+    <Reference Include="HZH_Controls">
+      <HintPath>..\packages\HZH_Controls.1.0.14\lib\net40\HZH_Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="libs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\libs.dll</HintPath>
+    </Reference>
+    <Reference Include="LicenseActivation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\LicenseActivation.dll</HintPath>
+    </Reference>
+    <Reference Include="RecXF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\RecXF.dll</HintPath>
+    </Reference>
+    <Reference Include="ScottPlot, Version=4.1.14.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScottPlot.4.1.14\lib\net461\ScottPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="ScottPlot.WinForms, Version=4.1.14.0, Culture=neutral, PublicKeyToken=5df1dfa5321e734b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScottPlot.WinForms.4.1.14\lib\net461\ScottPlot.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing.Common, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.5.0.0\lib\net461\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="zxing, Version=0.16.9.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.9\lib\net461\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.9.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.9\lib\net461\zxing.presentation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="UI\MenuDevice\MenuDeviceSetForm3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuDevice\MenuDeviceSetForm3.Designer.cs">
+      <DependentUpon>MenuDeviceSetForm3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuDevice\MenuDeviceSetForm2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuDevice\MenuDeviceSetForm2.Designer.cs">
+      <DependentUpon>MenuDeviceSetForm2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuDevice\MenuQuickConnectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuDevice\MenuQuickConnectForm.Designer.cs">
+      <DependentUpon>MenuQuickConnectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHelp\MenuModelSelectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHelp\MenuModelSelectForm.Designer.cs">
+      <DependentUpon>MenuModelSelectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHomework\ImportTicketForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHomework\ImportTicketForm.Designer.cs">
+      <DependentUpon>ImportTicketForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHomework\MenuManageWrenchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHomework\MenuManageWrenchForm.Designer.cs">
+      <DependentUpon>MenuManageWrenchForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHomework\MenuTicketWorkForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHomework\MenuTicketWorkForm.Designer.cs">
+      <DependentUpon>MenuTicketWorkForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHomework\SearchSrcewInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHomework\SearchSrcewInfoForm.Designer.cs">
+      <DependentUpon>SearchSrcewInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHomework\MenuManageScrewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHomework\MenuManageScrewForm.Designer.cs">
+      <DependentUpon>MenuManageScrewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHomework\MenuManageTicketForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHomework\MenuManageTicketForm.Designer.cs">
+      <DependentUpon>MenuManageTicketForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHomework\SearchWrenchInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHomework\SearchWrenchInfoForm.Designer.cs">
+      <DependentUpon>SearchWrenchInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHomework\TicketScrewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHomework\TicketScrewForm.Designer.cs">
+      <DependentUpon>TicketScrewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHomework\TicketInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHomework\TicketInfoForm.Designer.cs">
+      <DependentUpon>TicketInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHomework\WrenchInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHomework\WrenchInfoForm.Designer.cs">
+      <DependentUpon>WrenchInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\XhTorqueShow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\XhTorqueShow.Designer.cs">
+      <DependentUpon>XhTorqueShow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\MenuData\MenuDataAnalysisForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuData\MenuDataAnalysisForm.Designer.cs">
+      <DependentUpon>MenuDataAnalysisForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuData\MenuDataManageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuData\MenuDataManageForm.Designer.cs">
+      <DependentUpon>MenuDataManageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuDevice\MenuActualDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuDevice\MenuActualDataForm.Designer.cs">
+      <DependentUpon>MenuActualDataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuDevice\MenuConnectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuDevice\MenuConnectForm.Designer.cs">
+      <DependentUpon>MenuConnectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuDevice\MenuDeviceSetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuDevice\MenuDeviceSetForm.Designer.cs">
+      <DependentUpon>MenuDeviceSetForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuHomework\MenuCreateTicketForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuHomework\MenuCreateTicketForm.Designer.cs">
+      <DependentUpon>MenuCreateTicketForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuUser\MenuAccountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MenuUser\MenuAccountForm.Designer.cs">
+      <DependentUpon>MenuAccountForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MyControl\ButtonX.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="UI\MenuDevice\MenuDeviceSetForm3.resx">
+      <DependentUpon>MenuDeviceSetForm3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuDevice\MenuDeviceSetForm2.resx">
+      <DependentUpon>MenuDeviceSetForm2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuDevice\MenuQuickConnectForm.resx">
+      <DependentUpon>MenuQuickConnectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHelp\MenuModelSelectForm.resx">
+      <DependentUpon>MenuModelSelectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHomework\ImportTicketForm.resx">
+      <DependentUpon>ImportTicketForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHomework\MenuManageScrewForm.resx">
+      <DependentUpon>MenuManageScrewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHomework\MenuManageTicketForm.resx">
+      <DependentUpon>MenuManageTicketForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHomework\MenuManageWrenchForm.resx">
+      <DependentUpon>MenuManageWrenchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHomework\MenuTicketWorkForm.resx">
+      <DependentUpon>MenuTicketWorkForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHomework\SearchSrcewInfoForm.resx">
+      <DependentUpon>SearchSrcewInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHomework\SearchWrenchInfoForm.resx">
+      <DependentUpon>SearchWrenchInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHomework\TicketScrewForm.resx">
+      <DependentUpon>TicketScrewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHomework\TicketInfoForm.resx">
+      <DependentUpon>TicketInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHomework\WrenchInfoForm.resx">
+      <DependentUpon>WrenchInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\XhTorqueShow.resx">
+      <DependentUpon>XhTorqueShow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuData\MenuDataAnalysisForm.resx">
+      <DependentUpon>MenuDataAnalysisForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuData\MenuDataManageForm.resx">
+      <DependentUpon>MenuDataManageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuDevice\MenuActualDataForm.resx">
+      <DependentUpon>MenuActualDataForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuDevice\MenuConnectForm.resx">
+      <DependentUpon>MenuConnectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuDevice\MenuDeviceSetForm.resx">
+      <DependentUpon>MenuDeviceSetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuHomework\MenuCreateTicketForm.resx">
+      <DependentUpon>MenuCreateTicketForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuUser\MenuAccountForm.resx">
+      <DependentUpon>MenuAccountForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\MenuInternet\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DBHelper\DBHelper.csproj">
+      <Project>{925af7c6-37da-448c-9f5c-be227d9506d2}</Project>
+      <Name>DBHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Library\Library.csproj">
+      <Project>{6828B7F1-EE18-4F51-A4D9-F1050DE8BC09}</Project>
+      <Name>Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{0BF3C8A7-08D9-4BE0-A5DC-DBA8CECBF1FE}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="C:\Users\Ricardo.Sun\Desktop\GenerateCode\GenerateCode_S1\GenerateCode\bin\Debug\GenerateCode.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
