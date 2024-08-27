@@ -112,7 +112,6 @@ namespace Base.UI.MenuDevice
 
             //设备号
             List<KeyValuePair<string, string>> device_Mode = new List<KeyValuePair<string, string>>();
-            ucCombox2.Source = new List<KeyValuePair<string, string>>();
             for (int i = 0; i < MyDevice.devSum; i++)
             {
                 if ((MyDevice.protocol.type == COMP.XF && MyDevice.mXF[MyDevice.AddrList[i]].sTATE == STATE.WORKING) ||
@@ -144,12 +143,6 @@ namespace Base.UI.MenuDevice
             }
 
             if (device_Mode.Count == 0) return;//无效设备，终止函数
-
-            ucCombox2.Source = device_Mode;
-            MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) = 0;
-            ucCombox2.ConerRadius = 2;
-            ucCombox2.RectColor = SystemColors.GradientActiveCaption;
-            ucCombox2.BoxStyle = ComboBoxStyle.DropDownList;
 
             #endregion
 
@@ -277,8 +270,8 @@ namespace Base.UI.MenuDevice
         {
             if (myPictures.Count > 0)
             {
-                MyDevice.myTaskManager.SelectedDev = Convert.ToByte(ucCombox2.TextValue);
-                MyDevice.protocol.addr = Convert.ToByte(ucCombox2.TextValue);
+                //MyDevice.myTaskManager.SelectedDev = Convert.ToByte(ucCombox2.TextValue);
+                //MyDevice.protocol.addr = Convert.ToByte(ucCombox2.TextValue);
 
                 //TCP模式要切换端口
                 if (MyDevice.protocol.type == COMP.TCP)
@@ -1083,7 +1076,7 @@ namespace Base.UI.MenuDevice
                 else
                 {
                     //画详细信息分析
-                    g.DrawString("设备ID: " + ucCombox2.TextValue, new Font("Arial", 8), Brushes.CadetBlue, x + 5, pictureBox1.Height / 2 + 20);
+                    g.DrawString("设备ID: " + MyDevice.protocol.addr, new Font("Arial", 8), Brushes.CadetBlue, x + 5, pictureBox1.Height / 2 + 20);
                     g.DrawString("扭矩: " + torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)][torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count - 5000 + idx].ToString(), new Font("Arial", 8), Brushes.CadetBlue, x + 5, pictureBox1.Height / 2 + 40);
                     g.DrawString("角度: " + angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)][angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count - 5000 + idx].ToString(), new Font("Arial", 8), Brushes.CadetBlue, x + 5, pictureBox1.Height / 2 + 60);
                     g.DrawString("扭矩峰值: " + torquePeak.ToString() + torqueUnit, new Font("Arial", 8), Brushes.CadetBlue, x + 5, pictureBox1.Height / 2 + 80);
