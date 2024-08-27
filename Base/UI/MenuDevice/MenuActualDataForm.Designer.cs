@@ -33,7 +33,6 @@
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.ucCombox2 = new HZH_Controls.Controls.UCCombox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -89,7 +88,6 @@
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.ucCombox2);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -97,33 +95,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(380, 129);
             this.panel1.TabIndex = 0;
-            // 
-            // ucCombox2
-            // 
-            this.ucCombox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ucCombox2.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox2.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox2.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
-            this.ucCombox2.ConerRadius = 5;
-            this.ucCombox2.DropPanelHeight = -1;
-            this.ucCombox2.FillColor = System.Drawing.Color.White;
-            this.ucCombox2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox2.IsRadius = true;
-            this.ucCombox2.IsShowRect = true;
-            this.ucCombox2.ItemWidth = 70;
-            this.ucCombox2.Location = new System.Drawing.Point(151, 18);
-            this.ucCombox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox2.Name = "ucCombox2";
-            this.ucCombox2.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.ucCombox2.RectWidth = 1;
-            this.ucCombox2.SelectedIndex = -1;
-            this.ucCombox2.SelectedValue = "";
-            this.ucCombox2.Size = new System.Drawing.Size(150, 32);
-            this.ucCombox2.Source = null;
-            this.ucCombox2.TabIndex = 176;
-            this.ucCombox2.TextValue = null;
-            this.ucCombox2.TriangleColor = System.Drawing.Color.CadetBlue;
-            this.ucCombox2.SelectedChangedEvent += new System.EventHandler(this.ucCombox2_SelectedChangedEvent);
             // 
             // label2
             // 
@@ -414,7 +385,6 @@
         private HZH_Controls.Controls.UCCombox ucCombox1;
         private System.Windows.Forms.Button btn_Clear;
         private System.Windows.Forms.Label label5;
-        private HZH_Controls.Controls.UCCombox ucCombox2;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
