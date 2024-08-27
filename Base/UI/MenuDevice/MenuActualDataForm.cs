@@ -1,4 +1,5 @@
 ﻿using DBHelper;
+using HZH_Controls.Controls;
 using Library;
 using Model;
 using System;
@@ -150,6 +151,23 @@ namespace Base.UI.MenuDevice
             //myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = new DrawPicture(pictureBox1.Height, pictureBox1.Width, BackgroundImageType.OnlyXYAxis);
 
             MyDevice.myTaskManager.SelectedDev = MyDevice.AddrList[0];
+            MyDevice.protocol.addr = MyDevice.AddrList[0];
+
+            //TCP模式要切换端口
+            if (MyDevice.protocol.type == COMP.TCP)
+            {
+                //防止字典查询溢出
+                if (MyDevice.addr_ip.ContainsKey(MyDevice.protocol.addr.ToString()) &&
+                    MyDevice.clientConnectionItems.ContainsKey(MyDevice.addr_ip[MyDevice.protocol.addr.ToString()])
+                    )
+                {
+                    MyDevice.protocol.port = MyDevice.clientConnectionItems[MyDevice.addr_ip[MyDevice.protocol.addr.ToString()]];
+                }
+                else
+                {
+                    return;
+                }
+            }
             actXET = MyDevice.actDev;
             actXET.torqueMultiple = (int)Math.Pow(10, actXET.devc.torque_decimal);
             actXET.angleMultiple = (int)Math.Pow(10, actXET.para.angle_decimal);
@@ -1405,6 +1423,54 @@ namespace Base.UI.MenuDevice
                         break;
                     default:
                         break;
+                }
+
+                //收到指令切换设备
+                if (myPictures.Count > 0)
+                {
+                    //MyDevice.myTaskManager.SelectedDev = Convert.ToByte(ucCombox2.TextValue);
+                    //MyDevice.protocol.addr = Convert.ToByte(ucCombox2.TextValue);
+                    MyDevice.myTaskManager.SelectedDev = MyDevice.AddrList[(MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) + 1) % MyDevice.AddrList.Count];
+                    MyDevice.protocol.addr = MyDevice.AddrList[(MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) + 1) % MyDevice.AddrList.Count];
+
+                    //TCP模式要切换端口
+                    if (MyDevice.protocol.type == COMP.TCP)
+                    {
+                        //防止字典查询溢出
+                        if (MyDevice.addr_ip.ContainsKey(MyDevice.protocol.addr.ToString()) &&
+                            MyDevice.clientConnectionItems.ContainsKey(MyDevice.addr_ip[MyDevice.protocol.addr.ToString()])
+                            )
+                        {
+                            MyDevice.protocol.port = MyDevice.clientConnectionItems[MyDevice.addr_ip[MyDevice.protocol.addr.ToString()]];
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+
+                    //更新设备
+                    actXET = MyDevice.actDev;
+                    actXET.torqueMultiple = (int)Math.Pow(10, actXET.devc.torque_decimal);
+                    actXET.angleMultiple = (int)Math.Pow(10, actXET.para.angle_decimal);
+
+                    //更新作业号
+                    if (snbatArr != null)
+                    {
+                        actXET.snBat = snbatArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                        actXET.opsn = actXET.wlan.addr + opsnTimeArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] + " " + actXET.snBat.ToString().PadLeft(4, '0');
+
+                        if (!TorquedataGroups.ContainsKey(actXET.opsn))
+                        {
+                            TorquedataGroups.Add(actXET.opsn, new List<double>());
+                            AngledataGroups.Add(actXET.opsn, new List<double>());
+                            dataGroupResults.Add(actXET.opsn, false);
+                        }
+                    }
+
+                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Width = pictureBox1.Width;
+                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Height = pictureBox1.Height;
+                    ucCombox1_SelectedChangedEvent(null, null);
                 }
             };
             Invoke(action);
