@@ -1428,8 +1428,6 @@ namespace Base.UI.MenuDevice
                 //收到指令切换设备
                 if (myPictures.Count > 0)
                 {
-                    //MyDevice.myTaskManager.SelectedDev = Convert.ToByte(ucCombox2.TextValue);
-                    //MyDevice.protocol.addr = Convert.ToByte(ucCombox2.TextValue);
                     MyDevice.myTaskManager.SelectedDev = MyDevice.AddrList[(MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) + 1) % MyDevice.AddrList.Count];
                     MyDevice.protocol.addr = MyDevice.AddrList[(MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) + 1) % MyDevice.AddrList.Count];
 
@@ -1470,7 +1468,7 @@ namespace Base.UI.MenuDevice
 
                     myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Width = pictureBox1.Width;
                     myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Height = pictureBox1.Height;
-                    ucCombox1_SelectedChangedEvent(null, null);
+                    //ucCombox1_SelectedChangedEvent(null, null);
                 }
             };
             Invoke(action);

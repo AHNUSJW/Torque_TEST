@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Library
@@ -540,7 +542,7 @@ namespace Library
 
             return img;
         }
-                                                                                                                                                                                                                                                                                                                                                                                                            
+        
         /// <summary>
         /// 画网格线
         /// </summary>
@@ -598,5 +600,204 @@ namespace Library
             }
 
         }
+
+        #region 画多设备曲线 Ricardo
+
+        //画上层(提供y坐标)—— 多设备
+        public Bitmap GetForegroundImageFromDevs(params double[][] datas)
+        {
+            //层图
+            Bitmap img = new Bitmap(Width, Height);
+
+            //绘制
+            Graphics g = Graphics.FromImage(img);
+
+            //设置曲线呈现质量（此模式可以避免画直线出现轻微折痕现象）
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+            //画网格线
+            DrawPictureGrid(g);
+
+            // 遍历每个数组，并分别绘制曲线
+            for (int i = 0; i < datas.Length; i++)
+            {
+                // 计算点位
+                List<PointF> points = GetDataToPointF(datas[i], imageType);
+
+                // 画图
+                if (points.Count >= 2)
+                {
+                    g.DrawCurve(new Pen(drawLines[(i + 3) % drawLines.Length], 1.0f), points.ToArray(), 0);//i + 3是为了从颜色blue开始
+                }
+            }
+
+            g.Dispose();
+
+            return img;
+        }
+
+        //画上层(提供x坐标和y坐标)
+        public Bitmap GetForegroundImage_TwoFromDevs(params Tuple<double[], double[]>[] curves)
+        {
+            //层图
+            Bitmap img = new Bitmap(Width, Height);
+
+            //绘制
+            Graphics g = Graphics.FromImage(img);
+
+            //设置曲线呈现质量（此模式可以避免画直线出现轻微折痕现象）
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+            //画网格线
+            DrawPictureGrid(g);
+
+            //遍历
+            foreach (var curve in curves)
+            {
+                double[] xDatas = curve.Item1;
+                double[] yDatas = curve.Item2;
+
+                // 计算间隔高度
+                double interval = (Height - 2 * TextInfo - OffsetY) / (LimitUpperLeftY - LimitLowerLeftY);
+
+                // 设置坐标集合
+                List<PointF> point1 = new List<PointF>();
+
+                // 将数据转换为坐标
+                int Cnt = xDatas.Length;
+                double xMin = Math.Abs(xDatas.Min()) > xDatas.Max() ? Math.Abs(xDatas.Min()) : xDatas.Max();
+
+                for (int i = 0; i < Cnt; i++)
+                {
+                    point1.Add(new PointF(
+                        (float)(TextInfo + xMin + xDatas[i]),
+                        (float)(Height - TextInfo - interval * (yDatas[i] - LimitLowerLeftY))
+                    ));
+                }
+
+                // 将当前曲线的点集合添加到points列表中
+                points.Add(point1);
+            }
+
+            // 绘制所有曲线
+            for (int i = 0; i < points.Count; i++)
+            {
+                if (points[i].Count < 2) continue;
+                g.DrawCurve(new Pen(drawLines[(i + 3) % drawLines.Length], 1.0f), points[i].ToArray(), 0);
+            }
+
+            g.Dispose();
+
+            return img;
+        }
+        
+        //获取点位
+        public List<PointF> GetDataToPointF(double[] data, BackgroundImageType targetImageType)
+        {
+            List<PointF> points = new List<PointF>();
+
+            //计算坐标点
+            switch (targetImageType)
+            {
+                case BackgroundImageType.OnlyXAxis:
+                    GetDataToPointFTypeOne(data);
+                    break;
+                case BackgroundImageType.OnlyXYAxis:
+                    GetDataToPointFTypeTwo(data);
+                    break;
+                case BackgroundImageType.OneXTwoYAxis:
+                    GetDataToPointFTypeThree(data);
+                    break;
+            }
+
+            return points;
+        }
+
+        //轴模式一计算坐标
+        public List<PointF> GetDataToPointFTypeOne(double[] data)
+        {
+            //初始化一个空的list存储点坐标
+            List<PointF> pointsTypeOne = new List<PointF>();
+
+            //间隔高度
+            double interval = (Height - 2 * TextInfo) / (LimitUpperLeftY - LimitLowerLeftY);
+
+            //计算起始坐标数；超过图形范围不显示
+            int index = data.Length - (StopIdx - StartIdx);
+            index = index < 0 ? 0 : index;
+
+            for (int i = index; i < data.Length; i++)
+            {
+                pointsTypeOne.Add(new PointF(TextInfo + i - index, (float)(Height - TextInfo - interval * (data[i] - LimitLowerLeftY))));
+            }
+
+            return pointsTypeOne;
+        }
+
+        //轴模式二计算坐标
+        public List<PointF> GetDataToPointFTypeTwo(double[] data)
+        {
+            //初始化一个空的list存储点坐标
+            List<PointF> pointsTypeTwo = new List<PointF>();
+
+            int px;     //求x坐标
+            int py;     //求x坐标
+
+            //间隔高度
+            double interval = (Height - 2 * TextInfo - OffsetY) / (LimitUpperLeftY - LimitLowerLeftY);
+
+            //计算起始坐标数
+            int index = 0;
+
+            //数据量 < 图像宽度总像素（无需压缩曲线）
+            if (data.Length < StopIdx - StartIdx)
+            {
+                for (int i = index; i < data.Length; i++)
+                {
+                    px = StartIdx + OffsetX + i - index;
+                    py = (int)(Height - TextInfo - interval * (data[i] - LimitLowerLeftY));
+                    pointsTypeTwo.Add(new Point(px, py));
+                }
+
+            }
+            //数据量 > 图像宽度总像素（压缩曲线）
+            else
+            {
+                for (int i = index; i < data.Length; i++)
+                {
+                    //坐标x压缩原则:  数量 / 像素和 = index / px
+                    px = (StartIdx + OffsetX) + (i - index) * (StopIdx - StartIdx) / data.Length;
+                    py = (int)(Height - TextInfo - interval * (data[i] - LimitLowerLeftY));
+                    pointsTypeTwo.Add(new Point(px, py));
+                }
+            }
+
+            return pointsTypeTwo;
+        }
+
+        //轴模式三计算坐标
+        public List<PointF> GetDataToPointFTypeThree(double[] data)
+        {
+            //初始化一个空的list存储点坐标
+            List<PointF> pointsTypeThree = new List<PointF>();
+
+            //间隔高度
+            double intervalLeft = (Height - 2 * TextInfo - OffsetY) / (LimitUpperLeftY - LimitLowerLeftY);
+            double intervalRight = (Height - 2 * TextInfo - OffsetY) / (LimitUpperRightY - LimitLowerRightY);
+
+            //计算起始坐标数；超过图形范围不显示
+            int index = data.Length - (StopIdx - StartIdx);
+            index = index < 0 ? 0 : index;
+
+            for (int i = index; i < data.Length; i++)
+            {
+                pointsTypeThree.Add(new PointF(StartIdx + OffsetX + i - index, (float)(Height - TextInfo - intervalLeft * (data[i] - LimitLowerLeftY))));
+            }
+
+            return pointsTypeThree;
+        }
+
+        #endregion
+
     }
 }
