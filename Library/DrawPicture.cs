@@ -637,7 +637,7 @@ namespace Library
         }
 
         //画上层(提供x坐标和y坐标)
-        public Bitmap GetForegroundImage_TwoFromDevs(params Tuple<double[], double[]>[] curves)
+        public Bitmap GetForegroundImageFromDevs_Two(params Tuple<double[], double[]>[] curves)
         {
             //层图
             Bitmap img = new Bitmap(Width, Height);
@@ -700,13 +700,13 @@ namespace Library
             switch (targetImageType)
             {
                 case BackgroundImageType.OnlyXAxis:
-                    GetDataToPointFTypeOne(data);
+                    points = GetDataToPointFTypeOne(data);
                     break;
                 case BackgroundImageType.OnlyXYAxis:
-                    GetDataToPointFTypeTwo(data);
+                    points = GetDataToPointFTypeTwo(data);
                     break;
                 case BackgroundImageType.OneXTwoYAxis:
-                    GetDataToPointFTypeThree(data);
+                    points = GetDataToPointFTypeThree(data);
                     break;
             }
 

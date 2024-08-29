@@ -43,6 +43,7 @@ namespace Base.UI.MenuDevice
         private List<double> newAngleLower = new List<double>();                //新角度坐标下限
 
         private List<DrawPicture> myPictures = new List<DrawPicture>();         //绘图
+        private DrawPicture myDrawPicture = new DrawPicture();                  //汇总图
         private List<List<double>> torqueLists = new List<List<double>>();      //扭矩集合，用于画扭矩曲线
         private List<List<double>> angleLists = new List<List<double>>();       //角度集合，用于画角度曲线
         private List<PointF> PointList = new List<PointF>();
@@ -221,9 +222,9 @@ namespace Base.UI.MenuDevice
         {
             if (myPictures.Count > 0)
             {
-                myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Width = pictureBox1.Width;
-                myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Height = pictureBox1.Height;
-                pictureBox1.BackgroundImage = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetBackgroundImage();
+                myDrawPicture.Width = pictureBox1.Width;
+                myDrawPicture.Height = pictureBox1.Height;
+                pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
 
                 dataGridView1.Columns[0].Width = this.dataGridView1.Width * 1 / 10;
                 dataGridView1.Columns[1].Width = this.dataGridView1.Width * 25 / 100;
@@ -245,40 +246,53 @@ namespace Base.UI.MenuDevice
 
             if (myPictures.Count > 0)
             {
-                myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = new DrawPicture(pictureBox1.Height, pictureBox1.Width, BackgroundImageType.OnlyXYAxis);
+                myDrawPicture = new DrawPicture(pictureBox1.Height, pictureBox1.Width, BackgroundImageType.OnlyXYAxis);
 
-                //横轴数量(网格)
-                myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].HorizontalAxisNum = 11;
+                //画x轴,y轴,网格
+                myDrawPicture.HorizontalAxisNum = 11;
+
+                //扭矩数组和角度数组
+                double[][] torqueData = { };
+                double[][] angleData = { };
 
                 if (ucCombox1.SelectedIndex == 0 && torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
                 {
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitUpperLeftY = newTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitLowerLeftY = newTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                    myDrawPicture.LimitUpperLeftY = newTorqueUpper.Max();
+                    myDrawPicture.LimitLowerLeftY = newTorqueLower.Min();
+                    pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
 
-                    //画x轴,y轴,网格
-                    pictureBox1.BackgroundImage = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetBackgroundImage();
-
-                    pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage(torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].ToArray());
+                    // 将 List<List<double>> 转换为 double[][]
+                    torqueData = torqueLists.ConvertAll(list => list.ToArray()).ToArray();
+                    pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs(torqueData);
                 }
                 else if (ucCombox1.SelectedIndex == 1 && angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
                 {
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitUpperLeftY = newAngleUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitLowerLeftY = newAngleLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                    myDrawPicture.LimitUpperLeftY = newAngleUpper.Max();
+                    myDrawPicture.LimitLowerLeftY = newAngleLower.Min();
+                    pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
 
-                    //画x轴,y轴,网格
-                    pictureBox1.BackgroundImage = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetBackgroundImage();
-
-                    pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage(angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].ToArray());
+                    // 将 List<List<double>> 转换为 double[][]
+                    angleData = angleLists.ConvertAll(list => list.ToArray()).ToArray();
+                    pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs(angleData);
                 }
                 else if (ucCombox1.SelectedIndex == 2 && torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
                 {
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitUpperLeftY = newTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitLowerLeftY = newTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                    myDrawPicture.LimitUpperLeftY = newTorqueUpper.Max();
+                    myDrawPicture.LimitLowerLeftY = newTorqueLower.Min();
+                    pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
 
-                    //画x轴,y轴,网格
-                    pictureBox1.BackgroundImage = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetBackgroundImage();
+                    torqueData = torqueLists.ConvertAll(list => list.ToArray()).ToArray();
+                    angleData = angleLists.ConvertAll(list => list.ToArray()).ToArray();
 
-                    pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage_Two(angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].ToArray(), torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].ToArray());
+                    // 创建存储 Tuple 的数组
+                    Tuple<double[], double[]>[] curves = new Tuple<double[], double[]>[torqueData.Length];
+
+                    // 遍历数组，创建 Tuple 并添加到 curves 数组中
+                    for (int i = 0; i < torqueData.Length; i++)
+                    {
+                        curves[i] = Tuple.Create(angleData[i], torqueData[i]);
+                    }
+                    pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_Two(curves);
                 }
             }
         }
@@ -345,10 +359,10 @@ namespace Base.UI.MenuDevice
                 torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Clear();
                 angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Clear();
                 pictureBox1.Image = null;
-                myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = new DrawPicture(pictureBox1.Height, pictureBox1.Width, BackgroundImageType.OnlyXYAxis);
+                myDrawPicture = new DrawPicture(pictureBox1.Height, pictureBox1.Width, BackgroundImageType.OnlyXYAxis);
 
                 //画x轴,y轴,网格
-                pictureBox1.BackgroundImage = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetBackgroundImage();
+                pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
 
                 oldTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = 0;
                 oldTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = 0;
@@ -851,19 +865,19 @@ namespace Base.UI.MenuDevice
             {
                 case 0:
                     //x轴上下限
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitLowerX = 0;
+                    myDrawPicture.LimitLowerX = 0;
 
                     //y轴上下限
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitUpperLeftY = newTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitLowerLeftY = newTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                    myDrawPicture.LimitUpperLeftY = newTorqueUpper.Max();
+                    myDrawPicture.LimitLowerLeftY = newTorqueLower.Min();
                     break;
                 case 1:
                     //x轴上下限
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitLowerX = 0;
+                    myDrawPicture.LimitLowerX = 0;
 
                     //y轴上下限
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitUpperLeftY = newAngleUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitLowerLeftY = newAngleLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                    myDrawPicture.LimitUpperLeftY = newAngleUpper.Max();
+                    myDrawPicture.LimitLowerLeftY = newAngleLower.Min();
                     break;
                 case 2:
                     break;
@@ -872,7 +886,7 @@ namespace Base.UI.MenuDevice
             }
 
             //横轴数量(网格)
-            myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].HorizontalAxisNum = 11;
+            myDrawPicture.HorizontalAxisNum = 11;
 
             //画x轴,y轴,网格
             //pictureBox1.BackgroundImage = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetBackgroundImage();
@@ -896,73 +910,72 @@ namespace Base.UI.MenuDevice
                         angle = angleOld;
                     }
 
-                    ////遇到数据就更新曲线
-                    //if (ucCombox1.SelectedIndex == 0)
-                    //{
-                    //    pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage(torque);
-                    //}
-                    //else if (ucCombox1.SelectedIndex == 1)
-                    //{
-                    //    pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage(angle);
-                    //}
-                    //else if (ucCombox1.SelectedIndex == 2)
-                    //{
-                    //    pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage_Two(angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].ToArray(), torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].ToArray());
-                    //}
-
                     //遇到数据F2/F3才更新曲线
                     if (actXET.data[i].dtype == 0xF2 || actXET.data[i].dtype == 0xF3)
                     {
-                        pictureBox1.BackgroundImage = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetBackgroundImage();//画x轴,y轴
+                        pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();//画x轴,y轴
                         pictureBox1.Image = null;
 
                         if (myPictures.Count > 0)
                         {
-                            myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = new DrawPicture(pictureBox1.Height, pictureBox1.Width, BackgroundImageType.OnlyXYAxis);
+                            myDrawPicture = new DrawPicture(pictureBox1.Height, pictureBox1.Width, BackgroundImageType.OnlyXYAxis);
 
                             //横轴数量(网格)
-                            myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].HorizontalAxisNum = 11;
+                            myDrawPicture.HorizontalAxisNum = 11;
+
+                            //扭矩数组和角度数组
+                            double[][] torqueData = { };
+                            double[][] angleData = { };
 
                             if (ucCombox1.SelectedIndex == 0 && torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
                             {
-                                myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitUpperLeftY = newTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
-                                myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitLowerLeftY = newTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                                myDrawPicture.LimitUpperLeftY = newTorqueUpper.Max();
+                                myDrawPicture.LimitLowerLeftY = newTorqueLower.Min();
+                                pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
 
-                                //画x轴,y轴,网格
-                                pictureBox1.BackgroundImage = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetBackgroundImage();
-
-                                pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage(torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].ToArray());
+                                // 将 List<List<double>> 转换为 double[][]
+                                torqueData = torqueLists.ConvertAll(list => list.ToArray()).ToArray();
+                                pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs(torqueData);
                             }
                             else if (ucCombox1.SelectedIndex == 1 && angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
                             {
-                                myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitUpperLeftY = newAngleUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
-                                myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitLowerLeftY = newAngleLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                                myDrawPicture.LimitUpperLeftY = newAngleUpper.Max();
+                                myDrawPicture.LimitLowerLeftY = newAngleLower.Min();
+                                pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
 
-                                //画x轴,y轴,网格
-                                pictureBox1.BackgroundImage = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetBackgroundImage();
-
-                                pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage(angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].ToArray());
+                                // 将 List<List<double>> 转换为 double[][]
+                                angleData = angleLists.ConvertAll(list => list.ToArray()).ToArray();
+                                pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs(angleData);
                             }
                             else if (ucCombox1.SelectedIndex == 2 && torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
                             {
-                                myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitUpperLeftY = newTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
-                                myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].LimitLowerLeftY = newTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
-
-                                //画x轴,y轴,网格
-                                pictureBox1.BackgroundImage = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetBackgroundImage();
+                                myDrawPicture.LimitUpperLeftY = newTorqueUpper.Max();
+                                myDrawPicture.LimitLowerLeftY = newTorqueLower.Min();
+                                pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
 
                                 //06按照dtype=F2划分成n段，实时更新最后一段
                                 if (actXET.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || actXET.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
                                 {
-                                    pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage_Two(angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].ToArray(), torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].ToArray());
+                                    torqueData = torqueLists.ConvertAll(list => list.ToArray()).ToArray();
+                                    angleData = angleLists.ConvertAll(list => list.ToArray()).ToArray();
+
+                                    // 创建存储 Tuple 的数组
+                                    Tuple<double[], double[]>[] curves = new Tuple<double[], double[]>[torqueData.Length];
+
+                                    // 遍历数组，创建 Tuple 并添加到 curves 数组中
+                                    for (int j = 0; j < torqueData.Length; j++)
+                                    {
+                                        curves[j] = Tuple.Create(angleData[j], torqueData[j]);
+                                    }
+                                    pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_Two(curves);
                                 }
 
-                                //07按照dtype=F3划分成n段，实时更新最后一段
-                                if (actXET.data[i].dtype == 0xF3)
-                                {
-                                    string index = AngledataGroups.Keys.ElementAt(AngledataGroups.Count - 2);//当前作业号的上一个
-                                    pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage_Two(AngledataGroups[index].ToArray(), TorquedataGroups[index].ToArray());
-                                }     
+                                ////07按照dtype=F3划分成n段，实时更新最后一段
+                                //if (actXET.data[i].dtype == 0xF3)
+                                //{
+                                //    string index = AngledataGroups.Keys.ElementAt(AngledataGroups.Count - 2);//当前作业号的上一个
+                                //    pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage_Two(AngledataGroups[index].ToArray(), TorquedataGroups[index].ToArray());
+                                //}     
                             }
                         }
                     }
@@ -1466,8 +1479,8 @@ namespace Base.UI.MenuDevice
                         }
                     }
 
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Width = pictureBox1.Width;
-                    myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Height = pictureBox1.Height;
+                    myDrawPicture.Width = pictureBox1.Width;
+                    myDrawPicture.Height = pictureBox1.Height;
                     //ucCombox1_SelectedChangedEvent(null, null);
                 }
             };

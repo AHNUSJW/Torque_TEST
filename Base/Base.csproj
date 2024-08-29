@@ -344,8 +344,5 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="C:\Users\Ricardo.Sun\Desktop\GenerateCode\GenerateCode_S1\GenerateCode\bin\Debug\GenerateCode.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
