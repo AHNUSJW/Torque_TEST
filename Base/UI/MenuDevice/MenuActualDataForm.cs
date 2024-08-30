@@ -144,6 +144,7 @@ namespace Base.UI.MenuDevice
                 }
             }
 
+            actXET = MyDevice.actDev;//确保点击表格时不会报错
             if (device_Mode.Count == 0) return;//无效设备，终止函数
 
             #endregion
