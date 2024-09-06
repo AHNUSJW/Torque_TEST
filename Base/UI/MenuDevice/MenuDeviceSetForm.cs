@@ -777,16 +777,16 @@ namespace Base.UI.MenuDevice
                     tb_adNeg4.Enabled = false;
                     tb_adNeg5.Enabled = false;
 
-                    tb_adPosOutPut1.Enabled = false;
-                    tb_adPosOutPut2.Enabled = false;
-                    tb_adPosOutPut3.Enabled = false;
-                    tb_adPosOutPut4.Enabled = false;
-                    tb_adPosOutPut5.Enabled = false;
-                    tb_adNegOutPut1.Enabled = false;
-                    tb_adNegOutPut2.Enabled = false;
-                    tb_adNegOutPut3.Enabled = false;
-                    tb_adNegOutPut4.Enabled = false;
-                    tb_adNegOutPut5.Enabled = false;
+                    tb_adPosOutPut1.Enabled = true;
+                    tb_adPosOutPut2.Enabled = true;
+                    tb_adPosOutPut3.Enabled = true;
+                    tb_adPosOutPut4.Enabled = true;
+                    tb_adPosOutPut5.Enabled = true;
+                    tb_adNegOutPut1.Enabled = true;
+                    tb_adNegOutPut2.Enabled = true;
+                    tb_adNegOutPut3.Enabled = true;
+                    tb_adNegOutPut4.Enabled = true;
+                    tb_adNegOutPut5.Enabled = true;
 
                     tb_screwMax.Enabled = false;
                     ucCombox_runMode.Enabled = true;
@@ -1343,15 +1343,15 @@ namespace Base.UI.MenuDevice
                 //actXET.para.screwmax = Convert.ToByte(tb_screwMax.InputText);
                 //actXET.para.runmode = Convert.ToByte(ucCombox_runMode.SelectedIndex);
 
-                //if (tb_adPosOutPut2.InputText != "") actXET.devc.ad_pos_point2 = Convert.ToInt32(tb_adPosOutPut2.InputText);
-                //if (tb_adPosOutPut3.InputText != "") actXET.devc.ad_pos_point3 = Convert.ToInt32(tb_adPosOutPut3.InputText);
-                //if (tb_adPosOutPut4.InputText != "") actXET.devc.ad_pos_point4 = Convert.ToInt32(tb_adPosOutPut4.InputText);
-                //if (tb_adPosOutPut5.InputText != "") actXET.devc.ad_pos_point5 = Convert.ToInt32(tb_adPosOutPut5.InputText);
-                //if (tb_adNegOutPut1.InputText != "") actXET.devc.ad_neg_point1 = Convert.ToInt32(tb_adNegOutPut1.InputText);
-                //if (tb_adNegOutPut2.InputText != "") actXET.devc.ad_neg_point2 = Convert.ToInt32(tb_adNegOutPut2.InputText);
-                //if (tb_adNegOutPut3.InputText != "") actXET.devc.ad_neg_point3 = Convert.ToInt32(tb_adNegOutPut3.InputText);
-                //if (tb_adNegOutPut4.InputText != "") actXET.devc.ad_neg_point4 = Convert.ToInt32(tb_adNegOutPut4.InputText);
-                //if (tb_adNegOutPut5.InputText != "") actXET.devc.ad_neg_point5 = Convert.ToInt32(tb_adNegOutPut5.InputText);
+                if (tb_adPosOutPut2.InputText != "") actXET.devc.ad_pos_point2 = Convert.ToInt32(tb_adPosOutPut2.InputText);
+                if (tb_adPosOutPut3.InputText != "") actXET.devc.ad_pos_point3 = Convert.ToInt32(tb_adPosOutPut3.InputText);
+                if (tb_adPosOutPut4.InputText != "") actXET.devc.ad_pos_point4 = Convert.ToInt32(tb_adPosOutPut4.InputText);
+                if (tb_adPosOutPut5.InputText != "") actXET.devc.ad_pos_point5 = Convert.ToInt32(tb_adPosOutPut5.InputText);
+                if (tb_adNegOutPut1.InputText != "") actXET.devc.ad_neg_point1 = Convert.ToInt32(tb_adNegOutPut1.InputText);
+                if (tb_adNegOutPut2.InputText != "") actXET.devc.ad_neg_point2 = Convert.ToInt32(tb_adNegOutPut2.InputText);
+                if (tb_adNegOutPut3.InputText != "") actXET.devc.ad_neg_point3 = Convert.ToInt32(tb_adNegOutPut3.InputText);
+                if (tb_adNegOutPut4.InputText != "") actXET.devc.ad_neg_point4 = Convert.ToInt32(tb_adNegOutPut4.InputText);
+                if (tb_adNegOutPut5.InputText != "") actXET.devc.ad_neg_point5 = Convert.ToInt32(tb_adNegOutPut5.InputText);
             }
 
             selectNum = 0;
@@ -1366,7 +1366,7 @@ namespace Base.UI.MenuDevice
             List<TASKS> tasks = new List<TASKS>
             {
                 TASKS.REG_BLOCK5_INFO,
-                //TASKS.REG_BLOCK4_CAL,
+                TASKS.REG_BLOCK4_CAL,
             };
 
             for (int i = 0; i < ucDataGridView1.SelectRows.Count; i++)

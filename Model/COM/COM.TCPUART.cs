@@ -268,6 +268,8 @@ namespace Model
                     //完成一次连接。数据存储在state.buffer里，bytesRead为读取的长度。
                     int bytesRead = handler.EndReceive(ar);
 
+                    Console.WriteLine("接收" + bytesRead +"++++" + MyDevice.protocol.trTASK + DateTime.Now.ToString("HH:mm:ss:fff"));
+
                     if (bytesRead > 0)
                     {
                         byte[] a = new byte[bytesRead];
@@ -289,11 +291,19 @@ namespace Model
                             mePort_DataReceived();
                         }
 
-                        //粘包字节未处理干净(极少数情况，上述for循环基本上能清除)
+                        //粘包字节未处理干净(回复的包是上一个不同指令的回复)
                         if (rxRnt != 0)
                         {
-                            Console.WriteLine("粘包超出的字节未处理");
-                            MyDevice.protocol.Protocol_ClearState();
+                            //MyDevice.protocol.Protocol_ClearState();
+                            if (rxRnt >= 8)
+                            {
+                                while (rxRnt >= 8)
+                                {
+                                    mePort_DataReceived();
+                                }
+                            }
+                            mePort_DataRemove(rxRnt);
+                            Console.WriteLine("粘包处理成功！！！！！！");
                         }
 
                         // 发送数据byteData，回调函数SendCallback。容器handler
@@ -2494,6 +2504,18 @@ namespace Model
                         }
 
                         List<DSData> sqlDataList = new List<DSData>();//存入数据库的数据列表
+                        
+                        foreach (DATA data1 in MyDevice.mTCP[sAddress].data)
+                        {
+                            if (data1.dtype == 0xF2)
+                            {
+                                Console.WriteLine(data1.dtype + "++++++++++++++" + data1.stamp);
+                            }
+                            else
+                            {
+                                Console.WriteLine(data1.dtype + "______" + data1.stamp);
+                            }
+                        }
 
                         // 遍历数组并将每个元素的拷贝添加到 List 集合中
                         foreach (DATA data in MyDevice.mTCP[sAddress].data)
@@ -2750,11 +2772,10 @@ namespace Model
             }
 
             //解码
-            switch ((REG)mePort_GetUInt16(2))
+            switch (trTASK)
             {
-                case REG.REG_W_ZERO:
-                case REG.REG_W_POWEROFF:
-                    if (mePort_GetInt16(4) == 1)
+                case TASKS.WRITE_ZERO:
+                    if ((REG)mePort_GetUInt16(2) == REG.REG_WR_AD_ZERO && mePort_GetInt16(4) == 1)
                     {
                         //写命令的参数值是1
                         isEQ = true;
@@ -2766,8 +2787,21 @@ namespace Model
                         return;
                     }
                     break;
-                case REG.REG_W_KEYLOCK:
-                    if (mePort_GetUInt16(4) == 0xFFFF)
+                case TASKS.WRITE_POWEROFF:
+                    if ((REG)mePort_GetUInt16(2) == REG.REG_W_POWEROFF && mePort_GetInt16(4) == 1)
+                    {
+                        //写命令的参数值是1
+                        isEQ = true;
+                        mePort_DataRemove(8);
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+                case TASKS.WRITE_KEYLOCK:
+                    if ((REG)mePort_GetUInt16(2) == REG.REG_W_KEYLOCK && mePort_GetUInt16(4) == 0xFFFF)
                     {
                         //写命令的参数值是按键锁
                         isEQ = true;
@@ -2779,8 +2813,8 @@ namespace Model
                         return;
                     }
                     break;
-                case REG.REG_W_MEMABLE:
-                    if (mePort_GetInt16(4) == Convert.ToByte(MyDevice.userRole))
+                case TASKS.WRITE_MEMABLE:
+                    if ((REG)mePort_GetUInt16(2) == REG.REG_W_MEMABLE && mePort_GetInt16(4) == Convert.ToByte(MyDevice.userRole))
                     {
                         //写命令的参数值是角色权限
                         isEQ = true;
@@ -2822,10 +2856,10 @@ namespace Model
             }
 
             //解码
-            switch (mePort_GetUInt16(2))
+            switch (trTASK)
             {
-                case Constants.REG_BLOCK1_ID:
-                    if (mePort_GetInt16(4) == 0x10)
+                case TASKS.REG_BLOCK1_ID:
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK1_ID && mePort_GetInt16(4) == 0x10)
                     {
                         //连续写入的寄存器个数是0x10
                         isEQ = true;
@@ -2838,8 +2872,8 @@ namespace Model
                     }
                     break;
 
-                case Constants.REG_BLOCK2_PARA:
-                    if (mePort_GetInt16(4) == 0x20)
+                case TASKS.REG_BLOCK2_PARA:
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK2_PARA && mePort_GetInt16(4) == 0x20)
                     {
                         //连续写入的寄存器个数是0x20
                         isEQ = true;
@@ -2852,10 +2886,34 @@ namespace Model
                     }
                     break;
 
-                case Constants.REG_BLOCK3_WLAN:
-                case Constants.REG_BLOCK3_JOB:
-                case Constants.REG_BLOCK3_OP:
-                    if (mePort_GetInt16(4) == 0x30)
+                case TASKS.REG_BLOCK3_WLAN:
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK3_WLAN && mePort_GetInt16(4) == 0x30)
+                    {
+                        //连续写入的寄存器个数是0x30
+                        isEQ = true;
+                        mePort_DataRemove(0x08);
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+                case TASKS.REG_BLOCK3_JOB:
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK3_JOB && mePort_GetInt16(4) == 0x30)
+                    {
+                        //连续写入的寄存器个数是0x30
+                        isEQ = true;
+                        mePort_DataRemove(0x08);
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+                case TASKS.REG_BLOCK3_OP:
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK3_OP && mePort_GetInt16(4) == 0x30)
                     {
                         //连续写入的寄存器个数是0x30
                         isEQ = true;
@@ -2868,8 +2926,8 @@ namespace Model
                     }
                     break;
 
-                case Constants.REG_BLOCK4_CAL:
-                    if (mePort_GetInt16(4) == 0x40)
+                case TASKS.REG_BLOCK4_CAL:
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK4_CAL && mePort_GetInt16(4) == 0x40)
                     {
                         //连续写入的寄存器个数是0x40
                         isEQ = true;
@@ -2882,11 +2940,47 @@ namespace Model
                     }
                     break;
 
-                case Constants.REG_BLOCK5_INFO:
-                case Constants.REG_BLOCK5_AM1:
-                case Constants.REG_BLOCK5_AM2:
-                case Constants.REG_BLOCK5_AM3:
-                    if (mePort_GetInt16(4) == 0x50)
+                case TASKS.REG_BLOCK5_INFO:
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK5_INFO && mePort_GetInt16(4) == 0x50)
+                    {
+                        //连续写入的寄存器个数是0x50
+                        isEQ = true;
+                        mePort_DataRemove(0x08);
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+                case TASKS.REG_BLOCK5_AM1:
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK5_AM1 && mePort_GetInt16(4) == 0x50)
+                    {
+                        //连续写入的寄存器个数是0x50
+                        isEQ = true;
+                        mePort_DataRemove(0x08);
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+                case TASKS.REG_BLOCK5_AM2:
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK5_AM2 && mePort_GetInt16(4) == 0x50)
+                    {
+                        //连续写入的寄存器个数是0x50
+                        isEQ = true;
+                        mePort_DataRemove(0x08);
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+                case TASKS.REG_BLOCK5_AM3:
+                    if ((mePort_GetUInt16(2) == Constants.REG_BLOCK5_AM3 && mePort_GetInt16(4) == 0x50))
                     {
                         //连续写入的寄存器个数是0x50
                         isEQ = true;
@@ -2899,9 +2993,22 @@ namespace Model
                     }
                     break;
 
-                case 0x0004://fifoClear
-                case 0x0400 + 0X0500://fifoIndex
-                    if (mePort_GetInt16(4) == 0x02)
+                case TASKS.WRITE_FIFOCLEAR:
+                    if ((REG)mePort_GetUInt16(2) == REG.REG_W_FIFOCLEAR && mePort_GetInt16(4) == 0x02)
+                    {
+                        //连续写入的寄存器个数是0x02
+                        isEQ = true;
+                        mePort_DataRemove(0x08);
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+
+                case TASKS.WRITE_FIFO_INDEX:
+                    if ((REG)mePort_GetUInt16(2) == REG.REG_R_RECDAT && mePort_GetInt16(4) == 0x02)
                     {
                         //连续写入的寄存器个数是0x02
                         isEQ = true;
@@ -2964,6 +3071,7 @@ namespace Model
                     }
                     else
                     {
+                        Console.WriteLine(meRXD[rxRead]);
                         mePort_DataRemove(1);
                     }
                 }

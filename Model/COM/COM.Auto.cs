@@ -207,6 +207,7 @@ namespace Model
                         CurrentCommand = command;
                         DateTime startTime = DateTime.Now;
                         SendCommand(CurrentCommand);
+                        Console.WriteLine("发送"+ MyDevice.protocol.trTASK + DateTime.Now.ToString("HH:mm:ss:fff"));
                         // 等待设备回复或超时
                         if (receiveSignal.WaitOne(TimeSpan.FromMilliseconds(timeout)))
                         {
@@ -256,7 +257,7 @@ namespace Model
                 //实时数据
                 if (mode == AutoMode.UserAndActualData)
                 {
-                    Console.WriteLine(MyDevice.protocol.addr + "========" + CurrentCommand.TaskState);
+                    //Console.WriteLine(MyDevice.protocol.addr + "========" + CurrentCommand.TaskState);
                     switch (CurrentCommand.TaskState)
                     {
                         case TASKS.REG_BLOCK1_FIFO:
@@ -296,12 +297,7 @@ namespace Model
                             break;
                         case TASKS.REG_BLOCK2_DAT:
                             MyDevice.actDev.auto.dataTick++;
-                            Console.WriteLine(MyDevice.actDev.wlan.addr + ": " + MyDevice.actDev.fifo.index + "---正常-----" + MyDevice.actDev.auto.fifoIndex);
-                            //Console.WriteLine(MyDevice.mTCP[1].fifo.index + ":" + MyDevice.mTCP[2].fifo.index);
-                            //if (MyDevice.mTCP[1].fifo.index == MyDevice.mTCP[2].fifo.index)
-                            //{
-                            //    MessageBox.Show("乱码改了index");
-                            //}
+                            //Console.WriteLine(MyDevice.actDev.wlan.addr + ": " + MyDevice.actDev.fifo.index + "---正常-----" + MyDevice.actDev.auto.fifoIndex);
 
                             if (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
                             {
@@ -352,6 +348,10 @@ namespace Model
                                         }
                                         else
                                         {
+                                            for (int i = 0; i < 5; i++)
+                                            {
+                                                Console.WriteLine(MyDevice.actDev.data[i].dtype);
+                                            }
                                             MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;
                                         }
                                     }
@@ -359,32 +359,32 @@ namespace Model
                                 //1.收到的index不是连续性，说明数据丢失，重新读该条
                                 else
                                 {
-                                    if (MyDevice.protocol.type == COMP.XF)
-                                    {
-                                        if (MyDevice.mXF[2].fifo.index == MyDevice.mXF[5].fifo.index)
-                                        {
-                                            MessageBox.Show("接收器乱码改了index");
-                                        }
-                                        else if (Math.Abs(MyDevice.mXF[2].fifo.index - MyDevice.mXF[5].fifo.index) == 140 ||
-                                                 Math.Abs(MyDevice.mXF[5].fifo.index - MyDevice.mXF[2].fifo.index) == 140
-                                                )
-                                        {
-                                            MessageBox.Show("接收器乱码改了index");
-                                        }
-                                    }
-                                    else if (MyDevice.protocol.type == COMP.TCP)
-                                    {
-                                        if (MyDevice.mTCP[2].fifo.index == MyDevice.mTCP[1].fifo.index)
-                                        {
-                                            MessageBox.Show("路由器乱码改了index");
-                                        }
-                                        else if (Math.Abs(MyDevice.mTCP[1].fifo.index - MyDevice.mTCP[2].fifo.index) % 140 == 0 ||
-                                                 Math.Abs(MyDevice.mTCP[2].fifo.index - MyDevice.mTCP[1].fifo.index) % 140 == 0
-                                                )
-                                        {
-                                            MessageBox.Show("路由器乱码改了index");
-                                        }
-                                    }
+                                    //if (MyDevice.protocol.type == COMP.XF)
+                                    //{
+                                    //    if (MyDevice.mXF[1].fifo.index == MyDevice.mXF[2].fifo.index)
+                                    //    {
+                                    //        MessageBox.Show("接收器乱码改了index");
+                                    //    }
+                                    //    else if (Math.Abs(MyDevice.mXF[1].fifo.index - MyDevice.mXF[2].fifo.index) == 140 ||
+                                    //             Math.Abs(MyDevice.mXF[2].fifo.index - MyDevice.mXF[1].fifo.index) == 140
+                                    //            )
+                                    //    {
+                                    //        MessageBox.Show("接收器乱码改了index");
+                                    //    }
+                                    //}
+                                    //else if (MyDevice.protocol.type == COMP.TCP)
+                                    //{
+                                    //    if (MyDevice.mTCP[2].fifo.index == MyDevice.mTCP[1].fifo.index)
+                                    //    {
+                                    //        MessageBox.Show("路由器乱码改了index");
+                                    //    }
+                                    //    else if (Math.Abs(MyDevice.mTCP[1].fifo.index - MyDevice.mTCP[2].fifo.index) % 140 == 0 ||
+                                    //             Math.Abs(MyDevice.mTCP[2].fifo.index - MyDevice.mTCP[1].fifo.index) % 140 == 0
+                                    //            )
+                                    //    {
+                                    //        MessageBox.Show("路由器乱码改了index");
+                                    //    }
+                                    //}
 
                                     Console.WriteLine(MyDevice.actDev.wlan.addr + ": " + MyDevice.actDev.fifo.index + "---异常--------------" + MyDevice.actDev.auto.fifoIndex);
                                     MyDevice.actDev.auto.fifoIndex -= 5 * 28;//回退到上一条是为了防止丢失的数据是5包中的其一
@@ -402,6 +402,7 @@ namespace Model
                     }
 
                     //触发UI更新事件
+                    Console.WriteLine("更新UI");
                     TriggerUpdateUI(CurrentCommand);
                 }
                 //工单

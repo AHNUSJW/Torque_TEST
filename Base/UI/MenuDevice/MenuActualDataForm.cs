@@ -756,10 +756,12 @@ namespace Base.UI.MenuDevice
 
                         if (actXET.data[i].dtype == 0xF1)
                         {
+                            Console.WriteLine(actXET.data[i].mode_pt + "_" + actXET.data[i].dtype);
                             dataGridView1.Rows[idx].Cells[0].Value = (++lines).ToString();
                         }
                         else if (actXET.data[i].dtype == 0xF2)
                         {
+                            Console.WriteLine("抓住02");
                             dataGridView1.Rows[idx].Cells[0].Value = "☆" + (++lines);
                         }
                         else if (actXET.data[i].dtype == 0xF3)
