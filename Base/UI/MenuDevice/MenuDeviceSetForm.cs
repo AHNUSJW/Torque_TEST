@@ -511,6 +511,9 @@ namespace Base.UI.MenuDevice
 
             #region 高级设置
 
+            //标定零点
+            tb_adZero.InputText = actXET.devc.ad_zero.ToString();
+
             //标定内码 (包含正向与反向，各5组)
             tb_adPos1.InputText = actXET.devc.ad_pos_point1.ToString();
             tb_adPos2.InputText = actXET.devc.ad_pos_point2.ToString();
@@ -524,19 +527,62 @@ namespace Base.UI.MenuDevice
             tb_adNeg4.InputText = actXET.devc.ad_neg_point4.ToString();
             tb_adNeg5.InputText = actXET.devc.ad_neg_point5.ToString();
 
-            //离线工单数量
-            tb_screwMax.InputText = actXET.para.screwmax.ToString();
-
-            //执行工单模式
-            ucCombox_runMode.Source = new List<KeyValuePair<string, string>>
+            //标定单位
+            ucCombox_calUnit.Source = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("0", "不执行"),
-                new KeyValuePair<string, string>("1", "手动执行"),
-                new KeyValuePair<string, string>("2", "自动执行"),
+                new KeyValuePair<string, string>("0", "N·m"),
+                new KeyValuePair<string, string>("1", "lbf·in"),
+                new KeyValuePair<string, string>("2", "lbf·ft"),
+                new KeyValuePair<string, string>("3", "kgf·cm")
             };
-            ucCombox_runMode.SelectedIndex = actXET.para.runmode;
+            if ((TYPE)(actXET.devc.type + 1280) == TYPE.TQ_XH_XL01_07 || (TYPE)(actXET.devc.type + 1280) == TYPE.TQ_XH_XL01_09)
+            {
+                ucCombox_calUnit.Source.Add(new KeyValuePair<string, string>("4", "kgf·m"));
+            }
+            ucCombox_calUnit.SelectedIndex = (byte)actXET.devc.unit;
 
-            //扭矩修改参数
+            //标定方式
+            ucCombox_calType.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "五点标定"),
+                new KeyValuePair<string, string>("1", "七点标定"),
+                new KeyValuePair<string, string>("2", "九点标定"),
+                new KeyValuePair<string, string>("3", "十一点标定")
+            };
+            ucCombox_calType.SelectedIndex = actXET.devc.caltype;
+
+            //标定量程
+            ucCombox_capacity.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0",  "6"),
+                new KeyValuePair<string, string>("1",  "12"),
+                new KeyValuePair<string, string>("2",  "20"),
+                new KeyValuePair<string, string>("3",  "30"),
+                new KeyValuePair<string, string>("4",  "50"),
+                new KeyValuePair<string, string>("5",  "85"),
+                new KeyValuePair<string, string>("6",  "100"),
+                new KeyValuePair<string, string>("7",  "200"),
+                new KeyValuePair<string, string>("8",  "300"),
+                new KeyValuePair<string, string>("9",  "400"),
+                new KeyValuePair<string, string>("10", "650"),
+                new KeyValuePair<string, string>("11", "800"),
+                new KeyValuePair<string, string>("12", "1000"),
+                new KeyValuePair<string, string>("13", "1300"),
+                new KeyValuePair<string, string>("14", "1500"),
+                new KeyValuePair<string, string>("15", "1800"),
+                new KeyValuePair<string, string>("16", "2000"),
+                new KeyValuePair<string, string>("17", "2600"),
+                new KeyValuePair<string, string>("18", "3000"),
+
+            };
+            for (int i = 0; i < ucCombox_capacity.Source.Count; i++)
+            {
+                if (ucCombox_capacity.Source[i].Value == (actXET.devc.capacity / (int)Math.Pow(10, actXET.devc.torque_decimal)).ToString())
+                {
+                    ucCombox_capacity.SelectedIndex = i;
+                    break;
+                }
+            }
 
             //校准时间
             if (actXET.work.caltime != 0)
@@ -560,25 +606,25 @@ namespace Base.UI.MenuDevice
             switch (MyDevice.userRole)
             {
                 case "0":
-                    label_point.Visible = false;
-                    ucCombox_point.Visible = false;
+                    label_point.Visible     = false;
+                    ucCombox_point.Visible  = false;
 
-                    label_select.Enabled = false;
+                    label_select.Enabled    = false;
                     ucCombox_select.Enabled = false;
                     break;
                 case "1":
-                    label_point.Visible = false;
-                    ucCombox_point.Visible = false;
+                    label_point.Visible     = false;
+                    ucCombox_point.Visible  = false;
 
-                    label_select.Enabled = true;
+                    label_select.Enabled    = true;
                     ucCombox_select.Enabled = true;
                     break;
                 default:
                 case "32":
-                    label_point.Visible = true;
-                    ucCombox_point.Visible = true;
+                    label_point.Visible     = true;
+                    ucCombox_point.Visible  = true;
 
-                    label_select.Enabled = true;
+                    label_select.Enabled    = true;
                     ucCombox_select.Enabled = true;
                     break;
             }
@@ -586,113 +632,113 @@ namespace Base.UI.MenuDevice
             switch (MyDevice.userRole)
             {
                 case "0":
-                    groupBox6.Visible = false;
-
-                    label_fifomode.Enabled = false;
-                    ucCombox_fifomode.Enabled = false;
-                    label_fiforec.Enabled = false;
-                    ucCombox_fiforec.Enabled = false;
-                    label_fifospeed.Enabled = false;
-                    ucCombox_fifospeed.Enabled = false;
-                    label_heart.Enabled = false;
-                    ucCombox_heart.Enabled = false;
-                    label_heartcount.Enabled = false;
+                    groupBox6.Visible              = false;
+                                               
+                    label_fifomode.Enabled         = false;
+                    ucCombox_fifomode.Enabled      = false;
+                    label_fiforec.Enabled          = false;
+                    ucCombox_fiforec.Enabled       = false;
+                    label_fifospeed.Enabled        = false;
+                    ucCombox_fifospeed.Enabled     = false;
+                    label_heart.Enabled            = false;
+                    ucCombox_heart.Enabled         = false;
+                    label_heartcount.Enabled       = false;
                     ucTextBoxEx_heartcount.Enabled = false;
-                    label_heartcycle.Enabled = false;
+                    label_heartcycle.Enabled       = false;
                     ucTextBoxEx_heartcycle.Enabled = false;
-                    label_accmode.Enabled = false;
-                    ucCombox_accmode.Enabled = false;
-                    label_alarmode.Enabled = false;
-                    ucCombox_alarmode.Enabled = false;
-                    label_wifimode.Enabled = false;
-                    ucCombox_wifimode.Enabled = false;
-                    label_timeoff.Enabled = false;
-                    ucTextBoxEx_timeoff.Enabled = false;
-                    label_timeback.Enabled = false;
-                    ucTextBoxEx_timeback.Enabled = false;
-                    label_timezero.Enabled = false;
-                    ucTextBoxEx_timezero.Enabled = false;
-                    label_disptype.Enabled = false;
-                    ucCombox_disptype.Enabled = false;
-                    label_disptheme.Enabled = false;
-                    ucCombox_disptheme.Enabled = false;
-                    label_displan.Enabled = false;
-                    ucCombox_displan.Enabled = false;
+                    label_accmode.Enabled          = false;
+                    ucCombox_accmode.Enabled       = false;
+                    label_alarmode.Enabled         = false;
+                    ucCombox_alarmode.Enabled      = false;
+                    label_wifimode.Enabled         = false;
+                    ucCombox_wifimode.Enabled      = false;
+                    label_timeoff.Enabled          = false;
+                    ucTextBoxEx_timeoff.Enabled    = false;
+                    label_timeback.Enabled         = false;
+                    ucTextBoxEx_timeback.Enabled   = false;
+                    label_timezero.Enabled         = false;
+                    ucTextBoxEx_timezero.Enabled   = false;
+                    label_disptype.Enabled         = false;
+                    ucCombox_disptype.Enabled      = false;
+                    label_disptheme.Enabled        = false;
+                    ucCombox_disptheme.Enabled     = false;
+                    label_displan.Enabled          = false;
+                    ucCombox_displan.Enabled       = false;
 
-                    bt_UpdateMode.Enabled = false;
+                    bt_UpdateMode.Enabled          = false;
                     break;
                 case "1":
-                    groupBox6.Visible = false;
+                    groupBox6.Visible              = false;
 
-                    label_fifomode.Enabled = true;
-                    ucCombox_fifomode.Enabled = true;
-                    label_fiforec.Enabled = true;
-                    ucCombox_fiforec.Enabled = true;
-                    label_fifospeed.Enabled = true;
-                    ucCombox_fifospeed.Enabled = true;
-                    label_heart.Enabled = true;
-                    ucCombox_heart.Enabled = true;
-                    label_heartcount.Enabled = true;
+                    label_fifomode.Enabled         = true;
+                    ucCombox_fifomode.Enabled      = true;
+                    label_fiforec.Enabled          = true;
+                    ucCombox_fiforec.Enabled       = true;
+                    label_fifospeed.Enabled        = true;
+                    ucCombox_fifospeed.Enabled     = true;
+                    label_heart.Enabled            = true;
+                    ucCombox_heart.Enabled         = true;
+                    label_heartcount.Enabled       = true;
                     ucTextBoxEx_heartcount.Enabled = true;
-                    label_heartcycle.Enabled = true;
+                    label_heartcycle.Enabled       = true;
                     ucTextBoxEx_heartcycle.Enabled = true;
-                    label_accmode.Enabled = true;
-                    ucCombox_accmode.Enabled = true;
-                    label_alarmode.Enabled = true;
-                    ucCombox_alarmode.Enabled = true;
-                    label_wifimode.Enabled = true;
-                    ucCombox_wifimode.Enabled = true;
-                    label_timeoff.Enabled = true;
-                    ucTextBoxEx_timeoff.Enabled = true;
-                    label_timeback.Enabled = true;
-                    ucTextBoxEx_timeback.Enabled = true;
-                    label_timezero.Enabled = true;
-                    ucTextBoxEx_timezero.Enabled = true;
-                    label_disptype.Enabled = true;
-                    ucCombox_disptype.Enabled = true;
-                    label_disptheme.Enabled = true;
-                    ucCombox_disptheme.Enabled = true;
-                    label_displan.Enabled = true;
-                    ucCombox_displan.Enabled = true;
+                    label_accmode.Enabled          = true;
+                    ucCombox_accmode.Enabled       = true;
+                    label_alarmode.Enabled         = true;
+                    ucCombox_alarmode.Enabled      = true;
+                    label_wifimode.Enabled         = true;
+                    ucCombox_wifimode.Enabled      = true;
+                    label_timeoff.Enabled          = true;
+                    ucTextBoxEx_timeoff.Enabled    = true;
+                    label_timeback.Enabled         = true;
+                    ucTextBoxEx_timeback.Enabled   = true;
+                    label_timezero.Enabled         = true;
+                    ucTextBoxEx_timezero.Enabled   = true;
+                    label_disptype.Enabled         = true;
+                    ucCombox_disptype.Enabled      = true;
+                    label_disptheme.Enabled        = true;
+                    ucCombox_disptheme.Enabled     = true;
+                    label_displan.Enabled          = true;
+                    ucCombox_displan.Enabled       = true;
 
-                    bt_UpdateMode.Enabled = true;
+                    bt_UpdateMode.Enabled          = true;
                     break;
                 default:
                 case "32":
                     groupBox6.Visible = false;
 
-                    label_fifomode.Enabled = true;
-                    ucCombox_fifomode.Enabled = true;
-                    label_fiforec.Enabled = true;
-                    ucCombox_fiforec.Enabled = true;
-                    label_fifospeed.Enabled = true;
-                    ucCombox_fifospeed.Enabled = true;
-                    label_heart.Enabled = true;
-                    ucCombox_heart.Enabled = true;
-                    label_heartcount.Enabled = true;
+                    label_fifomode.Enabled         = true;
+                    ucCombox_fifomode.Enabled      = true;
+                    label_fiforec.Enabled          = true;
+                    ucCombox_fiforec.Enabled       = true;
+                    label_fifospeed.Enabled        = true;
+                    ucCombox_fifospeed.Enabled     = true;
+                    label_heart.Enabled            = true;
+                    ucCombox_heart.Enabled         = true;
+                    label_heartcount.Enabled       = true;
                     ucTextBoxEx_heartcount.Enabled = true;
-                    label_heartcycle.Enabled = true;
+                    label_heartcycle.Enabled       = true;
                     ucTextBoxEx_heartcycle.Enabled = true;
-                    label_accmode.Enabled = true;
-                    ucCombox_accmode.Enabled = true;
-                    label_alarmode.Enabled = true;
-                    ucCombox_alarmode.Enabled = true;
-                    label_wifimode.Enabled = true;
-                    ucCombox_wifimode.Enabled = true;
-                    label_timeoff.Enabled = true;
-                    ucTextBoxEx_timeoff.Enabled = true;
-                    label_timeback.Enabled = true;
-                    ucTextBoxEx_timeback.Enabled = true;
-                    label_timezero.Enabled = true;
-                    ucTextBoxEx_timezero.Enabled = true;
-                    label_disptype.Enabled = true;
-                    ucCombox_disptype.Enabled = true;
-                    label_disptheme.Enabled = true;
-                    ucCombox_disptheme.Enabled = true;
-                    label_displan.Enabled = true;
-                    ucCombox_displan.Enabled = true;
+                    label_accmode.Enabled          = true;
+                    ucCombox_accmode.Enabled       = true;
+                    label_alarmode.Enabled         = true;
+                    ucCombox_alarmode.Enabled      = true;
+                    label_wifimode.Enabled         = true;
+                    ucCombox_wifimode.Enabled      = true;
+                    label_timeoff.Enabled          = true;
+                    ucTextBoxEx_timeoff.Enabled    = true;
+                    label_timeback.Enabled         = true;
+                    ucTextBoxEx_timeback.Enabled   = true;
+                    label_timezero.Enabled         = true;
+                    ucTextBoxEx_timezero.Enabled   = true;
+                    label_disptype.Enabled         = true;
+                    ucCombox_disptype.Enabled      = true;
+                    label_disptheme.Enabled        = true;
+                    ucCombox_disptheme.Enabled     = true;
+                    label_displan.Enabled          = true;
+                    ucCombox_displan.Enabled       = true;
 
-                    bt_UpdateMode.Enabled = true;
+                    bt_UpdateMode.Enabled          = true;
                     break;
             }
             //WLAN设置
@@ -700,36 +746,36 @@ namespace Base.UI.MenuDevice
             {
                 case "32":
                 case "1":
-                    label_addr.Enabled = true;
-                    ucTextBoxEx_addr.Enabled = true;
-                    label_RFchan.Enabled = true;
-                    ucCombox_RFchan.Enabled = true;
-                    label_wifiIp.Enabled = true;
-                    ucTextBoxEx_wifiIp.Enabled = true;
-                    label_port.Enabled = true;
-                    ucTextBoxEx_port.Enabled = true;
-                    label_ssid.Enabled = true;
-                    ucTextBoxEx_ssid.Enabled = true;
-                    label_pwd.Enabled = true;
-                    ucTextBoxEx_pwd.Enabled = true;
+                    label_addr.Enabled          = true;
+                    ucTextBoxEx_addr.Enabled    = true;
+                    label_RFchan.Enabled        = true;
+                    ucCombox_RFchan.Enabled     = true;
+                    label_wifiIp.Enabled        = true;
+                    ucTextBoxEx_wifiIp.Enabled  = true;
+                    label_port.Enabled          = true;
+                    ucTextBoxEx_port.Enabled    = true;
+                    label_ssid.Enabled          = true;
+                    ucTextBoxEx_ssid.Enabled    = true;
+                    label_pwd.Enabled           = true;
+                    ucTextBoxEx_pwd.Enabled     = true;
 
-                    bt_UpdateWLAN.Enabled = true;
+                    bt_UpdateWLAN.Enabled       = true;
                     break;
                 default:
                 case "0":
-                    label_addr.Enabled = false;
-                    ucTextBoxEx_addr.Enabled = true;
-                    ucCombox_RFchan.Enabled = false;
-                    label_wifiIp.Enabled = false;
-                    ucTextBoxEx_wifiIp.Enabled = false;
-                    label_port.Enabled = false;
-                    ucTextBoxEx_port.Enabled = false;
-                    label_ssid.Enabled = false;
-                    ucTextBoxEx_ssid.Enabled = false;
-                    label_pwd.Enabled = false;
-                    ucTextBoxEx_pwd.Enabled = false;
+                    label_addr.Enabled          = false;
+                    ucTextBoxEx_addr.Enabled    = true;
+                    ucCombox_RFchan.Enabled     = false;
+                    label_wifiIp.Enabled        = false;
+                    ucTextBoxEx_wifiIp.Enabled  = false;
+                    label_port.Enabled          = false;
+                    ucTextBoxEx_port.Enabled    = false;
+                    label_ssid.Enabled          = false;
+                    ucTextBoxEx_ssid.Enabled    = false;
+                    label_pwd.Enabled           = false;
+                    ucTextBoxEx_pwd.Enabled     = false;
 
-                    bt_UpdateWLAN.Enabled = false;
+                    bt_UpdateWLAN.Enabled       = false;
                     break;
             }
             //高级设置
@@ -737,6 +783,7 @@ namespace Base.UI.MenuDevice
             {
                 case "0":
                 case "1":
+                    tb_adZero.Enabled = false;
                     tb_adPos1.Enabled = false;
                     tb_adPos2.Enabled = false;
                     tb_adPos3.Enabled = false;
@@ -747,7 +794,8 @@ namespace Base.UI.MenuDevice
                     tb_adNeg3.Enabled = false;
                     tb_adNeg4.Enabled = false;
                     tb_adNeg5.Enabled = false;
-                    
+
+                    tb_adZeroOutput.Enabled = false;
                     tb_adPosOutPut1.Enabled = false;
                     tb_adPosOutPut2.Enabled = false;
                     tb_adPosOutPut3.Enabled = false;
@@ -759,13 +807,14 @@ namespace Base.UI.MenuDevice
                     tb_adNegOutPut4.Enabled = false;
                     tb_adNegOutPut5.Enabled = false;
 
-                    tb_screwMax.Enabled = false;
-                    ucCombox_runMode.Enabled = false;
-                    ucTextBoxEx22.Enabled = false;
+                    ucCombox_calUnit.Enabled = false;
+                    ucCombox_calType.Enabled = false;
+                    ucCombox_capacity.Enabled = false;
 
                     btn_SuperUpdate.Enabled = false;
                     break;
                 case "32":
+                    tb_adZero.Enabled = false;
                     tb_adPos1.Enabled = false;
                     tb_adPos2.Enabled = false;
                     tb_adPos3.Enabled = false;
@@ -777,6 +826,7 @@ namespace Base.UI.MenuDevice
                     tb_adNeg4.Enabled = false;
                     tb_adNeg5.Enabled = false;
 
+                    tb_adZeroOutput.Enabled = true;
                     tb_adPosOutPut1.Enabled = true;
                     tb_adPosOutPut2.Enabled = true;
                     tb_adPosOutPut3.Enabled = true;
@@ -788,9 +838,9 @@ namespace Base.UI.MenuDevice
                     tb_adNegOutPut4.Enabled = true;
                     tb_adNegOutPut5.Enabled = true;
 
-                    tb_screwMax.Enabled = false;
-                    ucCombox_runMode.Enabled = true;
-                    ucTextBoxEx22.Enabled = false;
+                    ucCombox_calUnit.Enabled = true;
+                    ucCombox_calType.Enabled = true;
+                    ucCombox_capacity.Enabled = true;
 
                     btn_SuperUpdate.Enabled = true;
                     break;
@@ -1330,7 +1380,9 @@ namespace Base.UI.MenuDevice
                     actXET = MyDevice.actDev;
                 }
 
-                //更新参数
+                /********更新参数***********/
+
+                //更新校准时间
                 actXET.work.caltime = MyDevice.DateTimeToUInt32((DateTime)dateTimePicker_caltime.Value);
                 actXET.work.calremind = MyDevice.DateTimeToUInt32((DateTime)dateTimePicker_calremind.Value);
 
@@ -1340,9 +1392,12 @@ namespace Base.UI.MenuDevice
                     return;
                 }
 
-                //actXET.para.screwmax = Convert.ToByte(tb_screwMax.InputText);
-                //actXET.para.runmode = Convert.ToByte(ucCombox_runMode.SelectedIndex);
+                //更新内码相关参数(必须工厂权限)
+                actXET.devc.unit     = (UNIT)ucCombox_calUnit.SelectedIndex;
+                actXET.devc.caltype  = (byte)ucCombox_calType.SelectedIndex;
+                actXET.devc.capacity = Convert.ToInt32(ucCombox_capacity.SelectedText) * (int)Math.Pow(10, actXET.devc.torque_decimal);
 
+                if (tb_adPosOutPut1.InputText != "") actXET.devc.ad_pos_point1 = Convert.ToInt32(tb_adPosOutPut1.InputText);
                 if (tb_adPosOutPut2.InputText != "") actXET.devc.ad_pos_point2 = Convert.ToInt32(tb_adPosOutPut2.InputText);
                 if (tb_adPosOutPut3.InputText != "") actXET.devc.ad_pos_point3 = Convert.ToInt32(tb_adPosOutPut3.InputText);
                 if (tb_adPosOutPut4.InputText != "") actXET.devc.ad_pos_point4 = Convert.ToInt32(tb_adPosOutPut4.InputText);
@@ -1490,6 +1545,68 @@ namespace Base.UI.MenuDevice
             else
             {
                 ucTextBoxEx_heartcount.Enabled = false;
+            }
+        }
+
+        //标定方式切换
+        private void ucCombox_calType_SelectedChangedEvent(object sender, EventArgs e)
+        {
+            switch (ucCombox_calType.SelectedIndex)
+            {
+                case 0://五点标定
+                    tb_adPosOutPut1.Visible = true;
+                    tb_adPosOutPut2.Visible = true;
+                    tb_adPosOutPut3.Visible = false;
+                    tb_adPosOutPut4.Visible = false;
+                    tb_adPosOutPut5.Visible = false;
+
+                    tb_adPosOutPut1.Visible = true;
+                    tb_adPosOutPut2.Visible = true;
+                    tb_adNegOutPut3.Visible = false;
+                    tb_adNegOutPut4.Visible = false;
+                    tb_adNegOutPut5.Visible = false;
+                    break;
+                case 1://七点标定
+                    tb_adPosOutPut1.Visible = true;
+                    tb_adPosOutPut2.Visible = true;
+                    tb_adPosOutPut3.Visible = true;
+                    tb_adPosOutPut4.Visible = false;
+                    tb_adPosOutPut5.Visible = false;
+
+                    tb_adPosOutPut1.Visible = true;
+                    tb_adPosOutPut2.Visible = true;
+                    tb_adNegOutPut3.Visible = true;
+                    tb_adNegOutPut4.Visible = false;
+                    tb_adNegOutPut5.Visible = false;
+                    break;
+                case 2://九点标定
+                    tb_adPosOutPut1.Visible = true;
+                    tb_adPosOutPut2.Visible = true;
+                    tb_adPosOutPut3.Visible = true;
+                    tb_adPosOutPut4.Visible = true;
+                    tb_adPosOutPut5.Visible = false;
+
+                    tb_adPosOutPut1.Visible = true;
+                    tb_adPosOutPut2.Visible = true;
+                    tb_adNegOutPut3.Visible = true;
+                    tb_adNegOutPut4.Visible = true;
+                    tb_adNegOutPut5.Visible = false;
+                    break;
+                case 3://十一点标定
+                    tb_adPosOutPut1.Visible = true;
+                    tb_adPosOutPut2.Visible = true;
+                    tb_adPosOutPut3.Visible = true;
+                    tb_adPosOutPut4.Visible = true;
+                    tb_adPosOutPut5.Visible = true;
+
+                    tb_adNegOutPut1.Visible = true;
+                    tb_adNegOutPut2.Visible = true;
+                    tb_adNegOutPut3.Visible = true;
+                    tb_adNegOutPut4.Visible = true;
+                    tb_adNegOutPut5.Visible = true;
+                    break;
+                default:
+                    break;
             }
         }
 

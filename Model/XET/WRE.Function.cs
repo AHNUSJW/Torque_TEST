@@ -26,7 +26,7 @@ namespace Model
             devc.caltype        = 0;
             devc.torque_decimal = 0;
             devc.torque_fdn     = 1;
-            devc.capacity       = 0;
+            devc.capacity       = 3000;
             devc.ad_zero        = 0;
             devc.ad_pos_point1  = 0;
             devc.ad_pos_point2  = 0;
