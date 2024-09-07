@@ -135,7 +135,7 @@ namespace Model
             work.user_name      = "";
             work.user_ID        = 0;
 
-            for (byte k = 0; k < 16; k++)
+            for (byte k = 0; k < 32; k++)
             {
                 work.screworder[k] = 0;
             }

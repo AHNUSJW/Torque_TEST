@@ -340,6 +340,22 @@ namespace Model
                     (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK2_DAT >> 8, Constants.REG_BLOCK2_DAT & 0xFF, 0x00, 0x48 }).CopyTo(meTXD, 0);
                     break;
 
+                case TASKS.REG_BLOCK3_SCREW1:
+                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK3_SCREW1 >> 8, Constants.REG_BLOCK3_SCREW1 & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW2:
+                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK3_SCREW2 >> 8, Constants.REG_BLOCK3_SCREW1 & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW3:
+                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK3_SCREW3 >> 8, Constants.REG_BLOCK3_SCREW1 & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW4:
+                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK3_SCREW4 >> 8, Constants.REG_BLOCK3_SCREW4 & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
+                    break;
+
                 default:
                     break;
             }
@@ -1063,18 +1079,127 @@ namespace Model
                         }
                     }
                     //预留字节
-                    for (int i = idx; i < 64 + 7; i++)
+                    for (int i = idx; i < 96 + 7; i++)
                     {
                         meTXD[idx++] = 0xFF;
                     }
 
-                    //MyDevice.mBUS[sAddress].work.screworder
-                    for (int i = 0; idx < 96 + 7; i++)
-                    {
-                        meTXD[idx++] = 0x00;
-                        meTXD[idx++] = MyDevice.mBUS[sAddress].work.screworder[i];
-                    }
+                    break;
 
+                case TASKS.REG_BLOCK3_SCREW1:
+                    num = 0x30;//48个寄存器个数
+                    meTXD[idx++] = sAddress;
+                    meTXD[idx++] = (byte)CMD.CMD_SEQUENCE;
+                    meTXD[idx++] = Constants.REG_BLOCK3_SCREW1 >> 8;
+                    meTXD[idx++] = Constants.REG_BLOCK3_SCREW1 & 0xFF;
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = num;
+                    meTXD[idx++] = (byte)(num * 2);
+                    for (int i = 0; i < 8; i++)
+                    {
+                        meTXD[idx++] = MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx;
+                        meTXD[idx++] = MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt;
+                        MyDevice.myUIT.UI = MyDevice.mBUS[sAddress].screw[i].scw_ticketNum;
+                        meTXD[idx++] = MyDevice.myUIT.B3;
+                        meTXD[idx++] = MyDevice.myUIT.B2;
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                        MyDevice.myUIT.UI = (uint)((MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 8) >> 8);
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
+                        meTXD[idx++] = MyDevice.myUIT.B3;
+                        meTXD[idx++] = MyDevice.myUIT.B2;
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                    }
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW2:
+                    num = 0x30;//48个寄存器个数
+                    meTXD[idx++] = sAddress;
+                    meTXD[idx++] = (byte)CMD.CMD_SEQUENCE;
+                    meTXD[idx++] = Constants.REG_BLOCK3_SCREW2 >> 8;
+                    meTXD[idx++] = Constants.REG_BLOCK3_SCREW2 & 0xFF;
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = num;
+                    meTXD[idx++] = (byte)(num * 2);
+                    for (int i = 8; i < 16; i++)
+                    {
+                        meTXD[idx++] = MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx;
+                        meTXD[idx++] = MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt;
+                        MyDevice.myUIT.UI = MyDevice.mBUS[sAddress].screw[i].scw_ticketNum;
+                        meTXD[idx++] = MyDevice.myUIT.B3;
+                        meTXD[idx++] = MyDevice.myUIT.B2;
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                        MyDevice.myUIT.UI = (uint)((MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 8) >> 8);
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
+                        meTXD[idx++] = MyDevice.myUIT.B3;
+                        meTXD[idx++] = MyDevice.myUIT.B2;
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                    }
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW3:
+                    num = 0x30;//48个寄存器个数
+                    meTXD[idx++] = sAddress;
+                    meTXD[idx++] = (byte)CMD.CMD_SEQUENCE;
+                    meTXD[idx++] = Constants.REG_BLOCK3_SCREW3 >> 8;
+                    meTXD[idx++] = Constants.REG_BLOCK3_SCREW3 & 0xFF;
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = num;
+                    meTXD[idx++] = (byte)(num * 2);
+                    for (int i = 16; i < 24; i++)
+                    {
+                        meTXD[idx++] = MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx;
+                        meTXD[idx++] = MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt;
+                        MyDevice.myUIT.UI = MyDevice.mBUS[sAddress].screw[i].scw_ticketNum;
+                        meTXD[idx++] = MyDevice.myUIT.B3;
+                        meTXD[idx++] = MyDevice.myUIT.B2;
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                        MyDevice.myUIT.UI = (uint)((MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 8) >> 8);
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
+                        meTXD[idx++] = MyDevice.myUIT.B3;
+                        meTXD[idx++] = MyDevice.myUIT.B2;
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                    }
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW4:
+                    num = 0x30;//48个寄存器个数
+                    meTXD[idx++] = sAddress;
+                    meTXD[idx++] = (byte)CMD.CMD_SEQUENCE;
+                    meTXD[idx++] = Constants.REG_BLOCK3_SCREW4 >> 8;
+                    meTXD[idx++] = Constants.REG_BLOCK3_SCREW4 & 0xFF;
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = num;
+                    meTXD[idx++] = (byte)(num * 2);
+                    for (int i = 24; i < 32; i++)
+                    {
+                        meTXD[idx++] = MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx;
+                        meTXD[idx++] = MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt;
+                        MyDevice.myUIT.UI = MyDevice.mBUS[sAddress].screw[i].scw_ticketNum;
+                        meTXD[idx++] = MyDevice.myUIT.B3;
+                        meTXD[idx++] = MyDevice.myUIT.B2;
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                        MyDevice.myUIT.UI = (uint)((MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 8) >> 8);
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
+                        meTXD[idx++] = MyDevice.myUIT.B3;
+                        meTXD[idx++] = MyDevice.myUIT.B2;
+                        meTXD[idx++] = MyDevice.myUIT.B1;
+                        meTXD[idx++] = MyDevice.myUIT.B0;
+                    }
                     break;
 
                 default:
@@ -2045,10 +2170,6 @@ namespace Model
                     {
                         MyDevice.mBUS[sAddress].work.user_ID = mePort_GetByte(6);
                         MyDevice.mBUS[sAddress].work.user_name = mePort_GetString(7, 48);
-                        for (int i = 0, j = 0; i < 16; i++, j = j + 2)
-                        {
-                            MyDevice.mBUS[sAddress].work.screworder[i] = mePort_GetByte((UInt16)(68 + j));
-                        }
                         mePort_DataRemove(0x65);
                         isEQ = true;
                     }
@@ -2526,6 +2647,86 @@ namespace Model
                     }
                     break;
 
+                case TASKS.REG_BLOCK3_SCREW1:
+                    if (len == 0x65)
+                    {
+                        for (int i = 0; i < 8; i++)
+                        {
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + i * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + i * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + i * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = ((UInt64)mePort_GetUInt32((ushort)(11 + i * 12)) << 32) | mePort_GetUInt16((ushort)(9 + i * 12));
+                        }
+                        mePort_DataRemove(0x65);
+                        isEQ = true;
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW2:
+                    if (len == 0x65)
+                    {
+                        for (int i = 8; i < 16; i++)
+                        {
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + (i - 8) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + (i - 8) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + (i - 8) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 8) * 12)) << 32) | mePort_GetUInt16((ushort)(9 + (i - 8) * 12));
+                        }
+                        mePort_DataRemove(0x65);
+                        isEQ = true;
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW3:
+                    if (len == 0x65)
+                    {
+                        for (int i = 16; i < 24; i++)
+                        {
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + (i - 16) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + (i - 16) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + (i - 16) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 16) * 12)) << 32) | mePort_GetUInt16((ushort)(9 + (i - 16) * 12));
+                        }
+                        mePort_DataRemove(0x65);
+                        isEQ = true;
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW4:
+                    if (len == 0x65)
+                    {
+                        for (int i = 24; i < 32; i++)
+                        {
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + (i - 24) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + (i - 24) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + (i - 24) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 24) * 12)) << 32) | mePort_GetUInt16((ushort)(9 + (i - 24) * 12));
+                        }
+                        mePort_DataRemove(0x65);
+                        isEQ = true;
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+
                 default:
                     mePort_DataRemove(1);
                     return;
@@ -2710,6 +2911,23 @@ namespace Model
                     if (mePort_GetInt16(4) == 0x02)
                     {
                         //连续写入的寄存器个数是0x02
+                        isEQ = true;
+                        mePort_DataRemove(0x08);
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+
+                case Constants.REG_BLOCK3_SCREW1:
+                case Constants.REG_BLOCK3_SCREW2:
+                case Constants.REG_BLOCK3_SCREW3:
+                case Constants.REG_BLOCK3_SCREW4:
+                    if (mePort_GetInt16(4) == 0x30)
+                    {
+                        //连续写入的寄存器个数是0x30
                         isEQ = true;
                         mePort_DataRemove(0x08);
                     }

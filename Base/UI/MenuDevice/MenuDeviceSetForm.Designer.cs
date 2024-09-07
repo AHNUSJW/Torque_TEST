@@ -137,7 +137,6 @@
             this.ucTextBoxEx_addr = new HZH_Controls.Controls.UCTextBoxEx();
             this.label_addr = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.tb_adNegOutPut5 = new HZH_Controls.Controls.UCTextBoxEx();
             this.label39 = new System.Windows.Forms.Label();
             this.groupBox20 = new System.Windows.Forms.GroupBox();
             this.label38 = new System.Windows.Forms.Label();
@@ -167,6 +166,7 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.tb_adNegOutPut5 = new HZH_Controls.Controls.UCTextBoxEx();
             this.label18 = new System.Windows.Forms.Label();
             this.tb_adNegOutPut1 = new HZH_Controls.Controls.UCTextBoxEx();
             this.label19 = new System.Windows.Forms.Label();
@@ -211,6 +211,23 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tb_adPos1 = new HZH_Controls.Controls.UCTextBoxEx();
             this.btn_SuperUpdate = new System.Windows.Forms.Button();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.groupBox21 = new System.Windows.Forms.GroupBox();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.ucCombox_runMode = new HZH_Controls.Controls.UCCombox();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.btn_UpdateTicket = new System.Windows.Forms.Button();
+            this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column11 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Column12 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column17 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column18 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ucCombox_screwMax = new HZH_Controls.Controls.UCCombox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -241,6 +258,9 @@
             this.groupBox15.SuspendLayout();
             this.groupBox14.SuspendLayout();
             this.groupBox13.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.groupBox21.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -301,6 +321,7 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -2275,48 +2296,6 @@
             this.tabPage4.Text = "高级配置";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // tb_adNegOutPut5
-            // 
-            this.tb_adNegOutPut5.BackColor = System.Drawing.Color.Transparent;
-            this.tb_adNegOutPut5.ConerRadius = 5;
-            this.tb_adNegOutPut5.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.tb_adNegOutPut5.DecLength = 2;
-            this.tb_adNegOutPut5.FillColor = System.Drawing.Color.Empty;
-            this.tb_adNegOutPut5.FocusBorderColor = System.Drawing.Color.DodgerBlue;
-            this.tb_adNegOutPut5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tb_adNegOutPut5.InputText = "";
-            this.tb_adNegOutPut5.InputType = HZH_Controls.TextInputType.PositiveNumber;
-            this.tb_adNegOutPut5.IsFocusColor = true;
-            this.tb_adNegOutPut5.IsRadius = true;
-            this.tb_adNegOutPut5.IsShowClearBtn = false;
-            this.tb_adNegOutPut5.IsShowKeyboard = false;
-            this.tb_adNegOutPut5.IsShowRect = true;
-            this.tb_adNegOutPut5.IsShowSearchBtn = false;
-            this.tb_adNegOutPut5.KeyBoardType = HZH_Controls.Controls.KeyBoardType.UCKeyBorderAll_EN;
-            this.tb_adNegOutPut5.Location = new System.Drawing.Point(90, 202);
-            this.tb_adNegOutPut5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tb_adNegOutPut5.MaxValue = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.tb_adNegOutPut5.MinValue = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            -2147483648});
-            this.tb_adNegOutPut5.Name = "tb_adNegOutPut5";
-            this.tb_adNegOutPut5.Padding = new System.Windows.Forms.Padding(5);
-            this.tb_adNegOutPut5.PasswordChar = '\0';
-            this.tb_adNegOutPut5.PromptColor = System.Drawing.Color.Gray;
-            this.tb_adNegOutPut5.PromptFont = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.tb_adNegOutPut5.PromptText = "";
-            this.tb_adNegOutPut5.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.tb_adNegOutPut5.RectWidth = 1;
-            this.tb_adNegOutPut5.RegexPattern = "";
-            this.tb_adNegOutPut5.Size = new System.Drawing.Size(100, 30);
-            this.tb_adNegOutPut5.TabIndex = 94;
-            // 
             // label39
             // 
             this.label39.AutoSize = true;
@@ -2739,6 +2718,48 @@
             this.groupBox16.Size = new System.Drawing.Size(212, 249);
             this.groupBox16.TabIndex = 79;
             this.groupBox16.TabStop = false;
+            // 
+            // tb_adNegOutPut5
+            // 
+            this.tb_adNegOutPut5.BackColor = System.Drawing.Color.Transparent;
+            this.tb_adNegOutPut5.ConerRadius = 5;
+            this.tb_adNegOutPut5.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.tb_adNegOutPut5.DecLength = 2;
+            this.tb_adNegOutPut5.FillColor = System.Drawing.Color.Empty;
+            this.tb_adNegOutPut5.FocusBorderColor = System.Drawing.Color.DodgerBlue;
+            this.tb_adNegOutPut5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tb_adNegOutPut5.InputText = "";
+            this.tb_adNegOutPut5.InputType = HZH_Controls.TextInputType.PositiveNumber;
+            this.tb_adNegOutPut5.IsFocusColor = true;
+            this.tb_adNegOutPut5.IsRadius = true;
+            this.tb_adNegOutPut5.IsShowClearBtn = false;
+            this.tb_adNegOutPut5.IsShowKeyboard = false;
+            this.tb_adNegOutPut5.IsShowRect = true;
+            this.tb_adNegOutPut5.IsShowSearchBtn = false;
+            this.tb_adNegOutPut5.KeyBoardType = HZH_Controls.Controls.KeyBoardType.UCKeyBorderAll_EN;
+            this.tb_adNegOutPut5.Location = new System.Drawing.Point(90, 202);
+            this.tb_adNegOutPut5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tb_adNegOutPut5.MaxValue = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.tb_adNegOutPut5.MinValue = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            -2147483648});
+            this.tb_adNegOutPut5.Name = "tb_adNegOutPut5";
+            this.tb_adNegOutPut5.Padding = new System.Windows.Forms.Padding(5);
+            this.tb_adNegOutPut5.PasswordChar = '\0';
+            this.tb_adNegOutPut5.PromptColor = System.Drawing.Color.Gray;
+            this.tb_adNegOutPut5.PromptFont = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.tb_adNegOutPut5.PromptText = "";
+            this.tb_adNegOutPut5.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.tb_adNegOutPut5.RectWidth = 1;
+            this.tb_adNegOutPut5.RegexPattern = "";
+            this.tb_adNegOutPut5.Size = new System.Drawing.Size(100, 30);
+            this.tb_adNegOutPut5.TabIndex = 94;
             // 
             // label18
             // 
@@ -3795,6 +3816,204 @@
             this.btn_SuperUpdate.UseVisualStyleBackColor = true;
             this.btn_SuperUpdate.Click += new System.EventHandler(this.btn_SuperUpdate_Click);
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.btn_UpdateTicket);
+            this.tabPage5.Controls.Add(this.dataGridView2);
+            this.tabPage5.Controls.Add(this.groupBox21);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(1033, 703);
+            this.tabPage5.TabIndex = 3;
+            this.tabPage5.Text = "工单设置";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox21
+            // 
+            this.groupBox21.Controls.Add(this.ucCombox_screwMax);
+            this.groupBox21.Controls.Add(this.ucCombox_runMode);
+            this.groupBox21.Controls.Add(this.label41);
+            this.groupBox21.Controls.Add(this.label40);
+            this.groupBox21.Location = new System.Drawing.Point(6, 19);
+            this.groupBox21.Name = "groupBox21";
+            this.groupBox21.Size = new System.Drawing.Size(1021, 64);
+            this.groupBox21.TabIndex = 0;
+            this.groupBox21.TabStop = false;
+            this.groupBox21.Text = "基本配置";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.label40.ForeColor = System.Drawing.Color.Blue;
+            this.label40.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label40.Location = new System.Drawing.Point(19, 27);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(180, 22);
+            this.label40.TabIndex = 78;
+            this.label40.Text = "离线工单数量（1-32）:";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.label41.ForeColor = System.Drawing.Color.Blue;
+            this.label41.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label41.Location = new System.Drawing.Point(443, 27);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(122, 22);
+            this.label41.TabIndex = 79;
+            this.label41.Text = "执行工单模式：";
+            // 
+            // ucCombox_runMode
+            // 
+            this.ucCombox_runMode.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_runMode.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_runMode.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_runMode.ConerRadius = 5;
+            this.ucCombox_runMode.DropPanelHeight = -1;
+            this.ucCombox_runMode.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_runMode.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.ucCombox_runMode.IsRadius = true;
+            this.ucCombox_runMode.IsShowRect = true;
+            this.ucCombox_runMode.ItemWidth = 70;
+            this.ucCombox_runMode.Location = new System.Drawing.Point(572, 22);
+            this.ucCombox_runMode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_runMode.Name = "ucCombox_runMode";
+            this.ucCombox_runMode.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_runMode.RectWidth = 1;
+            this.ucCombox_runMode.SelectedIndex = -1;
+            this.ucCombox_runMode.SelectedValue = "";
+            this.ucCombox_runMode.Size = new System.Drawing.Size(141, 32);
+            this.ucCombox_runMode.Source = null;
+            this.ucCombox_runMode.TabIndex = 83;
+            this.ucCombox_runMode.TextValue = null;
+            this.ucCombox_runMode.TriangleColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(77)))), ((int)(((byte)(59)))));
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column10,
+            this.Column11,
+            this.Column12,
+            this.Column13,
+            this.Column14,
+            this.Column15,
+            this.Column16,
+            this.Column17,
+            this.Column18});
+            this.dataGridView2.Location = new System.Drawing.Point(6, 89);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.RowTemplate.Height = 23;
+            this.dataGridView2.Size = new System.Drawing.Size(888, 592);
+            this.dataGridView2.TabIndex = 1;
+            // 
+            // btn_UpdateTicket
+            // 
+            this.btn_UpdateTicket.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btn_UpdateTicket.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.btn_UpdateTicket.Location = new System.Drawing.Point(925, 631);
+            this.btn_UpdateTicket.Name = "btn_UpdateTicket";
+            this.btn_UpdateTicket.Size = new System.Drawing.Size(100, 50);
+            this.btn_UpdateTicket.TabIndex = 56;
+            this.btn_UpdateTicket.Text = "更 新";
+            this.btn_UpdateTicket.UseVisualStyleBackColor = true;
+            this.btn_UpdateTicket.Click += new System.EventHandler(this.btn_UpdateTicket_Click);
+            // 
+            // Column10
+            // 
+            this.Column10.HeaderText = "序号";
+            this.Column10.Name = "Column10";
+            // 
+            // Column11
+            // 
+            this.Column11.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.Column11.HeaderText = "Ax模式";
+            this.Column11.Items.AddRange(new object[] {
+            "SN",
+            "MN",
+            "SA",
+            "MA"});
+            this.Column11.Name = "Column11";
+            this.Column11.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column11.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Column12
+            // 
+            this.Column12.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.Column12.HeaderText = "Mx模式";
+            this.Column12.Items.AddRange(new object[] {
+            "M0",
+            "M1",
+            "M2",
+            "M3",
+            "M4",
+            "M5",
+            "M6",
+            "M7",
+            "M8",
+            "M9"});
+            this.Column12.Name = "Column12";
+            this.Column12.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column12.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Column13
+            // 
+            this.Column13.HeaderText = "报警值1";
+            this.Column13.Name = "Column13";
+            // 
+            // Column14
+            // 
+            this.Column14.HeaderText = "报警值2";
+            this.Column14.Name = "Column14";
+            // 
+            // Column15
+            // 
+            this.Column15.HeaderText = "报警值3";
+            this.Column15.Name = "Column15";
+            // 
+            // Column16
+            // 
+            this.Column16.HeaderText = "螺栓数量";
+            this.Column16.Name = "Column16";
+            // 
+            // Column17
+            // 
+            this.Column17.HeaderText = "工单号";
+            this.Column17.Name = "Column17";
+            // 
+            // Column18
+            // 
+            this.Column18.HeaderText = "序列号";
+            this.Column18.Name = "Column18";
+            // 
+            // ucCombox_screwMax
+            // 
+            this.ucCombox_screwMax.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_screwMax.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_screwMax.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_screwMax.ConerRadius = 5;
+            this.ucCombox_screwMax.DropPanelHeight = -1;
+            this.ucCombox_screwMax.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_screwMax.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_screwMax.IsRadius = true;
+            this.ucCombox_screwMax.IsShowRect = true;
+            this.ucCombox_screwMax.ItemWidth = 70;
+            this.ucCombox_screwMax.Location = new System.Drawing.Point(206, 22);
+            this.ucCombox_screwMax.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_screwMax.Name = "ucCombox_screwMax";
+            this.ucCombox_screwMax.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_screwMax.RectWidth = 1;
+            this.ucCombox_screwMax.SelectedIndex = -1;
+            this.ucCombox_screwMax.SelectedValue = "";
+            this.ucCombox_screwMax.Size = new System.Drawing.Size(124, 32);
+            this.ucCombox_screwMax.Source = null;
+            this.ucCombox_screwMax.TabIndex = 86;
+            this.ucCombox_screwMax.TextValue = null;
+            this.ucCombox_screwMax.TriangleColor = System.Drawing.Color.Blue;
+            this.ucCombox_screwMax.SelectedChangedEvent += new System.EventHandler(this.ucCombox_screwMax_SelectedChangedEvent);
+            // 
             // MenuDeviceSetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -3859,6 +4078,10 @@
             this.groupBox14.PerformLayout();
             this.groupBox13.ResumeLayout(false);
             this.groupBox13.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.groupBox21.ResumeLayout(false);
+            this.groupBox21.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4048,5 +4271,22 @@
         private HZH_Controls.Controls.UCCombox ucCombox_capacity;
         private HZH_Controls.Controls.UCCombox ucCombox_calUnit;
         private HZH_Controls.Controls.UCTextBoxEx tb_adNegOutPut5;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.GroupBox groupBox21;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label40;
+        private HZH_Controls.Controls.UCCombox ucCombox_runMode;
+        private System.Windows.Forms.Button btn_UpdateTicket;
+        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Column11;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Column12;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column13;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column14;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column15;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column16;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column17;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column18;
+        private HZH_Controls.Controls.UCCombox ucCombox_screwMax;
     }
 }

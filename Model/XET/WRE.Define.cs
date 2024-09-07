@@ -153,7 +153,7 @@ namespace Model
         public UInt32       user_ID;                                    //操作工号
         public String       user_name;                          		//操作姓名
 
-        public Byte[]       screworder = new Byte[16];                  //离线工单组合顺序
+        public Byte[]       screworder = new Byte[32];                  //离线工单组合顺序
     }
 
     public class FIFO
@@ -204,6 +204,15 @@ namespace Model
         public Int32[]      alarm = new Int32[3];                       //报警数值
     }
 
+    public class SCREW
+    {
+        public Byte          scw_ticketAxMx;                            //离线工单拧紧模式
+        public Byte          scw_ticketCnt;                             //离线工单数量
+        public UInt32        scw_ticketNum;                             //离线工单号
+        public UInt64        scw_ticketSerial;                          //离线工单序列号（1个工单可以有 n 个序列号）
+
+    }
+
     public partial class WRE
     {
         public WLAN wlan    = new WLAN();                               //无线配置参数
@@ -213,6 +222,7 @@ namespace Model
         public WORK work    = new WORK();                               //工单信息
         public FIFO fifo    = new FIFO();                               //缓存状态
         public DATA[] data  = new DATA[5];                              //测量数据
+        public SCREW[] screw = new SCREW[32];                           //离线工单
     }
 }
 

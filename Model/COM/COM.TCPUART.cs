@@ -1249,16 +1249,9 @@ namespace Model
                         }
                     }
                     //预留字节
-                    for (int i = idx; i < 64 + 7; i++)
+                    for (int i = idx; i < 96 + 7; i++)
                     {
                         meTXD[idx++] = 0xFF;
-                    }
-
-                    //MyDevice.mTCP[sAddress].work.screworder
-                    for (int i = 0; idx < 96 + 7; i++)
-                    {
-                        meTXD[idx++] = 0x00;
-                        meTXD[idx++] = MyDevice.mTCP[sAddress].work.screworder[i];
                     }
 
                     break;
@@ -2250,10 +2243,6 @@ namespace Model
                     {
                         MyDevice.mTCP[sAddress].work.user_ID = mePort_GetByte(6);
                         MyDevice.mTCP[sAddress].work.user_name = mePort_GetString(7, 48);
-                        for (int i = 0, j = 0; i < 16; i++, j = j + 2)
-                        {
-                            MyDevice.mTCP[sAddress].work.screworder[i] = mePort_GetByte((UInt16)(68 + j));
-                        }
                         mePort_DataRemove(0x65);
                         isEQ = true;
                     }

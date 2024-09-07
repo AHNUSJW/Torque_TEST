@@ -33,6 +33,7 @@ namespace Base.UI.MenuDevice
         private string buttonClicked = "";    //记录按下的按钮,区分按下的是预设值还是模式设置
         private int selectNum = 0;            //轮询发送指令的扳手下标
         private byte oldDevAddr = 1;          //改站点之前的旧站点
+        private const int ticketCntMax = 32;  //离线工单最大值
 
         public class GridModel
         {
@@ -82,59 +83,11 @@ namespace Base.UI.MenuDevice
 
             #region 表格初始化
 
-            //表格初始化
-            dataGridView1.EnableHeadersVisualStyles = false;//允许自定义行头样式
-            dataGridView1.RowHeadersVisible = false; //第一列空白隐藏掉
-            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.CadetBlue;//行头背景颜色
-            dataGridView1.RowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            //预设值设置表格初始化
+            DataGridView1_Init();
 
-            dataGridView1.AllowUserToAddRows = false;//禁止用户添加行
-            dataGridView1.AllowUserToDeleteRows = false;//禁止用户删除行
-            dataGridView1.AllowUserToOrderColumns = false;//禁止用户手动重新定位行
-            dataGridView1.AllowUserToResizeRows = false;//禁止用户调整行大小
-            dataGridView1.AllowUserToResizeColumns = false;//禁止用户调整列大小
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;// 禁止用户改变列头的高度 
-            dataGridView1.Font = new Font("Arial", 8, FontStyle.Bold);
-
-            Font font = new Font("Arial", 10, FontStyle.Bold);
-
-            //模式数据行初始化
-            dataGridView1.Rows.Add();
-            dataGridView1.Rows[0].Cells[0].Value = "模式";
-            dataGridView1.Rows[0].Cells[1].Value = "扭矩限制值";
-            dataGridView1.Rows[0].Cells[2].Value = "扭矩初始值";
-            dataGridView1.Rows[0].Cells[3].Value = "角度限制值";
-            dataGridView1.Rows[0].Cells[4].Value = "扭矩下限值";
-            dataGridView1.Rows[0].Cells[5].Value = "扭矩上限值";
-            dataGridView1.Rows[0].Cells[6].Value = "扭矩初始值";
-            dataGridView1.Rows[0].Cells[7].Value = "角度下限值";
-            dataGridView1.Rows[0].Cells[8].Value = "角度上限值";
-
-            //模式数据列初始化
-            for (int i = 1; i < 11; i++)
-            {
-                dataGridView1.Rows.Add();
-                dataGridView1.Rows[i].Cells[0].Value = "M" + (i - 1).ToString();
-                dataGridView1.Rows[i].Cells[0].Style.Font = font;
-            }
-
-            //行首与列首均禁止编辑
-            dataGridView1.Rows[0].ReadOnly = true;
-            dataGridView1.Columns[0].ReadOnly = true;
-
-            //设置列宽
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-            //设置行高
-            int height = 0;
-            dataGridView1.ColumnHeadersHeight = dataGridView1.Height / 25;
-            for (int i = 0; i < dataGridView1.RowCount; i++)
-            {
-                dataGridView1.Rows[i].Height = (dataGridView1.Height - dataGridView1.ColumnHeadersHeight) / dataGridView1.RowCount;
-                height += dataGridView1.Rows[i].Height;
-            }
-            dataGridView1.ColumnHeadersHeight = dataGridView1.Height - height;
+            //离线工单表格初始化
+            DataGridView2_Init();
 
             #endregion
 
@@ -573,7 +526,6 @@ namespace Base.UI.MenuDevice
                 new KeyValuePair<string, string>("16", "2000"),
                 new KeyValuePair<string, string>("17", "2600"),
                 new KeyValuePair<string, string>("18", "3000"),
-
             };
             for (int i = 0; i < ucCombox_capacity.Source.Count; i++)
             {
@@ -597,6 +549,58 @@ namespace Base.UI.MenuDevice
             }
 
             #endregion
+
+            #region 工单设置
+
+            //离线工单数量
+            ucCombox_screwMax.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0",  "1"),
+                new KeyValuePair<string, string>("1",  "2"),
+                new KeyValuePair<string, string>("2",  "3"),
+                new KeyValuePair<string, string>("3",  "4"),
+                new KeyValuePair<string, string>("4",  "5"),
+                new KeyValuePair<string, string>("5",  "6"),
+                new KeyValuePair<string, string>("6",  "7"),
+                new KeyValuePair<string, string>("7",  "8"),
+                new KeyValuePair<string, string>("8",  "9"),
+                new KeyValuePair<string, string>("9",  "10"),
+                new KeyValuePair<string, string>("10", "11"),
+                new KeyValuePair<string, string>("11", "12"),
+                new KeyValuePair<string, string>("12", "13"),
+                new KeyValuePair<string, string>("13", "14"),
+                new KeyValuePair<string, string>("14", "15"),
+                new KeyValuePair<string, string>("15", "16"),
+                new KeyValuePair<string, string>("16", "17"),
+                new KeyValuePair<string, string>("17", "18"),
+                new KeyValuePair<string, string>("18", "19"),
+                new KeyValuePair<string, string>("19", "20"),
+                new KeyValuePair<string, string>("20", "21"),
+                new KeyValuePair<string, string>("21", "22"),
+                new KeyValuePair<string, string>("22", "23"),
+                new KeyValuePair<string, string>("23", "24"),
+                new KeyValuePair<string, string>("24", "25"),
+                new KeyValuePair<string, string>("25", "26"),
+                new KeyValuePair<string, string>("26", "27"),
+                new KeyValuePair<string, string>("27", "28"),
+                new KeyValuePair<string, string>("28", "29"),
+                new KeyValuePair<string, string>("29", "30"),
+                new KeyValuePair<string, string>("30", "31"),
+                new KeyValuePair<string, string>("31", "32"),
+            };
+            ucCombox_screwMax.SelectedIndex = actXET.para.screwmax - 1;
+
+            //离线工单执行模式
+            ucCombox_runMode.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0",  "不执行"),
+                new KeyValuePair<string, string>("1",  "手动执行"),
+                new KeyValuePair<string, string>("2",  "自动执行"),
+            };
+            ucCombox_runMode.SelectedIndex = actXET.para.runmode;
+
+            #endregion
+
         }
 
         //依据权限调整控件状态
@@ -847,6 +851,8 @@ namespace Base.UI.MenuDevice
                 default:
                     break;
             }
+            //工单设置
+
         }
 
         //依据扳手型号调整控件状态
@@ -967,6 +973,123 @@ namespace Base.UI.MenuDevice
             if (MyDevice.protocol.type == COMP.UART)
             {
                 actXET.wlan.addr = Convert.ToByte(ucTextBoxEx_addr.InputText);
+            }
+        }
+
+        //预设值设置表格初始化
+        private void DataGridView1_Init()
+        {
+            //表格初始化
+            dataGridView1.EnableHeadersVisualStyles = false;//允许自定义行头样式
+            dataGridView1.RowHeadersVisible = false; //第一列空白隐藏掉
+            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.CadetBlue;//行头背景颜色
+            dataGridView1.RowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            dataGridView1.AllowUserToAddRows = false;//禁止用户添加行
+            dataGridView1.AllowUserToDeleteRows = false;//禁止用户删除行
+            dataGridView1.AllowUserToOrderColumns = false;//禁止用户手动重新定位行
+            dataGridView1.AllowUserToResizeRows = false;//禁止用户调整行大小
+            dataGridView1.AllowUserToResizeColumns = false;//禁止用户调整列大小
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;// 禁止用户改变列头的高度 
+            dataGridView1.Font = new Font("Arial", 8, FontStyle.Bold);
+
+            Font font = new Font("Arial", 10, FontStyle.Bold);
+
+            //模式数据行初始化
+            dataGridView1.Rows.Add();
+            dataGridView1.Rows[0].Cells[0].Value = "模式";
+            dataGridView1.Rows[0].Cells[1].Value = "扭矩限制值";
+            dataGridView1.Rows[0].Cells[2].Value = "扭矩初始值";
+            dataGridView1.Rows[0].Cells[3].Value = "角度限制值";
+            dataGridView1.Rows[0].Cells[4].Value = "扭矩下限值";
+            dataGridView1.Rows[0].Cells[5].Value = "扭矩上限值";
+            dataGridView1.Rows[0].Cells[6].Value = "扭矩初始值";
+            dataGridView1.Rows[0].Cells[7].Value = "角度下限值";
+            dataGridView1.Rows[0].Cells[8].Value = "角度上限值";
+
+            //模式数据列初始化
+            for (int i = 1; i < 11; i++)
+            {
+                dataGridView1.Rows.Add();
+                dataGridView1.Rows[i].Cells[0].Value = "M" + (i - 1).ToString();
+                dataGridView1.Rows[i].Cells[0].Style.Font = font;
+            }
+
+            //行首与列首均禁止编辑
+            dataGridView1.Rows[0].ReadOnly = true;
+            dataGridView1.Columns[0].ReadOnly = true;
+
+            //设置列宽
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            //设置行高
+            int height = 0;
+            dataGridView1.ColumnHeadersHeight = dataGridView1.Height / 25;
+            for (int i = 0; i < dataGridView1.RowCount; i++)
+            {
+                dataGridView1.Rows[i].Height = (dataGridView1.Height - dataGridView1.ColumnHeadersHeight) / dataGridView1.RowCount;
+                height += dataGridView1.Rows[i].Height;
+            }
+            dataGridView1.ColumnHeadersHeight = dataGridView1.Height - height;
+        }
+
+        //离线工单表格初始化
+        private void DataGridView2_Init()
+        {
+            //表格初始化
+            dataGridView2.EnableHeadersVisualStyles = false;//允许自定义行头样式
+            dataGridView2.RowHeadersVisible = false; //第一列空白隐藏掉
+            dataGridView2.ColumnHeadersDefaultCellStyle.BackColor = Color.CadetBlue;//行头背景颜色
+            dataGridView2.RowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView2.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            dataGridView2.AllowUserToAddRows = false;//禁止用户添加行
+            dataGridView2.AllowUserToDeleteRows = false;//禁止用户删除行
+            dataGridView2.AllowUserToOrderColumns = false;//禁止用户手动重新定位行
+            dataGridView2.AllowUserToResizeRows = false;//禁止用户调整行大小
+            dataGridView2.AllowUserToResizeColumns = false;//禁止用户调整列大小
+            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;// 禁止用户改变列头的高度 
+            dataGridView2.Font = new Font("Arial", 8, FontStyle.Bold);
+
+            Font font = new Font("Arial", 10, FontStyle.Bold);
+
+            //模式数据列初始化
+            for (int i = 0; i < ticketCntMax; i++)
+            {
+                dataGridView2.Rows.Add();
+                dataGridView2.Rows[i].Cells[0].Value = i + 1;
+                dataGridView2.Rows[i].Cells[0].Style.Font = font;
+            }
+
+            //行首与列首均禁止编辑
+            dataGridView2.Columns[0].ReadOnly = true;
+
+            //设置列宽
+            dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView2.ScrollBars = ScrollBars.None;
+
+            //设置行高
+            int height = 0;
+            dataGridView2.ColumnHeadersHeight = dataGridView2.Height / 25;
+            for (int i = 0; i < dataGridView2.RowCount; i++)
+            {
+                dataGridView2.Rows[i].Height = (dataGridView2.Height - dataGridView2.ColumnHeadersHeight) / dataGridView2.RowCount;
+                height += dataGridView2.Rows[i].Height;
+            }
+            dataGridView2.ColumnHeadersHeight = dataGridView2.Height - height;
+
+            //获取工单实际数值
+            for (int i = 0; i < ticketCntMax; i++)
+            {
+                //dataGridView2.Rows[i + 1].Cells[1].Value = actXET.alam.SN_target[i, unit] / (float)actXET.torqueMultiple;
+                //dataGridView2.Rows[i + 1].Cells[2].Value = actXET.alam.SA_pre[i, unit] / (float)actXET.torqueMultiple;
+                //dataGridView2.Rows[i + 1].Cells[3].Value = actXET.alam.SA_ang[i] / (float)actXET.angleMultiple;
+                //dataGridView2.Rows[i + 1].Cells[4].Value = actXET.alam.MN_low[i, unit] / (float)actXET.torqueMultiple;
+                //dataGridView2.Rows[i + 1].Cells[5].Value = actXET.alam.MN_high[i, unit] / (float)actXET.torqueMultiple;
+                //dataGridView2.Rows[i + 1].Cells[6].Value = actXET.alam.MA_pre[i, unit] / (float)actXET.torqueMultiple;
+                //dataGridView2.Rows[i + 1].Cells[7].Value = actXET.alam.MA_low[i] / (float)actXET.angleMultiple;
+                //dataGridView2.Rows[i + 1].Cells[8].Value = actXET.alam.MA_high[i] / (float)actXET.angleMultiple;
             }
         }
 
@@ -1430,6 +1553,19 @@ namespace Base.UI.MenuDevice
             }
         }
 
+        //更新工单设置
+        private void btn_UpdateTicket_Click(object sender, EventArgs e)
+        {
+            if (ucDataGridView1.SelectRows.Count == 0)
+            {
+                MessageBox.Show("未选择设备");
+                return;
+            }
+
+            //按键状态
+            btn_UpdateTicket.BackColor = Color.Firebrick;
+        }
+
         //单位切换更新数据表格——进行单位换算
         private void ucCombox1_SelectedChangedEvent(object sender, EventArgs e)
         {
@@ -1868,6 +2004,19 @@ namespace Base.UI.MenuDevice
                 height += dataGridView1.Rows[i].Height;
             }
             dataGridView1.ColumnHeadersHeight = dataGridView1.Height - height <= 4 ? 4 : dataGridView1.Height - height;//dataGridView1.ColumnHeadersHeight 必须大于4，否则报错
+
+            //设置datagridview2
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            //设置行高
+            int height2 = 0;
+            dataGridView2.ColumnHeadersHeight = dataGridView2.Height / 25 <= 4 ? 4 : dataGridView2.Height / 25;//dataGridView1.ColumnHeadersHeight 必须大于4，否则报错
+            for (int i = 0; i < dataGridView2.RowCount; i++)
+            {
+                dataGridView2.Rows[i].Height = (dataGridView2.Height - dataGridView2.ColumnHeadersHeight) / dataGridView2.RowCount;
+                height2 += dataGridView2.Rows[i].Height;
+            }
+            dataGridView2.ColumnHeadersHeight = dataGridView2.Height - height2 <= 4 ? 4 : dataGridView2.Height - height2;//dataGridView1.ColumnHeadersHeight 必须大于4，否则报错
         }
 
         #endregion
@@ -2230,5 +2379,18 @@ namespace Base.UI.MenuDevice
             return alarmEnable;
         }
 
+        //工单数量切换
+        private void ucCombox_screwMax_SelectedChangedEvent(object sender, EventArgs e)
+        {
+            List<int> limitRowList = new List<int>();//限制输入行
+
+            for (int i = 0; i < ucCombox_screwMax.SelectedIndex + 1; i++)
+            {
+                limitRowList.Add(i);
+            }
+
+            //报警值不可编辑，只能从扳手预设值引用
+            SetEditableCells(dataGridView2, new List<int> { 1, 2, 6, 7, 8 }, limitRowList);
+        }
     }
 }
