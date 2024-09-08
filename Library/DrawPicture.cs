@@ -604,7 +604,7 @@ namespace Library
         #region 画多设备曲线 Ricardo
 
         //画上层(提供y坐标)—— 多设备
-        public Bitmap GetForegroundImageFromDevs(params double[][] datas)
+        public Bitmap GetForegroundImageFromDevs_Y(params double[][] datas)
         {
             //层图
             Bitmap img = new Bitmap(Width, Height);
@@ -637,7 +637,7 @@ namespace Library
         }
 
         //画上层(提供x坐标和y坐标)
-        public Bitmap GetForegroundImageFromDevs_Two(params Tuple<double[], double[]>[] curves)
+        public Bitmap GetForegroundImageFromDevs_XY(params Tuple<double[], double[]>[] curves)
         {
             //层图
             Bitmap img = new Bitmap(Width, Height);

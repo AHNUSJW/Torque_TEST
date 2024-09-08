@@ -264,7 +264,7 @@ namespace Base.UI.MenuDevice
 
                     // 将 List<List<double>> 转换为 double[][]
                     torqueData = torqueLists.ConvertAll(list => list.ToArray()).ToArray();
-                    pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs(torqueData);
+                    pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_Y(torqueData);
                 }
                 else if (ucCombox1.SelectedIndex == 1 && angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
                 {
@@ -274,7 +274,7 @@ namespace Base.UI.MenuDevice
 
                     // 将 List<List<double>> 转换为 double[][]
                     angleData = angleLists.ConvertAll(list => list.ToArray()).ToArray();
-                    pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs(angleData);
+                    pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_Y(angleData);
                 }
                 else if (ucCombox1.SelectedIndex == 2 && torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
                 {
@@ -293,7 +293,7 @@ namespace Base.UI.MenuDevice
                     {
                         curves[i] = Tuple.Create(angleData[i], torqueData[i]);
                     }
-                    pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_Two(curves);
+                    pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_XY(curves);
                 }
             }
         }
@@ -477,10 +477,17 @@ namespace Base.UI.MenuDevice
                 if (dataGroupResults.ContainsKey(resultKey) && dataGroupResults[resultKey])
                 {
                     panel3.BackColor = Color.Green;
+                    label3.Text = "扭矩峰值：" + TorquedataGroups[resultKey].Max() + torqueUnit;
+                    label4.Text = "角度峰值：" + AngledataGroups[resultKey].Max() + "°";
                 }
                 else
                 {
                     panel3.BackColor = Color.CadetBlue;
+                    if (TorquedataGroups.ContainsKey(resultKey))
+                    {
+                        label3.Text = "扭矩峰值：" + TorquedataGroups[resultKey].Max() + torqueUnit;
+                        label4.Text = "角度峰值：" + AngledataGroups[resultKey].Max() + "°";
+                    }
                 }
             }
         }
@@ -637,8 +644,8 @@ namespace Base.UI.MenuDevice
                     dataGridView1.Rows[idx].Cells[3].Value = actXET.wlan.addr;
                     dataGridView1.Rows[idx].Cells[4].Value = torque + " " + torqueUnit;
                     dataGridView1.Rows[idx].Cells[5].Value = angle + " °";
-                    label3.Text = "扭矩峰值：" + torquePeak + torqueUnit;
-                    label4.Text = "角度峰值：" + anglePeak + "°";
+                    label3.Text = "扭矩峰值：" + torque + torqueUnit;
+                    label4.Text = "角度峰值：" + angle + "°";
 
                     TorquedataGroups[actXET.opsn].Add(torque);
                     AngledataGroups[actXET.opsn].Add(angle);
@@ -774,8 +781,8 @@ namespace Base.UI.MenuDevice
                         dataGridView1.Rows[idx].Cells[3].Value = actXET.wlan.addr;
                         dataGridView1.Rows[idx].Cells[4].Value = torque + " " + torqueUnit;
                         dataGridView1.Rows[idx].Cells[5].Value = angle + " °";
-                        label3.Text = "扭矩峰值：" + torquePeak + torqueUnit;
-                        label4.Text = "角度峰值：" + anglePeak + "°";
+                        label3.Text = "扭矩峰值：" + torque + torqueUnit;
+                        label4.Text = "角度峰值：" + angle + "°";
 
                         TorquedataGroups[actXET.opsn].Add(torque);
                         AngledataGroups[actXET.opsn].Add(angle);
@@ -938,7 +945,7 @@ namespace Base.UI.MenuDevice
 
                                 // 将 List<List<double>> 转换为 double[][]
                                 torqueData = torqueLists.ConvertAll(list => list.ToArray()).ToArray();
-                                pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs(torqueData);
+                                pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_Y(torqueData);
                             }
                             else if (ucCombox1.SelectedIndex == 1 && angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
                             {
@@ -948,7 +955,7 @@ namespace Base.UI.MenuDevice
 
                                 // 将 List<List<double>> 转换为 double[][]
                                 angleData = angleLists.ConvertAll(list => list.ToArray()).ToArray();
-                                pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs(angleData);
+                                pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_Y(angleData);
                             }
                             else if (ucCombox1.SelectedIndex == 2 && torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
                             {
@@ -956,29 +963,42 @@ namespace Base.UI.MenuDevice
                                 myDrawPicture.LimitLowerLeftY = newTorqueLower.Min();
                                 pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
 
+                                /*
+                                //更新所有数据
+                                torqueData = torqueLists.ConvertAll(list => list.ToArray()).ToArray();
+                                angleData = angleLists.ConvertAll(list => list.ToArray()).ToArray();
+
+                                // 创建存储 Tuple 的数组
+                                Tuple<double[], double[]>[] curves = new Tuple<double[], double[]>[torqueData.Length];
+
+                                // 遍历数组，创建 Tuple 并添加到 curves 数组中
+                                for (int j = 0; j < torqueData.Length; j++)
+                                {
+                                    curves[j] = Tuple.Create(angleData[j], torqueData[j]);
+                                }
+                                pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_XY(curves);
+                                */
+
+                                /************更新最后一个02或者03对应的过程数据**********/
+
                                 //06按照dtype=F2划分成n段，实时更新最后一段
                                 if (actXET.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || actXET.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
                                 {
-                                    torqueData = torqueLists.ConvertAll(list => list.ToArray()).ToArray();
-                                    angleData = angleLists.ConvertAll(list => list.ToArray()).ToArray();
-
-                                    // 创建存储 Tuple 的数组
-                                    Tuple<double[], double[]>[] curves = new Tuple<double[], double[]>[torqueData.Length];
-
-                                    // 遍历数组，创建 Tuple 并添加到 curves 数组中
-                                    for (int j = 0; j < torqueData.Length; j++)
+                                    if (actXET.data[i].dtype == 0xF2)
                                     {
-                                        curves[j] = Tuple.Create(angleData[j], torqueData[j]);
+                                        string index1 = AngledataGroups.Keys.ElementAt(AngledataGroups.Count - 2);//当前作业号的上一个
+                                        pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_XY(new Tuple<double[], double[]>(AngledataGroups[index1].ToArray(), TorquedataGroups[index1].ToArray()));
                                     }
-                                    pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_Two(curves);
                                 }
-
-                                ////07按照dtype=F3划分成n段，实时更新最后一段
-                                //if (actXET.data[i].dtype == 0xF3)
-                                //{
-                                //    string index = AngledataGroups.Keys.ElementAt(AngledataGroups.Count - 2);//当前作业号的上一个
-                                //    pictureBox1.Image = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetForegroundImage_Two(AngledataGroups[index].ToArray(), TorquedataGroups[index].ToArray());
-                                //}     
+                                else
+                                {
+                                    //07按照dtype=F3划分成n段，实时更新最后一段
+                                    if (actXET.data[i].dtype == 0xF3)
+                                    {
+                                        string index2 = AngledataGroups.Keys.ElementAt(AngledataGroups.Count - 2);//当前作业号的上一个
+                                        pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_XY(new Tuple<double[], double[]>(AngledataGroups[index2].ToArray(), TorquedataGroups[index2].ToArray()));
+                                    }
+                                }
                             }
                         }
                     }
