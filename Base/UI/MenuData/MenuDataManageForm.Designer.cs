@@ -38,7 +38,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btn_delete = new System.Windows.Forms.Button();
+            this.btn_toggle = new System.Windows.Forms.Button();
             this.btn_back = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.formsPlot1 = new ScottPlot.FormsPlot();
@@ -59,6 +59,7 @@
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.DeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btn_filter = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -154,6 +155,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btn_filter);
             this.panel2.Controls.Add(this.button2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(396, 3);
@@ -176,7 +178,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.btn_delete);
+            this.panel1.Controls.Add(this.btn_toggle);
             this.panel1.Controls.Add(this.btn_back);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
@@ -184,17 +186,17 @@
             this.panel1.Size = new System.Drawing.Size(387, 85);
             this.panel1.TabIndex = 0;
             // 
-            // btn_delete
+            // btn_toggle
             // 
-            this.btn_delete.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btn_delete.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btn_delete.Location = new System.Drawing.Point(233, 18);
-            this.btn_delete.Name = "btn_delete";
-            this.btn_delete.Size = new System.Drawing.Size(103, 45);
-            this.btn_delete.TabIndex = 169;
-            this.btn_delete.Text = "删除";
-            this.btn_delete.UseVisualStyleBackColor = false;
-            this.btn_delete.Visible = false;
+            this.btn_toggle.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btn_toggle.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.btn_toggle.Location = new System.Drawing.Point(233, 18);
+            this.btn_toggle.Name = "btn_toggle";
+            this.btn_toggle.Size = new System.Drawing.Size(103, 45);
+            this.btn_toggle.TabIndex = 169;
+            this.btn_toggle.Text = "切换模式";
+            this.btn_toggle.UseVisualStyleBackColor = false;
+            this.btn_toggle.Click += new System.EventHandler(this.btn_toggle_Click);
             // 
             // btn_back
             // 
@@ -375,14 +377,25 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DeleteToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 26);
             // 
             // DeleteToolStripMenuItem
             // 
             this.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem";
-            this.DeleteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.DeleteToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.DeleteToolStripMenuItem.Text = "删除数据";
             this.DeleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItem_Click);
+            // 
+            // btn_filter
+            // 
+            this.btn_filter.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btn_filter.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.btn_filter.Location = new System.Drawing.Point(12, 18);
+            this.btn_filter.Name = "btn_filter";
+            this.btn_filter.Size = new System.Drawing.Size(103, 45);
+            this.btn_filter.TabIndex = 170;
+            this.btn_filter.Text = "筛选";
+            this.btn_filter.UseVisualStyleBackColor = false;
             // 
             // MenuDataManageForm
             // 
@@ -443,8 +456,9 @@
         private System.Windows.Forms.Button btn_back;
         private ScottPlot.FormsPlot formsPlot1;
         private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button btn_delete;
+        private System.Windows.Forms.Button btn_toggle;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem DeleteToolStripMenuItem;
+        private System.Windows.Forms.Button btn_filter;
     }
 }

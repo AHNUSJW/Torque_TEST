@@ -1,11 +1,10 @@
 ﻿using DBHelper;
 using HZH_Controls;
-using ScottPlot;
+using Model;
 using ScottPlot.Plottable;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -32,6 +31,7 @@ namespace Base.UI.MenuData
         private VLine verticalLine;                                //纵轴
         private Text textAnnotation = null;                        //数据文本
         private string torUnit = "";                               //扭矩单位
+        private bool isPeakShow = false;                           //是否是峰值展示模式
 
         private Dictionary<byte, List<DSData>> DataDic = new Dictionary<byte, List<DSData>>(); //不同站点下的信息汇总
 
@@ -42,11 +42,27 @@ namespace Base.UI.MenuData
 
         private void MenuDataManageForm_Load(object sender, EventArgs e)
         {
-            //显示数据汇总表（根据工单名称）
-            ShowSummaryData();
+            if (GetShowType(MyDevice.userDAT + @"\DataShowType.txt") == "1")
+            {
+                btn_toggle.Text = "切换\n全局模式";
+                isPeakShow = true;
+            }
+            else if (GetShowType(MyDevice.userDAT + @"\DataShowType.txt") == "0" || GetShowType(MyDevice.userDAT + @"\DataShowType.txt") == "")
+            {
+                btn_toggle.Text = "切换\n峰值模式";
+                isPeakShow = false;
+
+                //显示数据汇总表（根据工单名称）
+                ShowSummaryData();
+            }
 
             // 将BindingSource绑定到DataGridView
             dataGridView1.DataSource = bindingSource1;
+
+            //新增切换模式——用于客户选择展示模式，峰值模式/全局模式
+            btn_toggle.Visible = true;
+            btn_toggle.Location = new System.Drawing.Point(btn_back.Location.X, btn_back.Location.Y);
+            btn_back.Visible = false;
         }
 
         //表格初始化
@@ -179,52 +195,51 @@ namespace Base.UI.MenuData
         //双击显示指定数据
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            DateTime targetTime;//当前表格的日期
-            string targetWorkNum;//当前表格的工单号
-            string targetSeqId; //当前表格的序列号
-            string targetVid;//当前表格的作业号
-
-            if (e.RowIndex < 0) return;//防止点击列名报错
-
-            // 创建并启动Stopwatch实例
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            switch (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText)
+            //峰值模式下（双击只有一层过程数据）
+            if (isPeakShow)
             {
-                case "工单名称":
-                    targetWorkNum = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                    if (dataTable.Rows.Count > 0) dataTable.Clear();
-                    ShowSummaryDataByWorkNum(targetWorkNum);
-                    break;
-                case "工作日期":
-                    targetWorkNum = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-                    targetSeqId = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                    targetTime = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToDate();
-                    if (dataTable.Rows.Count > 0) dataTable.Clear();
-                    ShowSummaryDataByWorkNumAndSeqAndTime(targetWorkNum, targetSeqId, targetTime);
-                    break;
-                case "作业号":
-                    targetWorkNum = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-                    targetSeqId = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                    targetTime = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToDate();
-                    targetVid = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
-                    if (dataTable.Rows.Count > 0) dataTable.Clear();
-                    ShowSummaryDataByDay(targetWorkNum, targetSeqId, targetTime, targetVid);
-                    DisplayPage();
-                    break;
-                default:
-                    break;
+                
             }
+            //全局模式下（多层）
+            else
+            {
+                DateTime targetTime;//当前表格的日期
+                string targetWorkNum;//当前表格的工单号
+                string targetSeqId; //当前表格的序列号
+                string targetVid;//当前表格的作业号
 
-            // 停止Stopwatch实例
-            stopwatch.Stop();
+                if (e.RowIndex < 0) return;//防止点击列名报错
 
-            // 获取花费的时间
-            TimeSpan elapsedTime = stopwatch.Elapsed;
+                switch (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText)
+                {
+                    case "工单名称":
+                        targetWorkNum = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        if (dataTable.Rows.Count > 0) dataTable.Clear();
+                        ShowSummaryDataByWorkNum(targetWorkNum);
 
-            // 输出花费的时间，可以使用MessageBox显示或记录到日志
-            Console.WriteLine($"{dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText} 双击操作花费的时间: {elapsedTime.TotalMilliseconds} 毫秒");
+                        btn_toggle.Visible = false;
+                        btn_back.Visible = true;
+                        break;
+                    case "工作日期":
+                        targetWorkNum = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        targetSeqId = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        targetTime = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToDate();
+                        if (dataTable.Rows.Count > 0) dataTable.Clear();
+                        ShowSummaryDataByWorkNumAndSeqAndTime(targetWorkNum, targetSeqId, targetTime);
+                        break;
+                    case "作业号":
+                        targetWorkNum = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        targetSeqId = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                        targetTime = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToDate();
+                        targetVid = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
+                        if (dataTable.Rows.Count > 0) dataTable.Clear();
+                        ShowSummaryDataByDay(targetWorkNum, targetSeqId, targetTime, targetVid);
+                        DisplayPage();
+                        break;
+                    default:
+                        break;
+                }
+            }        
         }
 
         //数据总表——按日期排列
@@ -288,9 +303,13 @@ namespace Base.UI.MenuData
             cloneTable = dataTable.Clone();
         }
 
+        #region 全局模式数据展示
+
         //数据汇总表
         private void ShowSummaryData()
         {
+            btn_back.Visible = false;
+            btn_toggle.Visible = true;
             datagridviewInit();
             bindingNavigator1.Visible = false;
             dataTable = new DataTable();
@@ -502,6 +521,94 @@ namespace Base.UI.MenuData
             // 克隆表结构，直接操作dataTable会影响有效数据引用
             cloneTable = dataTable.Clone();
         }
+
+        #endregion
+
+        #region 峰值模式数据展示
+
+        //显示峰值数据
+        private void ShowPeakData()
+        {
+            datagridviewInit();
+            bindingNavigator1.Visible = false;
+            dataTable = new DataTable();
+
+            // 添加列到DataTable
+            dataTable.Columns.Add("序号", typeof(int));
+            dataTable.Columns.Add("作业号", typeof(string));
+            dataTable.Columns.Add("工单编号", typeof(string));
+            dataTable.Columns.Add("序列号", typeof(string));
+            dataTable.Columns.Add("标准扭矩", typeof(string));
+            dataTable.Columns.Add("标准角度", typeof(string));
+            dataTable.Columns.Add("峰值扭矩", typeof(string));
+            dataTable.Columns.Add("峰值角度", typeof(string));
+            dataTable.Columns.Add("扭矩结果", typeof(string));
+            dataTable.Columns.Add("角度结果", typeof(string));
+            dataTable.Columns.Add("作业时间", typeof(string));
+            dataTable.Columns.Add("时间标识", typeof(string));
+            dataTable.Columns.Add("设备编号", typeof(string));
+            dataTable.Columns.Add("设备型号", typeof(string));
+            dataTable.Columns.Add("设备站点", typeof(string));
+
+            // 获取最近一天的数据表
+            var recentDataList = JDBC.GetDataByRecent(1);
+
+            var filteredList = recentDataList.AsParallel()
+                                             .AsOrdered()
+                                             .GroupBy(x => x.VinId)                    // 按属性a分组
+                                             .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
+                                             .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+
+            if (filteredList != null && filteredList.Count != 0)
+            {
+                string tempUint = "N·m";
+                //
+                for (int i = 0; i < filteredList.Count; i++)
+                {
+                    //单位更新
+                    switch (filteredList[i].TorqueUnit)
+                    {
+                        case "UNIT_nm": tempUint = "N·m"; break;
+                        case "UNIT_lbfin": tempUint = "lbf·in"; break;
+                        case "UNIT_lbfft": tempUint = "lbf·ft"; break;
+                        case "UNIT_kgcm": tempUint = "kgf·cm"; break;
+                        case "UNIT_kgm": tempUint = "kgf·m"; break;
+                        default: break;
+                    }
+
+                    dataTable.Rows.Add(new object[] { i + 1,
+                                                  filteredList[i].VinId,
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].WorkNum.ToString(),
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].SequenceId.ToString(),
+                                                  filteredList[i].Torque,
+                                                  filteredList[i].Angle,
+                                                  filteredList[i].TorquePeak + " " + tempUint,
+                                                  filteredList[i].AngleAcc,
+                                                  filteredList[i].DataResult,
+                                                  filteredList[i].DataResult,
+                                                  filteredList[i].CreateTime,
+                                                  filteredList[i].Stamp,
+                                                  filteredList[i].Bohrcode,
+                                                  filteredList[i].DevType,
+                                                  filteredList[i].DevAddr,
+                    });
+                }
+            }
+
+            bindingSource1.DataSource = dataTable;
+
+            //将读取数据库的表深拷贝，避免下次返回目录二次查询，减少时间损耗
+            //tempTable1.Clear();
+            //tempTable1 = dataTable.Copy();
+        }
+
+        //显示峰值模式下过程数据
+        private void ShowProcessData(string peakVid)
+        {
+
+        }
+
+        #endregion
 
         //返回
         private void btn_back_Click(object sender, EventArgs e)
@@ -1014,5 +1121,77 @@ namespace Base.UI.MenuData
             }
         }
 
+        //切换模式
+        private void btn_toggle_Click(object sender, EventArgs e)
+        {
+            DialogResult typeResult = MessageBox.Show($"是否{btn_toggle.Text}" + "？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            
+            if (typeResult == DialogResult.No) return;
+
+            if (btn_toggle.Text == "切换\n峰值模式")
+            {
+                btn_toggle.Text = "切换\n全局模式";
+                isPeakShow = true;
+                SaveShowType(1);
+                ShowPeakData();
+            }
+            else if (btn_toggle.Text == "切换\n全局模式")
+            {
+                btn_toggle.Text = "切换\n峰值模式";
+                isPeakShow = false;
+                SaveShowType(0);
+            }
+        }
+
+        //判定展示模式
+        private string GetShowType(string filePath)
+        {
+            string showType = "";
+            //空
+            if (!Directory.Exists(MyDevice.userDAT))
+            {
+                return showType;
+            }
+
+            //读取
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    showType = File.ReadAllText(filePath);
+                }
+            }
+            catch
+            {
+            }
+
+            return showType;
+        }
+
+        //存储展示模式
+        private void SaveShowType(int showType)
+        {
+            //空
+            if (!Directory.Exists(MyDevice.userDAT))
+            {
+                Directory.CreateDirectory(MyDevice.userDAT);
+            }
+
+            //写入
+            try
+            {
+                string mePath = MyDevice.userDAT + @"\DataShowType.txt";//设置文件路径
+                if (File.Exists(mePath))
+                {
+                    System.IO.File.SetAttributes(mePath, FileAttributes.Normal);
+                }
+                File.WriteAllText(mePath, showType.ToString());// 0代表全局展示， 1代表峰值展示
+                System.IO.File.SetAttributes(mePath, FileAttributes.ReadOnly);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
     }
 }
