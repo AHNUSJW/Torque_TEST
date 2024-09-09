@@ -1104,10 +1104,10 @@ namespace Model
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)((MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 8) >> 8);
+                        MyDevice.myUIT.US = (ushort)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 0x20);
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFFFFFF);
                         meTXD[idx++] = MyDevice.myUIT.B3;
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
@@ -1133,7 +1133,7 @@ namespace Model
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)((MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 8) >> 8);
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 0x20);
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
                         MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
@@ -1162,7 +1162,7 @@ namespace Model
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)((MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 8) >> 8);
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 0x20);
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
                         MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
@@ -1191,7 +1191,7 @@ namespace Model
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)((MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 8) >> 8);
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 0x20);
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
                         MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
@@ -2655,7 +2655,7 @@ namespace Model
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + i * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + i * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + i * 12));
-                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = ((UInt64)mePort_GetUInt32((ushort)(11 + i * 12)) << 32) | mePort_GetUInt16((ushort)(9 + i * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (UInt64)mePort_GetUInt16((ushort)(9 + i * 12)) << 0x20 | ((UInt64)mePort_GetUInt32((ushort)(11 + i * 12)));
                         }
                         mePort_DataRemove(0x65);
                         isEQ = true;
@@ -2675,7 +2675,7 @@ namespace Model
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + (i - 8) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + (i - 8) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + (i - 8) * 12));
-                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 8) * 12)) << 32) | mePort_GetUInt16((ushort)(9 + (i - 8) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (UInt64)mePort_GetUInt16((ushort)(9 + (i - 8) * 12)) << 0x20 | ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 8) * 12))); ;
                         }
                         mePort_DataRemove(0x65);
                         isEQ = true;
@@ -2695,7 +2695,7 @@ namespace Model
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + (i - 16) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + (i - 16) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + (i - 16) * 12));
-                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 16) * 12)) << 32) | mePort_GetUInt16((ushort)(9 + (i - 16) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (UInt64)mePort_GetUInt16((ushort)(9 + (i - 16) * 12)) << 0x20 | ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 16) * 12)));
                         }
                         mePort_DataRemove(0x65);
                         isEQ = true;
@@ -2715,7 +2715,7 @@ namespace Model
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + (i - 24) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + (i - 24) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + (i - 24) * 12));
-                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 24) * 12)) << 32) | mePort_GetUInt16((ushort)(9 + (i - 24) * 12));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (UInt64)mePort_GetUInt16((ushort)(9 + (i - 24) * 12)) << 0x20 | ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 24) * 12)));
                         }
                         mePort_DataRemove(0x65);
                         isEQ = true;

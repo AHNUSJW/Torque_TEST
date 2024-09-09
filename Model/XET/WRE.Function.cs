@@ -177,6 +177,15 @@ namespace Model
                 data[i].alarm[1]       = 0;
                 data[i].alarm[2]       = 0;
             }
+
+            for (int i = 0; i <32; i++)
+            {
+                screw[i] = new SCREW();
+                screw[i].scw_ticketAxMx = 0;
+                screw[i].scw_ticketCnt  = 1;
+                screw[i].scw_ticketNum  = 1;
+                screw[i].scw_ticketAxMx = 1;
+            }
         }
 
         public WRE(XET xet)
@@ -350,6 +359,14 @@ namespace Model
                 data[i].alarm[0]       = xet.data[i].alarm[0];
                 data[i].alarm[1]       = xet.data[i].alarm[1];
                 data[i].alarm[2]       = xet.data[i].alarm[2];
+            }
+
+            for (int i = 0; i < 32; i++)
+            {
+                screw[i].scw_ticketAxMx = xet.screw[i].scw_ticketAxMx;
+                screw[i].scw_ticketCnt  = xet.screw[i].scw_ticketCnt ;
+                screw[i].scw_ticketNum  = xet.screw[i].scw_ticketNum ;
+                screw[i].scw_ticketAxMx = xet.screw[i].scw_ticketAxMx;
             }
         }
     }

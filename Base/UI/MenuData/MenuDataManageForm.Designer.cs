@@ -36,6 +36,7 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button3 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btn_filter = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btn_toggle = new System.Windows.Forms.Button();
@@ -59,7 +60,6 @@
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.DeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btn_filter = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -162,6 +162,18 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(387, 85);
             this.panel2.TabIndex = 1;
+            // 
+            // btn_filter
+            // 
+            this.btn_filter.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btn_filter.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.btn_filter.Location = new System.Drawing.Point(12, 18);
+            this.btn_filter.Name = "btn_filter";
+            this.btn_filter.Size = new System.Drawing.Size(103, 45);
+            this.btn_filter.TabIndex = 170;
+            this.btn_filter.Text = "筛选";
+            this.btn_filter.UseVisualStyleBackColor = false;
+            this.btn_filter.Click += new System.EventHandler(this.btn_filter_Click);
             // 
             // button2
             // 
@@ -385,17 +397,6 @@
             this.DeleteToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.DeleteToolStripMenuItem.Text = "删除数据";
             this.DeleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItem_Click);
-            // 
-            // btn_filter
-            // 
-            this.btn_filter.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btn_filter.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btn_filter.Location = new System.Drawing.Point(12, 18);
-            this.btn_filter.Name = "btn_filter";
-            this.btn_filter.Size = new System.Drawing.Size(103, 45);
-            this.btn_filter.TabIndex = 170;
-            this.btn_filter.Text = "筛选";
-            this.btn_filter.UseVisualStyleBackColor = false;
             // 
             // MenuDataManageForm
             // 

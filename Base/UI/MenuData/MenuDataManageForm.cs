@@ -32,6 +32,7 @@ namespace Base.UI.MenuData
         private Text textAnnotation = null;                        //数据文本
         private string torUnit = "";                               //扭矩单位
         private bool isPeakShow = false;                           //是否是峰值展示模式
+        private List<DSData> peakShowDataList = new List<DSData>();//峰值模式展示的数据集合
 
         private Dictionary<byte, List<DSData>> DataDic = new Dictionary<byte, List<DSData>>(); //不同站点下的信息汇总
 
@@ -46,6 +47,9 @@ namespace Base.UI.MenuData
             {
                 btn_toggle.Text = "切换\n全局模式";
                 isPeakShow = true;
+
+                //峰值模式展示最近一天的峰值
+                ShowPeakData();
             }
             else if (GetShowType(MyDevice.userDAT + @"\DataShowType.txt") == "0" || GetShowType(MyDevice.userDAT + @"\DataShowType.txt") == "")
             {
@@ -195,10 +199,21 @@ namespace Base.UI.MenuData
         //双击显示指定数据
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            btn_filter.Visible = false;
+
             //峰值模式下（双击只有一层过程数据）
             if (isPeakShow)
             {
-                
+                string peakVid;//峰值模式下的作业号
+
+                if (e.RowIndex < 0) return;//防止点击列名报错
+
+                if (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText == "设备站点" && dataGridView1.Columns[dataGridView1.Columns.Count - 2].HeaderText == "设备型号")
+                {
+                    peakVid = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                    if (dataTable.Rows.Count > 0) dataTable.Clear();
+                    ShowProcessData(peakVid);
+                }
             }
             //全局模式下（多层）
             else
@@ -219,6 +234,7 @@ namespace Base.UI.MenuData
 
                         btn_toggle.Visible = false;
                         btn_back.Visible = true;
+                        btn_filter.Visible = true;
                         break;
                     case "工作日期":
                         targetWorkNum = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
@@ -310,6 +326,7 @@ namespace Base.UI.MenuData
         {
             btn_back.Visible = false;
             btn_toggle.Visible = true;
+            btn_filter.Visible = false;
             datagridviewInit();
             bindingNavigator1.Visible = false;
             dataTable = new DataTable();
@@ -529,6 +546,8 @@ namespace Base.UI.MenuData
         //显示峰值数据
         private void ShowPeakData()
         {
+            btn_filter.Visible = true;
+
             datagridviewInit();
             bindingNavigator1.Visible = false;
             dataTable = new DataTable();
@@ -538,6 +557,7 @@ namespace Base.UI.MenuData
             dataTable.Columns.Add("作业号", typeof(string));
             dataTable.Columns.Add("工单编号", typeof(string));
             dataTable.Columns.Add("序列号", typeof(string));
+            dataTable.Columns.Add("点位号", typeof(string));
             dataTable.Columns.Add("标准扭矩", typeof(string));
             dataTable.Columns.Add("标准角度", typeof(string));
             dataTable.Columns.Add("峰值扭矩", typeof(string));
@@ -551,13 +571,13 @@ namespace Base.UI.MenuData
             dataTable.Columns.Add("设备站点", typeof(string));
 
             // 获取最近一天的数据表
-            var recentDataList = JDBC.GetDataByRecent(1);
+            peakShowDataList = JDBC.GetDataByRecent(1);
 
-            var filteredList = recentDataList.AsParallel()
-                                             .AsOrdered()
-                                             .GroupBy(x => x.VinId)                    // 按属性a分组
-                                             .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
-                                             .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+            var filteredList = peakShowDataList.AsParallel()
+                                               .AsOrdered()                                                  // 使得并发按照顺序执行
+                                               .GroupBy(x => x.VinId)                                        // 按属性a分组
+                                               .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
+                                               .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
 
             if (filteredList != null && filteredList.Count != 0)
             {
@@ -580,6 +600,7 @@ namespace Base.UI.MenuData
                                                   filteredList[i].VinId,
                                                   filteredList[i].DataType == "ActualData" ? "": filteredList[i].WorkNum.ToString(),
                                                   filteredList[i].DataType == "ActualData" ? "": filteredList[i].SequenceId.ToString(),
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].PointNum.ToString(),
                                                   filteredList[i].Torque,
                                                   filteredList[i].Angle,
                                                   filteredList[i].TorquePeak + " " + tempUint,
@@ -598,14 +619,70 @@ namespace Base.UI.MenuData
             bindingSource1.DataSource = dataTable;
 
             //将读取数据库的表深拷贝，避免下次返回目录二次查询，减少时间损耗
-            //tempTable1.Clear();
-            //tempTable1 = dataTable.Copy();
+            tempTable1.Clear();
+            tempTable1 = dataTable.Copy();
         }
 
         //显示峰值模式下过程数据
         private void ShowProcessData(string peakVid)
         {
+            btn_back.Visible = true;
+            btn_toggle.Visible = false;
 
+            datagridviewInit();
+            bindingNavigator1.Visible = false;
+            dataTable = new DataTable();
+
+            // 添加列到DataTable
+            dataTable.Columns.Add("序号", typeof(int));
+            dataTable.Columns.Add("作业号", typeof(string));
+            dataTable.Columns.Add("工单编号", typeof(string));
+            dataTable.Columns.Add("序列号", typeof(string));
+            dataTable.Columns.Add("点位号", typeof(string));
+            dataTable.Columns.Add("标准扭矩", typeof(string));
+            dataTable.Columns.Add("标准角度", typeof(string));
+            dataTable.Columns.Add("作业时间", typeof(string));
+            dataTable.Columns.Add("时间标识", typeof(string));
+            dataTable.Columns.Add("设备站点", typeof(string));
+
+            //根据作业号筛选过程数据
+            var filteredList = peakShowDataList.AsParallel()
+                                               .AsOrdered()
+                                               .Where(x => x.VinId == peakVid)
+                                               .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+
+            if (filteredList != null && filteredList.Count != 0)
+            {
+                string processUint = "N·m";
+                //
+                for (int i = 0; i < filteredList.Count; i++)
+                {
+                    //单位更新
+                    switch (filteredList[i].TorqueUnit)
+                    {
+                        case "UNIT_nm": processUint = "N·m"; break;
+                        case "UNIT_lbfin": processUint = "lbf·in"; break;
+                        case "UNIT_lbfft": processUint = "lbf·ft"; break;
+                        case "UNIT_kgcm": processUint = "kgf·cm"; break;
+                        case "UNIT_kgm": processUint = "kgf·m"; break;
+                        default: break;
+                    }
+
+                    dataTable.Rows.Add(new object[] { i + 1,
+                                                  filteredList[i].VinId,
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].WorkNum.ToString(),
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].SequenceId.ToString(),
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].PointNum.ToString(),
+                                                  filteredList[i].Torque + " " + processUint,
+                                                  filteredList[i].Angle,
+                                                  filteredList[i].CreateTime,
+                                                  filteredList[i].Stamp,
+                                                  filteredList[i].DevAddr,
+                    });
+                }
+            }
+
+            bindingSource1.DataSource = dataTable;
         }
 
         #endregion
@@ -613,53 +690,69 @@ namespace Base.UI.MenuData
         //返回
         private void btn_back_Click(object sender, EventArgs e)
         {
-            switch (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText)
+            if (isPeakShow)
             {
-                case "工作日期":
+                if (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText == "设备站点")
+                {
+                    btn_back.Visible = false;
+                    btn_toggle.Visible = true;
+                    btn_filter.Visible = true;
+
                     if (dataTable.Rows.Count > 0) dataTable.Clear();
 
-                    //显示数据汇总表（根据工单名称）
-                    ShowSummaryData();
-                    break;
-                case "作业号":
-                    button3.Visible = false;
+                    bindingSource1.DataSource = tempTable1;//调用上次数据库查询的表，减少查询损耗
+                }
+            }
+            else
+            {
+                switch (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText)
+                {
+                    case "工作日期":
+                        if (dataTable.Rows.Count > 0) dataTable.Clear();
 
-                    if (dataGridView1.RowCount == 0)
-                    {
                         //显示数据汇总表（根据工单名称）
                         ShowSummaryData();
-                    }
-                    else
-                    {
-                        string targetWorkNum = dataGridView1.Rows[0].Cells[2].Value.ToString();
-
-                        if (dataTable.Rows.Count > 0) dataTable.Clear();
-
-                        //ShowSummaryDataByWorkNum(targetWorkNum);//数据库查找
-                        bindingSource1.DataSource = tempTable1;//调用上次数据库查询的表，减少查询损耗
-                    }
-
-                    break;
-                case "拧紧结果":
-                    if (comboBox1.Visible == false)
-                    {
+                        break;
+                    case "作业号":
                         button3.Visible = false;
-                        string selectWorkNum = dataGridView1.Rows[0].Cells[1].Value.ToString();
-                        string selectSeqId = dataGridView1.Rows[0].Cells[2].Value.ToString();
-                        DateTime selectTime = dataGridView1.Rows[0].Cells[8].Value.ToDate();
-                        if (dataTable.Rows.Count > 0) dataTable.Clear();
 
-                        //ShowSummaryDataByWorkNumAndSeqAndTime(selectWorkNum, selectSeqId, selectTime);
-                        bindingSource1.DataSource = tempTable2;//调用上次数据库查询的表，减少查询损耗
-                    }
-                    else
-                    {
-                        comboBox1.Visible = false;
-                        this.formsPlot1.Visible = false;
-                    }
-                    break;
-                default:
-                    break;
+                        if (dataGridView1.RowCount == 0)
+                        {
+                            //显示数据汇总表（根据工单名称）
+                            ShowSummaryData();
+                        }
+                        else
+                        {
+                            string targetWorkNum = dataGridView1.Rows[0].Cells[2].Value.ToString();
+
+                            if (dataTable.Rows.Count > 0) dataTable.Clear();
+
+                            //ShowSummaryDataByWorkNum(targetWorkNum);//数据库查找
+                            bindingSource1.DataSource = tempTable1;//调用上次数据库查询的表，减少查询损耗
+                        }
+
+                        break;
+                    case "拧紧结果":
+                        if (comboBox1.Visible == false)
+                        {
+                            button3.Visible = false;
+                            string selectWorkNum = dataGridView1.Rows[0].Cells[1].Value.ToString();
+                            string selectSeqId = dataGridView1.Rows[0].Cells[2].Value.ToString();
+                            DateTime selectTime = dataGridView1.Rows[0].Cells[8].Value.ToDate();
+                            if (dataTable.Rows.Count > 0) dataTable.Clear();
+
+                            //ShowSummaryDataByWorkNumAndSeqAndTime(selectWorkNum, selectSeqId, selectTime);
+                            bindingSource1.DataSource = tempTable2;//调用上次数据库查询的表，减少查询损耗
+                        }
+                        else
+                        {
+                            comboBox1.Visible = false;
+                            this.formsPlot1.Visible = false;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
 
             this.formsPlot1.Plot.Clear();
@@ -1133,6 +1226,9 @@ namespace Base.UI.MenuData
                 btn_toggle.Text = "切换\n全局模式";
                 isPeakShow = true;
                 SaveShowType(1);
+
+                //峰值模式展示最近一天的峰值
+                if (dataTable.Rows.Count > 0) dataTable.Clear();
                 ShowPeakData();
             }
             else if (btn_toggle.Text == "切换\n全局模式")
@@ -1140,6 +1236,10 @@ namespace Base.UI.MenuData
                 btn_toggle.Text = "切换\n峰值模式";
                 isPeakShow = false;
                 SaveShowType(0);
+
+                //显示数据汇总表（根据工单名称）
+                if (dataTable.Rows.Count > 0) dataTable.Clear();
+                ShowSummaryData();
             }
         }
 
@@ -1192,6 +1292,11 @@ namespace Base.UI.MenuData
             {
                 MessageBox.Show(e.Message);
             }
+        }
+
+        private void btn_filter_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

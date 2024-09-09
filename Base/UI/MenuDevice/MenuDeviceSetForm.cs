@@ -1564,6 +1564,14 @@ namespace Base.UI.MenuDevice
 
             //按键状态
             btn_UpdateTicket.BackColor = Color.Firebrick;
+
+            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+            //actXET = MyDevice.actDev;
+            //actXET.screw[0].scw_ticketAxMx = 0x11;
+            //actXET.screw[0].scw_ticketCnt = 0x20;
+            //actXET.screw[0].scw_ticketNum = 0x3333;
+            //actXET.screw[0].scw_ticketSerial = 0xAAAABBBBCCCC;
+            //MyDevice.protocol.Protocool_Sequence_SendCOM(TASKS.REG_BLOCK3_SCREW1);
         }
 
         //单位切换更新数据表格——进行单位换算
