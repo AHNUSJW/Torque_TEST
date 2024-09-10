@@ -42,6 +42,13 @@
             this.btn_toggle = new System.Windows.Forms.Button();
             this.btn_back = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
+            this.checkBox_recentDate = new System.Windows.Forms.CheckBox();
+            this.checkBox_selectDate = new System.Windows.Forms.CheckBox();
+            this.ucCombox_recentDate = new HZH_Controls.Controls.UCCombox();
+            this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.formsPlot1 = new ScottPlot.FormsPlot();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.bindingNavigator1 = new System.Windows.Forms.BindingNavigator(this.components);
@@ -72,6 +79,7 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
@@ -231,6 +239,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.panel4);
             this.splitContainer2.Panel1.Controls.Add(this.formsPlot1);
             this.splitContainer2.Panel1.Controls.Add(this.dataGridView1);
             // 
@@ -241,10 +250,100 @@
             this.splitContainer2.SplitterDistance = 618;
             this.splitContainer2.TabIndex = 0;
             // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.SystemColors.Window;
+            this.panel4.Controls.Add(this.dateTimePicker1);
+            this.panel4.Controls.Add(this.label1);
+            this.panel4.Controls.Add(this.checkBox_recentDate);
+            this.panel4.Controls.Add(this.checkBox_selectDate);
+            this.panel4.Controls.Add(this.ucCombox_recentDate);
+            this.panel4.Controls.Add(this.monthCalendar1);
+            this.panel4.Location = new System.Drawing.Point(546, 118);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(589, 399);
+            this.panel4.TabIndex = 2;
+            this.panel4.Visible = false;
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Location = new System.Drawing.Point(88, 295);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(200, 21);
+            this.dateTimePicker1.TabIndex = 5;
+            this.dateTimePicker1.Visible = false;
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(365, 145);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(155, 12);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "数据加载中，请耐心等待...";
+            // 
+            // checkBox_recentDate
+            // 
+            this.checkBox_recentDate.AutoSize = true;
+            this.checkBox_recentDate.Location = new System.Drawing.Point(365, 55);
+            this.checkBox_recentDate.Name = "checkBox_recentDate";
+            this.checkBox_recentDate.Size = new System.Drawing.Size(72, 16);
+            this.checkBox_recentDate.TabIndex = 3;
+            this.checkBox_recentDate.Text = "最近日期";
+            this.checkBox_recentDate.UseVisualStyleBackColor = true;
+            this.checkBox_recentDate.Click += new System.EventHandler(this.checkBox_recentDate_Click);
+            // 
+            // checkBox_selectDate
+            // 
+            this.checkBox_selectDate.AutoSize = true;
+            this.checkBox_selectDate.Checked = true;
+            this.checkBox_selectDate.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_selectDate.Location = new System.Drawing.Point(88, 55);
+            this.checkBox_selectDate.Name = "checkBox_selectDate";
+            this.checkBox_selectDate.Size = new System.Drawing.Size(72, 16);
+            this.checkBox_selectDate.TabIndex = 2;
+            this.checkBox_selectDate.Text = "指定日期";
+            this.checkBox_selectDate.UseVisualStyleBackColor = true;
+            this.checkBox_selectDate.Click += new System.EventHandler(this.checkBox_selectDate_Click);
+            // 
+            // ucCombox_recentDate
+            // 
+            this.ucCombox_recentDate.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_recentDate.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_recentDate.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.ucCombox_recentDate.ConerRadius = 5;
+            this.ucCombox_recentDate.DropPanelHeight = -1;
+            this.ucCombox_recentDate.FillColor = System.Drawing.Color.White;
+            this.ucCombox_recentDate.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.ucCombox_recentDate.IsRadius = true;
+            this.ucCombox_recentDate.IsShowRect = true;
+            this.ucCombox_recentDate.ItemWidth = 70;
+            this.ucCombox_recentDate.Location = new System.Drawing.Point(365, 83);
+            this.ucCombox_recentDate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_recentDate.Name = "ucCombox_recentDate";
+            this.ucCombox_recentDate.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.ucCombox_recentDate.RectWidth = 1;
+            this.ucCombox_recentDate.SelectedIndex = -1;
+            this.ucCombox_recentDate.SelectedValue = "";
+            this.ucCombox_recentDate.Size = new System.Drawing.Size(173, 32);
+            this.ucCombox_recentDate.Source = null;
+            this.ucCombox_recentDate.TabIndex = 1;
+            this.ucCombox_recentDate.TextValue = null;
+            this.ucCombox_recentDate.TriangleColor = System.Drawing.Color.Blue;
+            this.ucCombox_recentDate.SelectedChangedEvent += new System.EventHandler(this.ucCombox_recentDate_SelectedChangedEvent);
+            // 
+            // monthCalendar1
+            // 
+            this.monthCalendar1.Location = new System.Drawing.Point(88, 83);
+            this.monthCalendar1.Name = "monthCalendar1";
+            this.monthCalendar1.TabIndex = 0;
+            this.monthCalendar1.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar1_DateChanged);
+            // 
             // formsPlot1
             // 
             this.formsPlot1.BackColor = System.Drawing.Color.Transparent;
-            this.formsPlot1.Location = new System.Drawing.Point(253, 118);
+            this.formsPlot1.Location = new System.Drawing.Point(29, 118);
             this.formsPlot1.Name = "formsPlot1";
             this.formsPlot1.Size = new System.Drawing.Size(400, 277);
             this.formsPlot1.TabIndex = 1;
@@ -420,6 +519,8 @@
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
             this.bindingNavigator1.ResumeLayout(false);
@@ -461,5 +562,12 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem DeleteToolStripMenuItem;
         private System.Windows.Forms.Button btn_filter;
+        private System.Windows.Forms.Panel panel4;
+        private HZH_Controls.Controls.UCCombox ucCombox_recentDate;
+        private System.Windows.Forms.MonthCalendar monthCalendar1;
+        private System.Windows.Forms.CheckBox checkBox_recentDate;
+        private System.Windows.Forms.CheckBox checkBox_selectDate;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
     }
 }

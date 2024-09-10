@@ -33,6 +33,9 @@ namespace Base.UI.MenuData
         private string torUnit = "";                               //扭矩单位
         private bool isPeakShow = false;                           //是否是峰值展示模式
         private List<DSData> peakShowDataList = new List<DSData>();//峰值模式展示的数据集合
+        private bool isRecentDate = false;                         //是否筛选最近日期
+        private bool isDataLoad = false;                           //是否数据加载中（加载中其他UI事件均失效）
+        private int peakRecentDays = -1;                            //峰值模式下最近几天
 
         private Dictionary<byte, List<DSData>> DataDic = new Dictionary<byte, List<DSData>>(); //不同站点下的信息汇总
 
@@ -199,7 +202,12 @@ namespace Base.UI.MenuData
         //双击显示指定数据
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            btn_filter.Visible = false;
+            if (isDataLoad) return;
+
+            if (e.RowIndex >= 0)
+            {
+                btn_filter.Visible = false;
+            }
 
             //峰值模式下（双击只有一层过程数据）
             if (isPeakShow)
@@ -214,6 +222,10 @@ namespace Base.UI.MenuData
                     if (dataTable.Rows.Count > 0) dataTable.Clear();
                     ShowProcessData(peakVid);
                 }
+
+                button2.Visible = true;
+                button3.Visible = true;
+                comboBox1.Visible = true;
             }
             //全局模式下（多层）
             else
@@ -234,7 +246,6 @@ namespace Base.UI.MenuData
 
                         btn_toggle.Visible = false;
                         btn_back.Visible = true;
-                        btn_filter.Visible = true;
                         break;
                     case "工作日期":
                         targetWorkNum = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
@@ -543,7 +554,7 @@ namespace Base.UI.MenuData
 
         #region 峰值模式数据展示
 
-        //显示峰值数据
+        //显示峰值数据(默认最近一天)
         private void ShowPeakData()
         {
             btn_filter.Visible = true;
@@ -573,7 +584,8 @@ namespace Base.UI.MenuData
             // 获取最近一天的数据表
             peakShowDataList = JDBC.GetDataByRecent(1);
 
-            var filteredList = peakShowDataList.AsParallel()
+            var filteredList = peakShowDataList.Where(x => !string.IsNullOrEmpty(x.VinId))                   // 作业号不为空，提前筛选减少数据量，减少并发量
+                                               .AsParallel()                                                 // 并发执行
                                                .AsOrdered()                                                  // 使得并发按照顺序执行
                                                .GroupBy(x => x.VinId)                                        // 按属性a分组
                                                .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
@@ -623,12 +635,183 @@ namespace Base.UI.MenuData
             tempTable1 = dataTable.Copy();
         }
 
+        //显示峰值数据(最近几天)
+        private void ShowPeakData(int recentDays)
+        {
+            // 获取最近n天的数据表(耗时操作可以其他线程执行)
+            peakShowDataList = JDBC.GetDataByRecent(recentDays);
+
+            // UI操作部分必须在主线程中执行
+            this.Invoke(new Action(() => {
+                btn_filter.Visible = true;
+
+                datagridviewInit();
+                bindingNavigator1.Visible = false;
+                dataTable = new DataTable();
+
+                // 添加列到DataTable
+                dataTable.Columns.Add("序号", typeof(int));
+                dataTable.Columns.Add("作业号", typeof(string));
+                dataTable.Columns.Add("工单编号", typeof(string));
+                dataTable.Columns.Add("序列号", typeof(string));
+                dataTable.Columns.Add("点位号", typeof(string));
+                dataTable.Columns.Add("标准扭矩", typeof(string));
+                dataTable.Columns.Add("标准角度", typeof(string));
+                dataTable.Columns.Add("峰值扭矩", typeof(string));
+                dataTable.Columns.Add("峰值角度", typeof(string));
+                dataTable.Columns.Add("扭矩结果", typeof(string));
+                dataTable.Columns.Add("角度结果", typeof(string));
+                dataTable.Columns.Add("作业时间", typeof(string));
+                dataTable.Columns.Add("时间标识", typeof(string));
+                dataTable.Columns.Add("设备编号", typeof(string));
+                dataTable.Columns.Add("设备型号", typeof(string));
+                dataTable.Columns.Add("设备站点", typeof(string));
+
+
+                var filteredList = peakShowDataList.Where(x => !string.IsNullOrEmpty(x.VinId))                   // 作业号不为空，提前筛选减少数据量，减少并发量
+                                                   .AsParallel()
+                                                   .AsOrdered()                                                  // 使得并发按照顺序执行
+                                                   .GroupBy(x => x.VinId)                                        // 按属性a分组
+                                                   .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
+                                                   .OrderBy(x => long.Parse(x.VinId))                            // 将 VinId 转换为 long 以进行数值排序
+                                                   .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+
+                if (filteredList != null && filteredList.Count != 0)
+                {
+                    string tempUint = "N·m";
+                    //
+                    for (int i = 0; i < filteredList.Count; i++)
+                    {
+                        //单位更新
+                        switch (filteredList[i].TorqueUnit)
+                        {
+                            case "UNIT_nm": tempUint = "N·m"; break;
+                            case "UNIT_lbfin": tempUint = "lbf·in"; break;
+                            case "UNIT_lbfft": tempUint = "lbf·ft"; break;
+                            case "UNIT_kgcm": tempUint = "kgf·cm"; break;
+                            case "UNIT_kgm": tempUint = "kgf·m"; break;
+                            default: break;
+                        }
+
+                        dataTable.Rows.Add(new object[] { i + 1,
+                                                  filteredList[i].VinId,
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].WorkNum.ToString(),
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].SequenceId.ToString(),
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].PointNum.ToString(),
+                                                  filteredList[i].Torque,
+                                                  filteredList[i].Angle,
+                                                  filteredList[i].TorquePeak + " " + tempUint,
+                                                  filteredList[i].AngleAcc,
+                                                  filteredList[i].DataResult,
+                                                  filteredList[i].DataResult,
+                                                  filteredList[i].CreateTime,
+                                                  filteredList[i].Stamp,
+                                                  filteredList[i].Bohrcode,
+                                                  filteredList[i].DevType,
+                                                  filteredList[i].DevAddr,
+                        });
+                    }
+                }
+
+                bindingSource1.DataSource = dataTable;
+
+                //将读取数据库的表深拷贝，避免下次返回目录二次查询，减少时间损耗
+                tempTable1.Clear();
+                tempTable1 = dataTable.Copy();
+            }));
+            
+        }
+
+        //显示峰值数据(指定日期)
+        private void ShowPeakData(DateTime selectDate)
+        {
+            // 获取最近n天的数据表
+            peakShowDataList = JDBC.GetDataByTime(selectDate);
+
+            this.Invoke(new Action(() => {
+                btn_filter.Visible = true;
+
+                datagridviewInit();
+                bindingNavigator1.Visible = false;
+                dataTable = new DataTable();
+
+                // 添加列到DataTable
+                dataTable.Columns.Add("序号", typeof(int));
+                dataTable.Columns.Add("作业号", typeof(string));
+                dataTable.Columns.Add("工单编号", typeof(string));
+                dataTable.Columns.Add("序列号", typeof(string));
+                dataTable.Columns.Add("点位号", typeof(string));
+                dataTable.Columns.Add("标准扭矩", typeof(string));
+                dataTable.Columns.Add("标准角度", typeof(string));
+                dataTable.Columns.Add("峰值扭矩", typeof(string));
+                dataTable.Columns.Add("峰值角度", typeof(string));
+                dataTable.Columns.Add("扭矩结果", typeof(string));
+                dataTable.Columns.Add("角度结果", typeof(string));
+                dataTable.Columns.Add("作业时间", typeof(string));
+                dataTable.Columns.Add("时间标识", typeof(string));
+                dataTable.Columns.Add("设备编号", typeof(string));
+                dataTable.Columns.Add("设备型号", typeof(string));
+                dataTable.Columns.Add("设备站点", typeof(string));
+
+                var filteredList = peakShowDataList.Where(x => !string.IsNullOrEmpty(x.VinId))                   // 作业号不为空，提前筛选减少数据量，减少并发量
+                                                   .AsParallel()
+                                                   .AsOrdered()                                                  // 使得并发按照顺序执行
+                                                   .GroupBy(x => x.VinId)                                        // 按属性a分组
+                                                   .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
+                                                   .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+
+                if (filteredList != null && filteredList.Count != 0)
+                {
+                    string tempUint = "N·m";
+                    //
+                    for (int i = 0; i < filteredList.Count; i++)
+                    {
+                        //单位更新
+                        switch (filteredList[i].TorqueUnit)
+                        {
+                            case "UNIT_nm": tempUint = "N·m"; break;
+                            case "UNIT_lbfin": tempUint = "lbf·in"; break;
+                            case "UNIT_lbfft": tempUint = "lbf·ft"; break;
+                            case "UNIT_kgcm": tempUint = "kgf·cm"; break;
+                            case "UNIT_kgm": tempUint = "kgf·m"; break;
+                            default: break;
+                        }
+
+                        dataTable.Rows.Add(new object[] { i + 1,
+                                                  filteredList[i].VinId,
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].WorkNum.ToString(),
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].SequenceId.ToString(),
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].PointNum.ToString(),
+                                                  filteredList[i].Torque,
+                                                  filteredList[i].Angle,
+                                                  filteredList[i].TorquePeak + " " + tempUint,
+                                                  filteredList[i].AngleAcc,
+                                                  filteredList[i].DataResult,
+                                                  filteredList[i].DataResult,
+                                                  filteredList[i].CreateTime,
+                                                  filteredList[i].Stamp,
+                                                  filteredList[i].Bohrcode,
+                                                  filteredList[i].DevType,
+                                                  filteredList[i].DevAddr,
+                    });
+                    }
+                }
+
+                bindingSource1.DataSource = dataTable;
+
+                //将读取数据库的表深拷贝，避免下次返回目录二次查询，减少时间损耗
+                tempTable1.Clear();
+                tempTable1 = dataTable.Copy();
+            }));
+        }
+
         //显示峰值模式下过程数据
         private void ShowProcessData(string peakVid)
         {
             btn_back.Visible = true;
             btn_toggle.Visible = false;
 
+            DataDic.Clear();
             datagridviewInit();
             bindingNavigator1.Visible = false;
             dataTable = new DataTable();
@@ -679,6 +862,13 @@ namespace Base.UI.MenuData
                                                   filteredList[i].Stamp,
                                                   filteredList[i].DevAddr,
                     });
+
+                    //不同站点分配不同的List
+                    if (!DataDic.ContainsKey(filteredList[i].DevAddr))
+                    {
+                        DataDic.Add(filteredList[i].DevAddr, new List<DSData>());
+                    }
+                    DataDic[filteredList[i].DevAddr].Add(filteredList[i]);
                 }
             }
 
@@ -697,6 +887,10 @@ namespace Base.UI.MenuData
                     btn_back.Visible = false;
                     btn_toggle.Visible = true;
                     btn_filter.Visible = true;
+
+                    button2.Visible = false;
+                    button3.Visible = false;
+                    comboBox1.Visible = false;
 
                     if (dataTable.Rows.Count > 0) dataTable.Clear();
 
@@ -776,13 +970,27 @@ namespace Base.UI.MenuData
             //文件名称
             string filename = "";
 
-            if (dataTable.Rows[0][3].ToString() != "")
+            if (isPeakShow)
             {
-                filename = dataTable.Rows[0][3].ToString();
+                if (dataTable.Rows[0][1].ToString() != "")
+                {
+                    filename = dataTable.Rows[0][1].ToString();
+                }
+                else
+                {
+                    filename = DateTime.Now.ToString("yyyyMMddHHmm");
+                }
             }
             else
             {
-                filename = DateTime.Now.ToString("yyyyMMddHHmm");
+                if (dataTable.Rows[0][3].ToString() != "")
+                {
+                    filename = dataTable.Rows[0][3].ToString();
+                }
+                else
+                {
+                    filename = DateTime.Now.ToString("yyyyMMddHHmm");
+                }
             }
 
             // 创建保存文件对话框
@@ -1217,9 +1425,13 @@ namespace Base.UI.MenuData
         //切换模式
         private void btn_toggle_Click(object sender, EventArgs e)
         {
+            if (isDataLoad) return;
+
             DialogResult typeResult = MessageBox.Show($"是否{btn_toggle.Text}" + "？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             
             if (typeResult == DialogResult.No) return;
+
+            if (panel4.Visible == true) { panel4.Visible = false; } 
 
             if (btn_toggle.Text == "切换\n峰值模式")
             {
@@ -1296,7 +1508,220 @@ namespace Base.UI.MenuData
 
         private void btn_filter_Click(object sender, EventArgs e)
         {
+            panel4.Visible = !panel4.Visible;
+            panel4.Location = new System.Drawing.Point(btn_filter.PointToScreen(System.Drawing.Point.Empty).X, 0);
 
+            //弹窗
+            if (panel4.Visible == true)
+            {
+                label1.Text = "";
+                FilterInit();
+
+                isDataLoad = true;
+
+                if (isRecentDate)
+                {
+                    checkBox_selectDate.Checked = false;
+                    ucCombox_recentDate.Enabled = true;
+                }
+                else
+                {
+                    checkBox_selectDate.Checked = true;
+                    ucCombox_recentDate.Enabled = false;
+                }
+            }
+            //关闭
+            else
+            {
+                isDataLoad = false;
+            }
+        }
+
+        //筛选框初始化
+        private void FilterInit()
+        {
+            //最近日期
+            ucCombox_recentDate.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0",  "最近1天"),
+                new KeyValuePair<string, string>("1",  "最近3天"),
+                new KeyValuePair<string, string>("2",  "最近7天"),
+            };
+
+            switch (peakRecentDays)
+            {
+                case 1:
+                    ucCombox_recentDate.TextValue = "最近1天";
+                    break;
+                case 3:
+                    ucCombox_recentDate.TextValue = "最近3天";
+                    break;
+                case 7:
+                    ucCombox_recentDate.TextValue = "最近7天";
+                    break;
+                default:
+                    ucCombox_recentDate.SelectedIndex = 0;
+                    break;
+            }
+        }
+
+        //最近日期
+        private async void ucCombox_recentDate_SelectedChangedEvent(object sender, EventArgs e)
+        {
+            if (checkBox_recentDate.Checked)
+            {
+                await UpdatePeakRecentDate();
+            }
+        }
+
+        private async Task UpdatePeakRecentDate()
+        {
+            // 禁用UI元素
+            label1.Text = "数据加载中，请耐心等待...";
+            btn_filter.Enabled = false;
+            ucCombox_recentDate.Enabled = false; // 禁用下拉框，避免多次选择
+
+            try
+            {
+                // 获取所选的index，防止UI线程中的值变化
+                int selectedIndex = ucCombox_recentDate.SelectedIndex;
+
+                // 耗时操作放在Task.Run中，避免阻塞UI线程
+                await Task.Run(() => {
+                    switch (selectedIndex)
+                    {
+                        case 0:
+                            peakRecentDays = 1;
+                            ShowPeakData(1);
+                            break;
+
+                        case 1:
+                            peakRecentDays = 3;
+                            ShowPeakData(3);
+                            break;
+
+                        case 2:
+                            peakRecentDays = 7;
+                            ShowPeakData(7);
+                            break;
+
+                        default:
+                            break;
+                    }
+                });
+
+                // 耗时操作完成后更新UI
+                this.Invoke(new Action(() =>
+                {
+                    label1.Text = "数据加载成功";
+                }));
+            }
+            catch (Exception ex)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    MessageBox.Show(ex.Message);
+                }));
+            }
+            finally
+            {
+                // 无论成功与否，最终都重新启用UI元素
+                this.Invoke(new Action(() =>
+                {
+                    btn_filter.Enabled = true;
+                    ucCombox_recentDate.Enabled = true;
+                }));
+            }
+        }
+
+        private async void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            label1.Focus();
+
+            if (!isRecentDate)
+            {
+                await UpdatePeakSelectDate();
+            }
+        }
+
+        private async Task UpdatePeakSelectDate()
+        {
+            // 禁用UI元素
+            label1.Text = "数据加载中，请耐心等待...";
+            btn_filter.Enabled = false;
+
+            try
+            {
+                // 获取所选的date，防止UI线程中的值变化
+                DateTime selectDateTime = monthCalendar1.SelectionStart;
+
+                // 耗时操作放在Task.Run中，避免阻塞UI线程
+                await Task.Run(() => {
+                    ShowPeakData(selectDateTime.Date);
+                });
+
+                // 耗时操作完成后更新UI
+                this.Invoke(new Action(() =>
+                {
+                    label1.Text = "数据加载成功";
+                }));
+            }
+            catch (Exception ex)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    MessageBox.Show(ex.Message);
+                }));
+            }
+            finally
+            {
+                // 无论成功与否，最终都重新启用UI元素
+                this.Invoke(new Action(() =>
+                {
+                    btn_filter.Enabled = true;
+                }));
+            }
+        }
+
+        private async void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            if (!isRecentDate)
+            {
+                await UpdatePeakSelectDate();
+            }
+        }
+
+        private void checkBox_recentDate_Click(object sender, EventArgs e)
+        {
+            if (checkBox_recentDate.Checked)
+            {
+                checkBox_selectDate.Checked = false;
+                ucCombox_recentDate.Enabled = true;
+                isRecentDate = true;
+            }
+            else
+            {
+                checkBox_selectDate.Checked = true;
+                ucCombox_recentDate.Enabled = false;
+                isRecentDate = false;
+            }
+        }
+
+        private void checkBox_selectDate_Click(object sender, EventArgs e)
+        {
+            //不得使用monthCalendar1.Enable控制控件开关，否则会多次触发monthCalendar1切换函数
+            if (checkBox_selectDate.Checked)
+            {
+                checkBox_recentDate.Checked = false;
+                ucCombox_recentDate.Enabled = false;
+                isRecentDate = false;
+            }
+            else
+            {
+                checkBox_selectDate.Checked = true;
+                ucCombox_recentDate.Enabled = true;
+                isRecentDate = true;
+            }
         }
     }
 }

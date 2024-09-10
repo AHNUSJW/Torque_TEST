@@ -19,13 +19,13 @@ namespace Library
                         result = true;
                         break;
                     }
-                    //else
-                    //{
-                    //    //启动服务需要启动管理员权限
-                    //    sc.Start();
-                    //    result = true;
-                    //    break; 
-                    //}
+                    else
+                    {
+                        //启动服务需要启动管理员权限(调用之前必须设置管理员权限，否则报错)
+                        sc.Start();
+                        result = true;
+                        break;
+                    }
                 }
             }
             return result;
