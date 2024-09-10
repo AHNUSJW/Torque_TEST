@@ -3,6 +3,7 @@ using HZH_Controls;
 using Model;
 using ScottPlot.Plottable;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 //Ricardo 20240606
 
@@ -152,6 +154,7 @@ namespace Base.UI.MenuData
         }
 
         //置底页
+        //置底页
         private void bindingNavigatorMoveLastItem_Click(object sender, EventArgs e)
         {
             pageIndex = pageNum;
@@ -218,9 +221,15 @@ namespace Base.UI.MenuData
 
                 if (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText == "设备站点" && dataGridView1.Columns[dataGridView1.Columns.Count - 2].HeaderText == "设备型号")
                 {
-                    peakVid = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                    peakVid = dataGridView1.Rows[e.RowIndex].Cells[11].Value.ToString();
+                    DateTime targetTime  = Convert.ToDateTime(dataGridView1.Rows[e.RowIndex].Cells[11].Value.ToString());
+                    uint targetStamp     = Convert.ToUInt32(dataGridView1.Rows[e.RowIndex].Cells[12].Value);
+                    ulong targetBohrcode = Convert.ToUInt64(dataGridView1.Rows[e.RowIndex].Cells[13].Value);
+                    Byte targetAddr      = Convert.ToByte(dataGridView1.Rows[e.RowIndex].Cells[15].Value);
+
                     if (dataTable.Rows.Count > 0) dataTable.Clear();
-                    ShowProcessData(peakVid);
+                    //ShowProcessData(peakVid);
+                    ShowProcessData(targetTime,targetStamp, targetAddr, targetBohrcode);
                 }
 
                 button2.Visible = true;
@@ -338,6 +347,7 @@ namespace Base.UI.MenuData
             btn_back.Visible = false;
             btn_toggle.Visible = true;
             btn_filter.Visible = false;
+            button2.Visible = false;
             datagridviewInit();
             bindingNavigator1.Visible = false;
             dataTable = new DataTable();
@@ -558,6 +568,7 @@ namespace Base.UI.MenuData
         private void ShowPeakData()
         {
             btn_filter.Visible = true;
+            button2.Visible = true;
 
             datagridviewInit();
             bindingNavigator1.Visible = false;
@@ -584,12 +595,23 @@ namespace Base.UI.MenuData
             // 获取最近一天的数据表
             peakShowDataList = JDBC.GetDataByRecent(1);
 
-            var filteredList = peakShowDataList.Where(x => !string.IsNullOrEmpty(x.VinId))                   // 作业号不为空，提前筛选减少数据量，减少并发量
-                                               .AsParallel()                                                 // 并发执行
-                                               .AsOrdered()                                                  // 使得并发按照顺序执行
-                                               .GroupBy(x => x.VinId)                                        // 按属性a分组
-                                               .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
-                                               .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+            //var filteredList = peakShowDataList.Where(x => !string.IsNullOrEmpty(x.VinId))                   // 作业号不为空，提前筛选减少数据量，减少并发量
+            //                                   .AsParallel()                                                 // 并发执行
+            //                                   .AsOrdered()                                                  // 使得并发按照顺序执行
+            //                                   .GroupBy(x => x.VinId)                                        // 按属性a分组
+            //                                   .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
+            //                                   .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+
+            var filteredList = peakShowDataList
+                                               .Where(x => !string.IsNullOrEmpty(x.VinId))  // 过滤作业号不为空的数据
+                                               .Where(x => x.DType == 242 && x.DevType.Contains("5") ||
+                                                           x.DType == 242 && x.DevType.Contains("6") ||
+                                                           x.DType == 243 && x.DevType.Contains("7") ||
+                                                           x.DType == 243 && x.DevType.Contains("8") ||
+                                                           x.DType == 243 && x.DevType.Contains("9"))// 只保留满足条件的分组
+                                               .AsParallel()
+                                               .AsOrdered()  // 保证并发按照顺序执行                       
+                                               .ToList();
 
             if (filteredList != null && filteredList.Count != 0)
             {
@@ -644,6 +666,7 @@ namespace Base.UI.MenuData
             // UI操作部分必须在主线程中执行
             this.Invoke(new Action(() => {
                 btn_filter.Visible = true;
+                button2.Visible = true;
 
                 datagridviewInit();
                 bindingNavigator1.Visible = false;
@@ -668,13 +691,23 @@ namespace Base.UI.MenuData
                 dataTable.Columns.Add("设备站点", typeof(string));
 
 
-                var filteredList = peakShowDataList.Where(x => !string.IsNullOrEmpty(x.VinId))                   // 作业号不为空，提前筛选减少数据量，减少并发量
+                //var filteredList = peakShowDataList.Where(x => !string.IsNullOrEmpty(x.VinId))                   // 作业号不为空，提前筛选减少数据量，减少并发量
+                //                                   .AsParallel()
+                //                                   .AsOrdered()                                                  // 使得并发按照顺序执行
+                //                                   .GroupBy(x => x.VinId)                                        // 按属性a分组
+                //                                   .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
+                //                                   .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+
+                var filteredList = peakShowDataList
+                                                   .Where(x => !string.IsNullOrEmpty(x.VinId))  // 过滤作业号不为空的数据
+                                                   .Where(x => x.DType == 242 && x.DevType.Contains("5") ||
+                                                               x.DType == 242 && x.DevType.Contains("6") ||
+                                                               x.DType == 243 && x.DevType.Contains("7") ||
+                                                               x.DType == 243 && x.DevType.Contains("8") ||
+                                                               x.DType == 243 && x.DevType.Contains("9"))// 只保留满足条件的分组
                                                    .AsParallel()
-                                                   .AsOrdered()                                                  // 使得并发按照顺序执行
-                                                   .GroupBy(x => x.VinId)                                        // 按属性a分组
-                                                   .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
-                                                   .OrderBy(x => long.Parse(x.VinId))                            // 将 VinId 转换为 long 以进行数值排序
-                                                   .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+                                                   .AsOrdered()  // 保证并发按照顺序执行                       
+                                                   .ToList();
 
                 if (filteredList != null && filteredList.Count != 0)
                 {
@@ -730,6 +763,7 @@ namespace Base.UI.MenuData
 
             this.Invoke(new Action(() => {
                 btn_filter.Visible = true;
+                button2.Visible = true;
 
                 datagridviewInit();
                 bindingNavigator1.Visible = false;
@@ -753,12 +787,23 @@ namespace Base.UI.MenuData
                 dataTable.Columns.Add("设备型号", typeof(string));
                 dataTable.Columns.Add("设备站点", typeof(string));
 
-                var filteredList = peakShowDataList.Where(x => !string.IsNullOrEmpty(x.VinId))                   // 作业号不为空，提前筛选减少数据量，减少并发量
+                //var filteredList2 = peakShowDataList.Where(x => !string.IsNullOrEmpty(x.VinId))                   // 作业号不为空，提前筛选减少数据量，减少并发量
+                //                                   .AsParallel()
+                //                                   .AsOrdered()                                                  // 使得并发按照顺序执行
+                //                                   .GroupBy(x => x.VinId)                                        // 按属性a分组
+                //                                   .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
+                //                                   .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+
+                var filteredList = peakShowDataList
+                                                   .Where(x => !string.IsNullOrEmpty(x.VinId))  // 过滤作业号不为空的数据
+                                                   .Where(x => x.DType == 242 && x.DevType.Contains("5") || 
+                                                               x.DType == 242 && x.DevType.Contains("6") ||
+                                                               x.DType == 243 && x.DevType.Contains("7") ||
+                                                               x.DType == 243 && x.DevType.Contains("8") ||
+                                                               x.DType == 243 && x.DevType.Contains("9") )// 只保留满足条件的分组
                                                    .AsParallel()
-                                                   .AsOrdered()                                                  // 使得并发按照顺序执行
-                                                   .GroupBy(x => x.VinId)                                        // 按属性a分组
-                                                   .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
-                                                   .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+                                                   .AsOrdered()  // 保证并发按照顺序执行                       
+                                                   .ToList();
 
                 if (filteredList != null && filteredList.Count != 0)
                 {
@@ -805,7 +850,7 @@ namespace Base.UI.MenuData
             }));
         }
 
-        //显示峰值模式下过程数据
+        //显示峰值模式下过程数据(根据作业号)
         private void ShowProcessData(string peakVid)
         {
             btn_back.Visible = true;
@@ -833,6 +878,7 @@ namespace Base.UI.MenuData
                                                .AsOrdered()
                                                .Where(x => x.VinId == peakVid)
                                                .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+
 
             if (filteredList != null && filteredList.Count != 0)
             {
@@ -875,6 +921,116 @@ namespace Base.UI.MenuData
             bindingSource1.DataSource = dataTable;
         }
 
+        //
+        private void ShowProcessData(DateTime time,uint stamp,  byte addr, ulong bohrcode)
+        {
+            btn_back.Visible = true;
+            btn_toggle.Visible = false;
+
+            DataDic.Clear();
+            datagridviewInit();
+            bindingNavigator1.Visible = false;
+            dataTable = new DataTable();
+
+            // 添加列到DataTable
+            dataTable.Columns.Add("序号", typeof(int));
+            dataTable.Columns.Add("作业号", typeof(string));
+            dataTable.Columns.Add("工单编号", typeof(string));
+            dataTable.Columns.Add("序列号", typeof(string));
+            dataTable.Columns.Add("点位号", typeof(string));
+            dataTable.Columns.Add("标准扭矩", typeof(string));
+            dataTable.Columns.Add("标准角度", typeof(string));
+            dataTable.Columns.Add("作业时间", typeof(string));
+            dataTable.Columns.Add("时间标识", typeof(string));
+            dataTable.Columns.Add("设备站点", typeof(string));
+
+            //筛选过程数据
+            var filteredList = GroupData(peakShowDataList, time, stamp, addr, bohrcode);
+
+
+            if (filteredList != null && filteredList.Count != 0)
+            {
+                string processUint = "N·m";
+                //
+                for (int i = 0; i < filteredList.Count; i++)
+                {
+                    //单位更新
+                    switch (filteredList[i].TorqueUnit)
+                    {
+                        case "UNIT_nm": processUint = "N·m"; break;
+                        case "UNIT_lbfin": processUint = "lbf·in"; break;
+                        case "UNIT_lbfft": processUint = "lbf·ft"; break;
+                        case "UNIT_kgcm": processUint = "kgf·cm"; break;
+                        case "UNIT_kgm": processUint = "kgf·m"; break;
+                        default: break;
+                    }
+
+                    dataTable.Rows.Add(new object[] { i + 1,
+                                                  filteredList[i].VinId,
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].WorkNum.ToString(),
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].SequenceId.ToString(),
+                                                  filteredList[i].DataType == "ActualData" ? "": filteredList[i].PointNum.ToString(),
+                                                  filteredList[i].Torque + " " + processUint,
+                                                  filteredList[i].Angle,
+                                                  filteredList[i].CreateTime,
+                                                  filteredList[i].Stamp,
+                                                  filteredList[i].DevAddr,
+                    });
+
+                    //不同站点分配不同的List
+                    if (!DataDic.ContainsKey(filteredList[i].DevAddr))
+                    {
+                        DataDic.Add(filteredList[i].DevAddr, new List<DSData>());
+                    }
+                    DataDic[filteredList[i].DevAddr].Add(filteredList[i]);
+                }
+            }
+
+            bindingSource1.DataSource = dataTable;
+
+            //将读取数据库的表深拷贝，避免下次返回目录二次查询，减少时间损耗
+            tempTable2.Clear();
+            tempTable2 = dataTable.Copy();
+        }
+
+        //获取峰值对应下的过程数据
+        public List<DSData> GroupData(List<DSData> dataList, DateTime time, uint stamp,  byte addr, ulong bohrcode)
+        {
+            var targetDataList = new List<DSData>();
+
+            Int32 foundIndex = (Int32)(dataList
+                             .AsParallel()
+                             .AsOrdered()
+                             .Select((item, idx) => new { item, idx })
+                             .FirstOrDefault(x => x.item.CreateTime == time && x.item.Stamp == stamp && x.item.DevAddr == addr && x.item.Bohrcode == bohrcode)?.idx ?? -1);
+
+            if (foundIndex != -1)
+            {
+                int dtype = dataList[foundIndex].DType;//数据类型
+                //倒序查找
+                for (int i = foundIndex - 1; i > 0; i--)
+                {
+                    if (dataList[i].DevAddr == addr && dataList[i].Bohrcode == bohrcode)
+                    {
+                        if (dataList[i].DType == dtype)
+                        {
+                            break;//上一个03/02退出
+                        }
+
+                        targetDataList.Add(dataList[i]);
+                    }
+                    else
+                    {
+                        break;//不是一个站点或者不是一个bohrcode
+                    }
+                }
+            }
+
+            targetDataList.Reverse();//先前倒序查找，故恢复
+
+            return targetDataList;
+        }
+
         #endregion
 
         //返回
@@ -884,17 +1040,40 @@ namespace Base.UI.MenuData
             {
                 if (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText == "设备站点")
                 {
-                    btn_back.Visible = false;
-                    btn_toggle.Visible = true;
-                    btn_filter.Visible = true;
-
-                    button2.Visible = false;
-                    button3.Visible = false;
-                    comboBox1.Visible = false;
 
                     if (dataTable.Rows.Count > 0) dataTable.Clear();
 
-                    bindingSource1.DataSource = tempTable1;//调用上次数据库查询的表，减少查询损耗
+                    if (formsPlot1.Visible == false)
+                    {
+                        btn_back.Visible = false;
+                        btn_toggle.Visible = true;
+                        btn_filter.Visible = true;
+
+                        button2.Visible = true;
+                        button3.Visible = false;
+                        comboBox1.Visible = false;
+                        bindingSource1.DataSource = tempTable1;//返回顶层表
+
+                        dataTable = tempTable1.Copy();
+                    }
+                    else
+                    {
+                        btn_back.Visible = true;
+                        btn_toggle.Visible = false;
+                        btn_filter.Visible = false;
+
+                        button2.Visible = true;
+                        button3.Visible = true;
+                        comboBox1.Visible = true;
+                        bindingSource1.DataSource = tempTable2;//返回当前曲线对应的数据表
+
+                        dataTable = tempTable2.Copy();
+                    }
+
+                    this.formsPlot1.Plot.Clear();
+                    this.formsPlot1.Visible = false;
+                    this.comboBox1.Visible = false;
+                    return;
                 }
             }
             else
