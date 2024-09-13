@@ -346,11 +346,11 @@ namespace Model
                     break;
 
                 case TASKS.REG_BLOCK3_SCREW2:
-                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK3_SCREW2 >> 8, Constants.REG_BLOCK3_SCREW1 & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
+                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK3_SCREW2 >> 8, Constants.REG_BLOCK3_SCREW2 & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
                     break;
 
                 case TASKS.REG_BLOCK3_SCREW3:
-                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK3_SCREW3 >> 8, Constants.REG_BLOCK3_SCREW1 & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
+                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK3_SCREW3 >> 8, Constants.REG_BLOCK3_SCREW3 & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
                     break;
 
                 case TASKS.REG_BLOCK3_SCREW4:
@@ -1105,7 +1105,7 @@ namespace Model
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.US = (ushort)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 0x20);
+                        MyDevice.myUIT.US = (ushort)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial / Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
                         MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFFFFFF);
@@ -1134,7 +1134,7 @@ namespace Model
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 0x20);
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial / Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
                         MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
@@ -1163,7 +1163,7 @@ namespace Model
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 0x20);
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial / Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
                         MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
@@ -1192,7 +1192,7 @@ namespace Model
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial >> 0x20);
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial / Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
                         MyDevice.myUIT.UI = (uint)(MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
@@ -2659,7 +2659,6 @@ namespace Model
 
                         mePort_DataRemove(0x48 * 2 + 5);
                         isEQ = true;
-                        MyDevice.mBUS[sAddress].sTATE = STATE.WORKING;//状态工作中
                     }
                     else
                     {
@@ -2676,7 +2675,7 @@ namespace Model
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + i * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + i * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + i * 12));
-                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (UInt64)mePort_GetUInt16((ushort)(9 + i * 12)) << 0x20 | ((UInt64)mePort_GetUInt32((ushort)(11 + i * 12)));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (ulong)((UInt64)mePort_GetUInt16((ushort)(9 + i * 12)) * Math.Pow(10, 9) + ((UInt64)mePort_GetUInt32((ushort)(11 + i * 12))));
                         }
                         mePort_DataRemove(0x65);
                         isEQ = true;
@@ -2696,7 +2695,7 @@ namespace Model
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + (i - 8) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + (i - 8) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + (i - 8) * 12));
-                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (UInt64)mePort_GetUInt16((ushort)(9 + (i - 8) * 12)) << 0x20 | ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 8) * 12))); ;
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (ulong)((UInt64)mePort_GetUInt16((ushort)(9 + (i - 8) * 12)) * Math.Pow(10, 9) + ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 8) * 12)))); ;
                         }
                         mePort_DataRemove(0x65);
                         isEQ = true;
@@ -2716,7 +2715,7 @@ namespace Model
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + (i - 16) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + (i - 16) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + (i - 16) * 12));
-                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (UInt64)mePort_GetUInt16((ushort)(9 + (i - 16) * 12)) << 0x20 | ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 16) * 12)));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (ulong)((UInt64)mePort_GetUInt16((ushort)(9 + (i - 16) * 12)) * Math.Pow(10, 9) + ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 16) * 12))));
                         }
                         mePort_DataRemove(0x65);
                         isEQ = true;
@@ -2736,10 +2735,11 @@ namespace Model
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketAxMx = mePort_GetByte((ushort)(3 + (i - 24) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketCnt = mePort_GetByte((ushort)(4 + (i - 24) * 12));
                             MyDevice.mBUS[sAddress].screw[i].scw_ticketNum = mePort_GetUInt32((ushort)(5 + (i - 24) * 12));
-                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (UInt64)mePort_GetUInt16((ushort)(9 + (i - 24) * 12)) << 0x20 | ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 24) * 12)));
+                            MyDevice.mBUS[sAddress].screw[i].scw_ticketSerial = (ulong)((UInt64)mePort_GetUInt16((ushort)(9 + (i - 24) * 12)) * Math.Pow(10, 9) + ((UInt64)mePort_GetUInt32((ushort)(11 + (i - 24) * 12))));
                         }
                         mePort_DataRemove(0x65);
                         isEQ = true;
+                        MyDevice.mBUS[sAddress].sTATE = STATE.WORKING;//状态工作中
                     }
                     else
                     {
@@ -3047,7 +3047,7 @@ namespace Model
             }
         }
 
-        //串口读取所有任务状态机 DEV -> CAL -> INFO -> WLAN -> ID -> PARA -> AM1 -> AM2 -> AM3 -> JOB -> OP -> HEART -> FIFO -> DAT
+        //串口读取所有任务状态机 DEV -> CAL -> INFO -> WLAN -> ID -> PARA -> AM1 -> AM2 -> AM3 -> JOB -> OP -> HEART -> FIFO -> DAT -> SCREW1 -> SCREW2 -> SCREW3 -> SCREW4
         public void Protocol_mePort_ReadAllTasks()
         {
             //启动TASKS -> 根据任务选择指令 -> 根据接口指令装帧发送
@@ -3206,12 +3206,56 @@ namespace Model
                 case TASKS.REG_BLOCK2_DAT:
                     if (isEQ)
                     {
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                    }
+                    else
+                    {
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
+                    }
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW1:
+                    if (isEQ)
+                    {
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW2);
+                    }
+                    else
+                    {
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                    }
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW2:
+                    if (isEQ)
+                    {
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW3);
+                    }
+                    else
+                    {
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW2);
+                    }
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW3:
+                    if (isEQ)
+                    {
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW4);
+                    }
+                    else
+                    {
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW3);
+                    }
+                    break;
+
+                case TASKS.REG_BLOCK3_SCREW4:
+                    if (isEQ)
+                    {
                         MyDevice.mBUS[sAddress].sTATE = STATE.WORKING;
                         trTASK = TASKS.NULL;
                     }
                     else
                     {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW4);
                     }
                     break;
 

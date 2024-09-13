@@ -104,28 +104,28 @@
             // QuickConnectToolStripMenuItem
             // 
             this.QuickConnectToolStripMenuItem.Name = "QuickConnectToolStripMenuItem";
-            this.QuickConnectToolStripMenuItem.Size = new System.Drawing.Size(164, 32);
+            this.QuickConnectToolStripMenuItem.Size = new System.Drawing.Size(180, 32);
             this.QuickConnectToolStripMenuItem.Text = "快捷连接";
             this.QuickConnectToolStripMenuItem.Click += new System.EventHandler(this.QuickConnectToolStripMenuItem_Click);
             // 
             // DeviceConnectToolStripMenuItem
             // 
             this.DeviceConnectToolStripMenuItem.Name = "DeviceConnectToolStripMenuItem";
-            this.DeviceConnectToolStripMenuItem.Size = new System.Drawing.Size(164, 32);
+            this.DeviceConnectToolStripMenuItem.Size = new System.Drawing.Size(180, 32);
             this.DeviceConnectToolStripMenuItem.Text = "高级连接";
             this.DeviceConnectToolStripMenuItem.Click += new System.EventHandler(this.DeviceConnectToolStripMenuItem_Click);
             // 
             // DeviceSetToolStripMenuItem
             // 
             this.DeviceSetToolStripMenuItem.Name = "DeviceSetToolStripMenuItem";
-            this.DeviceSetToolStripMenuItem.Size = new System.Drawing.Size(164, 32);
+            this.DeviceSetToolStripMenuItem.Size = new System.Drawing.Size(180, 32);
             this.DeviceSetToolStripMenuItem.Text = "设备设置";
             this.DeviceSetToolStripMenuItem.Click += new System.EventHandler(this.DeviceSetToolStripMenuItem_Click);
             // 
             // DeviceDataToolStripMenuItem
             // 
             this.DeviceDataToolStripMenuItem.Name = "DeviceDataToolStripMenuItem";
-            this.DeviceDataToolStripMenuItem.Size = new System.Drawing.Size(164, 32);
+            this.DeviceDataToolStripMenuItem.Size = new System.Drawing.Size(180, 32);
             this.DeviceDataToolStripMenuItem.Text = "设备数据";
             this.DeviceDataToolStripMenuItem.Click += new System.EventHandler(this.DeviceDataToolStripMenuItem_Click);
             // 
@@ -362,7 +362,7 @@
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "XhTorqueShow";
-            this.Text = "Xh-Torque analysis-V9.09.12";
+            this.Text = "Xh-Torque analysis-V9.09.14";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Main_Load);
             this.menuStrip1.ResumeLayout(false);

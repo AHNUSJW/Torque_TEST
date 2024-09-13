@@ -76,6 +76,7 @@ namespace Base.UI.MenuDevice
                 //重启任务管理
                 MyDevice.myTaskManager.Resume();
             }
+
         }
 
         //连接模式切换
@@ -935,12 +936,64 @@ namespace Base.UI.MenuDevice
                         case TASKS.REG_BLOCK2_DAT:
                             if (MyDevice.protocol.isEqual)
                             {
-                                meTask = TASKS.NULL;
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                                meTask = TASKS.REG_BLOCK3_SCREW1;
                             }
                             else
                             {
                                 MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
                                 meTask = TASKS.REG_BLOCK2_DAT;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK3_SCREW1:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW2);
+                                meTask = TASKS.REG_BLOCK3_SCREW2;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                                meTask = TASKS.REG_BLOCK3_SCREW1;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK3_SCREW2:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW3);
+                                meTask = TASKS.REG_BLOCK3_SCREW3;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW2);
+                                meTask = TASKS.REG_BLOCK3_SCREW2;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK3_SCREW3:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW4);
+                                meTask = TASKS.REG_BLOCK3_SCREW4;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW3);
+                                meTask = TASKS.REG_BLOCK3_SCREW3;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK3_SCREW4:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                meTask = TASKS.NULL;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW4);
+                                meTask = TASKS.REG_BLOCK3_SCREW4;
                             }
                             break;
 
@@ -1173,8 +1226,8 @@ namespace Base.UI.MenuDevice
                         case TASKS.REG_BLOCK2_DAT:
                             if (MyDevice.protocol.isEqual)
                             {
-                                actXET.sTATE = STATE.WORKING;
-                                meTask = TASKS.NULL;
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                                meTask = TASKS.REG_BLOCK3_SCREW1;
                             }
                             else
                             {
@@ -1183,6 +1236,57 @@ namespace Base.UI.MenuDevice
                             }
                             break;
 
+                        case TASKS.REG_BLOCK3_SCREW1:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW2);
+                                meTask = TASKS.REG_BLOCK3_SCREW2;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                                meTask = TASKS.REG_BLOCK3_SCREW1;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK3_SCREW2:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW3);
+                                meTask = TASKS.REG_BLOCK3_SCREW3;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW2);
+                                meTask = TASKS.REG_BLOCK3_SCREW2;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK3_SCREW3:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW4);
+                                meTask = TASKS.REG_BLOCK3_SCREW4;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW3);
+                                meTask = TASKS.REG_BLOCK3_SCREW3;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK3_SCREW4:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                actXET.sTATE = STATE.WORKING;
+                                meTask = TASKS.NULL;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW4);
+                                meTask = TASKS.REG_BLOCK3_SCREW4;
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -1557,13 +1661,25 @@ namespace Base.UI.MenuDevice
                         textBox2.Text += "\r\n扳手FIFO读取成功";
                         break;
                     case TASKS.REG_BLOCK2_DAT:
+                        textBox2.Text += "\r\n扳手DAT读取成功";
+                        break;
+                    case TASKS.REG_BLOCK3_SCREW1:
+                        textBox2.Text += "\r\n扳手SCREW1读取成功";
+                        break;
+                    case TASKS.REG_BLOCK3_SCREW2:
+                        textBox2.Text += "\r\n扳手SCREW2读取成功";
+                        break;
+                    case TASKS.REG_BLOCK3_SCREW3:
+                        textBox2.Text += "\r\n扳手SCREW3读取成功";
+                        break;
+                    case TASKS.REG_BLOCK3_SCREW4:
                         //成功连接，更新连接扳手信息(先更新数据库，防止多设备连接时当前设备地址成功后还未存入就递增扫描了，存入的是扫描地址)
                         updateDatabaseWrench();
 
                         //USB
                         if (MyDevice.protocol.type == COMP.UART)
                         {
-                            textBox2.Text += "\r\n扳手DATA读取成功\r\n成功连接";
+                            textBox2.Text += "\r\n扳手SCREW4读取成功\r\n成功连接";
                             bt_connect.BackColor = Color.Green;
                             timer_USB.Enabled = false;
                             isConnecting = false;
@@ -1574,7 +1690,7 @@ namespace Base.UI.MenuDevice
                         {
                             isConnecting = false;
                             meTask = TASKS.NULL;
-                            textBox2.Text += "\r\n扳手DATA读取成功\r\n成功连接设备" + MyDevice.protocol.addr;
+                            textBox2.Text += "\r\n扳手SCREW4读取成功\r\n成功连接设备" + MyDevice.protocol.addr;
                             if (isRS485Scan)
                             {
                                 //连接成功扫描下一个
@@ -1593,7 +1709,7 @@ namespace Base.UI.MenuDevice
                         {
                             isConnecting = false;
                             meTask = TASKS.NULL;
-                            textBox2.Text += "\r\n扳手DATA读取成功\r\n成功连接设备" + MyDevice.protocol.addr;
+                            textBox2.Text += "\r\n扳手SCREW4读取成功\r\n成功连接设备" + MyDevice.protocol.addr;
                             if (isXFScan)
                             {
                                 //连接成功扫描下一个
@@ -1611,7 +1727,7 @@ namespace Base.UI.MenuDevice
                         {
                             isConnecting = false;
                             meTask = TASKS.NULL;
-                            textBox2.Text += "\r\n扳手DATA读取成功\r\n成功连接设备" + MyDevice.protocol.addr;
+                            textBox2.Text += "\r\n扳手SCREW4读取成功\r\n成功连接设备" + MyDevice.protocol.addr;
 
                             //设备地址绑定Ip
                             if (MyDevice.addr_ip.ContainsKey(addr.ToString()) == false)

@@ -1085,6 +1085,12 @@ namespace Base.UI.MenuDevice
             //行首与列首均禁止编辑
             dataGridView2.Columns[0].ReadOnly = true;
 
+            // 禁止所有列的排序
+            foreach (DataGridViewColumn column in dataGridView2.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+
             //设置列宽
             dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView2.ScrollBars = ScrollBars.None;
@@ -1100,16 +1106,145 @@ namespace Base.UI.MenuDevice
             dataGridView2.ColumnHeadersHeight = dataGridView2.Height - height;
 
             //获取工单实际数值
+            //工单数值初始化
             for (int i = 0; i < ticketCntMax; i++)
             {
-                //dataGridView2.Rows[i + 1].Cells[1].Value = actXET.alam.SN_target[i, unit] / (float)actXET.torqueMultiple;
-                //dataGridView2.Rows[i + 1].Cells[2].Value = actXET.alam.SA_pre[i, unit] / (float)actXET.torqueMultiple;
-                //dataGridView2.Rows[i + 1].Cells[3].Value = actXET.alam.SA_ang[i] / (float)actXET.angleMultiple;
-                //dataGridView2.Rows[i + 1].Cells[4].Value = actXET.alam.MN_low[i, unit] / (float)actXET.torqueMultiple;
-                //dataGridView2.Rows[i + 1].Cells[5].Value = actXET.alam.MN_high[i, unit] / (float)actXET.torqueMultiple;
-                //dataGridView2.Rows[i + 1].Cells[6].Value = actXET.alam.MA_pre[i, unit] / (float)actXET.torqueMultiple;
-                //dataGridView2.Rows[i + 1].Cells[7].Value = actXET.alam.MA_low[i] / (float)actXET.angleMultiple;
-                //dataGridView2.Rows[i + 1].Cells[8].Value = actXET.alam.MA_high[i] / (float)actXET.angleMultiple;
+                // 获取特定单元格
+                DataGridViewComboBoxCell comboBoxCell_Ax = (DataGridViewComboBoxCell)dataGridView2.Rows[i].Cells[1];
+                DataGridViewComboBoxCell comboBoxCell_Mx = (DataGridViewComboBoxCell)dataGridView2.Rows[i].Cells[2];
+                int ticketAx = actXET.screw[i].scw_ticketAxMx >> 0x04;
+                int ticketMx = actXET.screw[i].scw_ticketAxMx & 0x0F;
+
+                //Ax —— 取一个字节的高4位
+                switch (ticketAx)
+                {
+                    case 0://EN
+                        break;
+                    case 1://EA
+                        break;
+                    case 2://SN
+                        // 检查值是否在Items列表中
+                        if (comboBoxCell_Ax.Items.Contains("SN"))
+                        {
+                            comboBoxCell_Ax.Value = "SN"; // 赋值
+                        }
+                        break;
+                    case 3://SA
+                        // 检查值是否在Items列表中
+                        if (comboBoxCell_Ax.Items.Contains("SA"))
+                        {
+                            comboBoxCell_Ax.Value = "SA"; // 赋值
+                        }
+                        break;
+                    case 4://MN
+                        // 检查值是否在Items列表中
+                        if (comboBoxCell_Ax.Items.Contains("MN"))
+                        {
+                            comboBoxCell_Ax.Value = "MN"; // 赋值
+                        }
+                        break;
+                    case 5://MA
+                        // 检查值是否在Items列表中
+                        if (comboBoxCell_Ax.Items.Contains("MA"))
+                        {
+                            comboBoxCell_Ax.Value = "MA"; // 赋值
+                        }
+                        break;
+                    case 6://AZ
+                        break;
+                    default:
+                        break;
+                }
+
+                //Mx —— 取一个字节的低4位
+                switch (ticketMx)
+                {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                        // 检查值是否在Items列表中
+                        if (comboBoxCell_Mx.Items.Contains($"M{ticketMx}"))
+                        {
+                            comboBoxCell_Mx.Value = $"M{ticketMx}"; // 赋值
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                //索引扳手的报警值
+                switch (actXET.screw[i].scw_ticketAxMx)
+                {
+                    case 0x20:
+                    case 0x21:
+                    case 0x22:
+                    case 0x23:
+                    case 0x24:
+                    case 0x25:
+                    case 0x26:
+                    case 0x27:
+                    case 0x28:
+                    case 0x29:
+                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.SN_target[ticketMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[i].Cells[4].Value = "";
+                        dataGridView2.Rows[i].Cells[5].Value = "";
+                        break;
+                    case 0x30:
+                    case 0x31:
+                    case 0x32:
+                    case 0x33:
+                    case 0x34:
+                    case 0x35:
+                    case 0x36:
+                    case 0x37:
+                    case 0x38:
+                    case 0x39:
+                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.SA_pre[ticketMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[i].Cells[4].Value = actXET.alam.SA_ang[ticketMx] / (float)actXET.angleMultiple;
+                        dataGridView2.Rows[i].Cells[5].Value = "";
+                        break;
+                    case 0x40:
+                    case 0x41:
+                    case 0x42:
+                    case 0x43:
+                    case 0x44:
+                    case 0x45:
+                    case 0x46:
+                    case 0x47:
+                    case 0x48:
+                    case 0x49:
+                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.MN_low[ticketMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[i].Cells[4].Value = actXET.alam.MN_high[ticketMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[i].Cells[5].Value = "";
+                        break;
+                    case 0x50:
+                    case 0x51:
+                    case 0x52:
+                    case 0x53:
+                    case 0x54:
+                    case 0x55:
+                    case 0x56:
+                    case 0x57:
+                    case 0x58:
+                    case 0x59:
+                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.MA_pre[ticketMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[i].Cells[4].Value = actXET.alam.MA_low[ticketMx] / (float)actXET.angleMultiple;
+                        dataGridView2.Rows[i].Cells[5].Value = actXET.alam.MA_high[ticketMx] / (float)actXET.angleMultiple;
+                        break;
+                    default:
+                        break;
+                }
+
+                dataGridView2.Rows[i].Cells[6].Value = actXET.screw[i].scw_ticketCnt;
+                dataGridView2.Rows[i].Cells[7].Value = actXET.screw[i].scw_ticketNum;
+                dataGridView2.Rows[i].Cells[8].Value = actXET.screw[i].scw_ticketSerial;
             }
         }
 
@@ -2466,8 +2601,381 @@ namespace Base.UI.MenuDevice
                 limitRowList.Add(i);
             }
 
-            //报警值不可编辑，只能从扳手预设值引用
+            ////工单数值初始化
+            //for (int i = 0; i < ticketCntMax; i++)
+            //{
+            //    // 获取特定单元格
+            //    DataGridViewComboBoxCell comboBoxCell_Ax = (DataGridViewComboBoxCell)dataGridView2.Rows[i].Cells[1];
+            //    DataGridViewComboBoxCell comboBoxCell_Mx = (DataGridViewComboBoxCell)dataGridView2.Rows[i].Cells[2];
+            //    int ticketAx = actXET.screw[i].scw_ticketAxMx >> 0x04;
+            //    int ticketMx = actXET.screw[i].scw_ticketAxMx & 0x0F;
+
+            //    //Ax —— 取一个字节的高4位
+            //    switch (ticketAx)
+            //    {
+            //        case 0://EN
+            //            break;
+            //        case 1://EA
+            //            break;
+            //        case 2://SN
+            //            // 检查值是否在Items列表中
+            //            if (comboBoxCell_Ax.Items.Contains("SN"))
+            //            {
+            //                comboBoxCell_Ax.Value = "SN"; // 赋值
+            //            }
+            //            break;
+            //        case 3://SA
+            //            // 检查值是否在Items列表中
+            //            if (comboBoxCell_Ax.Items.Contains("SA"))
+            //            {
+            //                comboBoxCell_Ax.Value = "SA"; // 赋值
+            //            }
+            //            break;
+            //        case 4://MN
+            //            // 检查值是否在Items列表中
+            //            if (comboBoxCell_Ax.Items.Contains("MN"))
+            //            {
+            //                comboBoxCell_Ax.Value = "MN"; // 赋值
+            //            }
+            //            break;
+            //        case 5://MA
+            //            // 检查值是否在Items列表中
+            //            if (comboBoxCell_Ax.Items.Contains("MA"))
+            //            {
+            //                comboBoxCell_Ax.Value = "MA"; // 赋值
+            //            }
+            //            break;
+            //        case 6://AZ
+            //            break;
+            //        default:
+            //            break;
+            //    }
+
+            //    //Mx —— 取一个字节的低4位
+            //    switch (ticketMx)
+            //    {
+            //        case 0:
+            //        case 1:
+            //        case 2:
+            //        case 3:
+            //        case 4:
+            //        case 5:
+            //        case 6:
+            //        case 7:
+            //        case 8:
+            //        case 9:
+            //            // 检查值是否在Items列表中
+            //            if (comboBoxCell_Mx.Items.Contains($"M{ticketMx}"))
+            //            {
+            //                comboBoxCell_Mx.Value = $"M{ticketMx}"; // 赋值
+            //            }
+            //            break;
+            //        default:
+            //            break;
+            //    }
+
+            //    //索引扳手的报警值
+            //    switch (actXET.screw[i].scw_ticketAxMx)
+            //    {
+            //        case 0x20:
+            //        case 0x21:
+            //        case 0x22:
+            //        case 0x23:
+            //        case 0x24:
+            //        case 0x25:
+            //        case 0x26:
+            //        case 0x27:
+            //        case 0x28:
+            //        case 0x29:
+            //            dataGridView2.Rows[i].Cells[3].Value = actXET.alam.SN_target[ticketMx, unit] / (float)actXET.torqueMultiple;
+            //            dataGridView2.Rows[i].Cells[4].Value = "";
+            //            dataGridView2.Rows[i].Cells[5].Value = "";
+            //            break;
+            //        case 0x30:
+            //        case 0x31:
+            //        case 0x32:
+            //        case 0x33:
+            //        case 0x34:
+            //        case 0x35:
+            //        case 0x36:
+            //        case 0x37:
+            //        case 0x38:
+            //        case 0x39:
+            //            dataGridView2.Rows[i].Cells[3].Value = actXET.alam.SA_pre[ticketMx, unit] / (float)actXET.torqueMultiple;
+            //            dataGridView2.Rows[i].Cells[4].Value = actXET.alam.SA_ang[ticketMx] / (float)actXET.angleMultiple;
+            //            dataGridView2.Rows[i].Cells[5].Value = "";
+            //            break;
+            //        case 0x40:
+            //        case 0x41:
+            //        case 0x42:
+            //        case 0x43:
+            //        case 0x44:
+            //        case 0x45:
+            //        case 0x46:
+            //        case 0x47:
+            //        case 0x48:
+            //        case 0x49:
+            //            dataGridView2.Rows[i].Cells[3].Value = actXET.alam.MN_low[ticketMx, unit] / (float)actXET.torqueMultiple;
+            //            dataGridView2.Rows[i].Cells[4].Value = actXET.alam.MN_high[ticketMx, unit] / (float)actXET.torqueMultiple;
+            //            dataGridView2.Rows[i].Cells[5].Value = "";
+            //            break;
+            //        case 0x50:
+            //        case 0x51:
+            //        case 0x52:
+            //        case 0x53:
+            //        case 0x54:
+            //        case 0x55:
+            //        case 0x56:
+            //        case 0x57:
+            //        case 0x58:
+            //        case 0x59:
+            //            dataGridView2.Rows[i].Cells[3].Value = actXET.alam.MA_pre[ticketMx, unit] / (float)actXET.torqueMultiple;
+            //            dataGridView2.Rows[i].Cells[4].Value = actXET.alam.MA_low[ticketMx] / (float)actXET.angleMultiple;
+            //            dataGridView2.Rows[i].Cells[5].Value = actXET.alam.MA_high[ticketMx] / (float)actXET.angleMultiple;
+            //            break;
+            //        default:
+            //            break;
+            //    }
+
+            //    dataGridView2.Rows[i].Cells[6].Value = actXET.screw[i].scw_ticketCnt;
+            //    dataGridView2.Rows[i].Cells[7].Value = actXET.screw[i].scw_ticketNum;
+            //    dataGridView2.Rows[i].Cells[8].Value = actXET.screw[i].scw_ticketSerial;
+            //}
+
+            //根据用户选中工单数量开放权限
+            for (int j = 0; j < ticketCntMax; j++)
+            {
+                // 获取指定行
+                DataGridViewRow row2 = dataGridView2.Rows[j];
+
+                if (j < ucCombox_screwMax.SelectedIndex + 1)
+                {
+                    // 将行背景颜色和前景颜色设为 DataGridView 的默认样式
+                    row2.DefaultCellStyle.BackColor = dataGridView2.DefaultCellStyle.BackColor;
+                    row2.DefaultCellStyle.ForeColor = dataGridView2.DefaultCellStyle.ForeColor;
+
+                    // 遍历该行的所有单元格
+                    foreach (DataGridViewCell cell in row2.Cells)
+                    {
+                        // 如果是 ComboBox 类型的单元格
+                        if (cell is DataGridViewComboBoxCell comboBoxCell)
+                        {
+                            // 恢复 ComboBox 单元格的默认样式和显示下拉箭头
+                            comboBoxCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing; // 隐藏下拉箭头
+
+                            // 取消只读状态
+                            comboBoxCell.ReadOnly = false;
+                        }
+                        else
+                        {
+                            // 如果是其他单元格，也恢复默认的只读状态（如果适用）
+                            cell.ReadOnly = false;
+                        }
+                    }
+                }
+                else
+                {
+                    // 将背景颜色和前景颜色设为灰色
+                    row2.DefaultCellStyle.BackColor = Color.LightGray;
+                    row2.DefaultCellStyle.ForeColor = Color.DarkGray;
+
+                    // 遍历该行的所有单元格
+                    foreach (DataGridViewCell cell in row2.Cells)
+                    {
+                        // 如果是 ComboBox 类型的单元格
+                        if (cell is DataGridViewComboBoxCell comboBoxCell)
+                        {
+                            // 将 ComboBox 单元格设为只读
+                            comboBoxCell.ReadOnly = true;
+
+                            // 设置 ComboBox 单元格的样式（前景和背景）
+                            comboBoxCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing; // 隐藏下拉箭头
+                        }
+                        else
+                        {
+                            // 将其他单元格也设为只读（根据需要）
+                            cell.ReadOnly = true;
+                        }
+                    }
+                }
+            }
+
+
+            //报警值可编辑，只能从扳手预设值引用
             SetEditableCells(dataGridView2, new List<int> { 1, 2, 6, 7, 8 }, limitRowList);
         }
+
+        // 订阅 DataGridView2 的 EditingControlShowing 事件
+        private void dataGridView2_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            // 判断当前编辑的列是否是 DataGridViewComboBoxColumn
+            if ((dataGridView2.CurrentCell.ColumnIndex == 1 || dataGridView2.CurrentCell.ColumnIndex == 2) && e.Control is ComboBox comboBox)
+            {
+                // 移除之前可能已经订阅的事件，防止事件被多次触发
+                comboBox.SelectedIndexChanged -= ComboBox_SelectedIndexChanged;
+
+                // 订阅 ComboBox 的 SelectedIndexChanged 事件
+                comboBox.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
+            }
+        }
+
+        // 离线工单AxMx切换同步更改索引值
+        private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // 获取当前正在编辑的 ComboBox
+            ComboBox comboBox = sender as ComboBox;
+
+            // 获取当前选择的索引和内容
+            int selectedIndex = comboBox.SelectedIndex;
+            string selectedText = comboBox.Text;
+
+            // 获取当前行索引
+            int rowIndex = dataGridView2.CurrentCell.RowIndex;
+
+            // 获取 Cell[1] 和 Cell[2] 的值，进行 null 检查，否则null直接赋值会报错
+            string strAx = string.Empty;
+
+            string strMx = string.Empty;
+
+            int targetAx = 0;
+            int targetMx = 0;
+            int targetAxMx = 0;
+
+            if (dataGridView2.CurrentCell.ColumnIndex == 1)
+            {
+                strAx = comboBox.Text;
+                strMx = dataGridView2.Rows[rowIndex].Cells[2].Value != null
+                                ? dataGridView2.Rows[rowIndex].Cells[2].Value.ToString()
+                                : string.Empty;
+            }
+            else if (dataGridView2.CurrentCell.ColumnIndex == 2)
+            {
+                strAx = dataGridView2.Rows[rowIndex].Cells[1].Value != null
+                                ? dataGridView2.Rows[rowIndex].Cells[1].Value.ToString()
+                                : string.Empty;
+                strMx = comboBox.Text;
+            }
+
+            switch (strAx)
+            {
+                case "SN":
+                    targetAx = 2;
+                    break;
+                case "SA":
+                    targetAx = 3;
+                    break;
+                case "MN":
+                    targetAx = 4;
+                    break;
+                case "MA":
+                    targetAx = 5;
+                    break;
+                default:
+                    break;
+            }
+            switch (strMx)
+            {
+                case "M0":
+                    targetMx = 0;
+                    break;
+                case "M1":
+                    targetMx = 1;
+                    break;
+                case "M2":
+                    targetMx = 2;
+                    break;
+                case "M3":
+                    targetMx = 3;
+                    break;
+                case "M4":
+                    targetMx = 4;
+                    break;
+                case "M5":
+                    targetMx = 5;
+                    break;
+                case "M6":
+                    targetMx = 6;
+                    break;
+                case "M7":
+                    targetMx = 7;
+                    break;
+                case "M8":
+                    targetMx = 8;
+                    break;
+                case "M9":
+                    targetMx = 9;
+                    break;
+                default:
+                    break;
+            }
+
+            targetAxMx = targetAx * 16 + targetMx;
+
+            if (dataGridView2.CurrentCell.ColumnIndex == 1 || dataGridView2.CurrentCell.ColumnIndex == 2)
+            {
+                switch (targetAxMx)
+                {
+                    case 0x20:
+                    case 0x21:
+                    case 0x22:
+                    case 0x23:
+                    case 0x24:
+                    case 0x25:
+                    case 0x26:
+                    case 0x27:
+                    case 0x28:
+                    case 0x29:
+                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.SN_target[targetMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[4].Value = "";
+                        dataGridView2.Rows[rowIndex].Cells[5].Value = "";
+                        break;
+                    case 0x30:
+                    case 0x31:
+                    case 0x32:
+                    case 0x33:
+                    case 0x34:
+                    case 0x35:
+                    case 0x36:
+                    case 0x37:
+                    case 0x38:
+                    case 0x39:
+                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.SA_pre[targetMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[4].Value = actXET.alam.SA_ang[targetMx] / (float)actXET.angleMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[5].Value = "";
+                        break;
+                    case 0x40:
+                    case 0x41:
+                    case 0x42:
+                    case 0x43:
+                    case 0x44:
+                    case 0x45:
+                    case 0x46:
+                    case 0x47:
+                    case 0x48:
+                    case 0x49:
+                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.MN_low[targetMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[4].Value = actXET.alam.MN_high[targetMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[5].Value = "";
+                        break;
+                    case 0x50:
+                    case 0x51:
+                    case 0x52:
+                    case 0x53:
+                    case 0x54:
+                    case 0x55:
+                    case 0x56:
+                    case 0x57:
+                    case 0x58:
+                    case 0x59:
+                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.MA_pre[targetMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[4].Value = actXET.alam.MA_low[targetMx] / (float)actXET.angleMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[5].Value = actXET.alam.MA_high[targetMx] / (float)actXET.angleMultiple;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
     }
 }
