@@ -956,7 +956,8 @@ namespace Base.UI.MenuHomework
                                 if (torque >= actXET.alam.SN_target[actXET.para.mode_mx, (int)actXET.para.torque_unit])
                                 {
                                     isDataValid = true;
-                                    return isDataValid;
+                                    //扭矩优先模式下再判断复拧角度
+                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, MyDevice.angleResist);
                                 }
                                 else
                                 {
@@ -968,7 +969,6 @@ namespace Base.UI.MenuHomework
                                 if (torque >= actXET.alam.SA_pre[actXET.para.mode_mx, (int)actXET.para.torque_unit] && angle >= actXET.alam.SA_ang[actXET.para.mode_mx])
                                 {
                                     isDataValid = true;
-                                    return isDataValid;
                                 }
                                 else
                                 {
@@ -980,7 +980,7 @@ namespace Base.UI.MenuHomework
                                 if (actXET.alam.MN_low[actXET.para.mode_mx, (int)actXET.para.torque_unit] <= torque && torque <= actXET.alam.MN_high[actXET.para.mode_mx, (int)actXET.para.torque_unit])
                                 {
                                     isDataValid = true;
-                                    return isDataValid;
+                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, MyDevice.angleResist);
                                 }
                                 else
                                 {
@@ -993,7 +993,6 @@ namespace Base.UI.MenuHomework
                                     && actXET.alam.MA_low[actXET.para.mode_mx] <= angle && angle <= actXET.alam.MA_high[actXET.para.mode_mx])
                                 {
                                     isDataValid = true;
-                                    return isDataValid;
                                 }
                                 else
                                 {
@@ -1133,10 +1132,10 @@ namespace Base.UI.MenuHomework
             updatePara();
             updateAlarm();
 
-            //if (isMatchDevType(actXET.devc.type.ToString(), tb_Unit.Text, tb_screwAx.Text, tb_screwMx.Text) == false)
-            //{
-            //    return;
-            //}
+            if (isMatchDevType(actXET.devc.type.ToString(), tb_Unit.Text, tb_screwAx.Text, tb_screwMx.Text) == false)
+            {
+                return;
+            }
 
             MyDevice.myTaskManager.SelectedDev = addr;
             MyDevice.myTaskManager.Mode = AutoMode.UserAndTicketWork;
@@ -1327,6 +1326,31 @@ namespace Base.UI.MenuHomework
             }            
 
             return isMatch;
+        }
+
+        //判断结果数据是否需要重复拧紧(F3专属)
+        private bool IsAngleResist(DATA data, XET xet, double angle, double angleResist)
+        {
+            bool isAngleResist = false;
+
+            //F3 结果数据是否需要重复拧紧
+            if (data.dtype == 0xF3)
+            {
+                if (data.mode_ax == 0 || data.mode_ax == 2 || data.mode_ax == 4)// EN|SN|MN (限定扭矩优先模式)
+                {
+                    //累加角度 < 复拧角度 ，提示客户重复拧紧
+                    if (angle < angleResist)
+                    {
+                        isAngleResist = true;
+                    }
+                    else
+                    {
+                        isAngleResist = false;
+                    }
+                }
+            }
+
+            return isAngleResist;
         }
 
         //UI更新事件

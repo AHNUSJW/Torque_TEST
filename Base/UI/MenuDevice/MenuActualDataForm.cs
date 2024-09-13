@@ -611,6 +611,7 @@ namespace Base.UI.MenuDevice
                         angle = actXET.data[i].angle / (double)actXET.angleMultiple;
                         angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Add(angle);
                         angleOld = angle;
+                        label2.Text = "";
                     }
                     else
                     {
@@ -662,14 +663,25 @@ namespace Base.UI.MenuDevice
                         panel3.BackColor = Color.CadetBlue;
                     }
 
+                    //判断数据结果是否要重复拧紧
+                    if (IsAngleResist(actXET.data[i], actXET, angle * actXET.angleMultiple, MyDevice.angleResist))
+                    {
+                        label2.Text = "需要重复拧紧";
+                    }
+                    else
+                    {
+                        //label2.Text = "无需重复拧紧";
+                    }
+
                     //更新作业号
                     if (actXET.data[i].dtype == 0xF3)
                     {
 
-                        //计算残余扭矩
+                        
                         try
                         {
-                            label2.Text = "残余扭矩值: " + GetResidualTorque(1, new List<double>(TorquedataGroups[actXET.opsn]), new List<double>(AngledataGroups[actXET.opsn]));
+                            //计算残余扭矩
+                            //label2.Text = "残余扭矩值: " + GetResidualTorque(1, new List<double>(TorquedataGroups[actXET.opsn]), new List<double>(AngledataGroups[actXET.opsn]));
                         }
                         catch
                         {
@@ -1556,7 +1568,7 @@ namespace Base.UI.MenuDevice
             return 0;
         }
 
-        //判断过程数据是否合格
+        //判断结果数据是否合格
         private bool IsValid(DATA data, XET xet, double torque, double angle)
         {
             bool isDataValid = false;
@@ -1674,7 +1686,9 @@ namespace Base.UI.MenuDevice
             //XH06—F2结果判断合格
             //存在局限性，由于F2数据包中不含modeAx，无法判断当前设备是那种模式，只能通过读para中的modeAx
             //客户在数据页面手动按键多种模式切换，modeAx的具体就不确定以哪种作为标准
-            else if ((xet.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || xet.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR) && data.dtype == 0xF2)
+            else if ((xet.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR 
+                || xet.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR) 
+                && data.dtype == 0xF2)
             {
                 //超量程结束
                 if (torque > actXET.devc.torque_over[torUnit])
@@ -1750,5 +1764,31 @@ namespace Base.UI.MenuDevice
             }
             return isDataValid;
         }
+
+        //判断结果数据是否需要重复拧紧(F3专属)
+        private bool IsAngleResist(DATA data, XET xet, double angle, double angleResist)
+        {
+            bool isAngleResist = false;
+
+            //F3 结果数据是否需要重复拧紧
+            if (data.dtype == 0xF3)
+            {
+                if (data.mode_ax == 0 || data.mode_ax == 2 || data.mode_ax == 4)// EN|SN|MN (限定扭矩优先模式)
+                {
+                    //累加角度 < 复拧角度 ，提示客户重复拧紧
+                    if (angle < angleResist)
+                    {
+                        isAngleResist = true;
+                    }
+                    else
+                    {
+                        isAngleResist = false;
+                    }
+                }  
+            }
+
+            return isAngleResist;
+        }
+
     }
 }

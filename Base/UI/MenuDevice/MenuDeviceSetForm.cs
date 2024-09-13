@@ -397,6 +397,26 @@ namespace Base.UI.MenuDevice
             //脱钩保持时间
             ucTextBoxEx_unhook.InputText = actXET.para.unhook.ToString();
 
+            //设置重复拧紧角度格式
+            switch (actXET.para.angle_decimal)
+            {
+                case 0:
+                    ucTextBoxEx_angleResist.RegexPattern = @"^\d{0,7}$";
+                    break;
+                case 1:
+                    ucTextBoxEx_angleResist.RegexPattern = @"^\d{0,7}(\.\d{0,1})?$";
+                    break;
+                case 2:
+                    ucTextBoxEx_angleResist.RegexPattern = @"^\d{0,7}(\.\d{0,2})?$";
+                    break;
+                case 3:
+                    ucTextBoxEx_angleResist.RegexPattern = @"^\d{0,7}(\.\d{0,3})?$";
+                    break;
+                default:
+                    break;
+            }
+            ucTextBoxEx_angleResist.InputText = (MyDevice.angleResist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
+
             #endregion
 
             #region WLAN设置
@@ -1343,6 +1363,16 @@ namespace Base.UI.MenuDevice
             {
                 MyDevice.myTaskManager.AddUserCommands(mutiAddres[ucDataGridView1.SelectRows[i].RowIndex], ProtocolFunc.Protocol_Sequence_SendCOM, tasks, this.Name);
             }
+
+            //通讯做好之后删除
+            if (ucTextBoxEx_angleResist.InputText != "")
+            {
+                MyDevice.angleResist = (int)(Convert.ToDouble(ucTextBoxEx_angleResist.InputText) * (int)Math.Pow(10, actXET.para.angle_decimal) + 0.5);
+            }
+            else
+            {
+                MessageBox.Show("重复拧紧角度未填写");
+            }
         }
 
         //更新WLAN设置
@@ -1486,6 +1516,9 @@ namespace Base.UI.MenuDevice
         //更新高级设置
         private void btn_SuperUpdate_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("开发中...");
+            return;
+
             //按键状态
             btn_SuperUpdate.BackColor = Color.Firebrick;
 
@@ -1556,6 +1589,9 @@ namespace Base.UI.MenuDevice
         //更新工单设置
         private void btn_UpdateTicket_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("开发中...");
+            return;
+
             if (ucDataGridView1.SelectRows.Count == 0)
             {
                 MessageBox.Show("未选择设备");
@@ -2049,6 +2085,39 @@ namespace Base.UI.MenuDevice
                             {
                                 bt_UpdatePara.BackColor = Color.Green;
                                 buttonClicked = "";
+
+                                //设置重复拧紧角度格式
+                                switch (actXET.para.angle_decimal)
+                                {
+                                    case 0:
+                                        ucTextBoxEx_angleResist.RegexPattern = @"^\d{0,7}$";
+                                        break;
+                                    case 1:
+                                        ucTextBoxEx_angleResist.RegexPattern = @"^\d{0,7}(\.\d{0,1})?$";
+                                        break;
+                                    case 2:
+                                        ucTextBoxEx_angleResist.RegexPattern = @"^\d{0,7}(\.\d{0,2})?$";
+                                        break;
+                                    case 3:
+                                        ucTextBoxEx_angleResist.RegexPattern = @"^\d{0,7}(\.\d{0,3})?$";
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+
+                                if (ucTextBoxEx_angleResist.InvokeRequired)
+                                {
+                                    ucTextBoxEx_angleResist.Invoke(new MethodInvoker(() =>
+                                    {
+                                        ucTextBoxEx_angleResist.InputText = (MyDevice.angleResist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
+                                    }));
+                                }
+                                else
+                                {
+                                    ucTextBoxEx_angleResist.InputText = (MyDevice.angleResist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
+                                }
+                                
                             }
                             else
                             {

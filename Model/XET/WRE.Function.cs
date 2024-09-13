@@ -176,6 +176,7 @@ namespace Model
                 data[i].alarm[0]       = 0;
                 data[i].alarm[1]       = 0;
                 data[i].alarm[2]       = 0;
+                data[i].angle_resist   = 5;
             }
 
             for (int i = 0; i <32; i++)
@@ -359,6 +360,7 @@ namespace Model
                 data[i].alarm[0]       = xet.data[i].alarm[0];
                 data[i].alarm[1]       = xet.data[i].alarm[1];
                 data[i].alarm[2]       = xet.data[i].alarm[2];
+                data[i].angle_resist   = xet.data[i].angle_resist;
             }
 
             for (int i = 0; i < 32; i++)

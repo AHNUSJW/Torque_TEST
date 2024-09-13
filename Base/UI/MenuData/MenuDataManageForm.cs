@@ -1485,8 +1485,8 @@ namespace Base.UI.MenuData
             //判断是否能打开文件
             try
             {
-                // 创建文件并写入数据
-                using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
+                // 创建文件并写入数据,  new UTF8Encoding(true): 这里的 true 参数指示 UTF8Encoding 使用带 BOM 的 UTF-8 编码。 
+                using (StreamWriter writer = new StreamWriter(filePath, false, new UTF8Encoding(true)))//效果：Encoding.UTF8 < new UTF8Encoding(true)
                 {
                     // 写入表头
                     for (int i = 0; i < dataTable.Columns.Count; i++)
