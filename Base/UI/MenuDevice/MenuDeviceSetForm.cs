@@ -6,6 +6,7 @@ using RecXF;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -25,7 +26,8 @@ namespace Base.UI.MenuDevice
         private XET actXET;       //当前设备
         private TASKS meTask;     //按键操作指令
 
-        private int unit;         //设备扭矩单位
+        private int unit;         //设备扭矩单位(ui控件操控的单位)
+        private int xetUnit;      //指令发送更改设备的单位
         private List<Byte> mutiAddres = new List<Byte>();         //存储已连接设备的地址
 
         private DataGridViewTextBoxEditingControl CellEdit = null;//单元格
@@ -108,7 +110,12 @@ namespace Base.UI.MenuDevice
             Task.Run(async () =>
             {
                 string ipAddress = await Task.Run(() => WifiInfo.GetIP());
-                string wifiSsid = await Task.Run(() => WifiInfo.GetWIFISsid());
+                string wifiSsid = await Task.Run(() => WifiInfo.GetAccurateWIFISsid());
+
+                if (wifiSsid == null || wifiSsid == "")
+                {
+                    wifiSsid = "无网络，请检查网络配置";
+                }
 
                 //IsHandleCreated判断更新控件是否被分配了语柄
                 //创建窗口句柄之前,不能在控件上调用 Invoke 或 BeginInvoke,否则报错
@@ -1724,8 +1731,8 @@ namespace Base.UI.MenuDevice
         //更新工单设置
         private void btn_UpdateTicket_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("开发中...");
-            return;
+            //MessageBox.Show("开发中...");
+            //return;
 
             if (ucDataGridView1.SelectRows.Count == 0)
             {
@@ -1733,16 +1740,66 @@ namespace Base.UI.MenuDevice
                 return;
             }
 
+            if (ucCombox_screwMax.TextValue == null || ucCombox_runMode.TextValue == null)
+            {
+                MessageBox.Show("离线工单基础设置未填写, 请检查所有参数", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             //按键状态
             btn_UpdateTicket.BackColor = Color.Firebrick;
 
-            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
-            //actXET = MyDevice.actDev;
-            //actXET.screw[0].scw_ticketAxMx = 0x11;
-            //actXET.screw[0].scw_ticketCnt = 0x20;
-            //actXET.screw[0].scw_ticketNum = 0x3333;
-            //actXET.screw[0].scw_ticketSerial = 0xAAAABBBBCCCC;
-            //MyDevice.protocol.Protocool_Sequence_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+            //多设备
+            for (int j = 0; j < ucDataGridView1.SelectRows.Count; j++)
+            {
+                //获取已选设备地址
+                if (MyDevice.protocol.type != COMP.UART)
+                {
+                    MyDevice.protocol.addr = mutiAddres[ucDataGridView1.SelectRows[j].RowIndex];
+                    if (MyDevice.protocol.type == COMP.TCP)
+                    {
+                        MyDevice.protocol.port = MyDevice.clientConnectionItems[MyDevice.addr_ip[MyDevice.protocol.addr.ToString()]];
+                    }
+                    actXET = MyDevice.actDev;
+                }
+
+                //离线工单基础设置
+                actXET.para.screwmax = (byte)(ucCombox_screwMax.SelectedIndex + 1);
+                actXET.para.runmode = (byte)ucCombox_runMode.SelectedIndex;
+
+                //离线工单数值设置
+                for (int i = 0; i < ucCombox_screwMax.SelectedIndex + 1; i++)
+                {
+                    actXET.screw[i].scw_ticketAxMx = GetTicketAxmx(dataGridView2.Rows[i].Cells[1].Value.ToString(), dataGridView2.Rows[i].Cells[2].Value.ToString());
+                    actXET.screw[i].scw_ticketCnt = Convert.ToByte(dataGridView2.Rows[i].Cells[6].Value.ToString());
+                    actXET.screw[i].scw_ticketNum = Convert.ToUInt32(dataGridView2.Rows[i].Cells[7].Value.ToString());
+                    actXET.screw[i].scw_ticketSerial = Convert.ToUInt64(dataGridView2.Rows[i].Cells[8].Value.ToString()); ;
+                }
+
+            }
+
+            selectNum = 0;
+            MyDevice.protocol.addr = mutiAddres[ucDataGridView1.SelectRows[selectNum].RowIndex];//从第一个设备开始设置
+            if (MyDevice.protocol.type == COMP.TCP)
+            {
+                MyDevice.protocol.port = MyDevice.clientConnectionItems[MyDevice.addr_ip[MyDevice.protocol.addr.ToString()]];
+            }
+            actXET = MyDevice.actDev;
+            buttonClicked = "bt_UpdateTicket";
+
+            List<TASKS> tasks = new List<TASKS>
+            {
+                TASKS.REG_BLOCK3_SCREW1,
+                TASKS.REG_BLOCK3_SCREW2,
+                TASKS.REG_BLOCK3_SCREW3,
+                TASKS.REG_BLOCK3_SCREW4,
+                TASKS.REG_BLOCK2_PARA,
+            };
+
+            for (int i = 0; i < ucDataGridView1.SelectRows.Count; i++)
+            {
+                MyDevice.myTaskManager.AddUserCommands(mutiAddres[ucDataGridView1.SelectRows[i].RowIndex], ProtocolFunc.Protocol_Sequence_SendCOM, tasks, this.Name);
+            }
         }
 
         //单位切换更新数据表格——进行单位换算
@@ -2114,6 +2171,62 @@ namespace Base.UI.MenuDevice
             }
         }
 
+        //
+        void SetTicketAlarm(int i, int cellIndex, ref int[,] targetArray, int torqueMultiple)
+        {
+            string cellValue = dataGridView2.Rows[i].Cells[cellIndex].Value.ToString();
+            if (cellValue != "")
+            {
+                int ticketAlarm = (int)(Convert.ToDouble(cellValue) * torqueMultiple + 0.5);//表格预设值
+
+                //根据单位调整上下限
+                switch (actXET.para.torque_unit)
+                {
+                    case UNIT.UNIT_nm:
+                        targetArray[i, 0] = UnitConvert.Torque_nmTrans(ticketAlarm, 0);
+                        targetArray[i, 1] = UnitConvert.Torque_nmTrans(ticketAlarm, 1);
+                        targetArray[i, 2] = UnitConvert.Torque_nmTrans(ticketAlarm, 2);
+                        targetArray[i, 3] = UnitConvert.Torque_nmTrans(ticketAlarm, 3);
+                        targetArray[i, 4] = UnitConvert.Torque_nmTrans(ticketAlarm, 4);
+                        break;
+                    case UNIT.UNIT_lbfin:
+                        targetArray[i, 0] = UnitConvert.Torque_lbfinTrans(ticketAlarm, 0);
+                        targetArray[i, 1] = UnitConvert.Torque_lbfinTrans(ticketAlarm, 1);
+                        targetArray[i, 2] = UnitConvert.Torque_lbfinTrans(ticketAlarm, 2);
+                        targetArray[i, 3] = UnitConvert.Torque_lbfinTrans(ticketAlarm, 3);
+                        targetArray[i, 4] = UnitConvert.Torque_lbfinTrans(ticketAlarm, 4);
+                        break;
+                    case UNIT.UNIT_lbfft:
+                        targetArray[i, 0] = UnitConvert.Torque_lbfftTrans(ticketAlarm, 0);
+                        targetArray[i, 1] = UnitConvert.Torque_lbfftTrans(ticketAlarm, 1);
+                        targetArray[i, 2] = UnitConvert.Torque_lbfftTrans(ticketAlarm, 2);
+                        targetArray[i, 3] = UnitConvert.Torque_lbfftTrans(ticketAlarm, 3);
+                        targetArray[i, 4] = UnitConvert.Torque_lbfftTrans(ticketAlarm, 4);
+                        break;
+                    case UNIT.UNIT_kgcm:
+                        targetArray[i, 0] = UnitConvert.Torque_kgfcmTrans(ticketAlarm, 0);
+                        targetArray[i, 1] = UnitConvert.Torque_kgfcmTrans(ticketAlarm, 1);
+                        targetArray[i, 2] = UnitConvert.Torque_kgfcmTrans(ticketAlarm, 2);
+                        targetArray[i, 3] = UnitConvert.Torque_kgfcmTrans(ticketAlarm, 3);
+                        targetArray[i, 4] = UnitConvert.Torque_kgfcmTrans(ticketAlarm, 4);
+                        break;
+                    case UNIT.UNIT_kgm:
+                        targetArray[i, 0] = UnitConvert.Torque_kgfmTrans(ticketAlarm, 0);
+                        targetArray[i, 1] = UnitConvert.Torque_kgfmTrans(ticketAlarm, 1);
+                        targetArray[i, 2] = UnitConvert.Torque_kgfmTrans(ticketAlarm, 2);
+                        targetArray[i, 3] = UnitConvert.Torque_kgfmTrans(ticketAlarm, 3);
+                        targetArray[i, 4] = UnitConvert.Torque_kgfmTrans(ticketAlarm, 4);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                targetArray[i, (int)actXET.para.torque_unit] = -1;
+            }
+        }
+
         #endregion
 
         #region 屏幕自适应
@@ -2380,6 +2493,34 @@ namespace Base.UI.MenuDevice
                             break;
                     }
                 }
+                else if (buttonClicked == "bt_UpdateTicket")
+                {
+                    switch (currentCommand.TaskState)
+                    {
+                        case TASKS.REG_BLOCK2_PARA:
+
+                            selectNum++;
+                            //所有设备接收
+                            if (selectNum == ucDataGridView1.SelectRows.Count)
+                            {
+                                btn_UpdateTicket.BackColor = Color.Green;
+                                buttonClicked = "";
+                            }
+                            else
+                            {
+                                //轮询下一台设备
+                                MyDevice.protocol.addr = mutiAddres[ucDataGridView1.SelectRows[selectNum].RowIndex];//
+                                if (MyDevice.protocol.type == COMP.TCP)
+                                {
+                                    MyDevice.protocol.port = MyDevice.clientConnectionItems[MyDevice.addr_ip[MyDevice.protocol.addr.ToString()]];
+                                }
+                                actXET = MyDevice.actDev;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         }
 
@@ -2600,147 +2741,6 @@ namespace Base.UI.MenuDevice
             {
                 limitRowList.Add(i);
             }
-
-            ////工单数值初始化
-            //for (int i = 0; i < ticketCntMax; i++)
-            //{
-            //    // 获取特定单元格
-            //    DataGridViewComboBoxCell comboBoxCell_Ax = (DataGridViewComboBoxCell)dataGridView2.Rows[i].Cells[1];
-            //    DataGridViewComboBoxCell comboBoxCell_Mx = (DataGridViewComboBoxCell)dataGridView2.Rows[i].Cells[2];
-            //    int ticketAx = actXET.screw[i].scw_ticketAxMx >> 0x04;
-            //    int ticketMx = actXET.screw[i].scw_ticketAxMx & 0x0F;
-
-            //    //Ax —— 取一个字节的高4位
-            //    switch (ticketAx)
-            //    {
-            //        case 0://EN
-            //            break;
-            //        case 1://EA
-            //            break;
-            //        case 2://SN
-            //            // 检查值是否在Items列表中
-            //            if (comboBoxCell_Ax.Items.Contains("SN"))
-            //            {
-            //                comboBoxCell_Ax.Value = "SN"; // 赋值
-            //            }
-            //            break;
-            //        case 3://SA
-            //            // 检查值是否在Items列表中
-            //            if (comboBoxCell_Ax.Items.Contains("SA"))
-            //            {
-            //                comboBoxCell_Ax.Value = "SA"; // 赋值
-            //            }
-            //            break;
-            //        case 4://MN
-            //            // 检查值是否在Items列表中
-            //            if (comboBoxCell_Ax.Items.Contains("MN"))
-            //            {
-            //                comboBoxCell_Ax.Value = "MN"; // 赋值
-            //            }
-            //            break;
-            //        case 5://MA
-            //            // 检查值是否在Items列表中
-            //            if (comboBoxCell_Ax.Items.Contains("MA"))
-            //            {
-            //                comboBoxCell_Ax.Value = "MA"; // 赋值
-            //            }
-            //            break;
-            //        case 6://AZ
-            //            break;
-            //        default:
-            //            break;
-            //    }
-
-            //    //Mx —— 取一个字节的低4位
-            //    switch (ticketMx)
-            //    {
-            //        case 0:
-            //        case 1:
-            //        case 2:
-            //        case 3:
-            //        case 4:
-            //        case 5:
-            //        case 6:
-            //        case 7:
-            //        case 8:
-            //        case 9:
-            //            // 检查值是否在Items列表中
-            //            if (comboBoxCell_Mx.Items.Contains($"M{ticketMx}"))
-            //            {
-            //                comboBoxCell_Mx.Value = $"M{ticketMx}"; // 赋值
-            //            }
-            //            break;
-            //        default:
-            //            break;
-            //    }
-
-            //    //索引扳手的报警值
-            //    switch (actXET.screw[i].scw_ticketAxMx)
-            //    {
-            //        case 0x20:
-            //        case 0x21:
-            //        case 0x22:
-            //        case 0x23:
-            //        case 0x24:
-            //        case 0x25:
-            //        case 0x26:
-            //        case 0x27:
-            //        case 0x28:
-            //        case 0x29:
-            //            dataGridView2.Rows[i].Cells[3].Value = actXET.alam.SN_target[ticketMx, unit] / (float)actXET.torqueMultiple;
-            //            dataGridView2.Rows[i].Cells[4].Value = "";
-            //            dataGridView2.Rows[i].Cells[5].Value = "";
-            //            break;
-            //        case 0x30:
-            //        case 0x31:
-            //        case 0x32:
-            //        case 0x33:
-            //        case 0x34:
-            //        case 0x35:
-            //        case 0x36:
-            //        case 0x37:
-            //        case 0x38:
-            //        case 0x39:
-            //            dataGridView2.Rows[i].Cells[3].Value = actXET.alam.SA_pre[ticketMx, unit] / (float)actXET.torqueMultiple;
-            //            dataGridView2.Rows[i].Cells[4].Value = actXET.alam.SA_ang[ticketMx] / (float)actXET.angleMultiple;
-            //            dataGridView2.Rows[i].Cells[5].Value = "";
-            //            break;
-            //        case 0x40:
-            //        case 0x41:
-            //        case 0x42:
-            //        case 0x43:
-            //        case 0x44:
-            //        case 0x45:
-            //        case 0x46:
-            //        case 0x47:
-            //        case 0x48:
-            //        case 0x49:
-            //            dataGridView2.Rows[i].Cells[3].Value = actXET.alam.MN_low[ticketMx, unit] / (float)actXET.torqueMultiple;
-            //            dataGridView2.Rows[i].Cells[4].Value = actXET.alam.MN_high[ticketMx, unit] / (float)actXET.torqueMultiple;
-            //            dataGridView2.Rows[i].Cells[5].Value = "";
-            //            break;
-            //        case 0x50:
-            //        case 0x51:
-            //        case 0x52:
-            //        case 0x53:
-            //        case 0x54:
-            //        case 0x55:
-            //        case 0x56:
-            //        case 0x57:
-            //        case 0x58:
-            //        case 0x59:
-            //            dataGridView2.Rows[i].Cells[3].Value = actXET.alam.MA_pre[ticketMx, unit] / (float)actXET.torqueMultiple;
-            //            dataGridView2.Rows[i].Cells[4].Value = actXET.alam.MA_low[ticketMx] / (float)actXET.angleMultiple;
-            //            dataGridView2.Rows[i].Cells[5].Value = actXET.alam.MA_high[ticketMx] / (float)actXET.angleMultiple;
-            //            break;
-            //        default:
-            //            break;
-            //    }
-
-            //    dataGridView2.Rows[i].Cells[6].Value = actXET.screw[i].scw_ticketCnt;
-            //    dataGridView2.Rows[i].Cells[7].Value = actXET.screw[i].scw_ticketNum;
-            //    dataGridView2.Rows[i].Cells[8].Value = actXET.screw[i].scw_ticketSerial;
-            //}
 
             //根据用户选中工单数量开放权限
             for (int j = 0; j < ticketCntMax; j++)
@@ -2975,6 +2975,70 @@ namespace Base.UI.MenuDevice
                         break;
                 }
             }
+        }
+
+        //
+        private byte GetTicketAxmx(string Ax, string Mx)
+        {
+            byte ax = 0;
+            byte mx = 0;
+            byte AxMx = 0;
+            switch (Ax)
+            {
+                case "SN":
+                    ax = 2;
+                    break;
+                case "SA":
+                    ax = 3;
+                    break;
+                case "MN":
+                    ax = 4;
+                    break;
+                case "MA":
+                    ax = 5;
+                    break;
+                default:
+                    break;
+            }
+            switch (Mx)
+            {
+                case "M0":
+                    mx = 0;
+                    break;
+                case "M1":
+                    mx = 1;
+                    break;
+                case "M2":
+                    mx = 2;
+                    break;
+                case "M3":
+                    mx = 3;
+                    break;
+                case "M4":
+                    mx = 4;
+                    break;
+                case "M5":
+                    mx = 5;
+                    break;
+                case "M6":
+                    mx = 6;
+                    break;
+                case "M7":
+                    mx = 7;
+                    break;
+                case "M8":
+                    mx = 8;
+                    break;
+                case "M9":
+                    mx = 9;
+                    break;
+                default:
+                    break;
+            }
+
+            AxMx = (byte)(ax * 16 + mx);
+
+            return AxMx;
         }
 
     }

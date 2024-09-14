@@ -31,7 +31,7 @@ namespace Library
             return wifis;
         }
 
-        //获取本地WIFI的ssid
+        //获取本地WIFI的ssid(不一定准确，获取的是本地wifi列表第一个，第一个不一定是正在使用的wifi)
         public static string GetWIFISsid()
         {
             Regex regex = new Regex(@"^SSID[*0-9]:[^\\\/\^]+", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline);
@@ -50,6 +50,30 @@ namespace Library
             }
             return null;
         }
+
+        //获取本地WIFI的ssid(正在使用的wifi, 搜索更准确)
+        public static string GetAccurateWIFISsid()
+        {
+            // 正则表达式用于匹配当前连接的SSID
+            Regex regex = new Regex(@"^\s*SSID\s*:\s*(.+)", RegexOptions.IgnoreCase);
+
+            // 执行netsh命令获取当前连接的Wi-Fi信息
+            if (WinCmdHelper.ExcuteDosCommand("netsh wlan show interfaces", false, true, out string res))
+            {
+                string[] lines = res.Split('\n');
+                foreach (var item in lines)
+                {
+                    // 使用正则表达式查找SSID字段
+                    var match = regex.Match(item);
+                    if (match.Success)
+                    {
+                        return match.Groups[1].Value.Trim(); // 返回匹配到的SSID
+                    }
+                }
+            }
+            return null;
+        }
+
 
         //获取本地的IP地址集合
         public static List<string> GetIPs()

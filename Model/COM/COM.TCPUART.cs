@@ -1293,7 +1293,7 @@ namespace Model
                         MyDevice.myUIT.US = (ushort)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial / Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial & 0xFFFFFFFF);
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial % Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B3;
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
@@ -1319,10 +1319,10 @@ namespace Model
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial / Math.Pow(10, 9));
+                        MyDevice.myUIT.UI = (ushort)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial / Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial % Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B3;
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
@@ -1348,10 +1348,10 @@ namespace Model
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial / Math.Pow(10, 9));
+                        MyDevice.myUIT.UI = (ushort)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial / Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial % Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B3;
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
@@ -1377,10 +1377,10 @@ namespace Model
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial / Math.Pow(10, 9));
+                        MyDevice.myUIT.UI = (ushort)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial / Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B1;
                         meTXD[idx++] = MyDevice.myUIT.B0;
-                        MyDevice.myUIT.UI = (uint)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial & 0xFFFF);
+                        MyDevice.myUIT.UI = (uint)(MyDevice.mTCP[sAddress].screw[i].scw_ticketSerial % Math.Pow(10, 9));
                         meTXD[idx++] = MyDevice.myUIT.B3;
                         meTXD[idx++] = MyDevice.myUIT.B2;
                         meTXD[idx++] = MyDevice.myUIT.B1;

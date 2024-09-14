@@ -182,10 +182,10 @@ namespace Model
             for (int i = 0; i <32; i++)
             {
                 screw[i] = new SCREW();
-                screw[i].scw_ticketAxMx = 0;
+                screw[i].scw_ticketAxMx = 0x21;
                 screw[i].scw_ticketCnt  = 1;
                 screw[i].scw_ticketNum  = 1;
-                screw[i].scw_ticketAxMx = 1;
+                screw[i].scw_ticketSerial = 1;
             }
         }
 

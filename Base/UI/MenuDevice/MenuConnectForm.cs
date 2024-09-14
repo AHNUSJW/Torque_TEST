@@ -683,13 +683,65 @@ namespace Base.UI.MenuDevice
                         case TASKS.REG_BLOCK2_DAT:
                             if (MyDevice.protocol.isEqual)
                             {
-                                actXET.sTATE = STATE.WORKING;
-                                meTask = TASKS.NULL;
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                                meTask = TASKS.REG_BLOCK3_SCREW1;
                             }
                             else
                             {
                                 MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
                                 meTask = TASKS.REG_BLOCK2_DAT;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK3_SCREW1:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW2);
+                                meTask = TASKS.REG_BLOCK3_SCREW2;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                                meTask = TASKS.REG_BLOCK3_SCREW1;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK3_SCREW2:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW3);
+                                meTask = TASKS.REG_BLOCK3_SCREW3;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW2);
+                                meTask = TASKS.REG_BLOCK3_SCREW2;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK3_SCREW3:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW4);
+                                meTask = TASKS.REG_BLOCK3_SCREW4;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW3);
+                                meTask = TASKS.REG_BLOCK3_SCREW3;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK3_SCREW4:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                actXET.sTATE = STATE.WORKING;
+                                meTask = TASKS.NULL;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW4);
+                                meTask = TASKS.REG_BLOCK3_SCREW4;
                             }
                             break;
 

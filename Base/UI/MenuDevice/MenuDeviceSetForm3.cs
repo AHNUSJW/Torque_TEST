@@ -149,7 +149,12 @@ namespace Base.UI.MenuDevice
             Task.Run(async () =>
             {
                 string ipAddress = await Task.Run(() => WifiInfo.GetIP());
-                string wifiSsid = await Task.Run(() => WifiInfo.GetWIFISsid());
+                string wifiSsid = await Task.Run(() => WifiInfo.GetAccurateWIFISsid());
+
+                if (wifiSsid == null || wifiSsid == "")
+                {
+                    wifiSsid = "无网络，请检查网络配置";
+                }
 
                 //IsHandleCreated判断更新控件是否被分配了语柄
                 //创建窗口句柄之前,不能在控件上调用 Invoke 或 BeginInvoke,否则报错

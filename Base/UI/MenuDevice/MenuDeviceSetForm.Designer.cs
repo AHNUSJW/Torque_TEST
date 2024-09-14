@@ -218,12 +218,6 @@
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btn_UpdateTicket = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.groupBox21 = new System.Windows.Forms.GroupBox();
-            this.ucCombox_screwMax = new HZH_Controls.Controls.UCCombox();
-            this.ucCombox_runMode = new HZH_Controls.Controls.UCCombox();
-            this.label41 = new System.Windows.Forms.Label();
-            this.label40 = new System.Windows.Forms.Label();
-            this.graphicalOverlayComponent1 = new HZH_Controls.Controls.GraphicalOverlayComponent(this.components);
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column11 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Column12 = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -233,6 +227,12 @@
             this.Column16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column17 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column18 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBox21 = new System.Windows.Forms.GroupBox();
+            this.ucCombox_screwMax = new HZH_Controls.Controls.UCCombox();
+            this.ucCombox_runMode = new HZH_Controls.Controls.UCCombox();
+            this.label41 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.graphicalOverlayComponent1 = new HZH_Controls.Controls.GraphicalOverlayComponent(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -1840,7 +1840,7 @@
             this.groupBox12.Controls.Add(this.label_recWIFIName);
             this.groupBox12.Location = new System.Drawing.Point(94, 376);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(268, 192);
+            this.groupBox12.Size = new System.Drawing.Size(323, 192);
             this.groupBox12.TabIndex = 148;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "接收器信息提示";
@@ -1911,7 +1911,7 @@
             this.groupBox11.Controls.Add(this.label_curWIFIName);
             this.groupBox11.Location = new System.Drawing.Point(94, 574);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(265, 100);
+            this.groupBox11.Size = new System.Drawing.Size(323, 100);
             this.groupBox11.TabIndex = 147;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "路由器信息提示";
@@ -3931,6 +3931,73 @@
             this.dataGridView2.TabIndex = 1;
             this.dataGridView2.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView2_EditingControlShowing);
             // 
+            // Column10
+            // 
+            this.Column10.HeaderText = "序号";
+            this.Column10.Name = "Column10";
+            // 
+            // Column11
+            // 
+            this.Column11.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.Column11.HeaderText = "Ax模式";
+            this.Column11.Items.AddRange(new object[] {
+            "SN",
+            "SA",
+            "MN",
+            "MA"});
+            this.Column11.Name = "Column11";
+            this.Column11.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column11.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Column12
+            // 
+            this.Column12.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.Column12.HeaderText = "Mx模式";
+            this.Column12.Items.AddRange(new object[] {
+            "M0",
+            "M1",
+            "M2",
+            "M3",
+            "M4",
+            "M5",
+            "M6",
+            "M7",
+            "M8",
+            "M9"});
+            this.Column12.Name = "Column12";
+            this.Column12.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column12.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Column13
+            // 
+            this.Column13.HeaderText = "报警值1";
+            this.Column13.Name = "Column13";
+            // 
+            // Column14
+            // 
+            this.Column14.HeaderText = "报警值2";
+            this.Column14.Name = "Column14";
+            // 
+            // Column15
+            // 
+            this.Column15.HeaderText = "报警值3";
+            this.Column15.Name = "Column15";
+            // 
+            // Column16
+            // 
+            this.Column16.HeaderText = "螺栓数量";
+            this.Column16.Name = "Column16";
+            // 
+            // Column17
+            // 
+            this.Column17.HeaderText = "工单号";
+            this.Column17.Name = "Column17";
+            // 
+            // Column18
+            // 
+            this.Column18.HeaderText = "序列号";
+            this.Column18.Name = "Column18";
+            // 
             // groupBox21
             // 
             this.groupBox21.Controls.Add(this.ucCombox_screwMax);
@@ -4022,73 +4089,6 @@
             // graphicalOverlayComponent1
             // 
             this.graphicalOverlayComponent1.Owner = null;
-            // 
-            // Column10
-            // 
-            this.Column10.HeaderText = "序号";
-            this.Column10.Name = "Column10";
-            // 
-            // Column11
-            // 
-            this.Column11.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
-            this.Column11.HeaderText = "Ax模式";
-            this.Column11.Items.AddRange(new object[] {
-            "SN",
-            "SA",
-            "MN",
-            "MA"});
-            this.Column11.Name = "Column11";
-            this.Column11.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column11.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // Column12
-            // 
-            this.Column12.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
-            this.Column12.HeaderText = "Mx模式";
-            this.Column12.Items.AddRange(new object[] {
-            "M0",
-            "M1",
-            "M2",
-            "M3",
-            "M4",
-            "M5",
-            "M6",
-            "M7",
-            "M8",
-            "M9"});
-            this.Column12.Name = "Column12";
-            this.Column12.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column12.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // Column13
-            // 
-            this.Column13.HeaderText = "报警值1";
-            this.Column13.Name = "Column13";
-            // 
-            // Column14
-            // 
-            this.Column14.HeaderText = "报警值2";
-            this.Column14.Name = "Column14";
-            // 
-            // Column15
-            // 
-            this.Column15.HeaderText = "报警值3";
-            this.Column15.Name = "Column15";
-            // 
-            // Column16
-            // 
-            this.Column16.HeaderText = "螺栓数量";
-            this.Column16.Name = "Column16";
-            // 
-            // Column17
-            // 
-            this.Column17.HeaderText = "工单号";
-            this.Column17.Name = "Column17";
-            // 
-            // Column18
-            // 
-            this.Column18.HeaderText = "序列号";
-            this.Column18.Name = "Column18";
             // 
             // MenuDeviceSetForm
             // 
