@@ -2231,12 +2231,12 @@ namespace Base.UI.MenuDevice
                                 {
                                     ucTextBoxEx_angleResist.Invoke(new MethodInvoker(() =>
                                     {
-                                        ucTextBoxEx_angleResist.InputText = (MyDevice.angleResist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
+                                        ucTextBoxEx_angleResist.InputText = (actXET.spec.angle_resist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
                                     }));
                                 }
                                 else
                                 {
-                                    ucTextBoxEx_angleResist.InputText = (MyDevice.angleResist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
+                                    ucTextBoxEx_angleResist.InputText = (actXET.spec.angle_resist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
                                 }
                                 
                             }
@@ -2260,24 +2260,32 @@ namespace Base.UI.MenuDevice
                 //模式设置
                 else if (buttonClicked == "bt_UpdateMode")
                 {
-                    updateDatabaseWrench();
+                    switch (currentCommand.TaskState)
+                    {
+                        case TASKS.REG_BLOCK1_SPEC:
+                            updateDatabaseWrench();
 
-                    selectNum++;
-                    //所有设备接收
-                    if (selectNum == ucDataGridView1.SelectRows.Count)
-                    {
-                        bt_UpdateMode.BackColor = Color.Green;
-                        buttonClicked = "";
-                    }
-                    else
-                    {
-                        //轮询下一台设备
-                        MyDevice.protocol.addr = mutiAddres[ucDataGridView1.SelectRows[selectNum].RowIndex];//
-                        if (MyDevice.protocol.type == COMP.TCP)
-                        {
-                            MyDevice.protocol.port = MyDevice.clientConnectionItems[MyDevice.addr_ip[MyDevice.protocol.addr.ToString()]];
-                        }
-                        actXET = MyDevice.actDev;
+                            selectNum++;
+                            //所有设备接收
+                            if (selectNum == ucDataGridView1.SelectRows.Count)
+                            {
+                                bt_UpdateMode.BackColor = Color.Green;
+                                buttonClicked = "";
+                            }
+                            else
+                            {
+                                //轮询下一台设备
+                                MyDevice.protocol.addr = mutiAddres[ucDataGridView1.SelectRows[selectNum].RowIndex];//
+                                if (MyDevice.protocol.type == COMP.TCP)
+                                {
+                                    MyDevice.protocol.port = MyDevice.clientConnectionItems[MyDevice.addr_ip[MyDevice.protocol.addr.ToString()]];
+                                }
+                                actXET = MyDevice.actDev;
+                            }
+
+                            break;
+                        default:
+                            break;
                     }
                 }
                 //WLAN设置

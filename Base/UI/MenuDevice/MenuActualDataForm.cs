@@ -664,7 +664,7 @@ namespace Base.UI.MenuDevice
                     }
 
                     //判断数据结果是否要重复拧紧
-                    if (IsAngleResist(actXET.data[i], actXET, angle * actXET.angleMultiple, MyDevice.angleResist))
+                    if (IsAngleResist(actXET.data[i], actXET, angle * actXET.angleMultiple, actXET.spec.angle_resist))
                     {
                         label2.Text = "需要重复拧紧";
                     }

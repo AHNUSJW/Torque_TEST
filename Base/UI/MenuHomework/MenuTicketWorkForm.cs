@@ -957,7 +957,7 @@ namespace Base.UI.MenuHomework
                                 {
                                     isDataValid = true;
                                     //扭矩优先模式下再判断复拧角度
-                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, MyDevice.angleResist);
+                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, actXET.spec.angle_resist);
                                 }
                                 else
                                 {
@@ -980,7 +980,7 @@ namespace Base.UI.MenuHomework
                                 if (actXET.alam.MN_low[actXET.para.mode_mx, (int)actXET.para.torque_unit] <= torque && torque <= actXET.alam.MN_high[actXET.para.mode_mx, (int)actXET.para.torque_unit])
                                 {
                                     isDataValid = true;
-                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, MyDevice.angleResist);
+                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, actXET.spec.angle_resist);
                                 }
                                 else
                                 {

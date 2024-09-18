@@ -90,9 +90,6 @@ namespace Model
         public static int ConnectDevCnt;               //连接的总设备数
         public static int WorkDevCnt;                  //工作的设备数
 
-        //临时变量（用于程序上未做好时，调用静态变量）
-        public static Int32 angleResist;              //复拧角度
-
 
         /// <summary>
         /// protocol指向的设备数量
@@ -323,8 +320,6 @@ namespace Model
             ConnectDevCnt = 1;
             WorkDevCnt = 0;
 
-            //
-            angleResist = 5000;
         }
 
         /// <summary>

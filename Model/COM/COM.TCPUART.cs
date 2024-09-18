@@ -3264,7 +3264,7 @@ namespace Model
                     break;
 
                 case TASKS.REG_BLOCK1_SPEC:
-                    if ((REG)mePort_GetUInt16(2) == REG.REG_WR_SPEC && mePort_GetInt16(4) == 0x10)
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK1_SPEC && mePort_GetInt16(4) == 0x10)
                     {
                         //连续写入的寄存器个数是0x10
                         isEQ = true;
