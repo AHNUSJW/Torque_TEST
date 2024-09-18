@@ -3,7 +3,6 @@ using HZH_Controls;
 using Model;
 using ScottPlot.Plottable;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -11,7 +10,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 //Ricardo 20240606
 
@@ -34,10 +32,11 @@ namespace Base.UI.MenuData
         private Text textAnnotation = null;                        //数据文本
         private string torUnit = "";                               //扭矩单位
         private bool isPeakShow = false;                           //是否是峰值展示模式
-        private List<DSData> peakShowDataList = new List<DSData>();//峰值模式展示的数据集合
+        private List<DSData> peakShowDataList = new List<DSData>();//峰值模式展示的数据集合（未筛选过）
+        private List<DSData> peakFilterDataList = new List<DSData>();//筛选后的实际展示数据集合
         private bool isRecentDate = false;                         //是否筛选最近日期
         private bool isDataLoad = false;                           //是否数据加载中（加载中其他UI事件均失效）
-        private int peakRecentDays = -1;                            //峰值模式下最近几天
+        private int peakRecentDays = -1;                           //峰值模式下最近几天
 
         private Dictionary<byte, List<DSData>> DataDic = new Dictionary<byte, List<DSData>>(); //不同站点下的信息汇总
 
@@ -154,7 +153,6 @@ namespace Base.UI.MenuData
         }
 
         //置底页
-        //置底页
         private void bindingNavigatorMoveLastItem_Click(object sender, EventArgs e)
         {
             pageIndex = pageNum;
@@ -219,13 +217,13 @@ namespace Base.UI.MenuData
 
                 if (e.RowIndex < 0) return;//防止点击列名报错
 
-                if (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText == "设备站点" && dataGridView1.Columns[dataGridView1.Columns.Count - 2].HeaderText == "设备型号")
+                if (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText == "设备识别号" && dataGridView1.Columns[dataGridView1.Columns.Count - 2].HeaderText == "作业时间")
                 {
-                    peakVid = dataGridView1.Rows[e.RowIndex].Cells[11].Value.ToString();
-                    DateTime targetTime  = Convert.ToDateTime(dataGridView1.Rows[e.RowIndex].Cells[11].Value.ToString());
-                    uint targetStamp     = Convert.ToUInt32(dataGridView1.Rows[e.RowIndex].Cells[12].Value);
-                    ulong targetBohrcode = Convert.ToUInt64(dataGridView1.Rows[e.RowIndex].Cells[13].Value);
-                    Byte targetAddr      = Convert.ToByte(dataGridView1.Rows[e.RowIndex].Cells[15].Value);
+                    peakVid = peakFilterDataList[e.RowIndex].VinId;
+                    DateTime targetTime  = peakFilterDataList[e.RowIndex].CreateTime;
+                    uint targetStamp     = peakFilterDataList[e.RowIndex].Stamp;
+                    ulong targetBohrcode = peakFilterDataList[e.RowIndex].Bohrcode;
+                    Byte targetAddr      = peakFilterDataList[e.RowIndex].DevAddr;
 
                     if (dataTable.Rows.Count > 0) dataTable.Clear();
                     //ShowProcessData(peakVid);
@@ -587,10 +585,10 @@ namespace Base.UI.MenuData
             dataTable.Columns.Add("扭矩结果", typeof(string));
             dataTable.Columns.Add("角度结果", typeof(string));
             dataTable.Columns.Add("作业时间", typeof(string));
-            dataTable.Columns.Add("时间标识", typeof(string));
-            dataTable.Columns.Add("设备编号", typeof(string));
-            dataTable.Columns.Add("设备型号", typeof(string));
-            dataTable.Columns.Add("设备站点", typeof(string));
+            //dataTable.Columns.Add("时间标识", typeof(string));
+            //dataTable.Columns.Add("设备编号", typeof(string));
+            //dataTable.Columns.Add("设备型号", typeof(string));
+            dataTable.Columns.Add("设备识别号", typeof(string));
 
             // 获取最近一天的数据表
             peakShowDataList = JDBC.GetDataByRecent(1);
@@ -642,15 +640,23 @@ namespace Base.UI.MenuData
                                                   filteredList[i].DataResult,
                                                   filteredList[i].DataResult,
                                                   filteredList[i].CreateTime,
-                                                  filteredList[i].Stamp,
-                                                  filteredList[i].Bohrcode,
-                                                  filteredList[i].DevType,
+                                                  //filteredList[i].Stamp,
+                                                  //filteredList[i].Bohrcode,
+                                                  //filteredList[i].DevType,
                                                   filteredList[i].DevAddr,
                     });
                 }
             }
 
             bindingSource1.DataSource = dataTable;
+
+            //深拷贝筛选集合
+            peakFilterDataList = new List<DSData>(filteredList.Count);
+
+            foreach (DSData item in filteredList)
+            {
+                peakFilterDataList.Add(item); 
+            }
 
             //将读取数据库的表深拷贝，避免下次返回目录二次查询，减少时间损耗
             tempTable1.Clear();
@@ -685,18 +691,10 @@ namespace Base.UI.MenuData
                 dataTable.Columns.Add("扭矩结果", typeof(string));
                 dataTable.Columns.Add("角度结果", typeof(string));
                 dataTable.Columns.Add("作业时间", typeof(string));
-                dataTable.Columns.Add("时间标识", typeof(string));
-                dataTable.Columns.Add("设备编号", typeof(string));
-                dataTable.Columns.Add("设备型号", typeof(string));
-                dataTable.Columns.Add("设备站点", typeof(string));
-
-
-                //var filteredList = peakShowDataList.Where(x => !string.IsNullOrEmpty(x.VinId))                   // 作业号不为空，提前筛选减少数据量，减少并发量
-                //                                   .AsParallel()
-                //                                   .AsOrdered()                                                  // 使得并发按照顺序执行
-                //                                   .GroupBy(x => x.VinId)                                        // 按属性a分组
-                //                                   .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
-                //                                   .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+                //dataTable.Columns.Add("时间标识", typeof(string));
+                //dataTable.Columns.Add("设备编号", typeof(string));
+                //dataTable.Columns.Add("设备型号", typeof(string));
+                dataTable.Columns.Add("设备识别号", typeof(string));
 
                 var filteredList = peakShowDataList
                                                    .Where(x => !string.IsNullOrEmpty(x.VinId))  // 过滤作业号不为空的数据
@@ -738,15 +736,23 @@ namespace Base.UI.MenuData
                                                   filteredList[i].DataResult,
                                                   filteredList[i].DataResult,
                                                   filteredList[i].CreateTime,
-                                                  filteredList[i].Stamp,
-                                                  filteredList[i].Bohrcode,
-                                                  filteredList[i].DevType,
+                                                  //filteredList[i].Stamp,
+                                                  //filteredList[i].Bohrcode,
+                                                  //filteredList[i].DevType,
                                                   filteredList[i].DevAddr,
                         });
                     }
                 }
 
                 bindingSource1.DataSource = dataTable;
+
+                //深拷贝筛选集合
+                peakFilterDataList = new List<DSData>(filteredList.Count);
+
+                foreach (DSData item in filteredList)
+                {
+                    peakFilterDataList.Add(item);
+                }
 
                 //将读取数据库的表深拷贝，避免下次返回目录二次查询，减少时间损耗
                 tempTable1.Clear();
@@ -782,17 +788,10 @@ namespace Base.UI.MenuData
                 dataTable.Columns.Add("扭矩结果", typeof(string));
                 dataTable.Columns.Add("角度结果", typeof(string));
                 dataTable.Columns.Add("作业时间", typeof(string));
-                dataTable.Columns.Add("时间标识", typeof(string));
-                dataTable.Columns.Add("设备编号", typeof(string));
-                dataTable.Columns.Add("设备型号", typeof(string));
-                dataTable.Columns.Add("设备站点", typeof(string));
-
-                //var filteredList2 = peakShowDataList.Where(x => !string.IsNullOrEmpty(x.VinId))                   // 作业号不为空，提前筛选减少数据量，减少并发量
-                //                                   .AsParallel()
-                //                                   .AsOrdered()                                                  // 使得并发按照顺序执行
-                //                                   .GroupBy(x => x.VinId)                                        // 按属性a分组
-                //                                   .Select(g => g.OrderByDescending(x => x.TorquePeak).First())  // 取出每组中的最大值
-                //                                   .ToList(); //使用 PLINQ（Parallel LINQ）来并行处理查询，以利用多核 CPU 的优势筛选
+                //dataTable.Columns.Add("时间标识", typeof(string));
+                //dataTable.Columns.Add("设备编号", typeof(string));
+                //dataTable.Columns.Add("设备型号", typeof(string));
+                dataTable.Columns.Add("设备识别号", typeof(string));
 
                 var filteredList = peakShowDataList
                                                    .Where(x => !string.IsNullOrEmpty(x.VinId))  // 过滤作业号不为空的数据
@@ -834,15 +833,23 @@ namespace Base.UI.MenuData
                                                   filteredList[i].DataResult,
                                                   filteredList[i].DataResult,
                                                   filteredList[i].CreateTime,
-                                                  filteredList[i].Stamp,
-                                                  filteredList[i].Bohrcode,
-                                                  filteredList[i].DevType,
+                                                  //filteredList[i].Stamp,
+                                                  //filteredList[i].Bohrcode,
+                                                  //filteredList[i].DevType,
                                                   filteredList[i].DevAddr,
-                    });
+                        });
                     }
                 }
 
                 bindingSource1.DataSource = dataTable;
+
+                //深拷贝筛选集合
+                peakFilterDataList = new List<DSData>(filteredList.Count);
+
+                foreach (DSData item in filteredList)
+                {
+                    peakFilterDataList.Add(item);
+                }
 
                 //将读取数据库的表深拷贝，避免下次返回目录二次查询，减少时间损耗
                 tempTable1.Clear();
@@ -871,7 +878,7 @@ namespace Base.UI.MenuData
             dataTable.Columns.Add("标准角度", typeof(string));
             dataTable.Columns.Add("作业时间", typeof(string));
             dataTable.Columns.Add("时间标识", typeof(string));
-            dataTable.Columns.Add("设备站点", typeof(string));
+            dataTable.Columns.Add("设备识别号", typeof(string));
 
             //根据作业号筛选过程数据
             var filteredList = peakShowDataList.AsParallel()
@@ -919,10 +926,18 @@ namespace Base.UI.MenuData
             }
 
             bindingSource1.DataSource = dataTable;
+
+            //深拷贝筛选集合
+            peakFilterDataList = new List<DSData>(filteredList.Count);
+
+            foreach (DSData item in filteredList)
+            {
+                peakFilterDataList.Add(item);
+            }
         }
 
-        //
-        private void ShowProcessData(DateTime time,uint stamp,  byte addr, ulong bohrcode)
+        //显示峰值模式下过程数据(根据日期，时间标识，地址，bohrcode)
+        private void ShowProcessData(DateTime time, uint stamp, byte addr, ulong bohrcode)
         {
             btn_back.Visible = true;
             btn_toggle.Visible = false;
@@ -942,11 +957,10 @@ namespace Base.UI.MenuData
             dataTable.Columns.Add("标准角度", typeof(string));
             dataTable.Columns.Add("作业时间", typeof(string));
             dataTable.Columns.Add("时间标识", typeof(string));
-            dataTable.Columns.Add("设备站点", typeof(string));
+            dataTable.Columns.Add("设备识别号", typeof(string));
 
             //筛选过程数据
             var filteredList = GroupData(peakShowDataList, time, stamp, addr, bohrcode);
-
 
             if (filteredList != null && filteredList.Count != 0)
             {
@@ -1002,7 +1016,11 @@ namespace Base.UI.MenuData
                              .AsParallel()
                              .AsOrdered()
                              .Select((item, idx) => new { item, idx })
-                             .FirstOrDefault(x => x.item.CreateTime == time && x.item.Stamp == stamp && x.item.DevAddr == addr && x.item.Bohrcode == bohrcode)?.idx ?? -1);
+                             .FirstOrDefault(x => x.item.CreateTime == time 
+                                               && x.item.Stamp == stamp 
+                                               && x.item.DevAddr == addr 
+                                               && x.item.Bohrcode == bohrcode)
+                                               ?.idx ?? -1);
 
             if (foundIndex != -1)
             {
@@ -1010,14 +1028,25 @@ namespace Base.UI.MenuData
                 //倒序查找
                 for (int i = foundIndex - 1; i > 0; i--)
                 {
-                    if (dataList[i].DevAddr == addr && dataList[i].Bohrcode == bohrcode)
+                    if (dataList[i].DevAddr == addr && dataList[i].Bohrcode == bohrcode && dataList[i].VinId != "")
                     {
                         if (dataList[i].DType == dtype)
                         {
                             break;//上一个03/02退出
                         }
 
-                        targetDataList.Add(dataList[i]);
+                        //F3峰值下的过程数据抛去F2过程峰值
+                        if (dtype == 0xF3)
+                        {
+                            if (dataList[i].DType != 0xF2)
+                            {
+                                targetDataList.Add(dataList[i]);
+                            }
+                        }
+                        else
+                        {
+                            targetDataList.Add(dataList[i]);
+                        }
                     }
                     else
                     {
@@ -1038,7 +1067,7 @@ namespace Base.UI.MenuData
         {
             if (isPeakShow)
             {
-                if (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText == "设备站点")
+                if (dataGridView1.Columns[dataGridView1.Columns.Count - 1].HeaderText == "设备识别号")
                 {
 
                     if (dataTable.Rows.Count > 0) dataTable.Clear();
@@ -1685,6 +1714,7 @@ namespace Base.UI.MenuData
             }
         }
 
+        //筛选
         private void btn_filter_Click(object sender, EventArgs e)
         {
             panel4.Visible = !panel4.Visible;
@@ -1753,6 +1783,7 @@ namespace Base.UI.MenuData
             }
         }
 
+        //更新最近日期的峰值
         private async Task UpdatePeakRecentDate()
         {
             // 禁用UI元素
@@ -1813,6 +1844,7 @@ namespace Base.UI.MenuData
             }
         }
 
+        //日期切换
         private async void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
         {
             label1.Focus();
@@ -1823,6 +1855,7 @@ namespace Base.UI.MenuData
             }
         }
 
+        //更新选中日期的峰值
         private async Task UpdatePeakSelectDate()
         {
             // 禁用UI元素
@@ -1862,6 +1895,7 @@ namespace Base.UI.MenuData
             }
         }
 
+        //更新切换后的日期的峰值
         private async void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             if (!isRecentDate)
@@ -1870,6 +1904,7 @@ namespace Base.UI.MenuData
             }
         }
 
+        //最近日期的选择切换
         private void checkBox_recentDate_Click(object sender, EventArgs e)
         {
             if (checkBox_recentDate.Checked)
@@ -1886,6 +1921,7 @@ namespace Base.UI.MenuData
             }
         }
 
+        //指定日期的选择切换
         private void checkBox_selectDate_Click(object sender, EventArgs e)
         {
             //不得使用monthCalendar1.Enable控制控件开关，否则会多次触发monthCalendar1切换函数
