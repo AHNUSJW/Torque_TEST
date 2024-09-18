@@ -176,7 +176,6 @@ namespace Model
                 data[i].alarm[0]       = 0;
                 data[i].alarm[1]       = 0;
                 data[i].alarm[2]       = 0;
-                data[i].angle_resist   = 5;
             }
 
             for (int i = 0; i <32; i++)
@@ -187,6 +186,8 @@ namespace Model
                 screw[i].scw_ticketNum  = 1;
                 screw[i].scw_ticketSerial = 1;
             }
+
+            spec.angle_resist = 5;
         }
 
         public WRE(XET xet)
@@ -360,7 +361,6 @@ namespace Model
                 data[i].alarm[0]       = xet.data[i].alarm[0];
                 data[i].alarm[1]       = xet.data[i].alarm[1];
                 data[i].alarm[2]       = xet.data[i].alarm[2];
-                data[i].angle_resist   = xet.data[i].angle_resist;
             }
 
             for (int i = 0; i < 32; i++)
@@ -370,6 +370,8 @@ namespace Model
                 screw[i].scw_ticketNum  = xet.screw[i].scw_ticketNum ;
                 screw[i].scw_ticketAxMx = xet.screw[i].scw_ticketAxMx;
             }
+
+            spec.angle_resist = xet.spec.angle_resist;
         }
     }
 }

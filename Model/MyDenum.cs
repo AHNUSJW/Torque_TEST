@@ -513,6 +513,7 @@ namespace Model
 
 
         REG_R_RECDAT            = 0x0400 + ADDROFFSET.TQ_XH_ADDR,   //
+        REG_WR_SPEC             = 0x0580 + ADDROFFSET.TQ_XH_ADDR,   //
         REG_WR_SCREWORDER0      = 0x0600 + ADDROFFSET.TQ_XH_ADDR,   //
         REG_WR_SCREWORDER1      = 0x0601 + ADDROFFSET.TQ_XH_ADDR,   //
         REG_WR_SCREWORDER2      = 0x0602 + ADDROFFSET.TQ_XH_ADDR,   //

@@ -344,6 +344,10 @@ namespace Model
                     (new Byte[] { 0xFF, (byte)CMD.CMD_READ, Constants.REG_BLUETOOTH_UNBIND >> 8, Constants.REG_BLUETOOTH_UNBIND & 0xFF, 0x00, 0x01 }).CopyTo(meTXD, 0);
                     break;
 
+                case TASKS.REG_BLOCK1_SPEC:
+                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK1_SPEC >> 8, Constants.REG_BLOCK1_SPEC & 0xFF, 0x00, 0x10 }).CopyTo(meTXD, 0);
+                    break;
+
                 case TASKS.REG_BLOCK3_SCREW1:
                     (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK3_SCREW1 >> 8, Constants.REG_BLOCK3_SCREW1 & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
                     break;
@@ -1093,6 +1097,29 @@ namespace Model
                     }
                     //预留字节
                     for (int i = idx; i < 96 + 7; i++)
+                    {
+                        meTXD[idx++] = 0xFF;
+                    }
+
+                    break;
+
+                case TASKS.REG_BLOCK1_SPEC:
+                    num = 0x10;//16个寄存器个数
+                    meTXD[idx++] = sAddress;
+                    meTXD[idx++] = (byte)CMD.CMD_SEQUENCE;
+                    meTXD[idx++] = Constants.REG_BLOCK1_SPEC >> 8;
+                    meTXD[idx++] = Constants.REG_BLOCK1_SPEC & 0xFF;
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = num;
+                    meTXD[idx++] = (byte)(num * 2);
+                    MyDevice.myUIT.I = MyDevice.mXF[sAddress].spec.angle_resist;
+                    meTXD[idx++] = MyDevice.myUIT.B3;
+                    meTXD[idx++] = MyDevice.myUIT.B2;
+                    meTXD[idx++] = MyDevice.myUIT.B1;
+                    meTXD[idx++] = MyDevice.myUIT.B0;
+
+                    //预留字节
+                    for (int i = idx; i < 32 + 7; i++)
                     {
                         meTXD[idx++] = 0xFF;
                     }
@@ -2659,6 +2686,20 @@ namespace Model
                     }
                     break;
 
+                case TASKS.REG_BLOCK1_SPEC:
+                    if (len == 0x25)
+                    {
+                        MyDevice.mXF[sAddress].spec.angle_resist = mePort_GetInt32(3);
+                        mePort_DataRemove(0x25);
+                        isEQ = true;
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+
                 case TASKS.REG_BLOCK3_SCREW1:
                     if (len == 0x65)
                     {
@@ -2969,6 +3010,20 @@ namespace Model
                     }
                     break;
 
+                case Constants.REG_BLOCK1_SPEC:
+                    if (mePort_GetInt16(4) == 0x10)
+                    {
+                        //连续写入的寄存器个数是0x10
+                        isEQ = true;
+                        mePort_DataRemove(0x08);
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
+
                 case Constants.REG_BLOCK3_SCREW1:
                 case Constants.REG_BLOCK3_SCREW2:
                 case Constants.REG_BLOCK3_SCREW3:
@@ -3111,7 +3166,7 @@ namespace Model
             }
         }
 
-        //串口读取所有任务状态机 DEV -> CAL -> INFO -> WLAN -> ID -> PARA -> AM1 -> AM2 -> AM3 -> JOB -> OP -> HEART -> FIFO -> DAT -> SCREW1 -> SCREW2 -> SCREW3 -> SCREW4
+        //串口读取所有任务状态机 DEV -> CAL -> INFO -> WLAN -> ID -> PARA -> AM1 -> AM2 -> AM3 -> JOB -> OP -> HEART -> FIFO -> DAT -> SPEC -> SCREW1 -> SCREW2 -> SCREW3 -> SCREW4
         public void Protocol_mePort_ReadAllTasks()
         {
             //启动TASKS -> 根据任务选择指令 -> 根据接口指令装帧发送
@@ -3270,11 +3325,22 @@ namespace Model
                 case TASKS.REG_BLOCK2_DAT:
                     if (isEQ)
                     {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_SPEC);
                     }
                     else
                     {
                         Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
+                    }
+                    break;
+
+                case TASKS.REG_BLOCK1_SPEC:
+                    if (isEQ)
+                    {
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                    }
+                    else
+                    {
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_SPEC);
                     }
                     break;
 

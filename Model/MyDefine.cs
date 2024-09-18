@@ -51,6 +51,7 @@ namespace Model
         REG_BLOCK1_HEART,       //只读
         REG_BLOCK1_FIFO,        //只读+读写
         REG_BLOCK2_DAT,         //只读
+        REG_BLOCK1_SPEC,        //读写
         REG_BLOCK3_SCREW1,      //读写
         REG_BLOCK3_SCREW2,      //读写
         REG_BLOCK3_SCREW3,      //读写
@@ -82,6 +83,7 @@ namespace Model
         public const UInt16     REG_BLOCK1_HEART    = (UInt16)REG.REG_R_TORQUE;
         public const UInt16     REG_BLOCK1_FIFO     = (UInt16)REG.REG_R_FIFO_FULL;
         public const UInt16     REG_BLOCK2_DAT      = (UInt16)REG.REG_R_RECDAT;
+        public const UInt16     REG_BLOCK1_SPEC     = (UInt16)REG.REG_WR_SPEC;
         public const UInt16     REG_BLOCK3_SCREW1   = (UInt16)REG.REG_WR_SCREWORDER0;
         public const UInt16     REG_BLOCK3_SCREW2   = (UInt16)REG.REG_WR_SCREWORDER48;
         public const UInt16     REG_BLOCK3_SCREW3   = (UInt16)REG.REG_WR_SCREWORDER96;

@@ -202,7 +202,11 @@ namespace Model
         /**************03专有参数**************/
         public Int32        torgroup_pk;                                //扭矩峰值
         public Int32[]      alarm = new Int32[3];                       //报警数值
-        public Int32        angle_resist;                               //复拧角度（angle_acc < angle_resist则提示重复拧紧）
+    }
+
+    public class SpeC
+    {
+        public Int32 angle_resist;                                      //复拧角度（angle_acc < angle_resist则提示重复拧紧）
     }
 
     public class SCREW
@@ -224,6 +228,7 @@ namespace Model
         public FIFO fifo    = new FIFO();                               //缓存状态
         public DATA[] data  = new DATA[5];                              //测量数据
         public SCREW[] screw = new SCREW[32];                           //离线工单
+        public SpeC spec    = new SpeC();                               //特殊属性（后期客户新增）
     }
 }
 

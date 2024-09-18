@@ -422,7 +422,7 @@ namespace Base.UI.MenuDevice
                 default:
                     break;
             }
-            ucTextBoxEx_angleResist.InputText = (MyDevice.angleResist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
+            ucTextBoxEx_angleResist.InputText = (actXET.spec.angle_resist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
 
             #endregion
 
@@ -1287,7 +1287,8 @@ namespace Base.UI.MenuDevice
                 || ucTextBoxEx_timeoff.InputText == ""
                 || ucTextBoxEx_timeback.InputText == ""
                 || ucTextBoxEx_timezero.InputText == ""
-                || ucTextBoxEx_unhook.InputText == "")
+                || ucTextBoxEx_unhook.InputText == ""
+                || ucTextBoxEx_angleResist.InputText == "")
             {
                 MessageBox.Show("有参数未填写, 请检查所有参数", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -1346,6 +1347,13 @@ namespace Base.UI.MenuDevice
                 {
                     actXET.para.unhook = unhook;
                 }
+
+                //复拧角度
+                if (ucTextBoxEx_angleResist.InputText != "")
+                {
+                    actXET.spec.angle_resist = (int)(Convert.ToDouble(ucTextBoxEx_angleResist.InputText) * (int)Math.Pow(10, actXET.para.angle_decimal) + 0.5);
+                }
+
             }
             selectNum = 0;
             MyDevice.protocol.addr = mutiAddres[ucDataGridView1.SelectRows[selectNum].RowIndex];//从第一个设备开始设置
@@ -1358,7 +1366,8 @@ namespace Base.UI.MenuDevice
 
             List<TASKS> tasks = new List<TASKS>
             {
-                TASKS.REG_BLOCK2_PARA
+                TASKS.REG_BLOCK2_PARA,
+                TASKS.REG_BLOCK1_SPEC
             };
 
             for (int i = 0; i < ucDataGridView1.SelectRows.Count; i++)
@@ -1366,15 +1375,6 @@ namespace Base.UI.MenuDevice
                 MyDevice.myTaskManager.AddUserCommands(mutiAddres[ucDataGridView1.SelectRows[i].RowIndex], ProtocolFunc.Protocol_Sequence_SendCOM, tasks, this.Name);
             }
 
-            //通讯做好之后删除
-            if (ucTextBoxEx_angleResist.InputText != "")
-            {
-                MyDevice.angleResist = (int)(Convert.ToDouble(ucTextBoxEx_angleResist.InputText) * (int)Math.Pow(10, actXET.para.angle_decimal) + 0.5);
-            }
-            else
-            {
-                MessageBox.Show("重复拧紧角度未填写");
-            }
         }
 
         //更新WLAN设置

@@ -683,13 +683,26 @@ namespace Base.UI.MenuDevice
                         case TASKS.REG_BLOCK2_DAT:
                             if (MyDevice.protocol.isEqual)
                             {
-                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
-                                meTask = TASKS.REG_BLOCK3_SCREW1;
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_SPEC);
+                                meTask = TASKS.REG_BLOCK1_SPEC;
                             }
                             else
                             {
                                 MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
                                 meTask = TASKS.REG_BLOCK2_DAT;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK1_SPEC:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                                meTask = TASKS.REG_BLOCK3_SCREW1;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_SPEC);
+                                meTask = TASKS.REG_BLOCK1_SPEC;
                             }
                             break;
 
@@ -988,13 +1001,26 @@ namespace Base.UI.MenuDevice
                         case TASKS.REG_BLOCK2_DAT:
                             if (MyDevice.protocol.isEqual)
                             {
-                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
-                                meTask = TASKS.REG_BLOCK3_SCREW1;
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_SPEC);
+                                meTask = TASKS.REG_BLOCK1_SPEC;
                             }
                             else
                             {
                                 MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
                                 meTask = TASKS.REG_BLOCK2_DAT;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK1_SPEC:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                                meTask = TASKS.REG_BLOCK3_SCREW1;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_SPEC);
+                                meTask = TASKS.REG_BLOCK1_SPEC;
                             }
                             break;
 
@@ -1278,13 +1304,26 @@ namespace Base.UI.MenuDevice
                         case TASKS.REG_BLOCK2_DAT:
                             if (MyDevice.protocol.isEqual)
                             {
-                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
-                                meTask = TASKS.REG_BLOCK3_SCREW1;
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_SPEC);
+                                meTask = TASKS.REG_BLOCK1_SPEC;
                             }
                             else
                             {
                                 MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
                                 meTask = TASKS.REG_BLOCK2_DAT;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK1_SPEC:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                                meTask = TASKS.REG_BLOCK3_SCREW1;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_SPEC);
+                                meTask = TASKS.REG_BLOCK1_SPEC;
                             }
                             break;
 
@@ -1714,6 +1753,9 @@ namespace Base.UI.MenuDevice
                         break;
                     case TASKS.REG_BLOCK2_DAT:
                         textBox2.Text += "\r\n扳手DAT读取成功";
+                        break;
+                    case TASKS.REG_BLOCK1_SPEC:
+                        textBox2.Text += "\r\n扳手SPEC读取成功";
                         break;
                     case TASKS.REG_BLOCK3_SCREW1:
                         textBox2.Text += "\r\n扳手SCREW1读取成功";
