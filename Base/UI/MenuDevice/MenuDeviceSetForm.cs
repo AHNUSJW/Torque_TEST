@@ -6,7 +6,6 @@ using RecXF;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ using System.Windows.Forms;
 
 //Ricardo 20240227
 //Lumi 20240507
-//Ricardo 20240514
+//Ricardo 2024018
 
 namespace Base.UI.MenuDevice
 {
@@ -36,6 +35,7 @@ namespace Base.UI.MenuDevice
         private int selectNum = 0;            //轮询发送指令的扳手下标
         private byte oldDevAddr = 1;          //改站点之前的旧站点
         private const int ticketCntMax = 32;  //离线工单最大值
+        private bool isInputValid = true;     //离线工单相关输入配置是否合格
 
         public class GridModel
         {
@@ -1112,147 +1112,7 @@ namespace Base.UI.MenuDevice
             }
             dataGridView2.ColumnHeadersHeight = dataGridView2.Height - height;
 
-            //获取工单实际数值
-            //工单数值初始化
-            for (int i = 0; i < ticketCntMax; i++)
-            {
-                // 获取特定单元格
-                DataGridViewComboBoxCell comboBoxCell_Ax = (DataGridViewComboBoxCell)dataGridView2.Rows[i].Cells[1];
-                DataGridViewComboBoxCell comboBoxCell_Mx = (DataGridViewComboBoxCell)dataGridView2.Rows[i].Cells[2];
-                int ticketAx = actXET.screw[i].scw_ticketAxMx >> 0x04;
-                int ticketMx = actXET.screw[i].scw_ticketAxMx & 0x0F;
-
-                //Ax —— 取一个字节的高4位
-                switch (ticketAx)
-                {
-                    case 0://EN
-                        break;
-                    case 1://EA
-                        break;
-                    case 2://SN
-                        // 检查值是否在Items列表中
-                        if (comboBoxCell_Ax.Items.Contains("SN"))
-                        {
-                            comboBoxCell_Ax.Value = "SN"; // 赋值
-                        }
-                        break;
-                    case 3://SA
-                        // 检查值是否在Items列表中
-                        if (comboBoxCell_Ax.Items.Contains("SA"))
-                        {
-                            comboBoxCell_Ax.Value = "SA"; // 赋值
-                        }
-                        break;
-                    case 4://MN
-                        // 检查值是否在Items列表中
-                        if (comboBoxCell_Ax.Items.Contains("MN"))
-                        {
-                            comboBoxCell_Ax.Value = "MN"; // 赋值
-                        }
-                        break;
-                    case 5://MA
-                        // 检查值是否在Items列表中
-                        if (comboBoxCell_Ax.Items.Contains("MA"))
-                        {
-                            comboBoxCell_Ax.Value = "MA"; // 赋值
-                        }
-                        break;
-                    case 6://AZ
-                        break;
-                    default:
-                        break;
-                }
-
-                //Mx —— 取一个字节的低4位
-                switch (ticketMx)
-                {
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 9:
-                        // 检查值是否在Items列表中
-                        if (comboBoxCell_Mx.Items.Contains($"M{ticketMx}"))
-                        {
-                            comboBoxCell_Mx.Value = $"M{ticketMx}"; // 赋值
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                //索引扳手的报警值
-                switch (actXET.screw[i].scw_ticketAxMx)
-                {
-                    case 0x20:
-                    case 0x21:
-                    case 0x22:
-                    case 0x23:
-                    case 0x24:
-                    case 0x25:
-                    case 0x26:
-                    case 0x27:
-                    case 0x28:
-                    case 0x29:
-                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.SN_target[ticketMx, unit] / (float)actXET.torqueMultiple;
-                        dataGridView2.Rows[i].Cells[4].Value = "";
-                        dataGridView2.Rows[i].Cells[5].Value = "";
-                        break;
-                    case 0x30:
-                    case 0x31:
-                    case 0x32:
-                    case 0x33:
-                    case 0x34:
-                    case 0x35:
-                    case 0x36:
-                    case 0x37:
-                    case 0x38:
-                    case 0x39:
-                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.SA_pre[ticketMx, unit] / (float)actXET.torqueMultiple;
-                        dataGridView2.Rows[i].Cells[4].Value = actXET.alam.SA_ang[ticketMx] / (float)actXET.angleMultiple;
-                        dataGridView2.Rows[i].Cells[5].Value = "";
-                        break;
-                    case 0x40:
-                    case 0x41:
-                    case 0x42:
-                    case 0x43:
-                    case 0x44:
-                    case 0x45:
-                    case 0x46:
-                    case 0x47:
-                    case 0x48:
-                    case 0x49:
-                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.MN_low[ticketMx, unit] / (float)actXET.torqueMultiple;
-                        dataGridView2.Rows[i].Cells[4].Value = actXET.alam.MN_high[ticketMx, unit] / (float)actXET.torqueMultiple;
-                        dataGridView2.Rows[i].Cells[5].Value = "";
-                        break;
-                    case 0x50:
-                    case 0x51:
-                    case 0x52:
-                    case 0x53:
-                    case 0x54:
-                    case 0x55:
-                    case 0x56:
-                    case 0x57:
-                    case 0x58:
-                    case 0x59:
-                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.MA_pre[ticketMx, unit] / (float)actXET.torqueMultiple;
-                        dataGridView2.Rows[i].Cells[4].Value = actXET.alam.MA_low[ticketMx] / (float)actXET.angleMultiple;
-                        dataGridView2.Rows[i].Cells[5].Value = actXET.alam.MA_high[ticketMx] / (float)actXET.angleMultiple;
-                        break;
-                    default:
-                        break;
-                }
-
-                dataGridView2.Rows[i].Cells[6].Value = actXET.screw[i].scw_ticketCnt;
-                dataGridView2.Rows[i].Cells[7].Value = actXET.screw[i].scw_ticketNum;
-                dataGridView2.Rows[i].Cells[8].Value = actXET.screw[i].scw_ticketSerial;
-            }
+            TicketInit();//表格初始化后初始化离线工单
         }
 
         #endregion
@@ -2334,6 +2194,19 @@ namespace Base.UI.MenuDevice
                                 bt_UpdatePara.BackColor = Color.Green;
                                 buttonClicked = "";
 
+                                //更新工单对应的索引值（单位更改）
+                                if (dataGridView2.InvokeRequired)
+                                {
+                                    dataGridView2.Invoke(new MethodInvoker(() =>
+                                    {
+                                        TicketInit();
+                                    }));
+                                }
+                                else
+                                {
+                                    TicketInit();
+                                }
+
                                 //设置重复拧紧角度格式
                                 switch (actXET.para.angle_decimal)
                                 {
@@ -2464,6 +2337,7 @@ namespace Base.UI.MenuDevice
                         MyDevice.myTaskManager.AddUserCommand(MyDevice.protocol.addr, ProtocolFunc.Protocol_Write_SendCOM, TASKS.WRITE_MEMABLE, Convert.ToByte(MyDevice.userRole), this.Name);
                     }
                 }
+                //高级设置
                 else if (buttonClicked == "bt_SuperUpdate")
                 {
                     switch (currentCommand.TaskState)
@@ -2493,6 +2367,7 @@ namespace Base.UI.MenuDevice
                             break;
                     }
                 }
+                //工单设置
                 else if (buttonClicked == "bt_UpdateTicket")
                 {
                     switch (currentCommand.TaskState)
@@ -2925,7 +2800,7 @@ namespace Base.UI.MenuDevice
                     case 0x27:
                     case 0x28:
                     case 0x29:
-                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.SN_target[targetMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.SN_target[targetMx, (int)actXET.para.torque_unit] / (float)actXET.torqueMultiple;
                         dataGridView2.Rows[rowIndex].Cells[4].Value = "";
                         dataGridView2.Rows[rowIndex].Cells[5].Value = "";
                         break;
@@ -2939,7 +2814,7 @@ namespace Base.UI.MenuDevice
                     case 0x37:
                     case 0x38:
                     case 0x39:
-                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.SA_pre[targetMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.SA_pre[targetMx, (int)actXET.para.torque_unit] / (float)actXET.torqueMultiple;
                         dataGridView2.Rows[rowIndex].Cells[4].Value = actXET.alam.SA_ang[targetMx] / (float)actXET.angleMultiple;
                         dataGridView2.Rows[rowIndex].Cells[5].Value = "";
                         break;
@@ -2953,8 +2828,8 @@ namespace Base.UI.MenuDevice
                     case 0x47:
                     case 0x48:
                     case 0x49:
-                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.MN_low[targetMx, unit] / (float)actXET.torqueMultiple;
-                        dataGridView2.Rows[rowIndex].Cells[4].Value = actXET.alam.MN_high[targetMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.MN_low[targetMx, (int)actXET.para.torque_unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[4].Value = actXET.alam.MN_high[targetMx, (int)actXET.para.torque_unit] / (float)actXET.torqueMultiple;
                         dataGridView2.Rows[rowIndex].Cells[5].Value = "";
                         break;
                     case 0x50:
@@ -2967,7 +2842,7 @@ namespace Base.UI.MenuDevice
                     case 0x57:
                     case 0x58:
                     case 0x59:
-                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.MA_pre[targetMx, unit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[rowIndex].Cells[3].Value = actXET.alam.MA_pre[targetMx, (int)actXET.para.torque_unit] / (float)actXET.torqueMultiple;
                         dataGridView2.Rows[rowIndex].Cells[4].Value = actXET.alam.MA_low[targetMx] / (float)actXET.angleMultiple;
                         dataGridView2.Rows[rowIndex].Cells[5].Value = actXET.alam.MA_high[targetMx] / (float)actXET.angleMultiple;
                         break;
@@ -2977,7 +2852,156 @@ namespace Base.UI.MenuDevice
             }
         }
 
-        //
+        //工单数值初始化
+        private void TicketInit()
+        {
+            //获取扳手单位
+            byte ticketUnit = (byte)actXET.para.torque_unit;
+
+            //获取工单实际数值
+            //工单数值初始化
+            for (int i = 0; i < ticketCntMax; i++)
+            {
+                // 获取特定单元格
+                DataGridViewComboBoxCell comboBoxCell_Ax = (DataGridViewComboBoxCell)dataGridView2.Rows[i].Cells[1];
+                DataGridViewComboBoxCell comboBoxCell_Mx = (DataGridViewComboBoxCell)dataGridView2.Rows[i].Cells[2];
+                int ticketAx = actXET.screw[i].scw_ticketAxMx >> 0x04;
+                int ticketMx = actXET.screw[i].scw_ticketAxMx & 0x0F;
+
+                //Ax —— 取一个字节的高4位
+                switch (ticketAx)
+                {
+                    case 0://EN
+                        break;
+                    case 1://EA
+                        break;
+                    case 2://SN
+                        // 检查值是否在Items列表中
+                        if (comboBoxCell_Ax.Items.Contains("SN"))
+                        {
+                            comboBoxCell_Ax.Value = "SN"; // 赋值
+                        }
+                        break;
+                    case 3://SA
+                        // 检查值是否在Items列表中
+                        if (comboBoxCell_Ax.Items.Contains("SA"))
+                        {
+                            comboBoxCell_Ax.Value = "SA"; // 赋值
+                        }
+                        break;
+                    case 4://MN
+                        // 检查值是否在Items列表中
+                        if (comboBoxCell_Ax.Items.Contains("MN"))
+                        {
+                            comboBoxCell_Ax.Value = "MN"; // 赋值
+                        }
+                        break;
+                    case 5://MA
+                        // 检查值是否在Items列表中
+                        if (comboBoxCell_Ax.Items.Contains("MA"))
+                        {
+                            comboBoxCell_Ax.Value = "MA"; // 赋值
+                        }
+                        break;
+                    case 6://AZ
+                        break;
+                    default:
+                        break;
+                }
+
+                //Mx —— 取一个字节的低4位
+                switch (ticketMx)
+                {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                        // 检查值是否在Items列表中
+                        if (comboBoxCell_Mx.Items.Contains($"M{ticketMx}"))
+                        {
+                            comboBoxCell_Mx.Value = $"M{ticketMx}"; // 赋值
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                //索引扳手的报警值
+                switch (actXET.screw[i].scw_ticketAxMx)
+                {
+                    case 0x20:
+                    case 0x21:
+                    case 0x22:
+                    case 0x23:
+                    case 0x24:
+                    case 0x25:
+                    case 0x26:
+                    case 0x27:
+                    case 0x28:
+                    case 0x29:
+                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.SN_target[ticketMx, ticketUnit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[i].Cells[4].Value = "";
+                        dataGridView2.Rows[i].Cells[5].Value = "";
+                        break;
+                    case 0x30:
+                    case 0x31:
+                    case 0x32:
+                    case 0x33:
+                    case 0x34:
+                    case 0x35:
+                    case 0x36:
+                    case 0x37:
+                    case 0x38:
+                    case 0x39:
+                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.SA_pre[ticketMx, ticketUnit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[i].Cells[4].Value = actXET.alam.SA_ang[ticketMx] / (float)actXET.angleMultiple;
+                        dataGridView2.Rows[i].Cells[5].Value = "";
+                        break;
+                    case 0x40:
+                    case 0x41:
+                    case 0x42:
+                    case 0x43:
+                    case 0x44:
+                    case 0x45:
+                    case 0x46:
+                    case 0x47:
+                    case 0x48:
+                    case 0x49:
+                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.MN_low[ticketMx, ticketUnit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[i].Cells[4].Value = actXET.alam.MN_high[ticketMx, ticketUnit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[i].Cells[5].Value = "";
+                        break;
+                    case 0x50:
+                    case 0x51:
+                    case 0x52:
+                    case 0x53:
+                    case 0x54:
+                    case 0x55:
+                    case 0x56:
+                    case 0x57:
+                    case 0x58:
+                    case 0x59:
+                        dataGridView2.Rows[i].Cells[3].Value = actXET.alam.MA_pre[ticketMx, ticketUnit] / (float)actXET.torqueMultiple;
+                        dataGridView2.Rows[i].Cells[4].Value = actXET.alam.MA_low[ticketMx] / (float)actXET.angleMultiple;
+                        dataGridView2.Rows[i].Cells[5].Value = actXET.alam.MA_high[ticketMx] / (float)actXET.angleMultiple;
+                        break;
+                    default:
+                        break;
+                }
+
+                dataGridView2.Rows[i].Cells[6].Value = actXET.screw[i].scw_ticketCnt;
+                dataGridView2.Rows[i].Cells[7].Value = actXET.screw[i].scw_ticketNum;
+                dataGridView2.Rows[i].Cells[8].Value = actXET.screw[i].scw_ticketSerial;
+            }
+        }
+
+        //获取工单的AxMx模式(通过Ax 与 Mx 高低位拼接)
         private byte GetTicketAxmx(string Ax, string Mx)
         {
             byte ax = 0;
@@ -3041,5 +3065,94 @@ namespace Base.UI.MenuDevice
             return AxMx;
         }
 
+        //单元格限制
+        private void dataGridView2_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            string headerText = dataGridView2.Columns[e.ColumnIndex].HeaderText;
+            string input = e.FormattedValue.ToString();
+
+            if (headerText == "螺栓数量")
+            {
+                if (!int.TryParse(input, out int value) || value < 1 || value > 255)
+                {
+                    e.Cancel = true;//强制焦点在此，不合格无法进行其他输入
+                    MessageBox.Show("螺栓数量限制在 1 - 255，请规范输入");
+                    isInputValid = false;
+                }
+                else
+                {
+                    isInputValid = true;
+                }
+            }
+            else if (headerText == "工单号")
+            {
+                if (!long.TryParse(input, out long _) || input.Length > 9)
+                {
+                    e.Cancel = true;
+                    MessageBox.Show("请输入不超过9位的数字");
+                    isInputValid = false;
+                }
+                else
+                {
+                    isInputValid = true;
+                }
+            }
+            else if (headerText == "序列号")
+            {
+                if (!long.TryParse(input, out long _) || input.Length > 13)
+                {
+                    e.Cancel = true;
+                    MessageBox.Show("请输入不超过13位的数字");
+                    isInputValid = false;
+                }
+                else
+                {
+                    isInputValid = true;
+                }
+            }
+        }
+
+        //单元格回车后不合格内容改成默认值
+        private void dataGridView2_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            string headerText = dataGridView2.Columns[e.ColumnIndex].HeaderText;
+            string input = dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+
+            if (headerText == "螺栓数量")
+            {
+                if (!isInputValid)
+                {
+                    dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = 10;
+                }
+            }
+            else if (headerText == "工单号")
+            {
+                if (!isInputValid)
+                {
+                    if (input.Length > 9 && Regex.IsMatch(input, @"^\d+$"))
+                    {
+                        dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = input.Substring(0, 9);
+                    }
+                    else
+                    {
+                        dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "8888";
+                    }
+                }
+            }
+            else if (headerText == "序列号")
+            {
+                if (!isInputValid)
+                {
+                    if (input.Length > 13 && Regex.IsMatch(input, @"^\d+$"))
+                    {
+                        dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = input.Substring(0, 13);
+                    }
+                    else
+                    {
+                        dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "88888888";
+                    }
+                }
+            }
+        }
     }
 }

@@ -233,6 +233,7 @@
             this.label41 = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
             this.graphicalOverlayComponent1 = new HZH_Controls.Controls.GraphicalOverlayComponent(this.components);
+            this.label42 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -1840,7 +1841,7 @@
             this.groupBox12.Controls.Add(this.label_recWIFIName);
             this.groupBox12.Location = new System.Drawing.Point(94, 376);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(323, 192);
+            this.groupBox12.Size = new System.Drawing.Size(323, 172);
             this.groupBox12.TabIndex = 148;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "接收器信息提示";
@@ -1907,11 +1908,12 @@
             // 
             // groupBox11
             // 
+            this.groupBox11.Controls.Add(this.label42);
             this.groupBox11.Controls.Add(this.label_curIP);
             this.groupBox11.Controls.Add(this.label_curWIFIName);
-            this.groupBox11.Location = new System.Drawing.Point(94, 574);
+            this.groupBox11.Location = new System.Drawing.Point(94, 554);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(323, 100);
+            this.groupBox11.Size = new System.Drawing.Size(323, 131);
             this.groupBox11.TabIndex = 147;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "路由器信息提示";
@@ -1939,7 +1941,7 @@
             this.label_curWIFIName.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label_curWIFIName.ForeColor = System.Drawing.Color.Gray;
             this.label_curWIFIName.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_curWIFIName.Location = new System.Drawing.Point(20, 63);
+            this.label_curWIFIName.Location = new System.Drawing.Point(20, 99);
             this.label_curWIFIName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_curWIFIName.Name = "label_curWIFIName";
             this.label_curWIFIName.Size = new System.Drawing.Size(113, 21);
@@ -3929,6 +3931,8 @@
             this.dataGridView2.RowTemplate.Height = 23;
             this.dataGridView2.Size = new System.Drawing.Size(888, 592);
             this.dataGridView2.TabIndex = 1;
+            this.dataGridView2.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellEndEdit);
+            this.dataGridView2.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView2_CellValidating);
             this.dataGridView2.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView2_EditingControlShowing);
             // 
             // Column10
@@ -4089,6 +4093,21 @@
             // graphicalOverlayComponent1
             // 
             this.graphicalOverlayComponent1.Owner = null;
+            // 
+            // label42
+            // 
+            this.label42.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label42.AutoSize = true;
+            this.label42.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label42.ForeColor = System.Drawing.Color.Gray;
+            this.label42.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label42.Location = new System.Drawing.Point(20, 62);
+            this.label42.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(119, 21);
+            this.label42.TabIndex = 143;
+            this.label42.Text = "本地端口: 5678";
             // 
             // MenuDeviceSetForm
             // 
@@ -4370,5 +4389,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column16;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column17;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column18;
+        private System.Windows.Forms.Label label42;
     }
 }
