@@ -675,9 +675,7 @@ namespace Base.UI.MenuDevice
 
                     //更新作业号
                     if (actXET.data[i].dtype == 0xF3)
-                    {
-
-                        
+                    {                
                         try
                         {
                             //计算残余扭矩

@@ -202,11 +202,20 @@ namespace Model
         /**************03专有参数**************/
         public Int32        torgroup_pk;                                //扭矩峰值
         public Int32[]      alarm = new Int32[3];                       //报警数值
+        public Int32        angle_resist;                               //F39版本及以上该参数替换03数据中stamp
+
+        /**************04专有参数**************/
+        public Byte         mode;                                       //工单模式AxMx
+        public Byte         screwNum;                                   //螺栓数量
+        public UInt32       work_ID;                                    //工单号
+        public UInt64       work_psq;                                   //工单序列号
+        public Byte         screwSeq;                                   //螺栓下标
+
     }
 
     public class SpeC
     {
-        public Int32 angle_resist;                                      //复拧角度（angle_acc < angle_resist则提示重复拧紧）
+        public Int32        angle_resist;                               //复拧角度（angle_acc < angle_resist则提示重复拧紧）
     }
 
     public class SCREW
@@ -215,7 +224,6 @@ namespace Model
         public Byte          scw_ticketCnt;                             //离线工单数量
         public UInt32        scw_ticketNum;                             //离线工单号
         public UInt64        scw_ticketSerial;                          //离线工单序列号（1个工单可以有 n 个序列号）
-
     }
 
     public partial class WRE

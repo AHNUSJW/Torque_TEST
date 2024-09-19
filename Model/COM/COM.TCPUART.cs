@@ -43,6 +43,7 @@ namespace Model
         private bool isEQ = false;                            //接收校验结果
 
         private String rxStr = null;
+        private UInt32 tempStamp = 0;                         //程序F39版本及以上F3数据帧的stamp删除了，故需要通过继承上一个F2继承
 
         public String rxString
         {
@@ -2478,6 +2479,8 @@ namespace Model
                         }
                         else if (MyDevice.mTCP[sAddress].data[0].dtype == 0xF2)  //02一次结果帧
                         {
+                            if (MyDevice.mTCP[sAddress].devc.version >= 39) tempStamp = MyDevice.mTCP[sAddress].data[0].stamp;
+
                             MyDevice.mTCP[sAddress].data[0].mark = mePort_GetByte(12);
                             MyDevice.mTCP[sAddress].data[0].torque_unit = (UNIT)mePort_GetByte(13);
                             MyDevice.mTCP[sAddress].data[0].angle_decimal = mePort_GetByte(14);
@@ -2489,6 +2492,12 @@ namespace Model
                         }
                         else if (MyDevice.mTCP[sAddress].data[0].dtype == 0xF3)  //03一组结果帧
                         {
+                            if (MyDevice.mTCP[sAddress].devc.version >= 39)
+                            {
+                                MyDevice.mTCP[sAddress].data[0].stamp = tempStamp;
+                                MyDevice.mTCP[sAddress].data[0].angle_resist = mePort_GetInt32(7);
+                            }
+
                             MyDevice.mTCP[sAddress].data[0].mode_pt = mePort_GetByte(12);
                             MyDevice.mTCP[sAddress].data[0].mode_ax = mePort_GetByte(13);
                             MyDevice.mTCP[sAddress].data[0].mode_mx = mePort_GetByte(14);
@@ -2497,6 +2506,15 @@ namespace Model
                             MyDevice.mTCP[sAddress].data[0].alarm[0] = mePort_GetInt32(23);
                             MyDevice.mTCP[sAddress].data[0].alarm[1] = mePort_GetInt32(27);
                             MyDevice.mTCP[sAddress].data[0].alarm[2] = mePort_GetInt32(31);
+                        }
+                        else if (MyDevice.mTCP[sAddress].data[0].dtype == 0xF4)  //04一组工单结果帧
+                        {
+                            MyDevice.mTCP[sAddress].data[0].mark = mePort_GetByte(12);
+                            MyDevice.mTCP[sAddress].data[0].mode = mePort_GetByte(13);
+                            MyDevice.mTCP[sAddress].data[0].screwNum = mePort_GetByte(14);
+                            MyDevice.mTCP[sAddress].data[0].work_ID = mePort_GetUInt32(15);
+                            MyDevice.mTCP[sAddress].data[0].work_psq = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
+                            MyDevice.mTCP[sAddress].data[0].screwSeq = mePort_GetByte(25);
                         }
 
                         //第二包
@@ -2516,6 +2534,8 @@ namespace Model
                         }
                         else if (MyDevice.mTCP[sAddress].data[1].dtype == 0xF2)  //02一次结果帧
                         {
+                            if (MyDevice.mTCP[sAddress].devc.version >= 39) tempStamp = MyDevice.mTCP[sAddress].data[1].stamp;
+
                             MyDevice.mTCP[sAddress].data[1].mark = mePort_GetByte(40);
                             MyDevice.mTCP[sAddress].data[1].torque_unit = (UNIT)mePort_GetByte(41);
                             MyDevice.mTCP[sAddress].data[1].angle_decimal = mePort_GetByte(42);
@@ -2527,6 +2547,12 @@ namespace Model
                         }
                         else if (MyDevice.mTCP[sAddress].data[1].dtype == 0xF3)  //03一组结果帧
                         {
+                            if (MyDevice.mTCP[sAddress].devc.version >= 39)
+                            {
+                                MyDevice.mTCP[sAddress].data[1].stamp = tempStamp;
+                                MyDevice.mTCP[sAddress].data[1].angle_resist = mePort_GetInt32(35);
+                            }
+
                             MyDevice.mTCP[sAddress].data[1].mode_pt = mePort_GetByte(40);
                             MyDevice.mTCP[sAddress].data[1].mode_ax = mePort_GetByte(41);
                             MyDevice.mTCP[sAddress].data[1].mode_mx = mePort_GetByte(42);
@@ -2535,6 +2561,15 @@ namespace Model
                             MyDevice.mTCP[sAddress].data[1].alarm[0] = mePort_GetInt32(51);
                             MyDevice.mTCP[sAddress].data[1].alarm[1] = mePort_GetInt32(55);
                             MyDevice.mTCP[sAddress].data[1].alarm[2] = mePort_GetInt32(59);
+                        }
+                        else if (MyDevice.mTCP[sAddress].data[1].dtype == 0xF4)  //04一组工单结果帧
+                        {
+                            MyDevice.mTCP[sAddress].data[1].mark = mePort_GetByte(40);
+                            MyDevice.mTCP[sAddress].data[1].mode = mePort_GetByte(41);
+                            MyDevice.mTCP[sAddress].data[1].screwNum = mePort_GetByte(42);
+                            MyDevice.mTCP[sAddress].data[1].work_ID = mePort_GetUInt32(43);
+                            MyDevice.mTCP[sAddress].data[1].work_psq = (ulong)(mePort_GetUInt16(47) * Math.Pow(10, 9) + mePort_GetUInt32(49));//6位
+                            MyDevice.mTCP[sAddress].data[1].screwSeq = mePort_GetByte(53);
                         }
 
                         //第三包
@@ -2554,6 +2589,8 @@ namespace Model
                         }
                         else if (MyDevice.mTCP[sAddress].data[2].dtype == 0xF2)  //02一次结果帧
                         {
+                            if (MyDevice.mTCP[sAddress].devc.version >= 39) tempStamp = MyDevice.mTCP[sAddress].data[2].stamp;
+
                             MyDevice.mTCP[sAddress].data[2].mark = mePort_GetByte(68);
                             MyDevice.mTCP[sAddress].data[2].torque_unit = (UNIT)mePort_GetByte(69);
                             MyDevice.mTCP[sAddress].data[2].angle_decimal = mePort_GetByte(70);
@@ -2565,6 +2602,12 @@ namespace Model
                         }
                         else if (MyDevice.mTCP[sAddress].data[2].dtype == 0xF3)  //03一组结果帧
                         {
+                            if (MyDevice.mTCP[sAddress].devc.version >= 39)
+                            {
+                                MyDevice.mTCP[sAddress].data[2].stamp = tempStamp;
+                                MyDevice.mTCP[sAddress].data[2].angle_resist = mePort_GetInt32(63);
+                            }
+
                             MyDevice.mTCP[sAddress].data[2].mode_pt = mePort_GetByte(68);
                             MyDevice.mTCP[sAddress].data[2].mode_ax = mePort_GetByte(69);
                             MyDevice.mTCP[sAddress].data[2].mode_mx = mePort_GetByte(70);
@@ -2573,6 +2616,15 @@ namespace Model
                             MyDevice.mTCP[sAddress].data[2].alarm[0] = mePort_GetInt32(79);
                             MyDevice.mTCP[sAddress].data[2].alarm[1] = mePort_GetInt32(83);
                             MyDevice.mTCP[sAddress].data[2].alarm[2] = mePort_GetInt32(87);
+                        }
+                        else if (MyDevice.mTCP[sAddress].data[2].dtype == 0xF4)  //04一组工单结果帧
+                        {
+                            MyDevice.mTCP[sAddress].data[2].mark = mePort_GetByte(68);
+                            MyDevice.mTCP[sAddress].data[2].mode = mePort_GetByte(69);
+                            MyDevice.mTCP[sAddress].data[2].screwNum = mePort_GetByte(70);
+                            MyDevice.mTCP[sAddress].data[2].work_ID = mePort_GetUInt32(71);
+                            MyDevice.mTCP[sAddress].data[2].work_psq = (ulong)(mePort_GetUInt16(75) * Math.Pow(10, 9) + mePort_GetUInt32(77));//6位
+                            MyDevice.mTCP[sAddress].data[2].screwSeq = mePort_GetByte(81);
                         }
 
                         //第四包
@@ -2592,6 +2644,8 @@ namespace Model
                         }
                         else if (MyDevice.mTCP[sAddress].data[3].dtype == 0xF2)  //02一次结果帧
                         {
+                            if (MyDevice.mTCP[sAddress].devc.version >= 39) tempStamp = MyDevice.mTCP[sAddress].data[3].stamp;
+
                             MyDevice.mTCP[sAddress].data[3].mark = mePort_GetByte(96);
                             MyDevice.mTCP[sAddress].data[3].torque_unit = (UNIT)mePort_GetByte(97);
                             MyDevice.mTCP[sAddress].data[3].angle_decimal = mePort_GetByte(98);
@@ -2603,6 +2657,12 @@ namespace Model
                         }
                         else if (MyDevice.mTCP[sAddress].data[3].dtype == 0xF3)  //03一组结果帧
                         {
+                            if (MyDevice.mTCP[sAddress].devc.version >= 39)
+                            {
+                                MyDevice.mTCP[sAddress].data[3].stamp = tempStamp;
+                                MyDevice.mTCP[sAddress].data[3].angle_resist = mePort_GetInt32(91);
+                            }
+
                             MyDevice.mTCP[sAddress].data[3].mode_pt = mePort_GetByte(96);
                             MyDevice.mTCP[sAddress].data[3].mode_ax = mePort_GetByte(97);
                             MyDevice.mTCP[sAddress].data[3].mode_mx = mePort_GetByte(98);
@@ -2611,6 +2671,15 @@ namespace Model
                             MyDevice.mTCP[sAddress].data[3].alarm[0] = mePort_GetInt32(107);
                             MyDevice.mTCP[sAddress].data[3].alarm[1] = mePort_GetInt32(111);
                             MyDevice.mTCP[sAddress].data[3].alarm[2] = mePort_GetInt32(115);
+                        }
+                        else if (MyDevice.mTCP[sAddress].data[3].dtype == 0xF4)  //04一组工单结果帧
+                        {
+                            MyDevice.mTCP[sAddress].data[3].mark = mePort_GetByte(96);
+                            MyDevice.mTCP[sAddress].data[3].mode = mePort_GetByte(97);
+                            MyDevice.mTCP[sAddress].data[3].screwNum = mePort_GetByte(98);
+                            MyDevice.mTCP[sAddress].data[3].work_ID = mePort_GetUInt32(99);
+                            MyDevice.mTCP[sAddress].data[3].work_psq = (ulong)(mePort_GetUInt16(103) * Math.Pow(10, 9) + mePort_GetUInt32(105));//6位
+                            MyDevice.mTCP[sAddress].data[3].screwSeq = mePort_GetByte(109);
                         }
 
                         //第五包
@@ -2630,6 +2699,8 @@ namespace Model
                         }
                         else if (MyDevice.mTCP[sAddress].data[4].dtype == 0xF2)  //02一次结果帧
                         {
+                            if (MyDevice.mTCP[sAddress].devc.version >= 39) tempStamp = MyDevice.mTCP[sAddress].data[4].stamp;
+
                             MyDevice.mTCP[sAddress].data[4].mark = mePort_GetByte(124);
                             MyDevice.mTCP[sAddress].data[4].torque_unit = (UNIT)mePort_GetByte(125);
                             MyDevice.mTCP[sAddress].data[4].angle_decimal = mePort_GetByte(126);
@@ -2641,6 +2712,12 @@ namespace Model
                         }
                         else if (MyDevice.mTCP[sAddress].data[4].dtype == 0xF3)  //03一组结果帧
                         {
+                            if (MyDevice.mTCP[sAddress].devc.version >= 39)
+                            {
+                                MyDevice.mTCP[sAddress].data[4].stamp = tempStamp;
+                                MyDevice.mTCP[sAddress].data[4].angle_resist = mePort_GetInt32(119);
+                            }
+
                             MyDevice.mTCP[sAddress].data[4].mode_pt = mePort_GetByte(124);
                             MyDevice.mTCP[sAddress].data[4].mode_ax = mePort_GetByte(125);
                             MyDevice.mTCP[sAddress].data[4].mode_mx = mePort_GetByte(126);
@@ -2649,6 +2726,15 @@ namespace Model
                             MyDevice.mTCP[sAddress].data[4].alarm[0] = mePort_GetInt32(135);
                             MyDevice.mTCP[sAddress].data[4].alarm[1] = mePort_GetInt32(139);
                             MyDevice.mTCP[sAddress].data[4].alarm[2] = mePort_GetInt32(143);
+                        }
+                        else if (MyDevice.mTCP[sAddress].data[4].dtype == 0xF4)  //04一组工单结果帧
+                        {
+                            MyDevice.mTCP[sAddress].data[4].mark = mePort_GetByte(124);
+                            MyDevice.mTCP[sAddress].data[4].mode = mePort_GetByte(125);
+                            MyDevice.mTCP[sAddress].data[4].screwNum = mePort_GetByte(126);
+                            MyDevice.mTCP[sAddress].data[4].work_ID = mePort_GetUInt32(127);
+                            MyDevice.mTCP[sAddress].data[4].work_psq = (ulong)(mePort_GetUInt16(131) * Math.Pow(10, 9) + mePort_GetUInt32(133));//6位
+                            MyDevice.mTCP[sAddress].data[4].screwSeq = mePort_GetByte(137);
                         }
 
                         List<DSData> sqlDataList = new List<DSData>();//存入数据库的数据列表

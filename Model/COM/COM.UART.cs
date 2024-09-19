@@ -37,6 +37,7 @@ namespace Model
 
         private String rxStr = null;
         private UInt32 tempStamp = 0;                         //程序F39版本及以上F3数据帧的stamp删除了，故需要通过继承上一个F2继承
+        private Byte angleDecimal = 0;                        //角度小数点（用于计算复拧角度）
 
         public String rxString
         {
@@ -2274,8 +2275,6 @@ namespace Model
                         }
                         else if (MyDevice.mBUS[sAddress].data[0].dtype == 0xF2)  //02一次结果帧
                         {
-                            if (MyDevice.mBUS[sAddress].devc.version > 39) tempStamp = MyDevice.mBUS[sAddress].data[0].stamp;
-
                             MyDevice.mBUS[sAddress].data[0].mark         = mePort_GetByte(12);
                             MyDevice.mBUS[sAddress].data[0].torque_unit  = (UNIT)mePort_GetByte(13);
                             MyDevice.mBUS[sAddress].data[0].angle_decimal= mePort_GetByte(14);
@@ -2284,10 +2283,20 @@ namespace Model
                             MyDevice.mBUS[sAddress].data[0].begin_series = mePort_GetUInt32(23);
                             MyDevice.mBUS[sAddress].data[0].begin_group  = mePort_GetUInt32(27);
                             MyDevice.mBUS[sAddress].data[0].len          = mePort_GetUInt16(31);
+
+                            if (MyDevice.mBUS[sAddress].devc.version >= 39)
+                            {
+                                tempStamp = MyDevice.mBUS[sAddress].data[0].stamp;
+                                angleDecimal = MyDevice.mBUS[sAddress].data[0].angle_decimal;
+                            }
                         }
                         else if (MyDevice.mBUS[sAddress].data[0].dtype == 0xF3)  //03一组结果帧
                         {
-                            if (MyDevice.mBUS[sAddress].devc.version > 39) MyDevice.mBUS[sAddress].data[0].stamp = tempStamp;
+                            if (MyDevice.mBUS[sAddress].devc.version >= 39)
+                            {
+                                MyDevice.mBUS[sAddress].data[0].stamp = tempStamp;
+                                MyDevice.mBUS[sAddress].data[0].angle_resist = mePort_GetInt32(7);
+                            }
 
                             MyDevice.mBUS[sAddress].data[0].mode_pt     = mePort_GetByte(12);
                             MyDevice.mBUS[sAddress].data[0].mode_ax     = mePort_GetByte(13);
@@ -2297,6 +2306,15 @@ namespace Model
                             MyDevice.mBUS[sAddress].data[0].alarm[0]    = mePort_GetInt32(23);
                             MyDevice.mBUS[sAddress].data[0].alarm[1]    = mePort_GetInt32(27);
                             MyDevice.mBUS[sAddress].data[0].alarm[2]    = mePort_GetInt32(31);
+                        }
+                        else if (MyDevice.mBUS[sAddress].data[0].dtype == 0xF4)  //04一组工单结果帧
+                        {
+                            MyDevice.mBUS[sAddress].data[0].mark        = mePort_GetByte(12);
+                            MyDevice.mBUS[sAddress].data[0].mode        = mePort_GetByte(13);
+                            MyDevice.mBUS[sAddress].data[0].screwNum    = mePort_GetByte(14);
+                            MyDevice.mBUS[sAddress].data[0].work_ID     = mePort_GetUInt32(15);
+                            MyDevice.mBUS[sAddress].data[0].work_psq    = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
+                            MyDevice.mBUS[sAddress].data[0].screwSeq    = mePort_GetByte(25);
                         }
 
                         //第二包
@@ -2316,8 +2334,6 @@ namespace Model
                         }
                         else if (MyDevice.mBUS[sAddress].data[1].dtype == 0xF2)  //02一次结果帧
                         {
-                            if (MyDevice.mBUS[sAddress].devc.version > 39) tempStamp = MyDevice.mBUS[sAddress].data[1].stamp;
-
                             MyDevice.mBUS[sAddress].data[1].mark         = mePort_GetByte(40);
                             MyDevice.mBUS[sAddress].data[1].torque_unit  = (UNIT)mePort_GetByte(41);
                             MyDevice.mBUS[sAddress].data[1].angle_decimal= mePort_GetByte(42);
@@ -2326,10 +2342,20 @@ namespace Model
                             MyDevice.mBUS[sAddress].data[1].begin_series = mePort_GetUInt32(51);
                             MyDevice.mBUS[sAddress].data[1].begin_group  = mePort_GetUInt32(55);
                             MyDevice.mBUS[sAddress].data[1].len          = mePort_GetUInt16(59);
+
+                            if (MyDevice.mBUS[sAddress].devc.version >= 39)
+                            {
+                                tempStamp = MyDevice.mBUS[sAddress].data[1].stamp;
+                                angleDecimal = MyDevice.mBUS[sAddress].data[1].angle_decimal;
+                            }
                         }
                         else if (MyDevice.mBUS[sAddress].data[1].dtype == 0xF3)  //03一组结果帧
                         {
-                            if (MyDevice.mBUS[sAddress].devc.version > 39) MyDevice.mBUS[sAddress].data[1].stamp = tempStamp;
+                            if (MyDevice.mBUS[sAddress].devc.version >= 39)
+                            {
+                                MyDevice.mBUS[sAddress].data[1].stamp = tempStamp;
+                                MyDevice.mBUS[sAddress].data[1].angle_resist = mePort_GetInt32(35);
+                            }
 
                             MyDevice.mBUS[sAddress].data[1].mode_pt     = mePort_GetByte(40);
                             MyDevice.mBUS[sAddress].data[1].mode_ax     = mePort_GetByte(41);
@@ -2339,6 +2365,15 @@ namespace Model
                             MyDevice.mBUS[sAddress].data[1].alarm[0]    = mePort_GetInt32(51);
                             MyDevice.mBUS[sAddress].data[1].alarm[1]    = mePort_GetInt32(55);
                             MyDevice.mBUS[sAddress].data[1].alarm[2]    = mePort_GetInt32(59);
+                        }
+                        else if (MyDevice.mBUS[sAddress].data[1].dtype == 0xF4)  //04一组工单结果帧
+                        {
+                            MyDevice.mBUS[sAddress].data[1].mark        = mePort_GetByte(40);
+                            MyDevice.mBUS[sAddress].data[1].mode        = mePort_GetByte(41);
+                            MyDevice.mBUS[sAddress].data[1].screwNum    = mePort_GetByte(42);
+                            MyDevice.mBUS[sAddress].data[1].work_ID     = mePort_GetUInt32(43);
+                            MyDevice.mBUS[sAddress].data[1].work_psq    = (ulong)(mePort_GetUInt16(47) * Math.Pow(10, 9) + mePort_GetUInt32(49));//6位
+                            MyDevice.mBUS[sAddress].data[1].screwSeq    = mePort_GetByte(53);
                         }
 
                         //第三包
@@ -2358,8 +2393,6 @@ namespace Model
                         }
                         else if (MyDevice.mBUS[sAddress].data[2].dtype == 0xF2)  //02一次结果帧
                         {
-                            if (MyDevice.mBUS[sAddress].devc.version > 39) tempStamp = MyDevice.mBUS[sAddress].data[2].stamp;
-
                             MyDevice.mBUS[sAddress].data[2].mark         = mePort_GetByte(68);
                             MyDevice.mBUS[sAddress].data[2].torque_unit  = (UNIT)mePort_GetByte(69);
                             MyDevice.mBUS[sAddress].data[2].angle_decimal= mePort_GetByte(70);
@@ -2367,11 +2400,21 @@ namespace Model
                             MyDevice.mBUS[sAddress].data[2].angle_acc    = mePort_GetInt32(75);
                             MyDevice.mBUS[sAddress].data[2].begin_series = mePort_GetUInt32(79);
                             MyDevice.mBUS[sAddress].data[2].begin_group  = mePort_GetUInt32(83);
-                            MyDevice.mBUS[sAddress].data[2].len          = mePort_GetUInt16(87);                        
+                            MyDevice.mBUS[sAddress].data[2].len          = mePort_GetUInt16(87);
+
+                            if (MyDevice.mBUS[sAddress].devc.version >= 39)
+                            {
+                                tempStamp = MyDevice.mBUS[sAddress].data[2].stamp;
+                                angleDecimal = MyDevice.mBUS[sAddress].data[2].angle_decimal;
+                            }
                         }
                         else if (MyDevice.mBUS[sAddress].data[2].dtype == 0xF3)  //03一组结果帧
                         {
-                            if (MyDevice.mBUS[sAddress].devc.version > 39) MyDevice.mBUS[sAddress].data[2].stamp = tempStamp;
+                            if (MyDevice.mBUS[sAddress].devc.version >= 39)
+                            {
+                                MyDevice.mBUS[sAddress].data[2].stamp = tempStamp;
+                                MyDevice.mBUS[sAddress].data[2].angle_resist = mePort_GetInt32(63);
+                            }
 
                             MyDevice.mBUS[sAddress].data[2].mode_pt     = mePort_GetByte(68);
                             MyDevice.mBUS[sAddress].data[2].mode_ax     = mePort_GetByte(69);
@@ -2381,6 +2424,15 @@ namespace Model
                             MyDevice.mBUS[sAddress].data[2].alarm[0]    = mePort_GetInt32(79);
                             MyDevice.mBUS[sAddress].data[2].alarm[1]    = mePort_GetInt32(83);
                             MyDevice.mBUS[sAddress].data[2].alarm[2]    = mePort_GetInt32(87);
+                        }
+                        else if (MyDevice.mBUS[sAddress].data[2].dtype == 0xF4)  //04一组工单结果帧
+                        {
+                            MyDevice.mBUS[sAddress].data[2].mark        = mePort_GetByte(68);
+                            MyDevice.mBUS[sAddress].data[2].mode        = mePort_GetByte(69);
+                            MyDevice.mBUS[sAddress].data[2].screwNum    = mePort_GetByte(70);
+                            MyDevice.mBUS[sAddress].data[2].work_ID     = mePort_GetUInt32(71);
+                            MyDevice.mBUS[sAddress].data[2].work_psq    = (ulong)(mePort_GetUInt16(75) * Math.Pow(10, 9) + mePort_GetUInt32(77));//6位
+                            MyDevice.mBUS[sAddress].data[2].screwSeq    = mePort_GetByte(81);
                         }
 
                         //第四包
@@ -2400,8 +2452,6 @@ namespace Model
                         }
                         else if (MyDevice.mBUS[sAddress].data[3].dtype == 0xF2)  //02一次结果帧
                         {
-                            if (MyDevice.mBUS[sAddress].devc.version > 39) tempStamp = MyDevice.mBUS[sAddress].data[3].stamp;
-
                             MyDevice.mBUS[sAddress].data[3].mark         = mePort_GetByte(96);
                             MyDevice.mBUS[sAddress].data[3].torque_unit  = (UNIT)mePort_GetByte(97);
                             MyDevice.mBUS[sAddress].data[3].angle_decimal= mePort_GetByte(98);
@@ -2410,10 +2460,20 @@ namespace Model
                             MyDevice.mBUS[sAddress].data[3].begin_series = mePort_GetUInt32(107);
                             MyDevice.mBUS[sAddress].data[3].begin_group  = mePort_GetUInt32(111);
                             MyDevice.mBUS[sAddress].data[3].len          = mePort_GetUInt16(115);
+
+                            if (MyDevice.mBUS[sAddress].devc.version >= 39)
+                            {
+                                tempStamp = MyDevice.mBUS[sAddress].data[3].stamp;
+                                angleDecimal = MyDevice.mBUS[sAddress].data[3].angle_decimal;
+                            }
                         }
                         else if (MyDevice.mBUS[sAddress].data[3].dtype == 0xF3)  //03一组结果帧
                         {
-                            if (MyDevice.mBUS[sAddress].devc.version > 39) MyDevice.mBUS[sAddress].data[3].stamp = tempStamp;
+                            if (MyDevice.mBUS[sAddress].devc.version >= 39)
+                            {
+                                MyDevice.mBUS[sAddress].data[3].stamp = tempStamp;
+                                MyDevice.mBUS[sAddress].data[3].angle_resist = mePort_GetInt32(91);
+                            }
 
                             MyDevice.mBUS[sAddress].data[3].mode_pt     = mePort_GetByte(96);
                             MyDevice.mBUS[sAddress].data[3].mode_ax     = mePort_GetByte(97);
@@ -2423,6 +2483,15 @@ namespace Model
                             MyDevice.mBUS[sAddress].data[3].alarm[0]    = mePort_GetInt32(107);
                             MyDevice.mBUS[sAddress].data[3].alarm[1]    = mePort_GetInt32(111);
                             MyDevice.mBUS[sAddress].data[3].alarm[2]    = mePort_GetInt32(115);
+                        }
+                        else if (MyDevice.mBUS[sAddress].data[3].dtype == 0xF4)  //04一组工单结果帧
+                        {
+                            MyDevice.mBUS[sAddress].data[3].mark        = mePort_GetByte(96);
+                            MyDevice.mBUS[sAddress].data[3].mode        = mePort_GetByte(97);
+                            MyDevice.mBUS[sAddress].data[3].screwNum    = mePort_GetByte(98);
+                            MyDevice.mBUS[sAddress].data[3].work_ID     = mePort_GetUInt32(99);
+                            MyDevice.mBUS[sAddress].data[3].work_psq    = (ulong)(mePort_GetUInt16(103) * Math.Pow(10, 9) + mePort_GetUInt32(105));//6位
+                            MyDevice.mBUS[sAddress].data[3].screwSeq    = mePort_GetByte(109);
                         }
 
                         //第五包
@@ -2442,8 +2511,6 @@ namespace Model
                         }
                         else if (MyDevice.mBUS[sAddress].data[4].dtype == 0xF2)  //02一次结果帧
                         {
-                            if (MyDevice.mBUS[sAddress].devc.version > 39) tempStamp = MyDevice.mBUS[sAddress].data[4].stamp;
-
                             MyDevice.mBUS[sAddress].data[4].mark         = mePort_GetByte(124);
                             MyDevice.mBUS[sAddress].data[4].torque_unit  = (UNIT)mePort_GetByte(125);
                             MyDevice.mBUS[sAddress].data[4].angle_decimal= mePort_GetByte(126);
@@ -2452,10 +2519,20 @@ namespace Model
                             MyDevice.mBUS[sAddress].data[4].begin_series = mePort_GetUInt32(135);
                             MyDevice.mBUS[sAddress].data[4].begin_group  = mePort_GetUInt32(139);
                             MyDevice.mBUS[sAddress].data[4].len          = mePort_GetUInt16(143);
+
+                            if (MyDevice.mBUS[sAddress].devc.version >= 39)
+                            {
+                                tempStamp = MyDevice.mBUS[sAddress].data[4].stamp;
+                                angleDecimal = MyDevice.mBUS[sAddress].data[4].angle_decimal;
+                            }
                         }
                         else if (MyDevice.mBUS[sAddress].data[4].dtype == 0xF3)  //03一组结果帧
                         {
-                            if (MyDevice.mBUS[sAddress].devc.version > 39) MyDevice.mBUS[sAddress].data[4].stamp = tempStamp;
+                            if (MyDevice.mBUS[sAddress].devc.version >= 39)
+                            {
+                                MyDevice.mBUS[sAddress].data[4].stamp = tempStamp;
+                                MyDevice.mBUS[sAddress].data[4].angle_resist = mePort_GetInt32(119);
+                            }
 
                             MyDevice.mBUS[sAddress].data[4].mode_pt     = mePort_GetByte(124);
                             MyDevice.mBUS[sAddress].data[4].mode_ax     = mePort_GetByte(125);
@@ -2466,13 +2543,22 @@ namespace Model
                             MyDevice.mBUS[sAddress].data[4].alarm[1]    = mePort_GetInt32(139);
                             MyDevice.mBUS[sAddress].data[4].alarm[2]    = mePort_GetInt32(143);
                         }
+                        else if (MyDevice.mBUS[sAddress].data[4].dtype == 0xF4)  //04一组工单结果帧
+                        {
+                            MyDevice.mBUS[sAddress].data[4].mark        = mePort_GetByte(124);
+                            MyDevice.mBUS[sAddress].data[4].mode        = mePort_GetByte(125);
+                            MyDevice.mBUS[sAddress].data[4].screwNum    = mePort_GetByte(126);
+                            MyDevice.mBUS[sAddress].data[4].work_ID     = mePort_GetUInt32(127);
+                            MyDevice.mBUS[sAddress].data[4].work_psq    = (ulong)(mePort_GetUInt16(131) * Math.Pow(10, 9) + mePort_GetUInt32(133));//6位
+                            MyDevice.mBUS[sAddress].data[4].screwSeq    = mePort_GetByte(137);
+                        }
 
                         List<DSData> sqlDataList = new List<DSData>();//存入数据库的数据列表
 
                         // 遍历数组并将每个元素的拷贝添加到 List 集合中
                         foreach (DATA data in MyDevice.mBUS[sAddress].data)
                         {
-                            if (data.dtype == 0xF1 || data.dtype == 0xF2 || data.dtype == 0xF3)      //添加有效数据
+                            if (data.dtype == 0xF1 || data.dtype == 0xF2 || data.dtype == 0xF3 || data.dtype == 0xF4)      //添加有效数据
                             {
                                 if (data.dtype == 0xF1 && data.torque == 0 && data.angle == 0) break;
                                 MyDevice.mBUS[sAddress].dataList.Add(data);
@@ -2637,6 +2723,10 @@ namespace Model
                                         MyDevice.DataResult = "error";
                                     }
 
+                                }
+                                else if (data.dtype == 0xF4)
+                                {
+                                    Console.WriteLine(data.mode);
                                 }
 
                                 sqlDataList.Add(new DSData()

@@ -1591,9 +1591,6 @@ namespace Base.UI.MenuDevice
         //更新工单设置
         private void btn_UpdateTicket_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("开发中...");
-            //return;
-
             if (ucDataGridView1.SelectRows.Count == 0)
             {
                 MessageBox.Show("未选择设备");
