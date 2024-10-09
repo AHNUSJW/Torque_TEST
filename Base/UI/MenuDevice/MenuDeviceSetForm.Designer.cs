@@ -96,8 +96,6 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label_accmode = new System.Windows.Forms.Label();
             this.label_alarmode = new System.Windows.Forms.Label();
-            this.label_wifimode = new System.Windows.Forms.Label();
-            this.ucCombox_wifimode = new HZH_Controls.Controls.UCCombox();
             this.ucCombox_alarmode = new HZH_Controls.Controls.UCCombox();
             this.ucCombox_accmode = new HZH_Controls.Controls.UCCombox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -116,12 +114,19 @@
             this.ucCombox_fifomode = new HZH_Controls.Controls.UCCombox();
             this.bt_UpdateMode = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox23 = new System.Windows.Forms.GroupBox();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.label_recIP = new System.Windows.Forms.Label();
             this.label_recPort = new System.Windows.Forms.Label();
             this.label_recWIFIPwd = new System.Windows.Forms.Label();
             this.label_recWIFIName = new System.Windows.Forms.Label();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
             this.label_curIP = new System.Windows.Forms.Label();
             this.label_curWIFIName = new System.Windows.Forms.Label();
             this.bt_UpdateWLAN = new System.Windows.Forms.Button();
@@ -233,7 +238,8 @@
             this.label41 = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
             this.graphicalOverlayComponent1 = new HZH_Controls.Controls.GraphicalOverlayComponent(this.components);
-            this.label42 = new System.Windows.Forms.Label();
+            this.label_wifimode = new System.Windows.Forms.Label();
+            this.ucCombox_wifimode = new HZH_Controls.Controls.UCCombox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -251,6 +257,7 @@
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.groupBox23.SuspendLayout();
             this.groupBox12.SuspendLayout();
             this.groupBox11.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -286,7 +293,7 @@
             // 
             this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.splitContainer1.Panel2.Controls.Add(this.tabControl1);
-            this.splitContainer1.Size = new System.Drawing.Size(1230, 729);
+            this.splitContainer1.Size = new System.Drawing.Size(1230, 739);
             this.splitContainer1.SplitterDistance = 185;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -333,7 +340,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1041, 729);
+            this.tabControl1.Size = new System.Drawing.Size(1041, 739);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -360,7 +367,7 @@
             this.tabPage1.Controls.Add(this.dataGridView1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(1033, 703);
+            this.tabPage1.Size = new System.Drawing.Size(1033, 713);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "预设值设置";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -796,7 +803,7 @@
             this.tabPage2.Controls.Add(this.bt_UpdateMode);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(1033, 703);
+            this.tabPage2.Size = new System.Drawing.Size(1033, 713);
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "模式设置";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1399,8 +1406,6 @@
             // 
             this.groupBox3.Controls.Add(this.label_accmode);
             this.groupBox3.Controls.Add(this.label_alarmode);
-            this.groupBox3.Controls.Add(this.label_wifimode);
-            this.groupBox3.Controls.Add(this.ucCombox_wifimode);
             this.groupBox3.Controls.Add(this.ucCombox_alarmode);
             this.groupBox3.Controls.Add(this.ucCombox_accmode);
             this.groupBox3.Location = new System.Drawing.Point(3, 349);
@@ -1432,43 +1437,6 @@
             this.label_alarmode.Size = new System.Drawing.Size(111, 22);
             this.label_alarmode.TabIndex = 66;
             this.label_alarmode.Text = "声光报警省电:";
-            // 
-            // label_wifimode
-            // 
-            this.label_wifimode.AutoSize = true;
-            this.label_wifimode.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_wifimode.ForeColor = System.Drawing.Color.Blue;
-            this.label_wifimode.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_wifimode.Location = new System.Drawing.Point(49, 123);
-            this.label_wifimode.Name = "label_wifimode";
-            this.label_wifimode.Size = new System.Drawing.Size(105, 22);
-            this.label_wifimode.TabIndex = 67;
-            this.label_wifimode.Text = "wifi/RF无线:";
-            // 
-            // ucCombox_wifimode
-            // 
-            this.ucCombox_wifimode.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_wifimode.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wifimode.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_wifimode.ConerRadius = 5;
-            this.ucCombox_wifimode.DropPanelHeight = -1;
-            this.ucCombox_wifimode.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wifimode.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_wifimode.IsRadius = true;
-            this.ucCombox_wifimode.IsShowRect = true;
-            this.ucCombox_wifimode.ItemWidth = 70;
-            this.ucCombox_wifimode.Location = new System.Drawing.Point(204, 118);
-            this.ucCombox_wifimode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_wifimode.Name = "ucCombox_wifimode";
-            this.ucCombox_wifimode.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wifimode.RectWidth = 1;
-            this.ucCombox_wifimode.SelectedIndex = -1;
-            this.ucCombox_wifimode.SelectedValue = "";
-            this.ucCombox_wifimode.Size = new System.Drawing.Size(173, 32);
-            this.ucCombox_wifimode.Source = null;
-            this.ucCombox_wifimode.TabIndex = 71;
-            this.ucCombox_wifimode.TextValue = null;
-            this.ucCombox_wifimode.TriangleColor = System.Drawing.Color.Blue;
             // 
             // ucCombox_alarmode
             // 
@@ -1819,6 +1787,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.groupBox23);
             this.tabPage3.Controls.Add(this.groupBox12);
             this.tabPage3.Controls.Add(this.groupBox11);
             this.tabPage3.Controls.Add(this.bt_UpdateWLAN);
@@ -1828,10 +1797,83 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1033, 703);
+            this.tabPage3.Size = new System.Drawing.Size(1033, 713);
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "WLAN设置";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox23
+            // 
+            this.groupBox23.Controls.Add(this.label43);
+            this.groupBox23.Controls.Add(this.label44);
+            this.groupBox23.Controls.Add(this.label45);
+            this.groupBox23.Controls.Add(this.label46);
+            this.groupBox23.Location = new System.Drawing.Point(557, 376);
+            this.groupBox23.Name = "groupBox23";
+            this.groupBox23.Size = new System.Drawing.Size(323, 172);
+            this.groupBox23.TabIndex = 149;
+            this.groupBox23.TabStop = false;
+            this.groupBox23.Text = "常见错误提示";
+            // 
+            // label43
+            // 
+            this.label43.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label43.AutoSize = true;
+            this.label43.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label43.ForeColor = System.Drawing.Color.Gray;
+            this.label43.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label43.Location = new System.Drawing.Point(20, 26);
+            this.label43.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(199, 21);
+            this.label43.TabIndex = 143;
+            this.label43.Text = "Er12 : 设备ip地址设置错误";
+            // 
+            // label44
+            // 
+            this.label44.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label44.AutoSize = true;
+            this.label44.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label44.ForeColor = System.Drawing.Color.Gray;
+            this.label44.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label44.Location = new System.Drawing.Point(20, 63);
+            this.label44.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(153, 21);
+            this.label44.TabIndex = 144;
+            this.label44.Text = "Er11 : 设备密码错误";
+            // 
+            // label45
+            // 
+            this.label45.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label45.AutoSize = true;
+            this.label45.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label45.ForeColor = System.Drawing.Color.Gray;
+            this.label45.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label45.Location = new System.Drawing.Point(20, 137);
+            this.label45.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(176, 21);
+            this.label45.TabIndex = 146;
+            this.label45.Text = "Er3 : 恢复出差设置失败";
+            // 
+            // label46
+            // 
+            this.label46.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label46.AutoSize = true;
+            this.label46.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label46.ForeColor = System.Drawing.Color.Gray;
+            this.label46.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label46.Location = new System.Drawing.Point(20, 100);
+            this.label46.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(176, 21);
+            this.label46.TabIndex = 145;
+            this.label46.Text = "Er8 : 退出透传模式失败";
             // 
             // groupBox12
             // 
@@ -1908,15 +1950,46 @@
             // 
             // groupBox11
             // 
+            this.groupBox11.Controls.Add(this.label47);
             this.groupBox11.Controls.Add(this.label42);
             this.groupBox11.Controls.Add(this.label_curIP);
             this.groupBox11.Controls.Add(this.label_curWIFIName);
             this.groupBox11.Location = new System.Drawing.Point(94, 554);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(323, 131);
+            this.groupBox11.Size = new System.Drawing.Size(323, 151);
             this.groupBox11.TabIndex = 147;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "路由器信息提示";
+            // 
+            // label47
+            // 
+            this.label47.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label47.AutoSize = true;
+            this.label47.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label47.ForeColor = System.Drawing.Color.Gray;
+            this.label47.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label47.Location = new System.Drawing.Point(20, 124);
+            this.label47.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(186, 21);
+            this.label47.TabIndex = 147;
+            this.label47.Text = "配置成功后需要打开端口";
+            // 
+            // label42
+            // 
+            this.label42.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label42.AutoSize = true;
+            this.label42.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label42.ForeColor = System.Drawing.Color.Gray;
+            this.label42.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label42.Location = new System.Drawing.Point(20, 53);
+            this.label42.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(119, 21);
+            this.label42.TabIndex = 143;
+            this.label42.Text = "本地端口: 5678";
             // 
             // label_curIP
             // 
@@ -1926,7 +1999,7 @@
             this.label_curIP.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label_curIP.ForeColor = System.Drawing.Color.Gray;
             this.label_curIP.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_curIP.Location = new System.Drawing.Point(20, 26);
+            this.label_curIP.Location = new System.Drawing.Point(20, 17);
             this.label_curIP.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_curIP.Name = "label_curIP";
             this.label_curIP.Size = new System.Drawing.Size(61, 21);
@@ -1941,7 +2014,7 @@
             this.label_curWIFIName.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label_curWIFIName.ForeColor = System.Drawing.Color.Gray;
             this.label_curWIFIName.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_curWIFIName.Location = new System.Drawing.Point(20, 99);
+            this.label_curWIFIName.Location = new System.Drawing.Point(20, 90);
             this.label_curWIFIName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_curWIFIName.Name = "label_curWIFIName";
             this.label_curWIFIName.Size = new System.Drawing.Size(113, 21);
@@ -1962,6 +2035,8 @@
             // 
             // groupBox8
             // 
+            this.groupBox8.Controls.Add(this.label_wifimode);
+            this.groupBox8.Controls.Add(this.ucCombox_wifimode);
             this.groupBox8.Controls.Add(this.ucTextBoxEx_wifiIp);
             this.groupBox8.Controls.Add(this.ucTextBoxEx_port);
             this.groupBox8.Controls.Add(this.ucTextBoxEx_pwd);
@@ -2364,7 +2439,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1033, 703);
+            this.tabPage4.Size = new System.Drawing.Size(1033, 713);
             this.tabPage4.TabIndex = 2;
             this.tabPage4.Text = "高级配置";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -3897,7 +3972,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(1033, 703);
+            this.tabPage5.Size = new System.Drawing.Size(1033, 713);
             this.tabPage5.TabIndex = 3;
             this.tabPage5.Text = "工单设置";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -4064,7 +4139,7 @@
             this.ucCombox_runMode.Source = null;
             this.ucCombox_runMode.TabIndex = 83;
             this.ucCombox_runMode.TextValue = null;
-            this.ucCombox_runMode.TriangleColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(77)))), ((int)(((byte)(59)))));
+            this.ucCombox_runMode.TriangleColor = System.Drawing.Color.Blue;
             // 
             // label41
             // 
@@ -4094,26 +4169,48 @@
             // 
             this.graphicalOverlayComponent1.Owner = null;
             // 
-            // label42
+            // label_wifimode
             // 
-            this.label42.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label42.AutoSize = true;
-            this.label42.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label42.ForeColor = System.Drawing.Color.Gray;
-            this.label42.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label42.Location = new System.Drawing.Point(20, 62);
-            this.label42.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(119, 21);
-            this.label42.TabIndex = 143;
-            this.label42.Text = "本地端口: 5678";
+            this.label_wifimode.AutoSize = true;
+            this.label_wifimode.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.label_wifimode.ForeColor = System.Drawing.Color.Blue;
+            this.label_wifimode.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_wifimode.Location = new System.Drawing.Point(549, 29);
+            this.label_wifimode.Name = "label_wifimode";
+            this.label_wifimode.Size = new System.Drawing.Size(105, 22);
+            this.label_wifimode.TabIndex = 141;
+            this.label_wifimode.Text = "wifi/RF无线:";
+            // 
+            // ucCombox_wifimode
+            // 
+            this.ucCombox_wifimode.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_wifimode.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wifimode.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_wifimode.ConerRadius = 5;
+            this.ucCombox_wifimode.DropPanelHeight = -1;
+            this.ucCombox_wifimode.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wifimode.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_wifimode.IsRadius = true;
+            this.ucCombox_wifimode.IsShowRect = true;
+            this.ucCombox_wifimode.ItemWidth = 70;
+            this.ucCombox_wifimode.Location = new System.Drawing.Point(704, 24);
+            this.ucCombox_wifimode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_wifimode.Name = "ucCombox_wifimode";
+            this.ucCombox_wifimode.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wifimode.RectWidth = 1;
+            this.ucCombox_wifimode.SelectedIndex = -1;
+            this.ucCombox_wifimode.SelectedValue = "";
+            this.ucCombox_wifimode.Size = new System.Drawing.Size(173, 32);
+            this.ucCombox_wifimode.Source = null;
+            this.ucCombox_wifimode.TabIndex = 142;
+            this.ucCombox_wifimode.TextValue = null;
+            this.ucCombox_wifimode.TriangleColor = System.Drawing.Color.Blue;
             // 
             // MenuDeviceSetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1230, 729);
+            this.ClientSize = new System.Drawing.Size(1230, 739);
             this.Controls.Add(this.splitContainer1);
             this.Name = "MenuDeviceSetForm";
             this.Text = "设备设置";
@@ -4147,6 +4244,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
+            this.groupBox23.ResumeLayout(false);
+            this.groupBox23.PerformLayout();
             this.groupBox12.ResumeLayout(false);
             this.groupBox12.PerformLayout();
             this.groupBox11.ResumeLayout(false);
@@ -4226,8 +4325,6 @@
         private HZH_Controls.Controls.UCCombox ucCombox_accmode;
         private System.Windows.Forms.Label label_timezero;
         private HZH_Controls.Controls.UCCombox ucCombox_alarmode;
-        private HZH_Controls.Controls.UCCombox ucCombox_wifimode;
-        private System.Windows.Forms.Label label_wifimode;
         private System.Windows.Forms.Label label_alarmode;
         private System.Windows.Forms.Label label_timeback;
         private System.Windows.Forms.Label label_timeoff;
@@ -4390,5 +4487,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column17;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column18;
         private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.GroupBox groupBox23;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label_wifimode;
+        private HZH_Controls.Controls.UCCombox ucCombox_wifimode;
     }
 }

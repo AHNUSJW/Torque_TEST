@@ -5,12 +5,14 @@ using System.IO;
 using System.Management;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Model
 {
     //定义委托
     public delegate void freshHandler();
+    public delegate void UpdateUIDelegate(object sender, UpdateUIEventArgs e);
 
     public static class MyDevice
     {
@@ -74,11 +76,15 @@ namespace Model
 
         //工单信息
         public static String DataType = "ActualData";  //数据类型（工单/非工单）
+        public static String WorkType = "";            //工单类型（在线/离线）
         public static UInt32 WorkId = 0;               //工单标识符
         public static String WorkNum = "";             //工单号（前缀）
         public static String SequenceId = "";          //工单序列号（后缀）
         public static String PointNum = "";            //点位
+        public static String TorqueResult = "NG";      //扭矩结果（合格/不合格）
+        public static String AngleResult = "NG";       //角度结果（合格/不合格）
         public static String DataResult = "NG";        //数据结果（合格/不合格）
+        public static String ResistResult = "NG";      //复拧结果（合格/不合格）
         public static String Vin = "";                 //一段数据集合标识
 
         //蓝牙接收器
@@ -89,6 +95,10 @@ namespace Model
         public static String ConnectAuto;              //扳手允许自动连接
         public static int ConnectDevCnt;               //连接的总设备数
         public static int WorkDevCnt;                  //工作的设备数
+
+        public static object MyDeviceLock = new object();
+        public static AutoResetEvent StickyPacksHandle = new AutoResetEvent(false);
+        public static bool IsVerified = false;
 
 
         /// <summary>

@@ -17,6 +17,7 @@ namespace Model
         TASKS trTASK { set; get; }                  //接口读写状态机
         Int32 txCount { get; }                      //接口发送字节计数
         Int32 rxCount { get; }                      //接口接收字节计数
+        Int32 rxReadCnt { get; }
         Boolean isEqual { get; }                    //接收的指令校验结果
 
         String rxString { get; }    //收到的字符串

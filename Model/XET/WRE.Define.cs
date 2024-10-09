@@ -10,19 +10,19 @@ namespace Model
     public class WLAN
     {
         public Byte         addr;                                       //站点地址
+        public Byte         rs485_baud;                                 //RS485波特率
+        public Byte         rs485_stopbit;                              //RS485停止位
+        public Byte         rs485_parity;                               //RS485校验位     
+        public Byte         wifimode;                                   //是否关闭wifi/RF无线
+
+        public String       wf_ip;                                      //网络IP
+        public UInt32       wf_port;                                    //网络端口号
+        public String       wf_ssid;                                    //WiFi账号
+        public String       wf_pwd;                                     //WiFi密码
 
         public Byte         rf_chan;                                    //RF信道,0x00~0xC8
         public Byte         rf_option;                                  //设置透传,发射功率
         public Byte         rf_para;                                    //RF参数,校验位,波特率,空中速率
-
-        public Byte         rs485_baud;                                 //RS485波特率
-        public Byte         rs485_stopbit;                              //RS485停止位
-        public Byte         rs485_parity;                               //RS485校验位
-
-        public String       wf_ssid;                                    //WiFi账号
-        public String       wf_pwd;                                     //WiFi密码
-        public String       wf_ip;                                      //网络IP
-        public UInt32       wf_port;                                    //网络端口号
     }
 
     public class DEVC
@@ -30,12 +30,19 @@ namespace Model
         public SERIES       series;                                     //系列BEM,KES,XH,XLT等
         public TYPE         type;                                       //型号
         public Byte         version;                                    //程序版本
+        public Byte         hardware;                                   //硬件版本
         public UInt64       bohrcode;                                   //唯一序列号
+        public Int32[]      torque_err = new Int32[Constants.UNITS];    //超量程使用扭矩值,nm,inlb,ftlb,kgcm,kgm
 
-        public UNIT         unit;                                       //标定的单位
+        public UNIT         calunit;                                    //标定的单位
         public Byte         caltype;                                    //标定方式,五点,七点,九点,十一点
         public Byte         torque_decimal;                             //扭矩小数点
         public Byte         torque_fdn;                                 //扭矩分度值
+        public Byte         calIndex;                                   //扭矩参数下标
+        public Int32        torque_disp;                                //最小显示扭矩值
+        public Int32        torque_min;                                 //最小可调报警值
+        public Int32        torque_max;                                 //最大可调报警值,等于量程
+        public Int32[]      torque_over = new Int32[Constants.UNITS];   //扭矩超载报警值,等于量程的120%
         public Int32        capacity;                                   //扭矩量程
         public Int32        ad_zero;                                    //标定零点
         public Int32        ad_pos_point1;                              //正向第1点内码
@@ -60,11 +67,42 @@ namespace Model
         public Int32        tq_neg_point4;                              //反向第4点扭矩值
         public Int32        tq_neg_point5;                              //反向第5点扭矩值
 
-        public Int32        torque_disp;                                //最小显示扭矩值
-        public Int32        torque_min;                                 //最小可调报警值
-        public Int32        torque_max;                                 //最大可调报警值,等于量程
-        public Int32[]      torque_over = new Int32[Constants.UNITS];   //扭矩超载报警值,等于量程的120%
-        public Int32[]      torque_err = new Int32[Constants.UNITS];    //超量程使用扭矩值,nm,inlb,ftlb,kgcm,kgm
+        /**************XH-08专有参数**************/
+        public Int32        cl2_ad_zero;                                //cl2标定零点
+        public Int32        cl2_ad_pos_point1;                          //cl2正向第1点内码
+        public Int32        cl2_ad_pos_point2;                          //cl2正向第2点内码
+        public Int32        cl2_ad_pos_point3;                          //cl2正向第3点内码
+        public Int32        cl2_ad_pos_point4;                          //cl2正向第4点内码
+        public Int32        cl2_ad_pos_point5;                          //cl2正向第5点内码
+        public Int32        cl2_ad_neg_point1;                          //cl2反向第1点内码
+        public Int32        cl2_ad_neg_point2;                          //cl2反向第2点内码
+        public Int32        cl2_ad_neg_point3;                          //cl2反向第3点内码
+        public Int32        cl2_ad_neg_point4;                          //cl2反向第4点内码
+        public Int32        cl2_ad_neg_point5;                          //cl2反向第5点内码
+                            
+        public Int32        cr1_ad_zero;                                //cr1标定零点
+        public Int32        cr1_ad_pos_point1;                          //cr1正向第1点内码
+        public Int32        cr1_ad_pos_point2;                          //cr1正向第2点内码
+        public Int32        cr1_ad_pos_point3;                          //cr1正向第3点内码
+        public Int32        cr1_ad_pos_point4;                          //cr1正向第4点内码
+        public Int32        cr1_ad_pos_point5;                          //cr1正向第5点内码
+        public Int32        cr1_ad_neg_point1;                          //cr1反向第1点内码
+        public Int32        cr1_ad_neg_point2;                          //cr1反向第2点内码
+        public Int32        cr1_ad_neg_point3;                          //cr1反向第3点内码
+        public Int32        cr1_ad_neg_point4;                          //cr1反向第4点内码
+        public Int32        cr1_ad_neg_point5;                          //cr1反向第5点内码
+                            
+        public Int32        cr2_ad_zero;                                //cr2标定零点
+        public Int32        cr2_ad_pos_point1;                          //cr2正向第1点内码
+        public Int32        cr2_ad_pos_point2;                          //cr2正向第2点内码
+        public Int32        cr2_ad_pos_point3;                          //cr2正向第3点内码
+        public Int32        cr2_ad_pos_point4;                          //cr2正向第4点内码
+        public Int32        cr2_ad_pos_point5;                          //cr2正向第5点内码
+        public Int32        cr2_ad_neg_point1;                          //cr2反向第1点内码
+        public Int32        cr2_ad_neg_point2;                          //cr2反向第2点内码
+        public Int32        cr2_ad_neg_point3;                          //cr2反向第3点内码
+        public Int32        cr2_ad_neg_point4;                          //cr2反向第4点内码
+        public Int32        cr2_ad_neg_point5;                          //cr2反向第5点内码
     }
 
     public class PARA
@@ -86,7 +124,6 @@ namespace Model
 
         public Byte         accmode;                                    //是否关闭角度累加
         public Byte         alarmode;                                   //是否关闭声光报警省电
-        public Byte         wifimode;                                   //是否关闭wifi/RF无线
 
         public Byte         timeoff;                                    //自动关机时间
         public Byte         timeback;                                   //自动关背光时间
@@ -97,7 +134,6 @@ namespace Model
         public Byte         displan;                                    //语言
 
         public UInt16       unhook;                                     //脱钩的保持时间,默认200ms
-        public float        angcorr;                                    //角度修正系数
         public Byte         adspeed;                                    //adc采样速率和增益
         public AUTOZERO     autozero;                                   //归零范围
         public TRACKZERO    trackzero;                                  //零点跟踪
@@ -105,6 +141,11 @@ namespace Model
         public ushort       amenable;                                   //使能扳手的按键修改报警值
         public byte         screwmax;                                   //离线工单有效数量
         public byte         runmode;                                    //离线执行工单模式，0无，1手动，2自动
+        public byte         auploaden;                                  //设备主动上传的使能控制
+        public byte         devrole;                                    //tcp server还是tcp client
+
+        public float        angcorr;                                    //角度修正系数
+        public Int32        angle_resist;                               //复拧角度（angle_acc < angle_resist则提示重复拧紧）
     }
 
     public class ALAM
@@ -206,16 +247,11 @@ namespace Model
 
         /**************04专有参数**************/
         public Byte         mode;                                       //工单模式AxMx
-        public Byte         screwNum;                                   //螺栓数量
-        public UInt32       work_ID;                                    //工单号
+        public Byte         screwCnt;                                   //螺栓数量
+        public UInt32       work_num;                                   //工单号
         public UInt64       work_psq;                                   //工单序列号
         public Byte         screwSeq;                                   //螺栓下标
 
-    }
-
-    public class SpeC
-    {
-        public Int32        angle_resist;                               //复拧角度（angle_acc < angle_resist则提示重复拧紧）
     }
 
     public class SCREW
@@ -236,7 +272,6 @@ namespace Model
         public FIFO fifo    = new FIFO();                               //缓存状态
         public DATA[] data  = new DATA[5];                              //测量数据
         public SCREW[] screw = new SCREW[32];                           //离线工单
-        public SpeC spec    = new SpeC();                               //特殊属性（后期客户新增）
     }
 }
 

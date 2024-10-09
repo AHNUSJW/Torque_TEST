@@ -211,6 +211,7 @@ namespace Model
                         // 等待设备回复或超时
                         if (receiveSignal.WaitOne(TimeSpan.FromMilliseconds(timeout)))
                         {
+                            Console.WriteLine("进入自动机线程处理" + MyDevice.protocol.trTASK + DateTime.Now.ToString("HH:mm:ss:fff"));
                             //回复后处理
                             HandleDeviceResponse();
 
@@ -387,7 +388,8 @@ namespace Model
                                     //}
 
                                     Console.WriteLine(MyDevice.actDev.wlan.addr + ": " + MyDevice.actDev.fifo.index + "---异常--------------" + MyDevice.actDev.auto.fifoIndex);
-                                    MyDevice.actDev.auto.fifoIndex -= 5 * 28;//回退到上一条是为了防止丢失的数据是5包中的其一
+                                    //MyDevice.actDev.auto.fifoIndex -= 5 * 28;//回退到上一条是为了防止丢失的数据是5包中的其一
+                                    MyDevice.actDev.auto.dataTick--;
                                     MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
                                 }
                             }
@@ -401,7 +403,6 @@ namespace Model
                             break;
                     }
 
-                    //触发UI更新事件
                     Console.WriteLine("更新UI");
                     TriggerUpdateUI(CurrentCommand);
                 }
@@ -1218,7 +1219,7 @@ namespace Model
             //发送
             switch (command.TaskState)
             {
-                case TASKS.REG_BLOCK1_ID:
+                case TASKS.REG_BLOCK3_WLAN:
                     //发指令
                     MyDevice.actDev.wlan.addr = newaddr;
                     ExecuteCommand(command);
@@ -1294,6 +1295,7 @@ namespace Model
 
             // 发送信号以表示设备已回复
             receiveSignal.Set();
+            Console.WriteLine("信号量回复");
         }
 
         #endregion
@@ -1331,9 +1333,12 @@ namespace Model
         //封装接收事件
         protected virtual void TriggerUpdateUIEvent(UpdateUIEventArgs e)
         {
+            Console.WriteLine("进入锁");
+
             lock (lock_onReceive)
             {
                 UpdateUI?.Invoke(this, e);
+                MyDevice.StickyPacksHandle.Set();
             }
         }
 

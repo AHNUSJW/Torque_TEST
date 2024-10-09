@@ -213,6 +213,37 @@ namespace DBHelper
             }
         }
 
+        //删除指定日期的分表数据
+        public static int DeleteDataByTime(DateTime time)
+        {
+            try
+            {
+                //返回删除的记录数
+                var tableName = Db.SplitHelper<DSData>().GetTableName(time);//根据时间获取表名
+                return Db.Deleteable<DSData>().AS(tableName).ExecuteCommand();
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        //删除指定时间区间的数据
+        public static int DeleteDataByPeriod(DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                //这里的ToList可以升级为ToPageList实现分页
+                return Db.Deleteable<DSData>()
+                       .Where(it => it.CreateTime >= startDate && it.CreateTime <= endDate)
+                       .ExecuteCommand();
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
         //删除指定工单号 + 序列号 + 日期的数据
         public static int DeleteDataByWidAndSeqAndTime(string workNum, string sequenceId, DateTime time)
         {

@@ -356,14 +356,6 @@ namespace Base.UI.MenuDevice
             };
             ucCombox_alarmode.SelectedIndex = actXET.para.alarmode;
 
-            //WiFi/RF无线
-            ucCombox_wifimode.Source = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("0", "关闭"),
-                new KeyValuePair<string, string>("1", "开启")
-            };
-            ucCombox_wifimode.SelectedIndex = actXET.para.wifimode;
-
             //自动关机时间
             ucTextBoxEx_timeoff.InputText = actXET.para.timeoff <= 0 ? "1" : actXET.para.timeoff.ToString();
 
@@ -422,7 +414,7 @@ namespace Base.UI.MenuDevice
                 default:
                     break;
             }
-            ucTextBoxEx_angleResist.InputText = (actXET.spec.angle_resist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
+            ucTextBoxEx_angleResist.InputText = (actXET.para.angle_resist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
 
             #endregion
 
@@ -487,6 +479,14 @@ namespace Base.UI.MenuDevice
             //WiFi密码
             ucTextBoxEx_pwd.InputText = actXET.wlan.wf_pwd;
 
+            //WiFi/RF无线
+            ucCombox_wifimode.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "关闭"),
+                new KeyValuePair<string, string>("1", "开启")
+            };
+            ucCombox_wifimode.SelectedIndex = actXET.wlan.wifimode;
+
             #endregion
 
             #region 高级设置
@@ -519,7 +519,7 @@ namespace Base.UI.MenuDevice
             {
                 ucCombox_calUnit.Source.Add(new KeyValuePair<string, string>("4", "kgf·m"));
             }
-            ucCombox_calUnit.SelectedIndex = (byte)actXET.devc.unit;
+            ucCombox_calUnit.SelectedIndex = (byte)actXET.devc.calunit;
 
             //标定方式
             ucCombox_calType.Source = new List<KeyValuePair<string, string>>
@@ -879,7 +879,27 @@ namespace Base.UI.MenuDevice
                     break;
             }
             //工单设置
+            switch (MyDevice.userRole)
+            {
+                case "0":
+                    btn_UpdateTicket.Enabled = false;
 
+                    dataGridView2.Enabled = false;
+                    ucCombox_screwMax.Enabled = false;
+                    ucCombox_runMode.Enabled = false;
+
+                    break;
+                case "1":
+                    btn_UpdateTicket.Enabled = true;
+
+                    dataGridView2.Enabled = true;
+                    ucCombox_screwMax.Enabled = true;
+                    ucCombox_runMode.Enabled = true;
+                    break;
+                case "32":
+                    break;
+
+            }
         }
 
         //依据扳手型号调整控件状态
@@ -890,6 +910,8 @@ namespace Base.UI.MenuDevice
             {
                 case TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR:
                     ucCombox_point.Enabled = false;
+                    groupBox22.Visible = false;
+                    groupBox4.Visible = false;
                     break;
 
                 default:
@@ -897,6 +919,8 @@ namespace Base.UI.MenuDevice
                 case TYPE.TQ_XH_XL01_07 - 1280:
                 case TYPE.TQ_XH_XL01_09 - 1280:
                     ucCombox_point.Enabled = true;
+                    groupBox22.Visible = true;
+                    groupBox4.Visible = true;
                     break;
             }
 
@@ -1204,7 +1228,7 @@ namespace Base.UI.MenuDevice
                 int torqueMin = actXET.devc.torque_min;//量程下限
 
                 //单位转换
-                switch (actXET.devc.unit)
+                switch (actXET.devc.calunit)
                 {
                     //根据不同的标定单位获取指定单位的峰值
                     //标定单位：actXET.devc.unit 指设备初次标定时所用的单位，基准是min = 150, max = 3000
@@ -1259,7 +1283,7 @@ namespace Base.UI.MenuDevice
 
             List<TASKS> tasks = new List<TASKS>
             {
-                TASKS.REG_BLOCK2_PARA,
+                TASKS.REG_BLOCK3_PARA,
                 TASKS.REG_BLOCK5_AM1,
                 TASKS.REG_BLOCK5_AM2,
                 TASKS.REG_BLOCK5_AM3
@@ -1288,7 +1312,7 @@ namespace Base.UI.MenuDevice
                 || ucTextBoxEx_timeback.InputText == ""
                 || ucTextBoxEx_timezero.InputText == ""
                 || ucTextBoxEx_unhook.InputText == ""
-                || ucTextBoxEx_angleResist.InputText == "")
+                || (ucTextBoxEx_angleResist.InputText == "" && ucTextBoxEx_angleResist.Visible == true))
             {
                 MessageBox.Show("有参数未填写, 请检查所有参数", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -1327,7 +1351,6 @@ namespace Base.UI.MenuDevice
                 }
                 actXET.para.accmode = (byte)ucCombox_accmode.SelectedIndex;
                 actXET.para.alarmode = (byte)ucCombox_alarmode.SelectedIndex;
-                actXET.para.wifimode = (byte)ucCombox_wifimode.SelectedIndex;
                 if (byte.TryParse(ucTextBoxEx_timeoff.InputText, out byte timeoff))
                 {
                     actXET.para.timeoff = timeoff;
@@ -1351,7 +1374,7 @@ namespace Base.UI.MenuDevice
                 //复拧角度
                 if (ucTextBoxEx_angleResist.InputText != "")
                 {
-                    actXET.spec.angle_resist = (int)(Convert.ToDouble(ucTextBoxEx_angleResist.InputText) * (int)Math.Pow(10, actXET.para.angle_decimal) + 0.5);
+                    actXET.para.angle_resist = (int)(Convert.ToDouble(ucTextBoxEx_angleResist.InputText) * (int)Math.Pow(10, actXET.para.angle_decimal) + 0.5);
                 }
 
             }
@@ -1366,8 +1389,7 @@ namespace Base.UI.MenuDevice
 
             List<TASKS> tasks = new List<TASKS>
             {
-                TASKS.REG_BLOCK2_PARA,
-                TASKS.REG_BLOCK1_SPEC
+                TASKS.REG_BLOCK3_PARA,
             };
 
             for (int i = 0; i < ucDataGridView1.SelectRows.Count; i++)
@@ -1455,6 +1477,8 @@ namespace Base.UI.MenuDevice
             {
                 actXET.wlan.wf_pwd = ucTextBoxEx_pwd.InputText;
             }
+
+            actXET.wlan.wifimode = (byte)ucCombox_wifimode.SelectedIndex;
             actXET.torqueMultiple = (int)Math.Pow(10, actXET.devc.torque_decimal);
             actXET.angleMultiple = (int)Math.Pow(10, actXET.para.angle_decimal);
 
@@ -1505,12 +1529,10 @@ namespace Base.UI.MenuDevice
             if (MyDevice.protocol.type == COMP.UART)
             {
                 //USB串口通讯固定地址01
-                MyDevice.myTaskManager.AddUserCommand(1, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK1_ID, this.Name);
                 MyDevice.myTaskManager.AddUserCommand(1, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK3_WLAN, this.Name);
             }
             else
             {
-                MyDevice.myTaskManager.AddUserCommand(oldAddr, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK1_ID, this.Name);
                 MyDevice.myTaskManager.AddUserCommand(actXET.wlan.addr, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK3_WLAN, this.Name);
             }
         }
@@ -1551,7 +1573,7 @@ namespace Base.UI.MenuDevice
                 }
 
                 //更新内码相关参数(必须工厂权限)
-                actXET.devc.unit     = (UNIT)ucCombox_calUnit.SelectedIndex;
+                actXET.devc.calunit     = (UNIT)ucCombox_calUnit.SelectedIndex;
                 actXET.devc.caltype  = (byte)ucCombox_calType.SelectedIndex;
                 actXET.devc.capacity = Convert.ToInt32(ucCombox_capacity.SelectedText) * (int)Math.Pow(10, actXET.devc.torque_decimal);
 
@@ -1579,7 +1601,7 @@ namespace Base.UI.MenuDevice
             List<TASKS> tasks = new List<TASKS>
             {
                 TASKS.REG_BLOCK5_INFO,
-                TASKS.REG_BLOCK4_CAL,
+                TASKS.REG_BLOCK4_CAL1,
             };
 
             for (int i = 0; i < ucDataGridView1.SelectRows.Count; i++)
@@ -1618,6 +1640,14 @@ namespace Base.UI.MenuDevice
                         MyDevice.protocol.port = MyDevice.clientConnectionItems[MyDevice.addr_ip[MyDevice.protocol.addr.ToString()]];
                     }
                     actXET = MyDevice.actDev;
+
+                }
+
+                if (actXET.devc.type != TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR &&
+                    actXET.devc.type != TYPE.TQ_XH_XL01_09 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
+                {
+                    MessageBox.Show("离线工单只能指定07 / 09型号扳手设置");
+                    return;
                 }
 
                 //离线工单基础设置
@@ -1650,7 +1680,7 @@ namespace Base.UI.MenuDevice
                 TASKS.REG_BLOCK3_SCREW2,
                 TASKS.REG_BLOCK3_SCREW3,
                 TASKS.REG_BLOCK3_SCREW4,
-                TASKS.REG_BLOCK2_PARA,
+                TASKS.REG_BLOCK3_PARA,
             };
 
             for (int i = 0; i < ucDataGridView1.SelectRows.Count; i++)
@@ -2228,12 +2258,12 @@ namespace Base.UI.MenuDevice
                                 {
                                     ucTextBoxEx_angleResist.Invoke(new MethodInvoker(() =>
                                     {
-                                        ucTextBoxEx_angleResist.InputText = (actXET.spec.angle_resist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
+                                        ucTextBoxEx_angleResist.InputText = (actXET.para.angle_resist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
                                     }));
                                 }
                                 else
                                 {
-                                    ucTextBoxEx_angleResist.InputText = (actXET.spec.angle_resist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
+                                    ucTextBoxEx_angleResist.InputText = (actXET.para.angle_resist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
                                 }
                                 
                             }
@@ -2259,7 +2289,7 @@ namespace Base.UI.MenuDevice
                 {
                     switch (currentCommand.TaskState)
                     {
-                        case TASKS.REG_BLOCK1_SPEC:
+                        case TASKS.REG_BLOCK3_PARA:
                             updateDatabaseWrench();
 
                             selectNum++;
@@ -2314,6 +2344,34 @@ namespace Base.UI.MenuDevice
                                     MyDevice.addr_ip.Add(newKey, oldValue);//添加新key_value
                                 }
                             }
+
+
+                            if (this.InvokeRequired)
+                            {
+                                this.Invoke(new MethodInvoker(() =>
+                                {
+                                    //修改扳手WLAN参数后，重新连接
+                                    MenuDeviceSetForm_FormClosing(null, null);
+                                    this.Hide();
+                                    MenuConnectForm myConnectForm = new MenuConnectForm();
+                                    myConnectForm.StartPosition = FormStartPosition.CenterParent;
+                                    myConnectForm.ShowDialog();
+                                    this.Close();
+                                    myConnectForm.Dispose();
+                                }));
+                            }
+                            else
+                            {
+                                //修改扳手WLAN参数后，重新连接
+                                MenuDeviceSetForm_FormClosing(null, null);
+                                this.Hide();
+                                MenuConnectForm myConnectForm = new MenuConnectForm();
+                                myConnectForm.StartPosition = FormStartPosition.CenterParent;
+                                myConnectForm.ShowDialog();
+                                this.Close();
+                                myConnectForm.Dispose();
+                            }
+
                             break;
                         default:
                             break;
@@ -2377,7 +2435,7 @@ namespace Base.UI.MenuDevice
                 {
                     switch (currentCommand.TaskState)
                     {
-                        case TASKS.REG_BLOCK2_PARA:
+                        case TASKS.REG_BLOCK3_PARA:
 
                             selectNum++;
                             //所有设备接收
@@ -2421,7 +2479,7 @@ namespace Base.UI.MenuDevice
                     Type = actXET.devc.type.ToString(),
                     Version = actXET.devc.version,
                     BohrCode = actXET.devc.bohrcode,
-                    Unit = actXET.devc.unit.ToString(),
+                    Unit = actXET.devc.calunit.ToString(),
                     TorqueDecimal = actXET.devc.torque_decimal,
                     TorqueFdn = actXET.devc.torque_fdn,
                     CalType = actXET.devc.caltype,
@@ -2469,7 +2527,7 @@ namespace Base.UI.MenuDevice
                     HeartCycle = actXET.para.heartcycle,
                     AccMode = actXET.para.accmode,
                     AlarmMode = actXET.para.alarmode,
-                    WifiMode = actXET.para.wifimode,
+                    WifiMode = actXET.wlan.wifimode,
                     TimeOff = actXET.para.timeoff,
                     TimeBack = actXET.para.timeback,
                     TimeZero = actXET.para.timezero,

@@ -49,6 +49,10 @@
             this.label_modeAx = new System.Windows.Forms.Label();
             this.label_torqueUnit = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.label_angcorr = new System.Windows.Forms.Label();
@@ -79,8 +83,6 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label_accmode = new System.Windows.Forms.Label();
             this.label_alarmode = new System.Windows.Forms.Label();
-            this.label_wifimode = new System.Windows.Forms.Label();
-            this.ucCombox_wifimode = new HZH_Controls.Controls.UCCombox();
             this.ucCombox_alarmode = new HZH_Controls.Controls.UCCombox();
             this.ucCombox_accmode = new HZH_Controls.Controls.UCCombox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -123,10 +125,8 @@
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.ucTextBoxEx_addr = new HZH_Controls.Controls.UCTextBoxEx();
             this.label_addr = new System.Windows.Forms.Label();
-            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label_wifimode = new System.Windows.Forms.Label();
+            this.ucCombox_wifimode = new HZH_Controls.Controls.UCCombox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -540,6 +540,34 @@
             this.dataGridView1.Size = new System.Drawing.Size(701, 594);
             this.dataGridView1.TabIndex = 38;
             this.dataGridView1.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView1_EditingControlShowing);
+            // 
+            // Column9
+            // 
+            this.Column9.HeaderText = "";
+            this.Column9.Name = "Column9";
+            this.Column9.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column9.Width = 73;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "SN";
+            this.Column1.Name = "Column1";
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 73;
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "MN";
+            this.Column4.Name = "Column4";
+            this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column4.Width = 74;
+            // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "";
+            this.Column5.Name = "Column5";
+            this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column5.Width = 73;
             // 
             // tabPage2
             // 
@@ -1092,8 +1120,6 @@
             // 
             this.groupBox3.Controls.Add(this.label_accmode);
             this.groupBox3.Controls.Add(this.label_alarmode);
-            this.groupBox3.Controls.Add(this.label_wifimode);
-            this.groupBox3.Controls.Add(this.ucCombox_wifimode);
             this.groupBox3.Controls.Add(this.ucCombox_alarmode);
             this.groupBox3.Controls.Add(this.ucCombox_accmode);
             this.groupBox3.Location = new System.Drawing.Point(3, 349);
@@ -1125,43 +1151,6 @@
             this.label_alarmode.Size = new System.Drawing.Size(111, 22);
             this.label_alarmode.TabIndex = 66;
             this.label_alarmode.Text = "声光报警省电:";
-            // 
-            // label_wifimode
-            // 
-            this.label_wifimode.AutoSize = true;
-            this.label_wifimode.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_wifimode.ForeColor = System.Drawing.Color.Blue;
-            this.label_wifimode.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_wifimode.Location = new System.Drawing.Point(49, 123);
-            this.label_wifimode.Name = "label_wifimode";
-            this.label_wifimode.Size = new System.Drawing.Size(105, 22);
-            this.label_wifimode.TabIndex = 67;
-            this.label_wifimode.Text = "wifi/RF无线:";
-            // 
-            // ucCombox_wifimode
-            // 
-            this.ucCombox_wifimode.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_wifimode.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wifimode.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_wifimode.ConerRadius = 5;
-            this.ucCombox_wifimode.DropPanelHeight = -1;
-            this.ucCombox_wifimode.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wifimode.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_wifimode.IsRadius = true;
-            this.ucCombox_wifimode.IsShowRect = true;
-            this.ucCombox_wifimode.ItemWidth = 70;
-            this.ucCombox_wifimode.Location = new System.Drawing.Point(204, 118);
-            this.ucCombox_wifimode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_wifimode.Name = "ucCombox_wifimode";
-            this.ucCombox_wifimode.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wifimode.RectWidth = 1;
-            this.ucCombox_wifimode.SelectedIndex = -1;
-            this.ucCombox_wifimode.SelectedValue = "";
-            this.ucCombox_wifimode.Size = new System.Drawing.Size(173, 32);
-            this.ucCombox_wifimode.Source = null;
-            this.ucCombox_wifimode.TabIndex = 71;
-            this.ucCombox_wifimode.TextValue = null;
-            this.ucCombox_wifimode.TriangleColor = System.Drawing.Color.Blue;
             // 
             // ucCombox_alarmode
             // 
@@ -1654,6 +1643,8 @@
             // 
             // groupBox8
             // 
+            this.groupBox8.Controls.Add(this.label_wifimode);
+            this.groupBox8.Controls.Add(this.ucCombox_wifimode);
             this.groupBox8.Controls.Add(this.ucTextBoxEx_wifiIp);
             this.groupBox8.Controls.Add(this.ucTextBoxEx_port);
             this.groupBox8.Controls.Add(this.ucTextBoxEx_pwd);
@@ -2031,33 +2022,42 @@
             this.label_addr.TabIndex = 22;
             this.label_addr.Text = "站点地址：";
             // 
-            // Column9
+            // label_wifimode
             // 
-            this.Column9.HeaderText = "";
-            this.Column9.Name = "Column9";
-            this.Column9.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column9.Width = 73;
+            this.label_wifimode.AutoSize = true;
+            this.label_wifimode.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.label_wifimode.ForeColor = System.Drawing.Color.Blue;
+            this.label_wifimode.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_wifimode.Location = new System.Drawing.Point(549, 29);
+            this.label_wifimode.Name = "label_wifimode";
+            this.label_wifimode.Size = new System.Drawing.Size(105, 22);
+            this.label_wifimode.TabIndex = 141;
+            this.label_wifimode.Text = "wifi/RF无线:";
             // 
-            // Column1
+            // ucCombox_wifimode
             // 
-            this.Column1.HeaderText = "SN";
-            this.Column1.Name = "Column1";
-            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column1.Width = 73;
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "MN";
-            this.Column4.Name = "Column4";
-            this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column4.Width = 74;
-            // 
-            // Column5
-            // 
-            this.Column5.HeaderText = "";
-            this.Column5.Name = "Column5";
-            this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column5.Width = 73;
+            this.ucCombox_wifimode.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_wifimode.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wifimode.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_wifimode.ConerRadius = 5;
+            this.ucCombox_wifimode.DropPanelHeight = -1;
+            this.ucCombox_wifimode.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wifimode.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_wifimode.IsRadius = true;
+            this.ucCombox_wifimode.IsShowRect = true;
+            this.ucCombox_wifimode.ItemWidth = 70;
+            this.ucCombox_wifimode.Location = new System.Drawing.Point(704, 24);
+            this.ucCombox_wifimode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_wifimode.Name = "ucCombox_wifimode";
+            this.ucCombox_wifimode.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wifimode.RectWidth = 1;
+            this.ucCombox_wifimode.SelectedIndex = -1;
+            this.ucCombox_wifimode.SelectedValue = "";
+            this.ucCombox_wifimode.Size = new System.Drawing.Size(173, 32);
+            this.ucCombox_wifimode.Source = null;
+            this.ucCombox_wifimode.TabIndex = 142;
+            this.ucCombox_wifimode.TextValue = null;
+            this.ucCombox_wifimode.TriangleColor = System.Drawing.Color.Blue;
             // 
             // MenuDeviceSetForm3
             // 
@@ -2143,8 +2143,6 @@
         private HZH_Controls.Controls.UCCombox ucCombox_accmode;
         private System.Windows.Forms.Label label_timezero;
         private HZH_Controls.Controls.UCCombox ucCombox_alarmode;
-        private HZH_Controls.Controls.UCCombox ucCombox_wifimode;
-        private System.Windows.Forms.Label label_wifimode;
         private System.Windows.Forms.Label label_alarmode;
         private System.Windows.Forms.Label label_timeback;
         private System.Windows.Forms.Label label_timeoff;
@@ -2210,5 +2208,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.Label label_wifimode;
+        private HZH_Controls.Controls.UCCombox ucCombox_wifimode;
     }
 }

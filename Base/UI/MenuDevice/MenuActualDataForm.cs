@@ -3,6 +3,7 @@ using HZH_Controls.Controls;
 using Library;
 using Model;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -10,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 //Ricardo  20240328
@@ -54,6 +56,11 @@ namespace Base.UI.MenuDevice
         private Dictionary<string, List<double>> AngledataGroups = new Dictionary<string, List<double>>(); //作业号字典，存储每次拧紧任务的角度集合
 
         private Dictionary<string, bool> dataGroupResults = new Dictionary<string, bool>();//作业号字典，存储每次作业的拧紧结果
+
+        private ConcurrentQueue<UpdateUIEventArgs> updateQueue = new ConcurrentQueue<UpdateUIEventArgs>();
+        private volatile bool isProcessing = false;
+        private object lockObj = new object();
+        private readonly object _processingLock = new object();
 
         #endregion
 
@@ -625,26 +632,33 @@ namespace Base.UI.MenuDevice
                     anglePeak = Math.Abs(angle) > Math.Abs(anglePeak) ? angle : anglePeak;
 
                     //更新表格
-                    int idx = dataGridView1.Rows.Add();            //实时表格的行数下标
+                    int idx;            //实时表格的行数下标
 
                     if (actXET.data[i].dtype == 0xF1)
                     {
+                        idx = dataGridView1.Rows.Add();
                         dataGridView1.Rows[idx].Cells[0].Value = (++lines).ToString();
+                        dataGridView1.Rows[idx].Cells[1].Value = actXET.opsn;
+                        dataGridView1.Rows[idx].Cells[2].Value = actXET.data[i].stamp;
+                        dataGridView1.Rows[idx].Cells[3].Value = actXET.wlan.addr;
+                        dataGridView1.Rows[idx].Cells[4].Value = torque + " " + torqueUnit;
+                        dataGridView1.Rows[idx].Cells[5].Value = angle + " °";
                     }
                     else if (actXET.data[i].dtype == 0xF2)
                     {
-                        dataGridView1.Rows[idx].Cells[0].Value = "☆" + (++lines);
+                        //dataGridView1.Rows[idx].Cells[0].Value = "☆" + (++lines);
                     }
                     else if (actXET.data[i].dtype == 0xF3)
                     {
+                        idx = dataGridView1.Rows.Add();
                         dataGridView1.Rows[idx].Cells[0].Value = "★" + (++lines);
+                        dataGridView1.Rows[idx].Cells[1].Value = actXET.opsn;
+                        dataGridView1.Rows[idx].Cells[2].Value = actXET.data[i].stamp;
+                        dataGridView1.Rows[idx].Cells[3].Value = actXET.wlan.addr;
+                        dataGridView1.Rows[idx].Cells[4].Value = torque + " " + torqueUnit;
+                        dataGridView1.Rows[idx].Cells[5].Value = angle + " °";
                     }
 
-                    dataGridView1.Rows[idx].Cells[1].Value = actXET.opsn;
-                    dataGridView1.Rows[idx].Cells[2].Value = actXET.data[i].stamp;
-                    dataGridView1.Rows[idx].Cells[3].Value = actXET.wlan.addr;
-                    dataGridView1.Rows[idx].Cells[4].Value = torque + " " + torqueUnit;
-                    dataGridView1.Rows[idx].Cells[5].Value = angle + " °";
                     label3.Text = "扭矩峰值：" + torque + torqueUnit;
                     label4.Text = "角度峰值：" + angle + "°";
 
@@ -664,7 +678,7 @@ namespace Base.UI.MenuDevice
                     }
 
                     //判断数据结果是否要重复拧紧
-                    if (IsAngleResist(actXET.data[i], actXET, angle * actXET.angleMultiple, actXET.spec.angle_resist))
+                    if (IsAngleResist(actXET.data[i], actXET, angle * actXET.angleMultiple, actXET.para.angle_resist))
                     {
                         label2.Text = "需要重复拧紧";
                     }
@@ -730,7 +744,12 @@ namespace Base.UI.MenuDevice
             {
                 if (actXET.data[i].dtype == 0xF1 || actXET.data[i].dtype == 0xF2)
                 {
+                    //if (actXET.data[i].dtype == 0xF2)
+                    //{
+                    //    Console.WriteLine("进入表格的F2" + actXET.data[i].torseries_pk);
+                    //}
                     if (actXET.data[i].dtype == 0xF1 && actXET.data[i].torque == 0 && actXET.data[i].angle == 0) break;
+
 
                     //单位更新
                     switch (actXET.data[i].torque_unit)
@@ -1450,74 +1469,124 @@ namespace Base.UI.MenuDevice
         //UI更新事件
         private void updateUI(object sender, UpdateUIEventArgs e)
         {
+            // 创建数据快照
+            DATA[] dataSnapshot;
+            lock (lockObj)
+            {
+                dataSnapshot = actXET.data.Take(5).ToArray();
+            }
+
+            // 初始处理
+            for (int i = 0; i < 5; i++)
+            {
+                if (dataSnapshot[i].dtype == 0xF1 || dataSnapshot[i].dtype == 0xF2)
+                {
+                    if (dataSnapshot[i].dtype == 0xF2)
+                    {
+                        Console.WriteLine($"初次进入updateUI,actXET.data{i}.dtype" + dataSnapshot[i].torseries_pk + "_" + dataSnapshot[i].stamp);
+                    }
+                }
+                Console.WriteLine($"UpdateUI actXET.data{i}.dtype: " + dataSnapshot[i].dtype + "_" + dataSnapshot[i].stamp);
+            }
+
             Action action = () =>
             {
-                Command currentCommand = e.Command;
-                switch (currentCommand.TaskState)
+                lock (lockObj)
                 {
-                    case TASKS.REG_BLOCK2_DAT:
-                        if (actXET.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || actXET.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
-                        {
-                            updateDataTable_XH06();
-                            pictureBoxScope_draw();
-                        }
-                        else
-                        {
-                            updateDataTable_XH07();
-                            pictureBoxScope_draw();
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                //收到指令切换设备
-                if (myPictures.Count > 0)
-                {
-                    MyDevice.myTaskManager.SelectedDev = MyDevice.AddrList[(MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) + 1) % MyDevice.AddrList.Count];
-                    MyDevice.protocol.addr = MyDevice.AddrList[(MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) + 1) % MyDevice.AddrList.Count];
-
-                    //TCP模式要切换端口
-                    if (MyDevice.protocol.type == COMP.TCP)
+                    for (int i = 0; i < 5; i++)
                     {
-                        //防止字典查询溢出
-                        if (MyDevice.addr_ip.ContainsKey(MyDevice.protocol.addr.ToString()) &&
-                            MyDevice.clientConnectionItems.ContainsKey(MyDevice.addr_ip[MyDevice.protocol.addr.ToString()])
-                            )
+                        if (actXET.data[i].dtype == 0xF1 || actXET.data[i].dtype == 0xF2)
                         {
-                            MyDevice.protocol.port = MyDevice.clientConnectionItems[MyDevice.addr_ip[MyDevice.protocol.addr.ToString()]];
+                            if (actXET.data[i].dtype == 0xF2)
+                            {
+                                Console.WriteLine($"初次进入Action,actXET.data{i}.dtype" + actXET.data[i].torseries_pk + "_" + actXET.data[i].stamp);
+                            }
                         }
-                        else
+                        Console.WriteLine($"Action actXET.data{i}.dtype: " + actXET.data[i].dtype + "_" + actXET.data[i].stamp);
+
+                        if (actXET.data[i].stamp != dataSnapshot[i].stamp)
                         {
-                            return;
+                            Console.WriteLine("数据中途被其他线程修改了");
                         }
                     }
 
-                    //更新设备
-                    actXET = MyDevice.actDev;
-                    actXET.torqueMultiple = (int)Math.Pow(10, actXET.devc.torque_decimal);
-                    actXET.angleMultiple = (int)Math.Pow(10, actXET.para.angle_decimal);
-
-                    //更新作业号
-                    if (snbatArr != null)
+                    Command currentCommand = e.Command;
+                    switch (currentCommand.TaskState)
                     {
-                        actXET.snBat = snbatArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
-                        actXET.opsn = actXET.wlan.addr + opsnTimeArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] + " " + actXET.snBat.ToString().PadLeft(4, '0');
-
-                        if (!TorquedataGroups.ContainsKey(actXET.opsn))
-                        {
-                            TorquedataGroups.Add(actXET.opsn, new List<double>());
-                            AngledataGroups.Add(actXET.opsn, new List<double>());
-                            dataGroupResults.Add(actXET.opsn, false);
-                        }
+                        case TASKS.REG_BLOCK2_DAT:
+                            if (actXET.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || actXET.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
+                            {
+                                updateDataTable_XH06();
+                                pictureBoxScope_draw();
+                            }
+                            else
+                            {
+                                updateDataTable_XH07();
+                                pictureBoxScope_draw();
+                            }
+                            break;
+                        default:
+                            break;
                     }
 
-                    myDrawPicture.Width = pictureBox1.Width;
-                    myDrawPicture.Height = pictureBox1.Height;
-                    //ucCombox1_SelectedChangedEvent(null, null);
+                    //收到指令切换设备
+                    if (myPictures.Count > 0)
+                    {
+                        MyDevice.myTaskManager.SelectedDev = MyDevice.AddrList[(MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) + 1) % MyDevice.AddrList.Count];
+                        MyDevice.protocol.addr = MyDevice.AddrList[(MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) + 1) % MyDevice.AddrList.Count];
+
+                        //TCP模式要切换端口
+                        if (MyDevice.protocol.type == COMP.TCP)
+                        {
+                            //防止字典查询溢出
+                            if (MyDevice.addr_ip.ContainsKey(MyDevice.protocol.addr.ToString()) &&
+                                MyDevice.clientConnectionItems.ContainsKey(MyDevice.addr_ip[MyDevice.protocol.addr.ToString()])
+                                )
+                            {
+                                MyDevice.protocol.port = MyDevice.clientConnectionItems[MyDevice.addr_ip[MyDevice.protocol.addr.ToString()]];
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
+
+                        //更新设备
+                        actXET = MyDevice.actDev;
+                        actXET.torqueMultiple = (int)Math.Pow(10, actXET.devc.torque_decimal);
+                        actXET.angleMultiple = (int)Math.Pow(10, actXET.para.angle_decimal);
+
+                        //更新作业号
+                        if (snbatArr != null)
+                        {
+                            actXET.snBat = snbatArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                            actXET.opsn = actXET.wlan.addr + opsnTimeArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] + " " + actXET.snBat.ToString().PadLeft(4, '0');
+
+                            if (!TorquedataGroups.ContainsKey(actXET.opsn))
+                            {
+                                TorquedataGroups.Add(actXET.opsn, new List<double>());
+                                AngledataGroups.Add(actXET.opsn, new List<double>());
+                                dataGroupResults.Add(actXET.opsn, false);
+                            }
+                        }
+
+                        myDrawPicture.Width = pictureBox1.Width;
+                        myDrawPicture.Height = pictureBox1.Height;
+                        //ucCombox1_SelectedChangedEvent(null, null);
+                    }
                 }
             };
-            Invoke(action);
+
+            // 异步调用
+            if (this.InvokeRequired)
+            {
+                this.Invoke(action);
+            }
+            else
+            {
+                action();
+            }
+
         }
 
         //计算再拧紧扭矩值
@@ -1788,5 +1857,86 @@ namespace Base.UI.MenuDevice
             return isAngleResist;
         }
 
+        private void receiveData()
+        {
+            //Action action = () =>
+            //{
+            //    for (int i = 0; i < 5; i++)
+            //    {
+            //        if (actXET.data[i].dtype == 0xF1 || actXET.data[i].dtype == 0xF2)
+            //        {
+            //            if (actXET.data[i].dtype == 0xF2)
+            //            {
+            //                Console.WriteLine("初次进入Action" + actXET.data[i].torseries_pk);
+            //            }
+            //        }
+            //    }
+            //    Command currentCommand = e.Command;
+            //    switch (currentCommand.TaskState)
+            //    {
+            //        case TASKS.REG_BLOCK2_DAT:
+            //            if (actXET.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || actXET.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
+            //            {
+            //                updateDataTable_XH06();
+            //                pictureBoxScope_draw();
+            //            }
+            //            else
+            //            {
+            //                updateDataTable_XH07();
+            //                pictureBoxScope_draw();
+            //            }
+            //            break;
+            //        default:
+            //            break;
+            //    }
+
+            //    //收到指令切换设备
+            //    if (myPictures.Count > 0)
+            //    {
+            //        MyDevice.myTaskManager.SelectedDev = MyDevice.AddrList[(MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) + 1) % MyDevice.AddrList.Count];
+            //        MyDevice.protocol.addr = MyDevice.AddrList[(MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) + 1) % MyDevice.AddrList.Count];
+
+            //        //TCP模式要切换端口
+            //        if (MyDevice.protocol.type == COMP.TCP)
+            //        {
+            //            //防止字典查询溢出
+            //            if (MyDevice.addr_ip.ContainsKey(MyDevice.protocol.addr.ToString()) &&
+            //                MyDevice.clientConnectionItems.ContainsKey(MyDevice.addr_ip[MyDevice.protocol.addr.ToString()])
+            //                )
+            //            {
+            //                MyDevice.protocol.port = MyDevice.clientConnectionItems[MyDevice.addr_ip[MyDevice.protocol.addr.ToString()]];
+            //            }
+            //            else
+            //            {
+            //                return;
+            //            }
+            //        }
+
+            //        //更新设备
+            //        actXET = MyDevice.actDev;
+            //        actXET.torqueMultiple = (int)Math.Pow(10, actXET.devc.torque_decimal);
+            //        actXET.angleMultiple = (int)Math.Pow(10, actXET.para.angle_decimal);
+
+            //        //更新作业号
+            //        if (snbatArr != null)
+            //        {
+            //            actXET.snBat = snbatArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+            //            actXET.opsn = actXET.wlan.addr + opsnTimeArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] + " " + actXET.snBat.ToString().PadLeft(4, '0');
+
+            //            if (!TorquedataGroups.ContainsKey(actXET.opsn))
+            //            {
+            //                TorquedataGroups.Add(actXET.opsn, new List<double>());
+            //                AngledataGroups.Add(actXET.opsn, new List<double>());
+            //                dataGroupResults.Add(actXET.opsn, false);
+            //            }
+            //        }
+
+            //        myDrawPicture.Width = pictureBox1.Width;
+            //        myDrawPicture.Height = pictureBox1.Height;
+            //        //ucCombox1_SelectedChangedEvent(null, null);
+            //    }
+            //};
+            //Invoke(action);
+        }
     }
 }

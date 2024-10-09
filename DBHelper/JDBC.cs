@@ -311,6 +311,12 @@ namespace DBHelper
             return DBData.DeleteDataByRecent(num) > 0;
         }
 
+        //删除指定日期的分表数据
+        public static bool DeleteDataByTime(DateTime time)
+        {
+            return DBData.DeleteDataByTime(time) > 0;
+        }
+
         //删除指定工单号 + 序列号 + 日期的数据
         public static bool DeleteDataByWidAndSeqAndTime(string workNum, string sequenceId, DateTime time)
         {

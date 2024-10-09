@@ -5,6 +5,7 @@ using ScottPlot.Plottable;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -34,9 +35,10 @@ namespace Base.UI.MenuData
         private bool isPeakShow = false;                           //是否是峰值展示模式
         private List<DSData> peakShowDataList = new List<DSData>();//峰值模式展示的数据集合（未筛选过）
         private List<DSData> peakFilterDataList = new List<DSData>();//筛选后的实际展示数据集合
-        private bool isRecentDate = false;                         //是否筛选最近日期
+        private bool isRecentDate = true;                          //是否筛选最近日期
         private bool isDataLoad = false;                           //是否数据加载中（加载中其他UI事件均失效）
         private int peakRecentDays = -1;                           //峰值模式下最近几天
+        private DateTime selectDateTime = new DateTime();              //峰值模式下指定日期
 
         private Dictionary<byte, List<DSData>> DataDic = new Dictionary<byte, List<DSData>>(); //不同站点下的信息汇总
 
@@ -50,6 +52,7 @@ namespace Base.UI.MenuData
             if (GetShowType(MyDevice.userDAT + @"\DataShowType.txt") == "1")
             {
                 btn_toggle.Text = "切换\n全局模式";
+                btn_delete.Visible = true;
                 isPeakShow = true;
 
                 //峰值模式展示最近一天的峰值
@@ -58,6 +61,7 @@ namespace Base.UI.MenuData
             else if (GetShowType(MyDevice.userDAT + @"\DataShowType.txt") == "0" || GetShowType(MyDevice.userDAT + @"\DataShowType.txt") == "")
             {
                 btn_toggle.Text = "切换\n峰值模式";
+                btn_delete.Visible = false;
                 isPeakShow = false;
 
                 //显示数据汇总表（根据工单名称）
@@ -71,6 +75,12 @@ namespace Base.UI.MenuData
             btn_toggle.Visible = true;
             btn_toggle.Location = new System.Drawing.Point(btn_back.Location.X, btn_back.Location.Y);
             btn_back.Visible = false;
+
+            //禁止更新后的表格排序
+            for (int i = 0; i < this.dataGridView1.Columns.Count; i++)
+            {
+                dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
         }
 
         //表格初始化
@@ -208,6 +218,7 @@ namespace Base.UI.MenuData
             if (e.RowIndex >= 0)
             {
                 btn_filter.Visible = false;
+                btn_delete.Visible = false;
             }
 
             //峰值模式下（双击只有一层过程数据）
@@ -273,7 +284,13 @@ namespace Base.UI.MenuData
                     default:
                         break;
                 }
-            }        
+            }
+
+            //禁止更新后的表格排序
+            for (int i = 0; i < this.dataGridView1.Columns.Count; i++)
+            {
+                dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
         }
 
         //数据总表——按日期排列
@@ -573,6 +590,7 @@ namespace Base.UI.MenuData
             dataTable = new DataTable();
 
             // 添加列到DataTable
+            dataTable.Columns.Add("是否选择", typeof(bool));
             dataTable.Columns.Add("序号", typeof(int));
             dataTable.Columns.Add("作业号", typeof(string));
             dataTable.Columns.Add("工单编号", typeof(string));
@@ -628,7 +646,7 @@ namespace Base.UI.MenuData
                         default: break;
                     }
 
-                    dataTable.Rows.Add(new object[] { i + 1,
+                    dataTable.Rows.Add(new object[] { false ,i + 1,
                                                   filteredList[i].VinId,
                                                   filteredList[i].DataType == "ActualData" ? "": filteredList[i].WorkNum.ToString(),
                                                   filteredList[i].DataType == "ActualData" ? "": filteredList[i].SequenceId.ToString(),
@@ -679,6 +697,7 @@ namespace Base.UI.MenuData
                 dataTable = new DataTable();
 
                 // 添加列到DataTable
+                dataTable.Columns.Add("是否选择", typeof(bool));
                 dataTable.Columns.Add("序号", typeof(int));
                 dataTable.Columns.Add("作业号", typeof(string));
                 dataTable.Columns.Add("工单编号", typeof(string));
@@ -724,7 +743,7 @@ namespace Base.UI.MenuData
                             default: break;
                         }
 
-                        dataTable.Rows.Add(new object[] { i + 1,
+                        dataTable.Rows.Add(new object[] { false, i + 1,
                                                   filteredList[i].VinId,
                                                   filteredList[i].DataType == "ActualData" ? "": filteredList[i].WorkNum.ToString(),
                                                   filteredList[i].DataType == "ActualData" ? "": filteredList[i].SequenceId.ToString(),
@@ -776,6 +795,7 @@ namespace Base.UI.MenuData
                 dataTable = new DataTable();
 
                 // 添加列到DataTable
+                dataTable.Columns.Add("是否选择", typeof(bool));
                 dataTable.Columns.Add("序号", typeof(int));
                 dataTable.Columns.Add("作业号", typeof(string));
                 dataTable.Columns.Add("工单编号", typeof(string));
@@ -821,7 +841,7 @@ namespace Base.UI.MenuData
                             default: break;
                         }
 
-                        dataTable.Rows.Add(new object[] { i + 1,
+                        dataTable.Rows.Add(new object[] { false, i + 1,
                                                   filteredList[i].VinId,
                                                   filteredList[i].DataType == "ActualData" ? "": filteredList[i].WorkNum.ToString(),
                                                   filteredList[i].DataType == "ActualData" ? "": filteredList[i].SequenceId.ToString(),
@@ -1077,6 +1097,7 @@ namespace Base.UI.MenuData
                         btn_back.Visible = false;
                         btn_toggle.Visible = true;
                         btn_filter.Visible = true;
+                        btn_delete.Visible = true;
 
                         button2.Visible = true;
                         button3.Visible = false;
@@ -1084,12 +1105,21 @@ namespace Base.UI.MenuData
                         bindingSource1.DataSource = tempTable1;//返回顶层表
 
                         dataTable = tempTable1.Copy();
+
+                        AddCheckBoxCol();
+
+                        //获取列的顺序，防止dataGridview展示的内容列的顺序与dataTable不一致
+                        for (int i = 0; i < dataTable.Columns.Count; i++)
+                        {
+                            dataGridView1.Columns[dataTable.Columns[i].ColumnName].DisplayIndex = i;
+                        }
                     }
                     else
                     {
                         btn_back.Visible = true;
                         btn_toggle.Visible = false;
                         btn_filter.Visible = false;
+                        btn_delete.Visible = false;
 
                         button2.Visible = true;
                         button3.Visible = true;
@@ -1102,6 +1132,12 @@ namespace Base.UI.MenuData
                     this.formsPlot1.Plot.Clear();
                     this.formsPlot1.Visible = false;
                     this.comboBox1.Visible = false;
+
+                    //禁止更新后的表格排序
+                    for (int i = 0; i < this.dataGridView1.Columns.Count; i++)
+                    {
+                        dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+                    }
                     return;
                 }
             }
@@ -1155,6 +1191,12 @@ namespace Base.UI.MenuData
                     default:
                         break;
                 }
+            }
+
+            //禁止更新后的表格排序
+            for (int i = 0; i < this.dataGridView1.Columns.Count; i++)
+            {
+                dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
             }
 
             this.formsPlot1.Plot.Clear();
@@ -1644,22 +1686,32 @@ namespace Base.UI.MenuData
             if (btn_toggle.Text == "切换\n峰值模式")
             {
                 btn_toggle.Text = "切换\n全局模式";
+                btn_delete.Visible = true;
                 isPeakShow = true;
                 SaveShowType(1);
 
                 //峰值模式展示最近一天的峰值
                 if (dataTable.Rows.Count > 0) dataTable.Clear();
                 ShowPeakData();
+
+                AddCheckBoxCol();
             }
             else if (btn_toggle.Text == "切换\n全局模式")
             {
                 btn_toggle.Text = "切换\n峰值模式";
+                btn_delete.Visible = false;
                 isPeakShow = false;
                 SaveShowType(0);
 
                 //显示数据汇总表（根据工单名称）
                 if (dataTable.Rows.Count > 0) dataTable.Clear();
                 ShowSummaryData();
+            }
+
+            //禁止更新后的表格排序
+            for (int i = 0; i < this.dataGridView1.Columns.Count; i++)
+            {
+                dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
             }
         }
 
@@ -1769,7 +1821,7 @@ namespace Base.UI.MenuData
                     ucCombox_recentDate.TextValue = "最近7天";
                     break;
                 default:
-                    ucCombox_recentDate.SelectedIndex = 0;
+                    ucCombox_recentDate.TextValue = "最近1天";
                     break;
             }
         }
@@ -1780,6 +1832,7 @@ namespace Base.UI.MenuData
             if (checkBox_recentDate.Checked)
             {
                 await UpdatePeakRecentDate();
+                AddCheckBoxCol();
             }
         }
 
@@ -1852,6 +1905,7 @@ namespace Base.UI.MenuData
             if (!isRecentDate)
             {
                 await UpdatePeakSelectDate();
+                AddCheckBoxCol();
             }
         }
 
@@ -1865,7 +1919,7 @@ namespace Base.UI.MenuData
             try
             {
                 // 获取所选的date，防止UI线程中的值变化
-                DateTime selectDateTime = monthCalendar1.SelectionStart;
+                selectDateTime = monthCalendar1.SelectionStart;
 
                 // 耗时操作放在Task.Run中，避免阻塞UI线程
                 await Task.Run(() => {
@@ -1937,6 +1991,260 @@ namespace Base.UI.MenuData
                 ucCombox_recentDate.Enabled = true;
                 isRecentDate = true;
             }
+        }
+
+        private void AddCheckBoxCol()
+        {
+            //行首替换成checkbox
+            datagridviewCheckboxHeaderCell ch = new datagridviewCheckboxHeaderCell();
+            ch.OnCheckBoxClicked += new datagridviewCheckboxHeaderCell.HeaderEventHander(ch_OnCheckBoxClicked);
+            DataGridViewCheckBoxColumn checkboxCol = dataGridView1.Columns["是否选择"] as DataGridViewCheckBoxColumn;
+            checkboxCol.HeaderCell = ch;
+            checkboxCol.HeaderCell.Value = "";//消除列头checkbox旁出现的文字
+        }
+
+        #region 表多选
+        void ch_OnCheckBoxClicked(object sender, datagridviewCheckboxHeaderEventArgs e)
+        {
+            if (dataGridView1.RowCount < 1) return; //防止表格无单元格时，BeginEdit()导致报错，无法执行此操作。
+            dataGridView1.SuspendLayout();//暂停布局更新
+            dataGridView1.BeginEdit(false);//批量操作开始，避免更改值时触发额外的事件和验证
+            foreach (DataGridViewRow dgvRow in dataGridView1.Rows)
+            {
+                if (e.CheckedState)
+                {
+                    dgvRow.Cells[0].Value = true;
+                }
+                else
+                {
+                    dgvRow.Cells[0].Value = false;
+                }
+            }
+            dataGridView1.EndEdit();//批量操作结束
+            dataGridView1.ResumeLayout();//恢复布局更新
+        }
+
+        public class datagridviewCheckboxHeaderEventArgs : EventArgs
+        {
+            private bool checkedState = false;
+            public bool CheckedState
+            {
+                get { return checkedState; }
+                set { checkedState = value; }
+            }
+        }
+
+        //定义继承于DataGridViewColumnHeaderCell的类，用于绘制checkbox，定义checkbox鼠标单击事件
+        public class datagridviewCheckboxHeaderCell : DataGridViewColumnHeaderCell
+        {
+            public delegate void HeaderEventHander(object sender, datagridviewCheckboxHeaderEventArgs e);
+            public event HeaderEventHander OnCheckBoxClicked;
+            Point checkBoxLocation;
+            Size checkBoxSize;
+            bool _checked = false;
+            Point _cellLocation = new Point();
+            System.Windows.Forms.VisualStyles.CheckBoxState _cbState =
+                System.Windows.Forms.VisualStyles.CheckBoxState.UncheckedNormal;
+
+            //绘制列头checkbox
+            protected override void Paint(System.Drawing.Graphics graphics,
+               System.Drawing.Rectangle clipBounds,
+               System.Drawing.Rectangle cellBounds,
+               int rowIndex,
+               DataGridViewElementStates dataGridViewElementState,
+               object value,
+               object formattedValue,
+               string errorText,
+               DataGridViewCellStyle cellStyle,
+               DataGridViewAdvancedBorderStyle advancedBorderStyle,
+               DataGridViewPaintParts paintParts)
+            {
+                base.Paint(graphics, clipBounds, cellBounds, rowIndex,
+                    dataGridViewElementState, value,
+                    formattedValue, errorText, cellStyle,
+                    advancedBorderStyle, paintParts);
+                Point p = new Point();
+                Size s = CheckBoxRenderer.GetGlyphSize(graphics,
+                System.Windows.Forms.VisualStyles.CheckBoxState.UncheckedNormal);
+                p.X = cellBounds.Location.X +
+                    (cellBounds.Width / 2) - (s.Width / 2) - 1;//列头checkbox的X坐标
+                p.Y = cellBounds.Location.Y +
+                    (cellBounds.Height / 2) - (s.Height / 2);//列头checkbox的Y坐标
+                _cellLocation = cellBounds.Location;
+                checkBoxLocation = p;
+                checkBoxSize = s;
+                if (_checked)
+                    _cbState = System.Windows.Forms.VisualStyles.
+                        CheckBoxState.CheckedNormal;
+                else
+                    _cbState = System.Windows.Forms.VisualStyles.
+                        CheckBoxState.UncheckedNormal;
+                CheckBoxRenderer.DrawCheckBox
+                (graphics, checkBoxLocation, _cbState);
+            }
+
+            /// <summary>
+            /// 点击列头checkbox单击事件
+            /// </summary>
+            /// <param name="e"></param>
+            protected override void OnMouseClick(DataGridViewCellMouseEventArgs e)
+            {
+                Point p = new Point(e.X + _cellLocation.X, e.Y + _cellLocation.Y);
+                if (p.X >= checkBoxLocation.X && p.X <=
+                    checkBoxLocation.X + checkBoxSize.Width
+                && p.Y >= checkBoxLocation.Y && p.Y <=
+                    checkBoxLocation.Y + checkBoxSize.Height)
+                {
+                    _checked = !_checked;
+                    //获取列头checkbox的选择状态
+                    datagridviewCheckboxHeaderEventArgs ex = new datagridviewCheckboxHeaderEventArgs();
+                    ex.CheckedState = _checked;
+
+                    object sender = new object();//此处不代表选择的列头checkbox，只是作为参数传递。应该列头checkbox是绘制出来的，无法获得它的实例
+
+                    if (OnCheckBoxClicked != null)
+                    {
+                        OnCheckBoxClicked(sender, ex);//触发单击事件
+                        this.DataGridView.InvalidateCell(this);
+                    }
+                }
+                base.OnMouseClick(e);
+            }
+        }
+
+        //结束编辑状态
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (isPeakShow && dataGridView1.Columns[0].GetType() == typeof(DataGridViewCheckBoxColumn))
+            {
+                if (e.RowIndex != -1 && e.ColumnIndex == 0)
+                {
+                    dataGridView1.Rows[e.RowIndex].Cells[0].Value = !Convert.ToBoolean(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
+                }
+            }
+        }
+
+        #endregion
+
+        //加载稳定后引入checkbox自定义列（Load里面使用会导致可能datagridview未稳定就调用方法无效）
+        private void MenuDataManageForm_Shown(object sender, EventArgs e)
+        {
+            // 确保DataGridView的列已初始化
+            if (btn_toggle.Text == "切换\n全局模式")
+            {
+                //行首替换成checkbox
+                AddCheckBoxCol();
+            }
+        }
+
+        //删除数据（峰值模式下）
+        private void btn_delete_Click(object sender, EventArgs e)
+        {
+            //管理员以上的权限
+            if (MyDevice.userRole == "0")
+            {
+                MessageBox.Show("无权限删除工单，请切换管理员用户", "确认", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            //无有效工单
+            if (dataGridView1.RowCount < 1) return;
+
+            List<int> rowsToRemove = new List<int>();// 列表存储要删除的行的索引
+
+            //收集被选中的工单汇总
+            for (int i = 0; i < dataGridView1.RowCount; i++)
+            {
+                if (this.dataGridView1.Rows[i].Cells[0].Value.ToString() == "True")
+                {
+                    //DSTicketInfo selectTicketInfo = new DSTicketInfo();//必须新建局部变量，因为添加的是指针，如果是全局变量，最后添加的工单信息全部一致
+                    //selectTicketInfo.WorkId = Convert.ToUInt32(this.dataGridView1.Rows[i].Cells[1].Value.ToString());
+                    //selectTicketInfos.Add(selectTicketInfo);
+                    rowsToRemove.Add(i);
+                }
+            }
+
+            if (rowsToRemove.Count < 1)
+            {
+                MessageBox.Show("未选择任何有效数据，无法删除", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            else
+            {
+                //全删
+                if (rowsToRemove.Count == dataGridView1.RowCount)
+                {
+                    //最近日期
+                    if (isRecentDate)
+                    {
+                        switch (ucCombox_recentDate.TextValue)
+                        {
+                            case "最近1天":
+                                JDBC.DeleteDataByRecent(1);
+                                break;
+                            case "最近3天":
+                                JDBC.DeleteDataByRecent(3);
+                                break;
+                            case "最近7天":
+                                JDBC.DeleteDataByRecent(7);
+                                break;
+                            default:
+                                JDBC.DeleteDataByRecent(1);
+                                break;
+                        }
+                    }
+                    //指定日期
+                    else
+                    {
+                        if (selectDateTime == new DateTime())
+                        {
+                            MessageBox.Show("指定日期模式下未选择具体的日期，无法删除", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                        JDBC.DeleteDataByTime(selectDateTime.Date);
+                    }
+                }
+                //部分删
+                else
+                {
+                    //最近日期
+                    if (isRecentDate)
+                    {
+
+                    }
+                    //指定日期
+                    else
+                    {
+
+                    }
+                }
+            }
+
+            //逆序遍历删除 （表格行数递减，正序删除容易造成溢出报错）
+            for (int i = rowsToRemove.Count - 1; i >= 0; i--)
+            {
+                this.dataGridView1.Rows.RemoveAt(rowsToRemove[i]);
+            }
+
+            #region 删指定日期
+
+            //全选删除
+
+            //部分选删除
+
+            //单选删除
+
+            #endregion
+
+            #region 删最近日期
+
+            //全选删除
+
+            //部分选删除
+
+            //单选删除
+
+            #endregion
         }
     }
 }

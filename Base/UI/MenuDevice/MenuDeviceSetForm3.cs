@@ -402,14 +402,6 @@ namespace Base.UI.MenuDevice
             };
             ucCombox_alarmode.SelectedIndex = actXET.para.alarmode;
 
-            //WiFi/RF无线
-            ucCombox_wifimode.Source = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("0", "关闭"),
-                new KeyValuePair<string, string>("1", "开启")
-            };
-            ucCombox_wifimode.SelectedIndex = actXET.para.wifimode;
-
             //自动关机时间
             ucTextBoxEx_timeoff.InputText = actXET.para.timeoff <= 0 ? "1" : actXET.para.timeoff.ToString();
 
@@ -512,6 +504,14 @@ namespace Base.UI.MenuDevice
 
             //WiFi密码
             ucTextBoxEx_pwd.InputText = actXET.wlan.wf_pwd;
+
+            //WiFi/RF无线
+            ucCombox_wifimode.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "关闭"),
+                new KeyValuePair<string, string>("1", "开启")
+            };
+            ucCombox_wifimode.SelectedIndex = actXET.wlan.wifimode;
 
             #endregion
         }
@@ -890,7 +890,7 @@ namespace Base.UI.MenuDevice
                 int torqueMin = actXET.devc.torque_min;//量程下限
 
                 //单位转换
-                switch (actXET.devc.unit)
+                switch (actXET.devc.calunit)
                 {
                     //根据不同的标定单位获取指定单位的峰值
                     //标定单位：actXET.devc.unit 指设备初次标定时所用的单位，基准是min = 150, max = 3000
@@ -939,7 +939,7 @@ namespace Base.UI.MenuDevice
 
             List<TASKS> tasks = new List<TASKS>
             {
-                TASKS.REG_BLOCK2_PARA,
+                TASKS.REG_BLOCK3_PARA,
                 TASKS.REG_BLOCK5_AM1,
                 TASKS.REG_BLOCK5_AM2,
                 TASKS.REG_BLOCK5_AM3
@@ -1006,7 +1006,6 @@ namespace Base.UI.MenuDevice
                 }
                 actXET.para.accmode = (byte)ucCombox_accmode.SelectedIndex;
                 actXET.para.alarmode = (byte)ucCombox_alarmode.SelectedIndex;
-                actXET.para.wifimode = (byte)ucCombox_wifimode.SelectedIndex;
                 if (byte.TryParse(ucTextBoxEx_timeoff.InputText, out byte timeoff))
                 {
                     actXET.para.timeoff = timeoff;
@@ -1038,7 +1037,7 @@ namespace Base.UI.MenuDevice
 
             List<TASKS> tasks = new List<TASKS>
             {
-                TASKS.REG_BLOCK2_PARA
+                TASKS.REG_BLOCK3_PARA
             };
 
             for (int i = 0; i < ucDataGridView1.SelectRows.Count; i++)
@@ -1125,6 +1124,8 @@ namespace Base.UI.MenuDevice
             {
                 actXET.wlan.wf_pwd = ucTextBoxEx_pwd.InputText;
             }
+
+            actXET.wlan.wifimode = (byte)ucCombox_wifimode.SelectedIndex;
             actXET.torqueMultiple = (int)Math.Pow(10, actXET.devc.torque_decimal);
             actXET.angleMultiple = (int)Math.Pow(10, actXET.para.angle_decimal);
 
@@ -1175,12 +1176,10 @@ namespace Base.UI.MenuDevice
             if (MyDevice.protocol.type == COMP.UART)
             {
                 //USB串口通讯固定地址01
-                MyDevice.myTaskManager.AddUserCommand(1, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK1_ID, this.Name);
                 MyDevice.myTaskManager.AddUserCommand(1, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK3_WLAN, this.Name);
             }
             else
             {
-                MyDevice.myTaskManager.AddUserCommand(oldAddr, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK1_ID, this.Name);
                 MyDevice.myTaskManager.AddUserCommand(actXET.wlan.addr, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK3_WLAN, this.Name);
             }
         }
@@ -1627,7 +1626,7 @@ namespace Base.UI.MenuDevice
                     Type = actXET.devc.type.ToString(),
                     Version = actXET.devc.version,
                     BohrCode = actXET.devc.bohrcode,
-                    Unit = actXET.devc.unit.ToString(),
+                    Unit = actXET.devc.calunit.ToString(),
                     TorqueDecimal = actXET.devc.torque_decimal,
                     TorqueFdn = actXET.devc.torque_fdn,
                     CalType = actXET.devc.caltype,
@@ -1675,7 +1674,7 @@ namespace Base.UI.MenuDevice
                     HeartCycle = actXET.para.heartcycle,
                     AccMode = actXET.para.accmode,
                     AlarmMode = actXET.para.alarmode,
-                    WifiMode = actXET.para.wifimode,
+                    WifiMode = actXET.wlan.wifimode,
                     TimeOff = actXET.para.timeoff,
                     TimeBack = actXET.para.timeback,
                     TimeZero = actXET.para.timezero,

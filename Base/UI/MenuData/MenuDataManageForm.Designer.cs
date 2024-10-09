@@ -36,6 +36,7 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button3 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btn_delete = new System.Windows.Forms.Button();
             this.btn_filter = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -163,6 +164,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btn_delete);
             this.panel2.Controls.Add(this.btn_filter);
             this.panel2.Controls.Add(this.button2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -170,6 +172,18 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(387, 85);
             this.panel2.TabIndex = 1;
+            // 
+            // btn_delete
+            // 
+            this.btn_delete.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btn_delete.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.btn_delete.Location = new System.Drawing.Point(251, 18);
+            this.btn_delete.Name = "btn_delete";
+            this.btn_delete.Size = new System.Drawing.Size(103, 45);
+            this.btn_delete.TabIndex = 171;
+            this.btn_delete.Text = "删除";
+            this.btn_delete.UseVisualStyleBackColor = false;
+            this.btn_delete.Click += new System.EventHandler(this.btn_delete_Click);
             // 
             // btn_filter
             // 
@@ -286,6 +300,8 @@
             // checkBox_recentDate
             // 
             this.checkBox_recentDate.AutoSize = true;
+            this.checkBox_recentDate.Checked = true;
+            this.checkBox_recentDate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox_recentDate.Location = new System.Drawing.Point(365, 55);
             this.checkBox_recentDate.Name = "checkBox_recentDate";
             this.checkBox_recentDate.Size = new System.Drawing.Size(72, 16);
@@ -297,8 +313,6 @@
             // checkBox_selectDate
             // 
             this.checkBox_selectDate.AutoSize = true;
-            this.checkBox_selectDate.Checked = true;
-            this.checkBox_selectDate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox_selectDate.Location = new System.Drawing.Point(88, 55);
             this.checkBox_selectDate.Name = "checkBox_selectDate";
             this.checkBox_selectDate.Size = new System.Drawing.Size(72, 16);
@@ -358,6 +372,7 @@
             this.dataGridView1.RowTemplate.Height = 23;
             this.dataGridView1.Size = new System.Drawing.Size(1191, 618);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             this.dataGridView1.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseUp);
             // 
@@ -506,6 +521,7 @@
             this.Name = "MenuDataManageForm";
             this.Text = "MenuDataManage";
             this.Load += new System.EventHandler(this.MenuDataManageForm_Load);
+            this.Shown += new System.EventHandler(this.MenuDataManageForm_Shown);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -569,5 +585,6 @@
         private System.Windows.Forms.CheckBox checkBox_selectDate;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.Button btn_delete;
     }
 }

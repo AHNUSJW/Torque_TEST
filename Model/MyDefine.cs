@@ -34,28 +34,27 @@ namespace Model
         WRITE_FIFOCLEAR,        //只连续写,请FIFO缓存大小
         WRITE_MEMABLE,          //只写,打开硬件参数包含
         WRITE_RESET,            //只写，重启设备
+        WRITE_CALVITO,          //只写，更新ad_point后计算斜率
 
         WRITE_FIFO_INDEX,       //只连续写
 
         REG_BLOCK1_DEV,         //只读,标定信息
-        REG_BLOCK4_CAL,         //读写
+        REG_BLOCK4_CAL1,        //读写
+        REG_BLOCK5_CAL2,        //读写
         REG_BLOCK5_INFO,        //读写
         REG_BLOCK3_WLAN,        //读写
-        REG_BLOCK1_ID,          //读写
-        REG_BLOCK2_PARA,        //读写
+        REG_BLOCK3_PARA,        //读写
         REG_BLOCK5_AM1,         //读写
         REG_BLOCK5_AM2,         //读写
         REG_BLOCK5_AM3,         //读写
         REG_BLOCK3_JOB,         //读写
         REG_BLOCK3_OP,          //读写
-        REG_BLOCK1_HEART,       //只读
-        REG_BLOCK1_FIFO,        //只读+读写
-        REG_BLOCK2_DAT,         //只读
-        REG_BLOCK1_SPEC,        //读写
         REG_BLOCK3_SCREW1,      //读写
         REG_BLOCK3_SCREW2,      //读写
         REG_BLOCK3_SCREW3,      //读写
         REG_BLOCK3_SCREW4,      //读写
+        REG_BLOCK1_FIFO,        //只读+读写
+        REG_BLOCK2_DAT,         //只读
 
         //****************针对蓝牙接收器******************//
         REG_R_BLUETOOTH_UNBIND,
@@ -70,24 +69,22 @@ namespace Model
         public const UInt16     TxSize              = 2048;
 
         public const UInt16     REG_BLOCK1_DEV      = (UInt16)REG.REG_R_SERIES;
-        public const UInt16     REG_BLOCK4_CAL      = (UInt16)REG.REG_WR_CAL_UNIT;
+        public const UInt16     REG_BLOCK4_CAL1     = (UInt16)REG.REG_WR_CAL_UNIT;
+        public const UInt16     REG_BLOCK5_CAL2     = (UInt16)REG.REG_WR_CL2_ZERO;
         public const UInt16     REG_BLOCK5_INFO     = (UInt16)REG.REG_WR_SRNO;
-        public const UInt16     REG_BLOCK3_WLAN     = (UInt16)REG.REG_WR_RF_CHAN;
-        public const UInt16     REG_BLOCK1_ID       = (UInt16)REG.REG_WR_ADDR;
+        public const UInt16     REG_BLOCK4_WLAN     = (UInt16)REG.REG_WR_ADDR;
         public const UInt16     REG_BLOCK2_PARA     = (UInt16)REG.REG_WR_TORQUE_UNIT;
         public const UInt16     REG_BLOCK5_AM1      = (UInt16)REG.REG_WR_SN_TARGET0;
         public const UInt16     REG_BLOCK5_AM2      = (UInt16)REG.REG_WR_MN_LOW5;
         public const UInt16     REG_BLOCK5_AM3      = (UInt16)REG.REG_WR_AZ_START0;
         public const UInt16     REG_BLOCK3_JOB      = (UInt16)REG.REG_WR_WO_AREA;
         public const UInt16     REG_BLOCK3_OP       = (UInt16)REG.REG_WR_USER_ID;
-        public const UInt16     REG_BLOCK1_HEART    = (UInt16)REG.REG_R_TORQUE;
-        public const UInt16     REG_BLOCK1_FIFO     = (UInt16)REG.REG_R_FIFO_FULL;
-        public const UInt16     REG_BLOCK2_DAT      = (UInt16)REG.REG_R_RECDAT;
-        public const UInt16     REG_BLOCK1_SPEC     = (UInt16)REG.REG_WR_SPEC;
         public const UInt16     REG_BLOCK3_SCREW1   = (UInt16)REG.REG_WR_SCREWORDER0;
         public const UInt16     REG_BLOCK3_SCREW2   = (UInt16)REG.REG_WR_SCREWORDER48;
         public const UInt16     REG_BLOCK3_SCREW3   = (UInt16)REG.REG_WR_SCREWORDER96;
         public const UInt16     REG_BLOCK3_SCREW4   = (UInt16)REG.REG_WR_SCREWORDER144;
+        public const UInt16     REG_BLOCK1_FIFO     = (UInt16)REG.REG_R_FIFO_FULL;
+        public const UInt16     REG_BLOCK2_DAT      = (UInt16)REG.REG_R_RECDAT;
 
         public const UInt16     REG_BLUETOOTH_UNBIND = (UInt16)REG.REG_WR_BLUETOOTH_UNBIND;
     }

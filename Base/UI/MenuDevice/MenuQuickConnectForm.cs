@@ -255,8 +255,8 @@ namespace Base.UI.MenuDevice
                     case TASKS.REG_BLOCK1_DEV:
                         if (MyDevice.protocol.isEqual)
                         {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL);
-                            meTask = TASKS.REG_BLOCK4_CAL;
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL1);
+                            meTask = TASKS.REG_BLOCK4_CAL1;
                         }
                         else
                         {
@@ -273,7 +273,7 @@ namespace Base.UI.MenuDevice
                         }
                         break;
 
-                    case TASKS.REG_BLOCK4_CAL:
+                    case TASKS.REG_BLOCK4_CAL1:
                         if (MyDevice.protocol.isEqual)
                         {
                             MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_INFO);
@@ -281,8 +281,8 @@ namespace Base.UI.MenuDevice
                         }
                         else
                         {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL);
-                            meTask = TASKS.REG_BLOCK4_CAL;
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL1);
+                            meTask = TASKS.REG_BLOCK4_CAL1;
                         }
                         break;
 
@@ -302,8 +302,8 @@ namespace Base.UI.MenuDevice
                     case TASKS.REG_BLOCK3_WLAN:
                         if (MyDevice.protocol.isEqual)
                         {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_ID);
-                            meTask = TASKS.REG_BLOCK1_ID;
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_PARA);
+                            meTask = TASKS.REG_BLOCK3_PARA;
                         }
                         else
                         {
@@ -312,20 +312,7 @@ namespace Base.UI.MenuDevice
                         }
                         break;
 
-                    case TASKS.REG_BLOCK1_ID:
-                        if (MyDevice.protocol.isEqual)
-                        {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK2_PARA);
-                            meTask = TASKS.REG_BLOCK2_PARA;
-                        }
-                        else
-                        {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_ID);
-                            meTask = TASKS.REG_BLOCK1_ID;
-                        }
-                        break;
-
-                    case TASKS.REG_BLOCK2_PARA:
+                    case TASKS.REG_BLOCK3_PARA:
                         if (MyDevice.protocol.isEqual)
                         {
                             MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_AM1);
@@ -333,8 +320,8 @@ namespace Base.UI.MenuDevice
                         }
                         else
                         {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK2_PARA);
-                            meTask = TASKS.REG_BLOCK2_PARA;
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_PARA);
+                            meTask = TASKS.REG_BLOCK3_PARA;
                         }
                         break;
 
@@ -393,8 +380,8 @@ namespace Base.UI.MenuDevice
                     case TASKS.REG_BLOCK3_OP:
                         if (MyDevice.protocol.isEqual)
                         {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_HEART);
-                            meTask = TASKS.REG_BLOCK1_HEART;
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_FIFO);
+                            meTask = TASKS.REG_BLOCK1_FIFO;
                         }
                         else
                         {
@@ -403,24 +390,11 @@ namespace Base.UI.MenuDevice
                         }
                         break;
 
-                    case TASKS.REG_BLOCK1_HEART:
-                        if (MyDevice.protocol.isEqual)
-                        {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_FIFO);
-                            meTask = TASKS.REG_BLOCK1_FIFO;
-                        }
-                        else
-                        {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK1_HEART);
-                            meTask = TASKS.REG_BLOCK1_HEART;
-                        }
-                        break;
-
                     case TASKS.REG_BLOCK1_FIFO:
                         if (MyDevice.protocol.isEqual)
                         {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
-                            meTask = TASKS.REG_BLOCK2_DAT;
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                            meTask = TASKS.REG_BLOCK3_SCREW1;
                         }
                         else
                         {
@@ -429,15 +403,54 @@ namespace Base.UI.MenuDevice
                         }
                         break;
 
-                    case TASKS.REG_BLOCK2_DAT:
+                    case TASKS.REG_BLOCK3_SCREW1:
+                        if (MyDevice.protocol.isEqual)
+                        {
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW2);
+                            meTask = TASKS.REG_BLOCK3_SCREW2;
+                        }
+                        else
+                        {
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
+                            meTask = TASKS.REG_BLOCK3_SCREW1;
+                        }
+                        break;
+
+                    case TASKS.REG_BLOCK3_SCREW2:
+                        if (MyDevice.protocol.isEqual)
+                        {
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW3);
+                            meTask = TASKS.REG_BLOCK3_SCREW3;
+                        }
+                        else
+                        {
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW2);
+                            meTask = TASKS.REG_BLOCK3_SCREW2;
+                        }
+                        break;
+
+                    case TASKS.REG_BLOCK3_SCREW3:
+                        if (MyDevice.protocol.isEqual)
+                        {
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW4);
+                            meTask = TASKS.REG_BLOCK3_SCREW4;
+                        }
+                        else
+                        {
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW3);
+                            meTask = TASKS.REG_BLOCK3_SCREW3;
+                        }
+                        break;
+
+                    case TASKS.REG_BLOCK3_SCREW4:
                         if (MyDevice.protocol.isEqual)
                         {
                             meTask = TASKS.NULL;
                         }
                         else
                         {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
-                            meTask = TASKS.REG_BLOCK2_DAT;
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW4);
+                            meTask = TASKS.REG_BLOCK3_SCREW4;
                         }
                         break;
 
@@ -936,15 +949,13 @@ namespace Base.UI.MenuDevice
                     case TASKS.REG_BLOCK1_DEV:
                         isConnecting = true;//正在连接，禁止关闭页面
                         break;
-                    case TASKS.REG_BLOCK4_CAL:
+                    case TASKS.REG_BLOCK4_CAL1:
                         break;
                     case TASKS.REG_BLOCK5_INFO:
                         break;
                     case TASKS.REG_BLOCK3_WLAN:
                         break;
-                    case TASKS.REG_BLOCK1_ID:
-                        break;
-                    case TASKS.REG_BLOCK2_PARA:
+                    case TASKS.REG_BLOCK3_PARA:
                         break;
                     case TASKS.REG_BLOCK5_AM1:
                         break;
@@ -956,11 +967,17 @@ namespace Base.UI.MenuDevice
                         break;
                     case TASKS.REG_BLOCK3_OP:
                         break;
-                    case TASKS.REG_BLOCK1_HEART:
-                        break;
                     case TASKS.REG_BLOCK1_FIFO:
                         break;
                     case TASKS.REG_BLOCK2_DAT:
+                        break;
+                    case TASKS.REG_BLOCK3_SCREW1:
+                        break;
+                    case TASKS.REG_BLOCK3_SCREW2:
+                        break;
+                    case TASKS.REG_BLOCK3_SCREW3:
+                        break;
+                    case TASKS.REG_BLOCK3_SCREW4:
                         //成功连接，更新连接扳手信息(先更新数据库，防止多设备连接时当前设备地址成功后还未存入就递增扫描了，存入的是扫描地址)
                         //updateDatabaseWrench();
 

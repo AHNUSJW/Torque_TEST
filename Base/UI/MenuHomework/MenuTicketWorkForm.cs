@@ -957,7 +957,7 @@ namespace Base.UI.MenuHomework
                                 {
                                     isDataValid = true;
                                     //扭矩优先模式下再判断复拧角度
-                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, actXET.spec.angle_resist);
+                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, actXET.para.angle_resist);
                                 }
                                 else
                                 {
@@ -980,7 +980,7 @@ namespace Base.UI.MenuHomework
                                 if (actXET.alam.MN_low[actXET.para.mode_mx, (int)actXET.para.torque_unit] <= torque && torque <= actXET.alam.MN_high[actXET.para.mode_mx, (int)actXET.para.torque_unit])
                                 {
                                     isDataValid = true;
-                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, actXET.spec.angle_resist);
+                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, actXET.para.angle_resist);
                                 }
                                 else
                                 {
@@ -1145,7 +1145,7 @@ namespace Base.UI.MenuHomework
             //设置参数及报警值
             List<TASKS> tasks = new List<TASKS>
             {
-                TASKS.REG_BLOCK2_PARA,
+                TASKS.REG_BLOCK3_PARA,
                 TASKS.REG_BLOCK5_AM1,
                 TASKS.REG_BLOCK5_AM2,
                 TASKS.REG_BLOCK5_AM3,

@@ -144,6 +144,13 @@ namespace Model
                 return rxWnt;
             }
         }
+        public Int32 rxReadCnt
+        {
+            get
+            {
+                return rxRnt;
+            }
+        }
         public Boolean isEqual
         {
             get
@@ -290,8 +297,8 @@ namespace Model
                     (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK1_DEV >> 8, Constants.REG_BLOCK1_DEV & 0xFF, 0x00, 0x10 }).CopyTo(meTXD, 0);
                     break;
 
-                case TASKS.REG_BLOCK4_CAL:
-                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK4_CAL >> 8, Constants.REG_BLOCK4_CAL & 0xFF, 0x00, 0x40 }).CopyTo(meTXD, 0);
+                case TASKS.REG_BLOCK4_CAL1:
+                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK4_CAL1 >> 8, Constants.REG_BLOCK4_CAL1 & 0xFF, 0x00, 0x40 }).CopyTo(meTXD, 0);
                     break;
 
                 case TASKS.REG_BLOCK5_INFO:
@@ -299,15 +306,11 @@ namespace Model
                     break;
 
                 case TASKS.REG_BLOCK3_WLAN:
-                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK3_WLAN >> 8, Constants.REG_BLOCK3_WLAN & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
+                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK4_WLAN >> 8, Constants.REG_BLOCK4_WLAN & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
                     break;
 
-                case TASKS.REG_BLOCK1_ID:
-                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK1_ID >> 8, Constants.REG_BLOCK1_ID & 0xFF, 0x00, 0x10 }).CopyTo(meTXD, 0);
-                    break;
-
-                case TASKS.REG_BLOCK2_PARA:
-                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK2_PARA >> 8, Constants.REG_BLOCK2_PARA & 0xFF, 0x00, 0x20 }).CopyTo(meTXD, 0);
+                case TASKS.REG_BLOCK3_PARA:
+                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK2_PARA >> 8, Constants.REG_BLOCK2_PARA & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
                     break;
 
                 case TASKS.REG_BLOCK5_AM1:
@@ -330,20 +333,12 @@ namespace Model
                     (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK3_OP >> 8, Constants.REG_BLOCK3_OP & 0xFF, 0x00, 0x30 }).CopyTo(meTXD, 0);
                     break;
 
-                case TASKS.REG_BLOCK1_HEART:
-                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK1_HEART >> 8, Constants.REG_BLOCK1_HEART & 0xFF, 0x00, 0x10 }).CopyTo(meTXD, 0);
-                    break;
-
                 case TASKS.REG_BLOCK1_FIFO:
                     (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK1_FIFO >> 8, Constants.REG_BLOCK1_FIFO & 0xFF, 0x00, 0x10 }).CopyTo(meTXD, 0);
                     break;
 
                 case TASKS.REG_BLOCK2_DAT://读dat一次性读5包 —— 0x48
                     (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK2_DAT >> 8, Constants.REG_BLOCK2_DAT & 0xFF, 0x00, 0x48 }).CopyTo(meTXD, 0);
-                    break;
-
-                case TASKS.REG_BLOCK1_SPEC:
-                    (new Byte[] { sAddress, (byte)CMD.CMD_READ, Constants.REG_BLOCK1_SPEC >> 8, Constants.REG_BLOCK1_SPEC & 0xFF, 0x00, 0x10 }).CopyTo(meTXD, 0);
                     break;
 
                 case TASKS.REG_BLOCK3_SCREW1:
@@ -402,7 +397,9 @@ namespace Model
                 case TASKS.WRITE_MEMABLE:
                     (new Byte[] { sAddress, (byte)CMD.CMD_WRITE, (UInt16)REG.REG_W_MEMABLE >> 8, (UInt16)REG.REG_W_MEMABLE & 0xFF, (byte)(data >> 8), (byte)(data & 0xFF) }).CopyTo(meTXD, 0);
                     break;
-
+                case TASKS.WRITE_RESET:
+                    (new Byte[] { sAddress, (byte)CMD.CMD_WRITE, (UInt16)REG.REG_W_RESET >> 8, (UInt16)REG.REG_W_RESET & 0xFF, 0xFF, 0xFF }).CopyTo(meTXD, 0);
+                    break;
                 default:
                     break;
             }
@@ -435,17 +432,17 @@ namespace Model
             //
             switch (meTask)
             {
-                case TASKS.REG_BLOCK4_CAL:
+                case TASKS.REG_BLOCK4_CAL1:
                     num = 0x40;//64个寄存器个数
                     meTXD[idx++] = sAddress;
                     meTXD[idx++] = (byte)CMD.CMD_SEQUENCE;
-                    meTXD[idx++] = Constants.REG_BLOCK4_CAL >> 8;
-                    meTXD[idx++] = Constants.REG_BLOCK4_CAL & 0xFF;
+                    meTXD[idx++] = Constants.REG_BLOCK4_CAL1 >> 8;
+                    meTXD[idx++] = Constants.REG_BLOCK4_CAL1 & 0xFF;
                     meTXD[idx++] = 0x00;
                     meTXD[idx++] = num;
                     meTXD[idx++] = (byte)(num * 2);
                     meTXD[idx++] = 0x00;
-                    meTXD[idx++] = (byte)MyDevice.mBUS[sAddress].devc.unit;
+                    meTXD[idx++] = (byte)MyDevice.mBUS[sAddress].devc.calunit;
                     meTXD[idx++] = 0x00;
                     meTXD[idx++] = (byte)MyDevice.mBUS[sAddress].devc.caltype;
                     meTXD[idx++] = 0x00;
@@ -456,6 +453,36 @@ namespace Model
                     meTXD[idx++] = 0xFF;
                     meTXD[idx++] = 0xFF;
                     meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    MyDevice.myUIT.I = MyDevice.mBUS[sAddress].devc.torque_disp;
+                    meTXD[idx++] = MyDevice.myUIT.B3;
+                    meTXD[idx++] = MyDevice.myUIT.B2;
+                    meTXD[idx++] = MyDevice.myUIT.B1;
+                    meTXD[idx++] = MyDevice.myUIT.B0;
+                    MyDevice.myUIT.I = MyDevice.mBUS[sAddress].devc.torque_min;
+                    meTXD[idx++] = MyDevice.myUIT.B3;
+                    meTXD[idx++] = MyDevice.myUIT.B2;
+                    meTXD[idx++] = MyDevice.myUIT.B1;
+                    meTXD[idx++] = MyDevice.myUIT.B0;
+                    MyDevice.myUIT.I = MyDevice.mBUS[sAddress].devc.torque_max;
+                    meTXD[idx++] = MyDevice.myUIT.B3;
+                    meTXD[idx++] = MyDevice.myUIT.B2;
+                    meTXD[idx++] = MyDevice.myUIT.B1;
+                    meTXD[idx++] = MyDevice.myUIT.B0;
+                    MyDevice.myUIT.I = MyDevice.mBUS[sAddress].devc.torque_over[(byte)MyDevice.mBUS[sAddress].devc.calunit];
+                    meTXD[idx++] = MyDevice.myUIT.B3;
+                    meTXD[idx++] = MyDevice.myUIT.B2;
+                    meTXD[idx++] = MyDevice.myUIT.B1;
+                    meTXD[idx++] = MyDevice.myUIT.B0;
                     MyDevice.myUIT.I = MyDevice.mBUS[sAddress].devc.capacity;
                     meTXD[idx++] = MyDevice.myUIT.B3;
                     meTXD[idx++] = MyDevice.myUIT.B2;
@@ -566,26 +593,6 @@ namespace Model
                     meTXD[idx++] = MyDevice.myUIT.B2;
                     meTXD[idx++] = MyDevice.myUIT.B1;
                     meTXD[idx++] = MyDevice.myUIT.B0;
-                    MyDevice.myUIT.I = MyDevice.mBUS[sAddress].devc.torque_disp;
-                    meTXD[idx++] = MyDevice.myUIT.B3;
-                    meTXD[idx++] = MyDevice.myUIT.B2;
-                    meTXD[idx++] = MyDevice.myUIT.B1;
-                    meTXD[idx++] = MyDevice.myUIT.B0;
-                    MyDevice.myUIT.I = MyDevice.mBUS[sAddress].devc.torque_min;
-                    meTXD[idx++] = MyDevice.myUIT.B3;
-                    meTXD[idx++] = MyDevice.myUIT.B2;
-                    meTXD[idx++] = MyDevice.myUIT.B1;
-                    meTXD[idx++] = MyDevice.myUIT.B0;
-                    MyDevice.myUIT.I = MyDevice.mBUS[sAddress].devc.torque_max;
-                    meTXD[idx++] = MyDevice.myUIT.B3;
-                    meTXD[idx++] = MyDevice.myUIT.B2;
-                    meTXD[idx++] = MyDevice.myUIT.B1;
-                    meTXD[idx++] = MyDevice.myUIT.B0;
-                    MyDevice.myUIT.I = MyDevice.mBUS[sAddress].devc.torque_over[(byte)MyDevice.mBUS[sAddress].devc.unit];
-                    meTXD[idx++] = MyDevice.myUIT.B3;
-                    meTXD[idx++] = MyDevice.myUIT.B2;
-                    meTXD[idx++] = MyDevice.myUIT.B1;
-                    meTXD[idx++] = MyDevice.myUIT.B0;
 
                     while (idx < 128 + 7)
                     {
@@ -677,72 +684,22 @@ namespace Model
                     num = 0x30;//48个寄存器个数
                     meTXD[idx++] = sAddress;
                     meTXD[idx++] = (byte)CMD.CMD_SEQUENCE;
-                    meTXD[idx++] = Constants.REG_BLOCK3_WLAN >> 8;
-                    meTXD[idx++] = Constants.REG_BLOCK3_WLAN & 0xFF;
+                    meTXD[idx++] = Constants.REG_BLOCK4_WLAN >> 8;
+                    meTXD[idx++] = Constants.REG_BLOCK4_WLAN & 0xFF;
                     meTXD[idx++] = 0x00;
                     meTXD[idx++] = num;
                     meTXD[idx++] = (byte)(num * 2);
                     meTXD[idx++] = 0x00;
-                    meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.rf_chan;
-                    meTXD[idx++] = 0x00;
-                    meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.rf_option;
-                    meTXD[idx++] = 0x00;
-                    meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.rf_para;
+                    meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.addr;
                     meTXD[idx++] = 0x00;
                     meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.rs485_baud;
                     meTXD[idx++] = 0x00;
                     meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.rs485_stopbit;
                     meTXD[idx++] = 0x00;
                     meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.rs485_parity;
-
-                    //预留字节
-                    for (int i = idx; i < 32 + 7; i++)
-                    {
-                        meTXD[idx++] = 0xFF;
-                    }
-
-                    //MyDevice.mBUS[sAddress].wlan.wf_ssid
-                    //wf_ssid 32个字节，以BEM46示例， 字节显示为 00 42 00 45 00 4D 00 34 00 36 ... 00
-                    strArr = Encoding.ASCII.GetBytes(MyDevice.mBUS[sAddress].wlan.wf_ssid);
-                    strLen = strArr.Length;
-                    for(int i = 0; i < strLen; i++)
-                    {
-                        meTXD[idx++] = 0x00;
-                        meTXD[idx++] = strArr[i];
-                    }
-                    while (idx < 64 + 7)
-                    {
-                        meTXD[idx++] = 0x00;
-                    }
-
-                    //MyDevice.mBUS[sAddress].wlan.wf_pwd
-                    strArr = Encoding.ASCII.GetBytes(MyDevice.mBUS[sAddress].wlan.wf_pwd);
-                    strLen = strArr.Length;
-                    for (int i = 0; i < strLen; i++)
-                    {
-                        meTXD[idx++] = 0x00;
-                        meTXD[idx++] = strArr[i];
-                    }
-                    while (idx < 96 + 7)
-                    {
-                        meTXD[idx++] = 0x00;
-                    }
-
-                    break;
-
-                case TASKS.REG_BLOCK1_ID:
-                    num = 0x10;//16个寄存器个数
-                    meTXD[idx++] = sAddress;
-                    meTXD[idx++] = (byte)CMD.CMD_SEQUENCE;
-                    meTXD[idx++] = Constants.REG_BLOCK1_ID >> 8;
-                    meTXD[idx++] = Constants.REG_BLOCK1_ID & 0xFF;
                     meTXD[idx++] = 0x00;
-                    meTXD[idx++] = num;
-                    meTXD[idx++] = (byte)(num * 2);
-                    meTXD[idx++] = 0x00;
-                    meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.addr;
-                    meTXD[idx++] = 0xFF;
-                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.wifimode;
+
 
                     //示例ip地址给的字符串为 C0A80101 ，转成8个字节为 00 192 00 168 00 01 01
                     meTXD[idx++] = 0x00;
@@ -758,15 +715,48 @@ namespace Model
                     meTXD[idx++] = Convert.ToByte(MyDevice.mBUS[sAddress].wlan.wf_port.ToString("X2").Substring(0, 2), 16);
                     meTXD[idx++] = Convert.ToByte(MyDevice.mBUS[sAddress].wlan.wf_port.ToString("X2").Substring(2, 2), 16);
 
-                    //预留字节
-                    for (int i = idx; i < 32 + 7; i++)
+                    //MyDevice.mBUS[sAddress].wlan.wf_ssid
+                    //wf_ssid 32个字节，以BEM46示例， 字节显示为 00 42 00 45 00 4D 00 34 00 36 ... 00
+                    strArr = Encoding.ASCII.GetBytes(MyDevice.mBUS[sAddress].wlan.wf_ssid);
+                    strLen = strArr.Length;
+                    for(int i = 0; i < strLen; i++)
+                    {
+                        meTXD[idx++] = 0x00;
+                        meTXD[idx++] = strArr[i];
+                    }
+                    while (idx < 52 + 7)
+                    {
+                        meTXD[idx++] = 0x00;
+                    }
+
+                    //MyDevice.mBUS[sAddress].wlan.wf_pwd
+                    strArr = Encoding.ASCII.GetBytes(MyDevice.mBUS[sAddress].wlan.wf_pwd);
+                    strLen = strArr.Length;
+                    for (int i = 0; i < strLen; i++)
+                    {
+                        meTXD[idx++] = 0x00;
+                        meTXD[idx++] = strArr[i];
+                    }
+                    while (idx < 84 + 7)
+                    {
+                        meTXD[idx++] = 0x00;
+                    }
+
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.rf_chan;
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.rf_option;
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = MyDevice.mBUS[sAddress].wlan.rf_para;
+                    while (idx < 96 + 7)
                     {
                         meTXD[idx++] = 0xFF;
                     }
+
                     break;
 
-                case TASKS.REG_BLOCK2_PARA:
-                    num = 0x20;//32个寄存器个数
+                case TASKS.REG_BLOCK3_PARA:
+                    num = 0x30;//48个寄存器个数
                     meTXD[idx++] = sAddress;
                     meTXD[idx++] = (byte)CMD.CMD_SEQUENCE;
                     meTXD[idx++] = Constants.REG_BLOCK2_PARA >> 8;
@@ -806,8 +796,6 @@ namespace Model
                     meTXD[idx++] = 0x00;
                     meTXD[idx++] = MyDevice.mBUS[sAddress].para.alarmode;
                     meTXD[idx++] = 0x00;
-                    meTXD[idx++] = MyDevice.mBUS[sAddress].para.wifimode;
-                    meTXD[idx++] = 0x00;
                     meTXD[idx++] = MyDevice.mBUS[sAddress].para.timeoff;
                     meTXD[idx++] = 0x00;
                     meTXD[idx++] = MyDevice.mBUS[sAddress].para.timeback;
@@ -831,15 +819,6 @@ namespace Model
                     meTXD[idx++] = 0x00;
                     meTXD[idx++] = (byte)MyDevice.mBUS[sAddress].para.trackzero;
 
-                    meTXD[idx++] = 0xFF;
-                    meTXD[idx++] = 0xFF;
-
-                    MyDevice.myUIT.F = MyDevice.mBUS[sAddress].para.angcorr;
-                    meTXD[idx++] = MyDevice.myUIT.B3;
-                    meTXD[idx++] = MyDevice.myUIT.B2;
-                    meTXD[idx++] = MyDevice.myUIT.B1;
-                    meTXD[idx++] = MyDevice.myUIT.B0;
-
                     MyDevice.myUIT.US = MyDevice.mBUS[sAddress].para.amenable;
                     meTXD[idx++] = MyDevice.myUIT.B1;
                     meTXD[idx++] = MyDevice.myUIT.B0;
@@ -848,9 +827,32 @@ namespace Model
                     meTXD[idx++] = MyDevice.mBUS[sAddress].para.screwmax;
                     meTXD[idx++] = 0x00;
                     meTXD[idx++] = MyDevice.mBUS[sAddress].para.runmode;
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = MyDevice.mBUS[sAddress].para.auploaden;
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = MyDevice.mBUS[sAddress].para.devrole;
+
+                    //预留6个字节
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0xFF;
+
+                    MyDevice.myUIT.F = MyDevice.mBUS[sAddress].para.angcorr;
+                    meTXD[idx++] = MyDevice.myUIT.B3;
+                    meTXD[idx++] = MyDevice.myUIT.B2;
+                    meTXD[idx++] = MyDevice.myUIT.B1;
+                    meTXD[idx++] = MyDevice.myUIT.B0;
+                    MyDevice.myUIT.I = MyDevice.mBUS[sAddress].para.angle_resist;
+                    meTXD[idx++] = MyDevice.myUIT.B3;
+                    meTXD[idx++] = MyDevice.myUIT.B2;
+                    meTXD[idx++] = MyDevice.myUIT.B1;
+                    meTXD[idx++] = MyDevice.myUIT.B0;
 
                     //预留字节
-                    for (int i = idx; i < 64 + 7; i++)
+                    for (int i = idx; i < 96 + 7; i++)
                     {
                         meTXD[idx++] = 0xFF;
                     }
@@ -1086,29 +1088,6 @@ namespace Model
                     }
                     //预留字节
                     for (int i = idx; i < 96 + 7; i++)
-                    {
-                        meTXD[idx++] = 0xFF;
-                    }
-
-                    break;
-
-                case TASKS.REG_BLOCK1_SPEC:
-                    num = 0x10;//16个寄存器个数
-                    meTXD[idx++] = sAddress;
-                    meTXD[idx++] = (byte)CMD.CMD_SEQUENCE;
-                    meTXD[idx++] = Constants.REG_BLOCK1_SPEC >> 8;
-                    meTXD[idx++] = Constants.REG_BLOCK1_SPEC & 0xFF;
-                    meTXD[idx++] = 0x00;
-                    meTXD[idx++] = num;
-                    meTXD[idx++] = (byte)(num * 2);
-                    MyDevice.myUIT.I = MyDevice.mBUS[sAddress].spec.angle_resist;
-                    meTXD[idx++] = MyDevice.myUIT.B3;
-                    meTXD[idx++] = MyDevice.myUIT.B2;
-                    meTXD[idx++] = MyDevice.myUIT.B1;
-                    meTXD[idx++] = MyDevice.myUIT.B0;
-                    
-                    //预留字节
-                    for (int i = idx; i < 32 + 7; i++)
                     {
                         meTXD[idx++] = 0xFF;
                     }
@@ -1425,6 +1404,7 @@ namespace Model
                         MyDevice.mBUS[sAddress].devc.series        = (SERIES)mePort_GetUInt16(3);
                         MyDevice.mBUS[sAddress].devc.type          = (TYPE)mePort_GetUInt16(5);
                         MyDevice.mBUS[sAddress].devc.version       = (byte)mePort_GetUInt16(7);
+                        MyDevice.mBUS[sAddress].devc.hardware      = (byte)mePort_GetUInt16(9);
                         MyDevice.mBUS[sAddress].devc.bohrcode      = mePort_GetUInt16(11);
                         MyDevice.mBUS[sAddress].devc.bohrcode      = mePort_GetUInt16(13) + (MyDevice.mBUS[sAddress].devc.bohrcode << 8);
                         MyDevice.mBUS[sAddress].devc.bohrcode      = mePort_GetUInt16(15) + (MyDevice.mBUS[sAddress].devc.bohrcode << 8);
@@ -1478,46 +1458,25 @@ namespace Model
                     }
                     break;
 
-                case TASKS.REG_BLOCK4_CAL:
+                case TASKS.REG_BLOCK4_CAL1:
                     if (len == 0x85)
                     {
-                        MyDevice.mBUS[sAddress].devc.unit = (UNIT)mePort_GetUInt16(3);
+                        MyDevice.mBUS[sAddress].devc.calunit = (UNIT)mePort_GetUInt16(3);
                         MyDevice.mBUS[sAddress].devc.caltype        = (byte)mePort_GetUInt16(5);
                         MyDevice.mBUS[sAddress].devc.torque_decimal = (byte)mePort_GetUInt16(7);
                         MyDevice.mBUS[sAddress].devc.torque_fdn     = (byte)mePort_GetUInt16(9);
-                        //四个备用字节
-                        MyDevice.mBUS[sAddress].devc.capacity       = mePort_GetInt32(15);
-                        MyDevice.mBUS[sAddress].devc.ad_zero        = mePort_GetInt32(19);
-                        MyDevice.mBUS[sAddress].devc.ad_pos_point1  = mePort_GetInt32(23);
-                        MyDevice.mBUS[sAddress].devc.ad_pos_point2  = mePort_GetInt32(27);
-                        MyDevice.mBUS[sAddress].devc.ad_pos_point3  = mePort_GetInt32(31);
-                        MyDevice.mBUS[sAddress].devc.ad_pos_point4  = mePort_GetInt32(35);
-                        MyDevice.mBUS[sAddress].devc.ad_pos_point5  = mePort_GetInt32(39);
-                        MyDevice.mBUS[sAddress].devc.ad_neg_point1  = mePort_GetInt32(43);
-                        MyDevice.mBUS[sAddress].devc.ad_neg_point2  = mePort_GetInt32(47);
-                        MyDevice.mBUS[sAddress].devc.ad_neg_point3  = mePort_GetInt32(51);
-                        MyDevice.mBUS[sAddress].devc.ad_neg_point4  = mePort_GetInt32(55);
-                        MyDevice.mBUS[sAddress].devc.ad_neg_point5  = mePort_GetInt32(59);
-                        MyDevice.mBUS[sAddress].devc.tq_pos_point1  = mePort_GetInt32(63);
-                        MyDevice.mBUS[sAddress].devc.tq_pos_point2  = mePort_GetInt32(67);
-                        MyDevice.mBUS[sAddress].devc.tq_pos_point3  = mePort_GetInt32(71);
-                        MyDevice.mBUS[sAddress].devc.tq_pos_point4  = mePort_GetInt32(75);
-                        MyDevice.mBUS[sAddress].devc.tq_pos_point5  = mePort_GetInt32(79);
-                        MyDevice.mBUS[sAddress].devc.tq_neg_point1  = mePort_GetInt32(83);
-                        MyDevice.mBUS[sAddress].devc.tq_neg_point2  = mePort_GetInt32(87);
-                        MyDevice.mBUS[sAddress].devc.tq_neg_point3  = mePort_GetInt32(91);
-                        MyDevice.mBUS[sAddress].devc.tq_neg_point4  = mePort_GetInt32(95);
-                        MyDevice.mBUS[sAddress].devc.tq_neg_point5  = mePort_GetInt32(99);
-                        MyDevice.mBUS[sAddress].devc.torque_disp    = mePort_GetInt32(103);
-                        MyDevice.mBUS[sAddress].devc.torque_min     = mePort_GetInt32(107);
-                        MyDevice.mBUS[sAddress].devc.torque_max     = mePort_GetInt32(111);
-                        MyDevice.mBUS[sAddress].devc.torque_over[(int)MyDevice.mBUS[sAddress].devc.unit] = mePort_GetInt32(115);
+                        MyDevice.mBUS[sAddress].devc.calIndex       = (byte)mePort_GetUInt16(11);
+                        //14个备用字节
+                        MyDevice.mBUS[sAddress].devc.torque_disp = mePort_GetInt32(27);
+                        MyDevice.mBUS[sAddress].devc.torque_min = mePort_GetInt32(31);
+                        MyDevice.mBUS[sAddress].devc.torque_max = mePort_GetInt32(35);
+                        MyDevice.mBUS[sAddress].devc.torque_over[(int)MyDevice.mBUS[sAddress].devc.calunit] = mePort_GetInt32(39);
 
                         //更新超量程使用扭矩值——超量程以over作为基准，无论标定单位是什么这个基准均是3600
-                        switch (MyDevice.mBUS[sAddress].devc.unit)
+                        switch (MyDevice.mBUS[sAddress].devc.calunit)
                         {
                             case UNIT.UNIT_nm:
-                                MyDevice.mBUS[sAddress].devc.torque_over[0] = mePort_GetInt32(115);
+                                MyDevice.mBUS[sAddress].devc.torque_over[0] = mePort_GetInt32(39);
                                 MyDevice.mBUS[sAddress].devc.torque_over[1] = UnitConvert.TorqueTransLbfin(MyDevice.mBUS[sAddress].devc.torque_over[0], (byte)UNIT.UNIT_nm);
                                 MyDevice.mBUS[sAddress].devc.torque_over[2] = UnitConvert.TorqueTransLbfft(MyDevice.mBUS[sAddress].devc.torque_over[0], (byte)UNIT.UNIT_nm);
                                 MyDevice.mBUS[sAddress].devc.torque_over[3] = UnitConvert.TorqueTransKgfcm(MyDevice.mBUS[sAddress].devc.torque_over[0], (byte)UNIT.UNIT_nm);
@@ -1525,7 +1484,7 @@ namespace Model
                                 break;
                             case UNIT.UNIT_lbfin:
                                 MyDevice.mBUS[sAddress].devc.torque_over[0] = UnitConvert.TorqueTransNm(MyDevice.mBUS[sAddress].devc.torque_over[1], (byte)UNIT.UNIT_lbfin);
-                                MyDevice.mBUS[sAddress].devc.torque_over[1] = mePort_GetInt32(115);
+                                MyDevice.mBUS[sAddress].devc.torque_over[1] = mePort_GetInt32(39);
                                 MyDevice.mBUS[sAddress].devc.torque_over[2] = UnitConvert.TorqueTransLbfft(MyDevice.mBUS[sAddress].devc.torque_over[1], (byte)UNIT.UNIT_lbfin);
                                 MyDevice.mBUS[sAddress].devc.torque_over[3] = UnitConvert.TorqueTransKgfcm(MyDevice.mBUS[sAddress].devc.torque_over[1], (byte)UNIT.UNIT_lbfin);
                                 MyDevice.mBUS[sAddress].devc.torque_over[4] = UnitConvert.TorqueTransKgfm(MyDevice.mBUS[sAddress].devc.torque_over[1], (byte)UNIT.UNIT_lbfin);
@@ -1533,7 +1492,7 @@ namespace Model
                             case UNIT.UNIT_lbfft:
                                 MyDevice.mBUS[sAddress].devc.torque_over[0] = UnitConvert.TorqueTransNm(MyDevice.mBUS[sAddress].devc.torque_over[2], (byte)UNIT.UNIT_lbfft);
                                 MyDevice.mBUS[sAddress].devc.torque_over[1] = UnitConvert.TorqueTransLbfin(MyDevice.mBUS[sAddress].devc.torque_over[2], (byte)UNIT.UNIT_lbfft);
-                                MyDevice.mBUS[sAddress].devc.torque_over[2] = mePort_GetInt32(115);
+                                MyDevice.mBUS[sAddress].devc.torque_over[2] = mePort_GetInt32(39);
                                 MyDevice.mBUS[sAddress].devc.torque_over[3] = UnitConvert.TorqueTransKgfcm(MyDevice.mBUS[sAddress].devc.torque_over[2], (byte)UNIT.UNIT_lbfft);
                                 MyDevice.mBUS[sAddress].devc.torque_over[4] = UnitConvert.TorqueTransKgfm(MyDevice.mBUS[sAddress].devc.torque_over[2], (byte)UNIT.UNIT_lbfft);
                                 break;
@@ -1541,7 +1500,7 @@ namespace Model
                                 MyDevice.mBUS[sAddress].devc.torque_over[0] = UnitConvert.TorqueTransNm(MyDevice.mBUS[sAddress].devc.torque_over[3], (byte)UNIT.UNIT_kgcm);
                                 MyDevice.mBUS[sAddress].devc.torque_over[1] = UnitConvert.TorqueTransLbfin(MyDevice.mBUS[sAddress].devc.torque_over[3], (byte)UNIT.UNIT_kgcm);
                                 MyDevice.mBUS[sAddress].devc.torque_over[2] = UnitConvert.TorqueTransLbfft(MyDevice.mBUS[sAddress].devc.torque_over[3], (byte)UNIT.UNIT_kgcm);
-                                MyDevice.mBUS[sAddress].devc.torque_over[3] = mePort_GetInt32(115);
+                                MyDevice.mBUS[sAddress].devc.torque_over[3] = mePort_GetInt32(39);
                                 MyDevice.mBUS[sAddress].devc.torque_over[4] = UnitConvert.TorqueTransKgfm(MyDevice.mBUS[sAddress].devc.torque_over[3], (byte)UNIT.UNIT_kgcm);
                                 break;
                             case UNIT.UNIT_kgm:
@@ -1549,12 +1508,35 @@ namespace Model
                                 MyDevice.mBUS[sAddress].devc.torque_over[1] = UnitConvert.TorqueTransLbfin(MyDevice.mBUS[sAddress].devc.torque_over[4], (byte)UNIT.UNIT_kgm);
                                 MyDevice.mBUS[sAddress].devc.torque_over[2] = UnitConvert.TorqueTransLbfft(MyDevice.mBUS[sAddress].devc.torque_over[4], (byte)UNIT.UNIT_kgm);
                                 MyDevice.mBUS[sAddress].devc.torque_over[3] = UnitConvert.TorqueTransKgfcm(MyDevice.mBUS[sAddress].devc.torque_over[4], (byte)UNIT.UNIT_kgm);
-                                MyDevice.mBUS[sAddress].devc.torque_over[4] = mePort_GetInt32(115);
+                                MyDevice.mBUS[sAddress].devc.torque_over[4] = mePort_GetInt32(39);
                                 break;
                             default:
                                 break;
                         }
 
+                        MyDevice.mBUS[sAddress].devc.capacity       = mePort_GetInt32(43);
+                        MyDevice.mBUS[sAddress].devc.ad_zero        = mePort_GetInt32(47);
+                        MyDevice.mBUS[sAddress].devc.ad_pos_point1  = mePort_GetInt32(51);
+                        MyDevice.mBUS[sAddress].devc.ad_pos_point2  = mePort_GetInt32(55);
+                        MyDevice.mBUS[sAddress].devc.ad_pos_point3  = mePort_GetInt32(59);
+                        MyDevice.mBUS[sAddress].devc.ad_pos_point4  = mePort_GetInt32(63);
+                        MyDevice.mBUS[sAddress].devc.ad_pos_point5  = mePort_GetInt32(67);
+                        MyDevice.mBUS[sAddress].devc.ad_neg_point1  = mePort_GetInt32(71);
+                        MyDevice.mBUS[sAddress].devc.ad_neg_point2  = mePort_GetInt32(75);
+                        MyDevice.mBUS[sAddress].devc.ad_neg_point3  = mePort_GetInt32(79);
+                        MyDevice.mBUS[sAddress].devc.ad_neg_point4  = mePort_GetInt32(83);
+                        MyDevice.mBUS[sAddress].devc.ad_neg_point5  = mePort_GetInt32(87);
+                        MyDevice.mBUS[sAddress].devc.tq_pos_point1  = mePort_GetInt32(91);
+                        MyDevice.mBUS[sAddress].devc.tq_pos_point2  = mePort_GetInt32(95);
+                        MyDevice.mBUS[sAddress].devc.tq_pos_point3  = mePort_GetInt32(99);
+                        MyDevice.mBUS[sAddress].devc.tq_pos_point4  = mePort_GetInt32(103);
+                        MyDevice.mBUS[sAddress].devc.tq_pos_point5  = mePort_GetInt32(107);
+                        MyDevice.mBUS[sAddress].devc.tq_neg_point1  = mePort_GetInt32(111);
+                        MyDevice.mBUS[sAddress].devc.tq_neg_point2  = mePort_GetInt32(115);
+                        MyDevice.mBUS[sAddress].devc.tq_neg_point3  = mePort_GetInt32(119);
+                        MyDevice.mBUS[sAddress].devc.tq_neg_point4  = mePort_GetInt32(123);
+                        MyDevice.mBUS[sAddress].devc.tq_neg_point5  = mePort_GetInt32(127);
+                        
                         mePort_DataRemove(0x85);
                         isEQ = true;
                     }
@@ -1589,30 +1571,38 @@ namespace Model
                 case TASKS.REG_BLOCK3_WLAN:
                     if (len == 0x65)
                     {
-                        MyDevice.mBUS[sAddress].wlan.rf_chan     = mePort_GetByte(4);
-                        MyDevice.mBUS[sAddress].wlan.rf_option   = mePort_GetByte(6);
-                        MyDevice.mBUS[sAddress].wlan.rf_para     = mePort_GetByte(8);
-                        MyDevice.mBUS[sAddress].wlan.rs485_baud  = mePort_GetByte(10);
-                        MyDevice.mBUS[sAddress].wlan.rs485_stopbit = mePort_GetByte(12);
-                        MyDevice.mBUS[sAddress].wlan.rs485_parity = mePort_GetByte(14);
-                        MyDevice.mBUS[sAddress].wlan.wf_ssid     = "";
-                        MyDevice.mBUS[sAddress].wlan.wf_pwd      = "";
+                        MyDevice.mBUS[sAddress].wlan.addr          = mePort_GetByte(4);
+                        MyDevice.mBUS[sAddress].wlan.rs485_baud    = mePort_GetByte(6);
+                        MyDevice.mBUS[sAddress].wlan.rs485_stopbit = mePort_GetByte(8);
+                        MyDevice.mBUS[sAddress].wlan.rs485_parity  = mePort_GetByte(10);
+                        MyDevice.mBUS[sAddress].wlan.wifimode      = mePort_GetByte(12);
+                        MyDevice.mBUS[sAddress].wlan.wf_ip         = $"{mePort_GetByte(14):X2}{mePort_GetByte(16):X2}{mePort_GetByte(18):X2}{mePort_GetByte(20):X2}";
+                        MyDevice.mBUS[sAddress].wlan.wf_port       = Convert.ToUInt32(mePort_GetByte(21)) << 8 | Convert.ToUInt32(mePort_GetByte(22)); //两个字节分别位于高低位拼成Uint32
+                        MyDevice.mBUS[sAddress].wlan.wf_ssid       = "";
+                        MyDevice.mBUS[sAddress].wlan.wf_pwd        = "";
+                        //备用两个字节
+
                         //wf_ssid 32个字节，以BEM46示例， 字节显示为 00 42 00 45 00 4D 00 34 00 36 ... 00
                         for (int i = 0; i < 16; i++)
                         {
-                            if (mePort_GetByte((ushort)(35 + i * 2 + 1)) != 0x00)
+                            if (mePort_GetByte((ushort)(23 + i * 2 + 1)) != 0x00)
                             {
-                                MyDevice.mBUS[sAddress].wlan.wf_ssid += (char)mePort_GetByte((ushort)(35 + i * 2 + 1));
+                                MyDevice.mBUS[sAddress].wlan.wf_ssid += (char)mePort_GetByte((ushort)(23 + i * 2 + 1));
                             }
                         }
                         //wf_pwd 32个字节
                         for (int i = 0; i < 16; i++)
                         {
-                            if (mePort_GetByte((ushort)(67 + i * 2 + 1)) != 0x00)
+                            if (mePort_GetByte((ushort)(55 + i * 2 + 1)) != 0x00)
                             {
-                                MyDevice.mBUS[sAddress].wlan.wf_pwd += (char)mePort_GetByte((ushort)(67 + i * 2 + 1));
+                                MyDevice.mBUS[sAddress].wlan.wf_pwd += (char)mePort_GetByte((ushort)(55 + i * 2 + 1));
                             }
                         }
+
+                        MyDevice.mBUS[sAddress].wlan.rf_chan   = mePort_GetByte(88);
+                        MyDevice.mBUS[sAddress].wlan.rf_option = mePort_GetByte(90);
+                        MyDevice.mBUS[sAddress].wlan.rf_para   = mePort_GetByte(92);
+
                         mePort_DataRemove(0x65);
                         isEQ = true;
                     }
@@ -1623,24 +1613,8 @@ namespace Model
                     }
                     break;
 
-                case TASKS.REG_BLOCK1_ID:
-                    if (len == 0x25)
-                    {
-                        MyDevice.mBUS[sAddress].wlan.addr      = mePort_GetByte(4);
-                        MyDevice.mBUS[sAddress].wlan.wf_ip = $"{mePort_GetByte(8):X2}{mePort_GetByte(10):X2}{mePort_GetByte(12):X2}{mePort_GetByte(14):X2}";
-                        MyDevice.mBUS[sAddress].wlan.wf_port   = Convert.ToUInt32(mePort_GetByte(15)) << 8 | Convert.ToUInt32(mePort_GetByte(16)); //两个字节分别位于高低位拼成Uint32
-                        mePort_DataRemove(0x25);
-                        isEQ = true;
-                    }
-                    else
-                    {
-                        mePort_DataRemove(1);
-                        return;
-                    }
-                    break;
-
-                case TASKS.REG_BLOCK2_PARA:
-                    if (len == 0x45)
+                case TASKS.REG_BLOCK3_PARA:
+                    if (len == 0x65)
                     {
                         MyDevice.mBUS[sAddress].para.torque_unit     = (UNIT)mePort_GetByte(4);
                         MyDevice.mBUS[sAddress].para.angle_speed     = mePort_GetByte(6);
@@ -1656,22 +1630,26 @@ namespace Model
                         MyDevice.mBUS[sAddress].para.heartcycle      = mePort_GetUInt16(25);
                         MyDevice.mBUS[sAddress].para.accmode         = mePort_GetByte(28);
                         MyDevice.mBUS[sAddress].para.alarmode        = mePort_GetByte(30);
-                        MyDevice.mBUS[sAddress].para.wifimode        = mePort_GetByte(32);
-                        MyDevice.mBUS[sAddress].para.timeoff         = mePort_GetByte(34);
-                        MyDevice.mBUS[sAddress].para.timeback        = mePort_GetByte(36);
-                        MyDevice.mBUS[sAddress].para.timezero        = mePort_GetByte(38);
-                        MyDevice.mBUS[sAddress].para.disptype        = mePort_GetByte(40);
-                        MyDevice.mBUS[sAddress].para.disptheme       = mePort_GetByte(42);
-                        MyDevice.mBUS[sAddress].para.displan         = mePort_GetByte(44);
-                        MyDevice.mBUS[sAddress].para.unhook          = mePort_GetUInt16(45);
-                        MyDevice.mBUS[sAddress].para.adspeed         = mePort_GetByte(48);
-                        MyDevice.mBUS[sAddress].para.autozero        = (AUTOZERO)mePort_GetByte(50);
-                        MyDevice.mBUS[sAddress].para.trackzero       = (TRACKZERO)mePort_GetByte(52);
-                        MyDevice.mBUS[sAddress].para.angcorr         = mePort_GetFloat(55);
-                        MyDevice.mBUS[sAddress].para.amenable        = mePort_GetUInt16(59);
-                        MyDevice.mBUS[sAddress].para.screwmax        = mePort_GetByte(62);
-                        MyDevice.mBUS[sAddress].para.runmode         = mePort_GetByte(64);
-                        mePort_DataRemove(0x45);
+                        MyDevice.mBUS[sAddress].para.timeoff         = mePort_GetByte(32);
+                        MyDevice.mBUS[sAddress].para.timeback        = mePort_GetByte(34);
+                        MyDevice.mBUS[sAddress].para.timezero        = mePort_GetByte(36);
+                        MyDevice.mBUS[sAddress].para.disptype        = mePort_GetByte(38);
+                        MyDevice.mBUS[sAddress].para.disptheme       = mePort_GetByte(40);
+                        MyDevice.mBUS[sAddress].para.displan         = mePort_GetByte(42);
+                        MyDevice.mBUS[sAddress].para.unhook          = mePort_GetUInt16(43);
+                        MyDevice.mBUS[sAddress].para.adspeed         = mePort_GetByte(46);
+                        MyDevice.mBUS[sAddress].para.autozero        = (AUTOZERO)mePort_GetByte(48);
+                        MyDevice.mBUS[sAddress].para.trackzero       = (TRACKZERO)mePort_GetByte(50);
+                        MyDevice.mBUS[sAddress].para.amenable        = mePort_GetUInt16(51);
+                        MyDevice.mBUS[sAddress].para.screwmax        = mePort_GetByte(54);
+                        MyDevice.mBUS[sAddress].para.runmode         = mePort_GetByte(56);
+                        MyDevice.mBUS[sAddress].para.auploaden       = mePort_GetByte(58);
+                        MyDevice.mBUS[sAddress].para.devrole         = mePort_GetByte(60);
+
+                        MyDevice.mBUS[sAddress].para.angcorr         = mePort_GetFloat(67);
+                        MyDevice.mBUS[sAddress].para.angle_resist    = mePort_GetInt32(71);
+
+                        mePort_DataRemove(0x65);
                         isEQ = true;
                     }
                     else
@@ -2209,27 +2187,6 @@ namespace Model
                     }
                     break;
 
-                case TASKS.REG_BLOCK1_HEART:
-                    if (len == 0x25)
-                    {
-                        MyDevice.mBUS[sAddress].data[0].torque      = mePort_GetInt32(3);
-                        MyDevice.mBUS[sAddress].data[0].torseries_pk = mePort_GetInt32(7);
-                        MyDevice.mBUS[sAddress].data[0].angle       = mePort_GetInt32(11);
-                        MyDevice.mBUS[sAddress].data[0].angle_acc   = mePort_GetInt32(15);
-                        MyDevice.mBUS[sAddress].data[0].update      = Convert.ToBoolean(mePort_GetInt16(19));
-                        MyDevice.mBUS[sAddress].data[0].error       = Convert.ToBoolean(mePort_GetInt16(21));
-                        MyDevice.mBUS[sAddress].data[0].battery     = mePort_GetByte(24);
-                        MyDevice.mBUS[sAddress].data[0].keybuf      = mePort_GetByte(26);
-                        mePort_DataRemove(0x25);
-                        isEQ = true;
-                    }
-                    else
-                    {
-                        mePort_DataRemove(1);
-                        return;
-                    }
-                    break;
-
                 case TASKS.REG_BLOCK1_FIFO:
                     if (len == 0x25)
                     {
@@ -2309,12 +2266,12 @@ namespace Model
                         }
                         else if (MyDevice.mBUS[sAddress].data[0].dtype == 0xF4)  //04一组工单结果帧
                         {
-                            MyDevice.mBUS[sAddress].data[0].mark        = mePort_GetByte(12);
-                            MyDevice.mBUS[sAddress].data[0].mode        = mePort_GetByte(13);
-                            MyDevice.mBUS[sAddress].data[0].screwNum    = mePort_GetByte(14);
-                            MyDevice.mBUS[sAddress].data[0].work_ID     = mePort_GetUInt32(15);
-                            MyDevice.mBUS[sAddress].data[0].work_psq    = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
-                            MyDevice.mBUS[sAddress].data[0].screwSeq    = mePort_GetByte(25);
+                            //MyDevice.mBUS[sAddress].data[0].mark        = mePort_GetByte(12);
+                            //MyDevice.mBUS[sAddress].data[0].mode        = mePort_GetByte(13);
+                            //MyDevice.mBUS[sAddress].data[0].screwCnt    = mePort_GetByte(14);
+                            //MyDevice.mBUS[sAddress].data[0].work_num     = mePort_GetUInt32(15);
+                            //MyDevice.mBUS[sAddress].data[0].work_psq    = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
+                            //MyDevice.mBUS[sAddress].data[0].screwSeq    = mePort_GetByte(25);
                         }
 
                         //第二包
@@ -2368,12 +2325,12 @@ namespace Model
                         }
                         else if (MyDevice.mBUS[sAddress].data[1].dtype == 0xF4)  //04一组工单结果帧
                         {
-                            MyDevice.mBUS[sAddress].data[1].mark        = mePort_GetByte(40);
-                            MyDevice.mBUS[sAddress].data[1].mode        = mePort_GetByte(41);
-                            MyDevice.mBUS[sAddress].data[1].screwNum    = mePort_GetByte(42);
-                            MyDevice.mBUS[sAddress].data[1].work_ID     = mePort_GetUInt32(43);
-                            MyDevice.mBUS[sAddress].data[1].work_psq    = (ulong)(mePort_GetUInt16(47) * Math.Pow(10, 9) + mePort_GetUInt32(49));//6位
-                            MyDevice.mBUS[sAddress].data[1].screwSeq    = mePort_GetByte(53);
+                            //MyDevice.mBUS[sAddress].data[1].mark        = mePort_GetByte(40);
+                            //MyDevice.mBUS[sAddress].data[1].mode        = mePort_GetByte(41);
+                            //MyDevice.mBUS[sAddress].data[1].screwCnt    = mePort_GetByte(42);
+                            //MyDevice.mBUS[sAddress].data[1].work_num     = mePort_GetUInt32(43);
+                            //MyDevice.mBUS[sAddress].data[1].work_psq    = (ulong)(mePort_GetUInt16(47) * Math.Pow(10, 9) + mePort_GetUInt32(49));//6位
+                            //MyDevice.mBUS[sAddress].data[1].screwSeq    = mePort_GetByte(53);
                         }
 
                         //第三包
@@ -2427,12 +2384,12 @@ namespace Model
                         }
                         else if (MyDevice.mBUS[sAddress].data[2].dtype == 0xF4)  //04一组工单结果帧
                         {
-                            MyDevice.mBUS[sAddress].data[2].mark        = mePort_GetByte(68);
-                            MyDevice.mBUS[sAddress].data[2].mode        = mePort_GetByte(69);
-                            MyDevice.mBUS[sAddress].data[2].screwNum    = mePort_GetByte(70);
-                            MyDevice.mBUS[sAddress].data[2].work_ID     = mePort_GetUInt32(71);
-                            MyDevice.mBUS[sAddress].data[2].work_psq    = (ulong)(mePort_GetUInt16(75) * Math.Pow(10, 9) + mePort_GetUInt32(77));//6位
-                            MyDevice.mBUS[sAddress].data[2].screwSeq    = mePort_GetByte(81);
+                            //MyDevice.mBUS[sAddress].data[2].mark        = mePort_GetByte(68);
+                            //MyDevice.mBUS[sAddress].data[2].mode        = mePort_GetByte(69);
+                            //MyDevice.mBUS[sAddress].data[2].screwCnt    = mePort_GetByte(70);
+                            //MyDevice.mBUS[sAddress].data[2].work_num     = mePort_GetUInt32(71);
+                            //MyDevice.mBUS[sAddress].data[2].work_psq    = (ulong)(mePort_GetUInt16(75) * Math.Pow(10, 9) + mePort_GetUInt32(77));//6位
+                            //MyDevice.mBUS[sAddress].data[2].screwSeq    = mePort_GetByte(81);
                         }
 
                         //第四包
@@ -2486,12 +2443,12 @@ namespace Model
                         }
                         else if (MyDevice.mBUS[sAddress].data[3].dtype == 0xF4)  //04一组工单结果帧
                         {
-                            MyDevice.mBUS[sAddress].data[3].mark        = mePort_GetByte(96);
-                            MyDevice.mBUS[sAddress].data[3].mode        = mePort_GetByte(97);
-                            MyDevice.mBUS[sAddress].data[3].screwNum    = mePort_GetByte(98);
-                            MyDevice.mBUS[sAddress].data[3].work_ID     = mePort_GetUInt32(99);
-                            MyDevice.mBUS[sAddress].data[3].work_psq    = (ulong)(mePort_GetUInt16(103) * Math.Pow(10, 9) + mePort_GetUInt32(105));//6位
-                            MyDevice.mBUS[sAddress].data[3].screwSeq    = mePort_GetByte(109);
+                            //MyDevice.mBUS[sAddress].data[3].mark        = mePort_GetByte(96);
+                            //MyDevice.mBUS[sAddress].data[3].mode        = mePort_GetByte(97);
+                            //MyDevice.mBUS[sAddress].data[3].screwCnt    = mePort_GetByte(98);
+                            //MyDevice.mBUS[sAddress].data[3].work_num     = mePort_GetUInt32(99);
+                            //MyDevice.mBUS[sAddress].data[3].work_psq    = (ulong)(mePort_GetUInt16(103) * Math.Pow(10, 9) + mePort_GetUInt32(105));//6位
+                            //MyDevice.mBUS[sAddress].data[3].screwSeq    = mePort_GetByte(109);
                         }
 
                         //第五包
@@ -2545,12 +2502,12 @@ namespace Model
                         }
                         else if (MyDevice.mBUS[sAddress].data[4].dtype == 0xF4)  //04一组工单结果帧
                         {
-                            MyDevice.mBUS[sAddress].data[4].mark        = mePort_GetByte(124);
-                            MyDevice.mBUS[sAddress].data[4].mode        = mePort_GetByte(125);
-                            MyDevice.mBUS[sAddress].data[4].screwNum    = mePort_GetByte(126);
-                            MyDevice.mBUS[sAddress].data[4].work_ID     = mePort_GetUInt32(127);
-                            MyDevice.mBUS[sAddress].data[4].work_psq    = (ulong)(mePort_GetUInt16(131) * Math.Pow(10, 9) + mePort_GetUInt32(133));//6位
-                            MyDevice.mBUS[sAddress].data[4].screwSeq    = mePort_GetByte(137);
+                            //MyDevice.mBUS[sAddress].data[4].mark        = mePort_GetByte(124);
+                            //MyDevice.mBUS[sAddress].data[4].mode        = mePort_GetByte(125);
+                            //MyDevice.mBUS[sAddress].data[4].screwCnt    = mePort_GetByte(126);
+                            //MyDevice.mBUS[sAddress].data[4].work_num     = mePort_GetUInt32(127);
+                            //MyDevice.mBUS[sAddress].data[4].work_psq    = (ulong)(mePort_GetUInt16(131) * Math.Pow(10, 9) + mePort_GetUInt32(133));//6位
+                            //MyDevice.mBUS[sAddress].data[4].screwSeq    = mePort_GetByte(137);
                         }
 
                         List<DSData> sqlDataList = new List<DSData>();//存入数据库的数据列表
@@ -2558,12 +2515,15 @@ namespace Model
                         // 遍历数组并将每个元素的拷贝添加到 List 集合中
                         foreach (DATA data in MyDevice.mBUS[sAddress].data)
                         {
-                            if (data.dtype == 0xF1 || data.dtype == 0xF2 || data.dtype == 0xF3 || data.dtype == 0xF4)      //添加有效数据
+                            if (data.dtype == 0xF1 || data.dtype == 0xF2 || data.dtype == 0xF3)      //添加有效数据
                             {
                                 if (data.dtype == 0xF1 && data.torque == 0 && data.angle == 0) break;
                                 MyDevice.mBUS[sAddress].dataList.Add(data);
 
                                 MyDevice.DataResult = "NG";
+                                MyDevice.TorqueResult = "NG";
+                                MyDevice.AngleResult = "NG";
+                                MyDevice.ResistResult = "NG";
                                 //分析结果
                                 if (data.dtype == 0xF3)
                                 {
@@ -2575,7 +2535,7 @@ namespace Model
                                         //SN模式
                                         case 2:
                                             //峰值扭矩 >= 预设扭矩 = 合格
-                                            if (data.torgroup_pk >= data.alarm[0])
+                                            if (data.torgroup_pk >= data.alarm[0] && data.angle_acc >= data.angle_resist)
                                             {
                                                 MyDevice.DataResult = "pass";
                                             }
@@ -2601,7 +2561,7 @@ namespace Model
                                         //MN模式
                                         case 4:
                                             // 扭矩下限 <= 峰值扭矩 <= 扭矩上限  = 合格
-                                            if (data.alarm[0] <= data.torgroup_pk && data.torgroup_pk <= data.alarm[1])
+                                            if (data.alarm[0] <= data.torgroup_pk && data.torgroup_pk <= data.alarm[1] && data.angle_acc >= data.angle_resist)
                                             {
                                                 MyDevice.DataResult = "pass";
                                             }
@@ -2735,10 +2695,13 @@ namespace Model
                                     DataType = MyDevice.DataType,
                                     Bohrcode = MyDevice.mBUS[sAddress].devc.bohrcode,
                                     DevType = MyDevice.mBUS[sAddress].devc.series + "-" + MyDevice.mBUS[sAddress].devc.type,
+                                    //WorkType = (data.dtype == 0xF4) ? "离线工单" : "",
                                     WorkId = MyDevice.WorkId,
-                                    WorkNum = MyDevice.WorkNum,
-                                    SequenceId = MyDevice.SequenceId,
+                                    WorkNum = (data.dtype == 0xF4) ? data.work_num.ToString() : MyDevice.WorkNum,
+                                    SequenceId = (data.dtype == 0xF4) ? data.work_psq.ToString() : MyDevice.SequenceId,
                                     PointNum = MyDevice.PointNum,
+                                    //ScrewNum = (byte)((data.dtype == 0xF4) ? data.screwCnt : 1),
+                                    //ScrewSeq = (byte)((data.dtype == 0xF4) ? data.screwSeq : 0),
                                     DevAddr = sAddress,
                                     VinId = MyDevice.Vin,
                                     DType = data.dtype,
@@ -2748,10 +2711,14 @@ namespace Model
                                     TorqueUnit = data.torque_unit.ToString(),
                                     Angle = data.angle / (double)MyDevice.mBUS[sAddress].angleMultiple,
                                     AngleAcc = data.angle_acc / (double)MyDevice.mBUS[sAddress].angleMultiple,
+                                    //AngleResist = (data.dtype == 0xF3) ? data.angle_resist / (double)Math.Pow(10, angleDecimal) : 0,
+                                    //TorqueResult = MyDevice.TorqueResult,
+                                    //AngleResult = MyDevice.AngleResult,
+                                    //ResistResult = MyDevice.ResistResult,
                                     DataResult = MyDevice.DataResult,
                                     ModePt = data.mode_pt,
-                                    ModeAx = data.mode_ax,
-                                    ModeMx = data.mode_mx,
+                                    ModeAx = (byte)((data.dtype == 0xF4) ? data.mode >> 0x04 : data.mode_ax),
+                                    ModeMx = (byte)((data.dtype == 0xF4) ? data.mode & 0x0F : data.mode_mx),
                                     Battery = data.battery,
                                     KeyBuf = data.keybuf,
                                     KeyLock = data.keylock.ToString(),
@@ -2775,20 +2742,6 @@ namespace Model
                         });
 
                         mePort_DataRemove(0x48 * 2 + 5);
-                        isEQ = true;
-                    }
-                    else
-                    {
-                        mePort_DataRemove(1);
-                        return;
-                    }
-                    break;
-
-                case TASKS.REG_BLOCK1_SPEC:
-                    if (len == 0x25)
-                    {
-                        MyDevice.mBUS[sAddress].spec.angle_resist = mePort_GetInt32(3);
-                        mePort_DataRemove(0x25);
                         isEQ = true;
                     }
                     else
@@ -2963,6 +2916,19 @@ namespace Model
                         return;
                     }
                     break;
+                case TASKS.WRITE_RESET:
+                    if ((REG)mePort_GetUInt16(2) == REG.REG_W_RESET && mePort_GetUInt16(4) == 0xFFFF)
+                    {
+                        //写命令的参数值是按键锁
+                        isEQ = true;
+                        mePort_DataRemove(8);
+                    }
+                    else
+                    {
+                        mePort_DataRemove(1);
+                        return;
+                    }
+                    break;
                 default:
                     mePort_DataRemove(1);
                     return;
@@ -2995,22 +2961,8 @@ namespace Model
             //解码
             switch (trTASK)
             {
-                case TASKS.REG_BLOCK1_ID:
-                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK1_ID && mePort_GetInt16(4) == 0x10)
-                    {
-                        //连续写入的寄存器个数是0x10
-                        isEQ = true;
-                        mePort_DataRemove(0x08);
-                    }
-                    else
-                    {
-                        mePort_DataRemove(1);
-                        return;
-                    }
-                    break;
-
-                case TASKS.REG_BLOCK2_PARA:
-                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK2_PARA && mePort_GetInt16(4) == 0x20)
+                case TASKS.REG_BLOCK3_PARA:
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK2_PARA && mePort_GetInt16(4) == 0x30)
                     {
                         //连续写入的寄存器个数是0x20
                         isEQ = true;
@@ -3024,7 +2976,7 @@ namespace Model
                     break;
 
                 case TASKS.REG_BLOCK3_WLAN:
-                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK3_WLAN && mePort_GetInt16(4) == 0x30)
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK4_WLAN && mePort_GetInt16(4) == 0x30)
                     {
                         //连续写入的寄存器个数是0x30
                         isEQ = true;
@@ -3063,8 +3015,8 @@ namespace Model
                     }
                     break;
 
-                case TASKS.REG_BLOCK4_CAL:
-                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK4_CAL && mePort_GetInt16(4) == 0x40)
+                case TASKS.REG_BLOCK4_CAL1:
+                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK4_CAL1 && mePort_GetInt16(4) == 0x40)
                     {
                         //连续写入的寄存器个数是0x40
                         isEQ = true;
@@ -3146,19 +3098,6 @@ namespace Model
                     if ((REG)mePort_GetUInt16(2) == REG.REG_R_RECDAT && mePort_GetInt16(4) == 0x02)
                     {
                         //连续写入的寄存器个数是0x02
-                        isEQ = true;
-                        mePort_DataRemove(0x08);
-                    }
-                    else
-                    {
-                        mePort_DataRemove(1);
-                        return;
-                    }
-                    break;
-                case TASKS.REG_BLOCK1_SPEC:
-                    if (mePort_GetUInt16(2) == Constants.REG_BLOCK1_SPEC && mePort_GetInt16(4) == 0x10)
-                    {
-                        //连续写入的寄存器个数是0x10
                         isEQ = true;
                         mePort_DataRemove(0x08);
                     }
@@ -3326,7 +3265,7 @@ namespace Model
                 case TASKS.REG_BLOCK1_DEV:
                     if (isEQ)
                     {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL);
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL1);
                     }
                     else
                     {
@@ -3334,14 +3273,14 @@ namespace Model
                     }
                     break;
 
-                case TASKS.REG_BLOCK4_CAL:
+                case TASKS.REG_BLOCK4_CAL1:
                     if (isEQ)
                     {
                         Protocol_Read_SendCOM(TASKS.REG_BLOCK5_INFO);
                     }
                     else
                     {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL);
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL1);
                     }
                     break;
 
@@ -3359,7 +3298,7 @@ namespace Model
                 case TASKS.REG_BLOCK3_WLAN:
                     if (isEQ)
                     {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_ID);
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_PARA);
                     }
                     else
                     {
@@ -3367,25 +3306,14 @@ namespace Model
                     }
                     break;
 
-                case TASKS.REG_BLOCK1_ID:
-                    if (isEQ)
-                    {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK2_PARA);
-                    }
-                    else
-                    {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_ID);
-                    }
-                    break;
-
-                case TASKS.REG_BLOCK2_PARA:
+                case TASKS.REG_BLOCK3_PARA:
                     if (isEQ)
                     {
                         Protocol_Read_SendCOM(TASKS.REG_BLOCK5_AM1);
                     }
                     else
                     {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK2_PARA);
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK3_PARA);
                     }
                     break;
 
@@ -3436,7 +3364,7 @@ namespace Model
                 case TASKS.REG_BLOCK3_OP:
                     if (isEQ)
                     {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_HEART);
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_FIFO);
                     }
                     else
                     {
@@ -3444,47 +3372,14 @@ namespace Model
                     }
                     break;
 
-                case TASKS.REG_BLOCK1_HEART:
-                    if (isEQ)
-                    {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_FIFO);
-                    }
-                    else
-                    {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_HEART);
-                    }
-                    break;
-
                 case TASKS.REG_BLOCK1_FIFO:
-                    if (isEQ)
-                    {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
-                    }
-                    else
-                    {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_FIFO);
-                    }
-                    break;
-
-                case TASKS.REG_BLOCK2_DAT:
-                    if (isEQ)
-                    {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_SPEC);
-                    }
-                    else
-                    {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK2_DAT);
-                    }
-                    break;
-
-                case TASKS.REG_BLOCK1_SPEC:
                     if (isEQ)
                     {
                         Protocol_Read_SendCOM(TASKS.REG_BLOCK3_SCREW1);
                     }
                     else
                     {
-                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_SPEC);
+                        Protocol_Read_SendCOM(TASKS.REG_BLOCK1_FIFO);
                     }
                     break;
 
@@ -3565,7 +3460,7 @@ namespace Model
                 case TASKS.REG_BLOCK3_WLAN:
                     if (isEQ)
                     {
-                        Protocool_Sequence_SendCOM(TASKS.REG_BLOCK1_ID);
+                        Protocool_Sequence_SendCOM(TASKS.REG_BLOCK3_PARA);
                     }
                     else
                     {
@@ -3573,25 +3468,14 @@ namespace Model
                     }
                     break;
 
-                case TASKS.REG_BLOCK1_ID:
-                    if (isEQ)
-                    {
-                        Protocool_Sequence_SendCOM(TASKS.REG_BLOCK2_PARA);
-                    }
-                    else
-                    {
-                        Protocool_Sequence_SendCOM(TASKS.REG_BLOCK1_ID);
-                    }
-                    break;
-
-                case TASKS.REG_BLOCK2_PARA:
+                case TASKS.REG_BLOCK3_PARA:
                     if (isEQ)
                     {
                         Protocool_Sequence_SendCOM(TASKS.REG_BLOCK5_AM1);
                     }
                     else
                     {
-                        Protocool_Sequence_SendCOM(TASKS.REG_BLOCK2_PARA);
+                        Protocool_Sequence_SendCOM(TASKS.REG_BLOCK3_PARA);
                     }
                     break;
 

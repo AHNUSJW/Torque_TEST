@@ -17,15 +17,30 @@ namespace Model
             wlan.wf_pwd         = "12345678";
             wlan.wf_ip          = "C0A80101";
             wlan.wf_port        = 5678;
+            wlan.wifimode       = 0;
 
             devc.series         = SERIES.TQ_XH;
             devc.type           = TYPE.TQ_XH_XL01_07;
             devc.version        = 0;
             devc.bohrcode       = 0;
-            devc.unit           = UNIT.UNIT_nm;
+            devc.torque_err[0]  = 0;
+            devc.torque_err[1]  = 0;
+            devc.torque_err[2]  = 0;
+            devc.torque_err[3]  = 0;
+            devc.torque_err[4]  = 0;
+            devc.calunit        = UNIT.UNIT_nm;
             devc.caltype        = 0;
             devc.torque_decimal = 0;
             devc.torque_fdn     = 1;
+            devc.calIndex       = 0;
+            devc.torque_disp    = 0;
+            devc.torque_min     = 0;
+            devc.torque_max     = 0;
+            devc.torque_over[0] = 0;
+            devc.torque_over[1] = 0;
+            devc.torque_over[2] = 0;
+            devc.torque_over[3] = 0;
+            devc.torque_over[4] = 0;
             devc.capacity       = 3000;
             devc.ad_zero        = 0;
             devc.ad_pos_point1  = 0;
@@ -48,19 +63,39 @@ namespace Model
             devc.tq_neg_point3  = 0;
             devc.tq_neg_point4  = 0;
             devc.tq_neg_point5  = 0;
-            devc.torque_disp    = 0;
-            devc.torque_min     = 0;
-            devc.torque_max     = 0;
-            devc.torque_over[0] = 0;
-            devc.torque_over[1] = 0;
-            devc.torque_over[2] = 0;
-            devc.torque_over[3] = 0;
-            devc.torque_over[4] = 0;
-            devc.torque_err[0]  = 0;
-            devc.torque_err[1]  = 0;
-            devc.torque_err[2]  = 0;
-            devc.torque_err[3]  = 0;
-            devc.torque_err[4]  = 0;
+            devc.cl2_ad_zero = 0;
+            devc.cl2_ad_pos_point1 = 0;
+            devc.cl2_ad_pos_point2 = 0;
+            devc.cl2_ad_pos_point3 = 0;
+            devc.cl2_ad_pos_point4 = 0;
+            devc.cl2_ad_pos_point5 = 0;
+            devc.cl2_ad_neg_point1 = 0;
+            devc.cl2_ad_neg_point2 = 0;
+            devc.cl2_ad_neg_point3 = 0;
+            devc.cl2_ad_neg_point4 = 0;
+            devc.cl2_ad_neg_point5 = 0;
+            devc.cr1_ad_zero = 0;
+            devc.cr1_ad_pos_point1 = 0;
+            devc.cr1_ad_pos_point2 = 0;
+            devc.cr1_ad_pos_point3 = 0;
+            devc.cr1_ad_pos_point4 = 0;
+            devc.cr1_ad_pos_point5 = 0;
+            devc.cr1_ad_neg_point1 = 0;
+            devc.cr1_ad_neg_point2 = 0;
+            devc.cr1_ad_neg_point3 = 0;
+            devc.cr1_ad_neg_point4 = 0;
+            devc.cr1_ad_neg_point5 = 0;
+            devc.cr2_ad_zero = 0;
+            devc.cr2_ad_pos_point1 = 0;
+            devc.cr2_ad_pos_point2 = 0;
+            devc.cr2_ad_pos_point3 = 0;
+            devc.cr2_ad_pos_point4 = 0;
+            devc.cr2_ad_pos_point5 = 0;
+            devc.cr2_ad_neg_point1 = 0;
+            devc.cr2_ad_neg_point2 = 0;
+            devc.cr2_ad_neg_point3 = 0;
+            devc.cr2_ad_neg_point4 = 0;
+            devc.cr2_ad_neg_point5 = 0;
 
             para.torque_unit    = UNIT.UNIT_nm;
             para.angle_speed    = 0;
@@ -76,7 +111,6 @@ namespace Model
             para.heartcycle     = 0;
             para.accmode        = 0;
             para.alarmode       = 0;
-            para.wifimode       = 0;
             para.timeoff        = 0;
             para.timeback       = 0;
             para.timezero       = 0;
@@ -85,12 +119,15 @@ namespace Model
             para.displan        = 0;
             para.unhook         = 0;
             para.angcorr        = 1.0f;
+            para.angle_resist   = 5;
             para.adspeed        = 0;
             para.autozero       = AUTOZERO.ATZ4;
             para.trackzero      = TRACKZERO.TKZ4;
             para.amenable       = 0;
             para.screwmax       = 16;
             para.runmode        = 0;
+            para.auploaden      = 0;
+            para.devrole        = 0;
 
             for (byte i = 0; i < 5; i++)
             {
@@ -178,8 +215,8 @@ namespace Model
                 data[i].alarm[2]       = 0;
                 data[i].angle_resist   = 0;
                 data[i].mode           = 0;
-                data[i].screwNum       = 0;
-                data[i].work_ID        = 0;
+                data[i].screwCnt       = 0;
+                data[i].work_num        = 0;
                 data[i].work_psq       = 0;
                 data[i].screwSeq       = 0;
             }
@@ -192,8 +229,6 @@ namespace Model
                 screw[i].scw_ticketNum  = 1;
                 screw[i].scw_ticketSerial = 1;
             }
-
-            spec.angle_resist = 5;
         }
 
         public WRE(XET xet)
@@ -209,15 +244,30 @@ namespace Model
             wlan.wf_pwd         = xet.wlan.wf_pwd;
             wlan.wf_ip          = xet.wlan.wf_ip;
             wlan.wf_port        = xet.wlan.wf_port;
+            wlan.wifimode       = xet.wlan.wifimode;
 
             devc.series         = xet.devc.series;
             devc.type           = xet.devc.type;
             devc.version        = xet.devc.version;
             devc.bohrcode       = xet.devc.bohrcode;
-            devc.unit           = xet.devc.unit;
+            devc.torque_err[0]  = xet.devc.torque_err[0];
+            devc.torque_err[1]  = xet.devc.torque_err[1];
+            devc.torque_err[2]  = xet.devc.torque_err[2];
+            devc.torque_err[3]  = xet.devc.torque_err[3];
+            devc.torque_err[4]  = xet.devc.torque_err[4];
+            devc.calunit        = xet.devc.calunit;
             devc.caltype        = xet.devc.caltype;
             devc.torque_decimal = xet.devc.torque_decimal;
             devc.torque_fdn     = xet.devc.torque_fdn;
+            devc.calIndex       = xet.devc.calIndex;
+            devc.torque_disp    = xet.devc.torque_disp;
+            devc.torque_min     = xet.devc.torque_min;
+            devc.torque_max     = xet.devc.torque_max;
+            devc.torque_over[0] = xet.devc.torque_over[0];
+            devc.torque_over[1] = xet.devc.torque_over[1];
+            devc.torque_over[2] = xet.devc.torque_over[2];
+            devc.torque_over[3] = xet.devc.torque_over[3];
+            devc.torque_over[4] = xet.devc.torque_over[4];
             devc.capacity       = xet.devc.capacity;
             devc.ad_zero        = xet.devc.ad_zero;
             devc.ad_pos_point1  = xet.devc.ad_pos_point1;
@@ -240,19 +290,39 @@ namespace Model
             devc.tq_neg_point3  = xet.devc.tq_neg_point3;
             devc.tq_neg_point4  = xet.devc.tq_neg_point4;
             devc.tq_neg_point5  = xet.devc.tq_neg_point5;
-            devc.torque_disp    = xet.devc.torque_disp;
-            devc.torque_min     = xet.devc.torque_min;
-            devc.torque_max     = xet.devc.torque_max;
-            devc.torque_over[0] = xet.devc.torque_over[0];
-            devc.torque_over[1] = xet.devc.torque_over[1];
-            devc.torque_over[2] = xet.devc.torque_over[2];
-            devc.torque_over[3] = xet.devc.torque_over[3];
-            devc.torque_over[4] = xet.devc.torque_over[4];
-            devc.torque_err[0]  = xet.devc.torque_err[0];
-            devc.torque_err[1]  = xet.devc.torque_err[1];
-            devc.torque_err[2]  = xet.devc.torque_err[2];
-            devc.torque_err[3]  = xet.devc.torque_err[3];
-            devc.torque_err[4]  = xet.devc.torque_err[4];
+            devc.cl2_ad_zero        = xet.devc.cl2_ad_zero;
+            devc.cl2_ad_pos_point1  = xet.devc.cl2_ad_pos_point1;
+            devc.cl2_ad_pos_point2  = xet.devc.cl2_ad_pos_point2;
+            devc.cl2_ad_pos_point3  = xet.devc.cl2_ad_pos_point3;
+            devc.cl2_ad_pos_point4  = xet.devc.cl2_ad_pos_point4;
+            devc.cl2_ad_pos_point5  = xet.devc.cl2_ad_pos_point5;
+            devc.cl2_ad_neg_point1  = xet.devc.cl2_ad_neg_point1;
+            devc.cl2_ad_neg_point2  = xet.devc.cl2_ad_neg_point2;
+            devc.cl2_ad_neg_point3  = xet.devc.cl2_ad_neg_point3;
+            devc.cl2_ad_neg_point4  = xet.devc.cl2_ad_neg_point4;
+            devc.cl2_ad_neg_point5  = xet.devc.cl2_ad_neg_point5;
+            devc.cr1_ad_zero        = xet.devc.cr1_ad_zero;
+            devc.cr1_ad_pos_point1  = xet.devc.cr1_ad_pos_point1;
+            devc.cr1_ad_pos_point2  = xet.devc.cr1_ad_pos_point2;
+            devc.cr1_ad_pos_point3  = xet.devc.cr1_ad_pos_point3;
+            devc.cr1_ad_pos_point4  = xet.devc.cr1_ad_pos_point4;
+            devc.cr1_ad_pos_point5  = xet.devc.cr1_ad_pos_point5;
+            devc.cr1_ad_neg_point1  = xet.devc.cr1_ad_neg_point1;
+            devc.cr1_ad_neg_point2  = xet.devc.cr1_ad_neg_point2;
+            devc.cr1_ad_neg_point3  = xet.devc.cr1_ad_neg_point3;
+            devc.cr1_ad_neg_point4  = xet.devc.cr1_ad_neg_point4;
+            devc.cr1_ad_neg_point5  = xet.devc.cr1_ad_neg_point5;
+            devc.cr2_ad_zero        = xet.devc.cr2_ad_zero;
+            devc.cr2_ad_pos_point1  = xet.devc.cr2_ad_pos_point1;
+            devc.cr2_ad_pos_point2  = xet.devc.cr2_ad_pos_point2;
+            devc.cr2_ad_pos_point3  = xet.devc.cr2_ad_pos_point3;
+            devc.cr2_ad_pos_point4  = xet.devc.cr2_ad_pos_point4;
+            devc.cr2_ad_pos_point5  = xet.devc.cr2_ad_pos_point5;
+            devc.cr2_ad_neg_point1  = xet.devc.cr2_ad_neg_point1;
+            devc.cr2_ad_neg_point2  = xet.devc.cr2_ad_neg_point2;
+            devc.cr2_ad_neg_point3  = xet.devc.cr2_ad_neg_point3;
+            devc.cr2_ad_neg_point4  = xet.devc.cr2_ad_neg_point4;
+            devc.cr2_ad_neg_point5  = xet.devc.cr2_ad_neg_point5;
 
             para.torque_unit    = xet.para.torque_unit;
             para.angle_speed    = xet.para.angle_speed;
@@ -268,7 +338,6 @@ namespace Model
             para.heartcycle     = xet.para.heartcycle;
             para.accmode        = xet.para.accmode;
             para.alarmode       = xet.para.alarmode;
-            para.wifimode       = xet.para.wifimode;
             para.timeoff        = xet.para.timeoff;
             para.timeback       = xet.para.timeback;
             para.timezero       = xet.para.timezero;
@@ -277,12 +346,15 @@ namespace Model
             para.displan        = xet.para.displan;
             para.unhook         = xet.para.unhook;
             para.angcorr        = xet.para.angcorr;
+            para.angle_resist   = xet.para.angle_resist;
             para.adspeed        = xet.para.adspeed;
             para.autozero       = xet.para.autozero;
             para.trackzero      = xet.para.trackzero;
             para.amenable       = xet.para.amenable;
             para.screwmax       = xet.para.screwmax;
             para.runmode        = xet.para.runmode;
+            para.auploaden      = xet.para.auploaden;
+            para.devrole        = xet.para.devrole;
 
             for (byte i = 0; i < 5; i++)
             {
@@ -369,8 +441,8 @@ namespace Model
                 data[i].alarm[2]       = xet.data[i].alarm[2];
                 data[i].angle_resist   = xet.data[i].angle_resist;
                 data[i].mode           = xet.data[i].mode;
-                data[i].screwNum       = xet.data[i].screwNum;
-                data[i].work_ID        = xet.data[i].work_ID;
+                data[i].screwCnt       = xet.data[i].screwCnt;
+                data[i].work_num        = xet.data[i].work_num;
                 data[i].work_psq       = xet.data[i].work_psq;
                 data[i].screwSeq       = xet.data[i].screwSeq;
             }
@@ -383,7 +455,6 @@ namespace Model
                 screw[i].scw_ticketAxMx = xet.screw[i].scw_ticketAxMx;
             }
 
-            spec.angle_resist = xet.spec.angle_resist;
         }
     }
 }

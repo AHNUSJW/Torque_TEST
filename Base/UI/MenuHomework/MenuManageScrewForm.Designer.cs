@@ -37,21 +37,21 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.EditScrewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DelScrewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -165,80 +165,80 @@
             this.DelScrewToolStripMenuItem.Text = "删除螺栓";
             this.DelScrewToolStripMenuItem.Click += new System.EventHandler(this.DelScrewToolStripMenuItem_Click);
             // 
-            // Column1
+            // Column8
             // 
-            this.Column1.HeaderText = "选择";
-            this.Column1.Name = "Column1";
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "名称";
-            this.Column3.Name = "Column3";
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "规格";
-            this.Column2.Name = "Column2";
-            // 
-            // Column15
-            // 
-            this.Column15.HeaderText = "标准";
-            this.Column15.Name = "Column15";
-            // 
-            // Column12
-            // 
-            this.Column12.HeaderText = "材料";
-            this.Column12.Name = "Column12";
-            // 
-            // Column13
-            // 
-            this.Column13.HeaderText = "头部尺寸";
-            this.Column13.Name = "Column13";
-            // 
-            // Column14
-            // 
-            this.Column14.HeaderText = "头部结构";
-            this.Column14.Name = "Column14";
-            // 
-            // Column9
-            // 
-            this.Column9.HeaderText = "扭矩单位";
-            this.Column9.Name = "Column9";
-            // 
-            // Column10
-            // 
-            this.Column10.HeaderText = "PT模式";
-            this.Column10.Name = "Column10";
-            // 
-            // Column11
-            // 
-            this.Column11.HeaderText = "Mx模式";
-            this.Column11.Name = "Column11";
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "Ax模式";
-            this.Column4.Name = "Column4";
-            // 
-            // Column5
-            // 
-            this.Column5.HeaderText = "报警值1";
-            this.Column5.Name = "Column5";
-            // 
-            // Column6
-            // 
-            this.Column6.HeaderText = "报警值2";
-            this.Column6.Name = "Column6";
+            this.Column8.HeaderText = "描述";
+            this.Column8.Name = "Column8";
             // 
             // Column7
             // 
             this.Column7.HeaderText = "报警值3";
             this.Column7.Name = "Column7";
             // 
-            // Column8
+            // Column6
             // 
-            this.Column8.HeaderText = "描述";
-            this.Column8.Name = "Column8";
+            this.Column6.HeaderText = "报警值2";
+            this.Column6.Name = "Column6";
+            // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "报警值1";
+            this.Column5.Name = "Column5";
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "Ax模式";
+            this.Column4.Name = "Column4";
+            // 
+            // Column11
+            // 
+            this.Column11.HeaderText = "Mx模式";
+            this.Column11.Name = "Column11";
+            // 
+            // Column10
+            // 
+            this.Column10.HeaderText = "PT模式";
+            this.Column10.Name = "Column10";
+            // 
+            // Column9
+            // 
+            this.Column9.HeaderText = "扭矩单位";
+            this.Column9.Name = "Column9";
+            // 
+            // Column14
+            // 
+            this.Column14.HeaderText = "头部结构";
+            this.Column14.Name = "Column14";
+            // 
+            // Column13
+            // 
+            this.Column13.HeaderText = "头部尺寸";
+            this.Column13.Name = "Column13";
+            // 
+            // Column12
+            // 
+            this.Column12.HeaderText = "材料";
+            this.Column12.Name = "Column12";
+            // 
+            // Column15
+            // 
+            this.Column15.HeaderText = "标准";
+            this.Column15.Name = "Column15";
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "规格";
+            this.Column2.Name = "Column2";
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "名称";
+            this.Column3.Name = "Column3";
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "选择";
+            this.Column1.Name = "Column1";
             // 
             // MenuManageScrewForm
             // 
