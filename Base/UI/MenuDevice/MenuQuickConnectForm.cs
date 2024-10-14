@@ -276,13 +276,26 @@ namespace Base.UI.MenuDevice
                     case TASKS.REG_BLOCK4_CAL1:
                         if (MyDevice.protocol.isEqual)
                         {
-                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_INFO);
-                            meTask = TASKS.REG_BLOCK5_INFO;
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_CAL2);
+                            meTask = TASKS.REG_BLOCK5_CAL2;
                         }
                         else
                         {
                             MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL1);
                             meTask = TASKS.REG_BLOCK4_CAL1;
+                        }
+                        break;
+
+                    case TASKS.REG_BLOCK5_CAL2:
+                        if (MyDevice.protocol.isEqual)
+                        {
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_INFO);
+                            meTask = TASKS.REG_BLOCK5_INFO;
+                        }
+                        else
+                        {
+                            MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_CAL2);
+                            meTask = TASKS.REG_BLOCK5_CAL2;
                         }
                         break;
 
@@ -950,6 +963,8 @@ namespace Base.UI.MenuDevice
                         isConnecting = true;//正在连接，禁止关闭页面
                         break;
                     case TASKS.REG_BLOCK4_CAL1:
+                        break;
+                    case TASKS.REG_BLOCK5_CAL2:
                         break;
                     case TASKS.REG_BLOCK5_INFO:
                         break;

@@ -527,13 +527,26 @@ namespace Base.UI.MenuDevice
                         case TASKS.REG_BLOCK4_CAL1:
                             if (MyDevice.protocol.isEqual)
                             {
-                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_INFO);
-                                meTask = TASKS.REG_BLOCK5_INFO;
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_CAL2);
+                                meTask = TASKS.REG_BLOCK5_CAL2;
                             }
                             else
                             {
                                 MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL1);
                                 meTask = TASKS.REG_BLOCK4_CAL1;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK5_CAL2:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_INFO);
+                                meTask = TASKS.REG_BLOCK5_INFO;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_CAL2);
+                                meTask = TASKS.REG_BLOCK5_CAL2;
                             }
                             break;
 
@@ -793,13 +806,26 @@ namespace Base.UI.MenuDevice
                         case TASKS.REG_BLOCK4_CAL1:
                             if (MyDevice.protocol.isEqual)
                             {
-                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_INFO);
-                                meTask = TASKS.REG_BLOCK5_INFO;
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_CAL2);
+                                meTask = TASKS.REG_BLOCK5_CAL2;
                             }
                             else
                             {
                                 MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL1);
                                 meTask = TASKS.REG_BLOCK4_CAL1;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK5_CAL2:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_INFO);
+                                meTask = TASKS.REG_BLOCK5_INFO;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_CAL2);
+                                meTask = TASKS.REG_BLOCK5_CAL2;
                             }
                             break;
 
@@ -1044,13 +1070,26 @@ namespace Base.UI.MenuDevice
                         case TASKS.REG_BLOCK4_CAL1:
                             if (MyDevice.protocol.isEqual)
                             {
-                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_INFO);
-                                meTask = TASKS.REG_BLOCK5_INFO;
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_CAL2);
+                                meTask = TASKS.REG_BLOCK5_CAL2;
                             }
                             else
                             {
                                 MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK4_CAL1);
                                 meTask = TASKS.REG_BLOCK4_CAL1;
+                            }
+                            break;
+
+                        case TASKS.REG_BLOCK5_CAL2:
+                            if (MyDevice.protocol.isEqual)
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_INFO);
+                                meTask = TASKS.REG_BLOCK5_INFO;
+                            }
+                            else
+                            {
+                                MyDevice.protocol.Protocol_Read_SendCOM(TASKS.REG_BLOCK5_CAL2);
+                                meTask = TASKS.REG_BLOCK5_CAL2;
                             }
                             break;
 
@@ -1562,6 +1601,9 @@ namespace Base.UI.MenuDevice
                     case TASKS.REG_BLOCK4_CAL1:
                         textBox2.Text += "\r\n扳手CAL读取成功";
                         break;
+                    case TASKS.REG_BLOCK5_CAL2:
+                        textBox2.Text += "\r\n扳手CAL2读取成功";
+                        break;
                     case TASKS.REG_BLOCK5_INFO:
                         textBox2.Text += "\r\n扳手INFO读取成功";
                         break;
@@ -1685,8 +1727,6 @@ namespace Base.UI.MenuDevice
                     default:
                         break;
                 }
-
-                MyDevice.StickyPacksHandle.Set();
             }
         }
 

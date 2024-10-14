@@ -96,10 +96,6 @@ namespace Model
         public static int ConnectDevCnt;               //连接的总设备数
         public static int WorkDevCnt;                  //工作的设备数
 
-        public static object MyDeviceLock = new object();
-        public static AutoResetEvent StickyPacksHandle = new AutoResetEvent(false);
-        public static bool IsVerified = false;
-
 
         /// <summary>
         /// protocol指向的设备数量

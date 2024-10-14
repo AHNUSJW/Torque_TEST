@@ -332,7 +332,15 @@ namespace Model
                                         if (MyDevice.actDev.auto.dataTick < 6000)
                                         {
                                             MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
-                                            MyDevice.actDev.auto.fifoIndex += 5 * 28;
+                                            if ((MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_08 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 11) ||
+                                                (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 41))
+                                            {
+                                                MyDevice.actDev.auto.fifoIndex += 5 * 32;
+                                            }
+                                            else
+                                            {
+                                                MyDevice.actDev.auto.fifoIndex += 5 * 28;
+                                            }
                                         }
                                         else
                                         {
@@ -344,7 +352,15 @@ namespace Model
                                         if ((int)MyDevice.actDev.auto.fifoCount / 5 > 1)
                                         {
                                             MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
-                                            MyDevice.actDev.auto.fifoIndex += 5 * 28;
+                                            if ((MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_08 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 11) ||
+                                                (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 41))
+                                            {
+                                                MyDevice.actDev.auto.fifoIndex += 5 * 32;
+                                            }
+                                            else
+                                            {
+                                                MyDevice.actDev.auto.fifoIndex += 5 * 28;
+                                            }
                                             MyDevice.actDev.auto.fifoCount -= 5;
                                         }
                                         else
@@ -1338,7 +1354,6 @@ namespace Model
             lock (lock_onReceive)
             {
                 UpdateUI?.Invoke(this, e);
-                MyDevice.StickyPacksHandle.Set();
             }
         }
 
