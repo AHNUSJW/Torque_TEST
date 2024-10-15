@@ -67,6 +67,18 @@ namespace DBHelper
         public uint ScrewId { get; set; }
 
         /// <summary>
+        /// 螺丝数量
+        /// </summary>
+        [SugarColumn(ColumnName = "screw_num", ColumnDescription = "螺丝数量", ColumnDataType = "tinyint unsigned ")]
+        public byte ScrewNum { get; set; }
+
+        /// <summary>
+        /// 螺丝顺序
+        /// </summary>
+        [SugarColumn(ColumnName = "screw_seq", ColumnDescription = "螺丝顺序", ColumnDataType = "tinyint unsigned ")]
+        public byte ScrewSeq { get; set; }
+
+        /// <summary>
         /// 螺丝名称
         /// </summary>
         [SugarColumn(ColumnName = "name", ColumnDescription = "螺丝名称")]
@@ -130,7 +142,7 @@ namespace DBHelper
         /// 备注
         /// </summary>
         [SugarColumn(ColumnName = "reserve", ColumnDescription = "备用")]
-        public string Reservee { get; set; }
+        public string Reserve { get; set; }
 
         #endregion
 

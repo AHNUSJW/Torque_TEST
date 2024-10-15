@@ -79,6 +79,12 @@ namespace DBHelper
         public string WoName { get; set; }
 
         /// <summary>
+        /// 重复拧紧角度
+        /// </summary>
+        [SugarColumn(ColumnName = "angle_resist", ColumnDescription = "重复拧紧角度", IsNullable = true)]
+        public double AngleResist { get; set; }
+
+        /// <summary>
         /// 备注
         /// </summary>
         [SugarColumn(ColumnName = "note", ColumnDescription = "备注")]

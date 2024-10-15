@@ -451,6 +451,8 @@ namespace DBHelper
                 Bohrcode = it.Bohrcode,
                 DevType = it.DevType,
                 PointNum = it.PointNum,
+                ScrewNum = it.ScrewNum,
+                ScrewSeq = it.ScrewSeq,
                 DevAddr = it.DevAddr,
                 CreateTime = it.CreateTime,
                 DType = it.DType,
@@ -458,8 +460,13 @@ namespace DBHelper
                 Torque = it.Torque,
                 TorqueUnit = it.TorqueUnit,
                 TorquePeak = it.TorquePeak,
+                AngleDecimal = it.AngleDecimal,
                 Angle = it.Angle,
                 AngleAcc = it.AngleAcc,
+                AngleResist = it.AngleResist,
+                TorqueResult = it.TorqueResult,
+                AngleResult = it.TorqueResult,
+                ResistResult = it.TorqueResult,
                 DataResult = it.DataResult,
             };
             Expression<Func<DSData, bool>> whereExpression = it => it.WorkNum == workNum

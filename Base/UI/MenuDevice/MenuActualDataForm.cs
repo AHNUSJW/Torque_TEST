@@ -51,16 +51,14 @@ namespace Base.UI.MenuDevice
         private List<PointF> PointList = new List<PointF>();
         private int[] snbatArr;                                                 //记录对应扳手的作业号中的尾数
         private string[] opsnTimeArr;                                           //记录对应扳手的作业号中的时间标志
+        private DataTable saveDt = new DataTable();                             //用于导出表格数据（包括隐藏的）
 
         private Dictionary<string, List<double>> TorquedataGroups = new Dictionary<string, List<double>>(); //作业号字典，存储每次拧紧任务的扭矩集合
         private Dictionary<string, List<double>> AngledataGroups = new Dictionary<string, List<double>>(); //作业号字典，存储每次拧紧任务的角度集合
 
         private Dictionary<string, bool> dataGroupResults = new Dictionary<string, bool>();//作业号字典，存储每次作业的拧紧结果
 
-        private ConcurrentQueue<UpdateUIEventArgs> updateQueue = new ConcurrentQueue<UpdateUIEventArgs>();
-        private volatile bool isProcessing = false;
-        private object lockObj = new object();
-        private readonly object _processingLock = new object();
+        private object lockObj = new object();//锁
 
         #endregion
 

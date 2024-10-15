@@ -97,12 +97,6 @@ namespace DBHelper
         public byte AlarmMode { get; set; }
 
         /// <summary>
-        /// wifi/RF无线
-        /// </summary>
-        [SugarColumn(ColumnName = "wifimode", ColumnDescription = "wifi/RF无线")]
-        public byte WifiMode { get; set; }
-
-        /// <summary>
         /// 自动关机时间
         /// </summary>
         [SugarColumn(ColumnName = "timeoff", ColumnDescription = "自动关机时间")]
@@ -145,12 +139,6 @@ namespace DBHelper
         public ushort Unhook { get; set; }
 
         /// <summary>
-        /// 角度修正系数
-        /// </summary>
-        [SugarColumn(ColumnName = "angcorr", ColumnDescription = "角度修正系数")]
-        public string AngCorr { get; set; }
-
-        /// <summary>
         /// adc采样速率和增益
         /// </summary>
         [SugarColumn(ColumnName = "adspeed", ColumnDescription = "adc采样速率和增益")]
@@ -167,6 +155,42 @@ namespace DBHelper
         /// </summary>
         [SugarColumn(ColumnName = "trackzero", ColumnDescription = "零点跟踪")]
         public string TrackZero { get; set; }
+
+        /// <summary>
+        /// 使能扳手的按键修改报警值
+        /// </summary>
+        [SugarColumn(ColumnName = "amenable", ColumnDescription = "使能扳手的按键修改报警值")]
+        public string Amenable { get; set; }
+
+        /// <summary>
+        /// 离线工单有效数量
+        /// </summary>
+        [SugarColumn(ColumnName = "screwmax", ColumnDescription = "离线工单有效数量")]
+        public byte Screwmax { get; set; }
+
+        /// <summary>
+        /// 离线执行工单模式
+        /// </summary>
+        [SugarColumn(ColumnName = "runmode", ColumnDescription = "离线执行工单模式")]
+        public byte Runmode { get; set; }
+
+        /// <summary>
+        /// 设备主动上传的使能控制
+        /// </summary>
+        [SugarColumn(ColumnName = "auploaden", ColumnDescription = "设备主动上传的使能控制")]
+        public byte Auploaden { get; set; }
+
+        /// <summary>
+        /// 角度修正系数
+        /// </summary>
+        [SugarColumn(ColumnName = "angcorr", ColumnDescription = "角度修正系数")]
+        public string AngCorr { get; set; }
+
+        /// <summary>
+        /// 复拧角度
+        /// </summary>
+        [SugarColumn(ColumnName = "angle_resist", ColumnDescription = "复拧角度")]
+        public int AngleResist { get; set; }
 
         /// <summary>
         /// 备用，供后期数据库增加字段用，无需显示在软件上

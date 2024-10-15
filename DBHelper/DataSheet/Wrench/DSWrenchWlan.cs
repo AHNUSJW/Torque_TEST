@@ -67,6 +67,12 @@ namespace DBHelper
         public byte Parity { get; set; }
 
         /// <summary>
+        /// wifi/RF无线
+        /// </summary>
+        [SugarColumn(ColumnName = "wifimode", ColumnDescription = "wifi/RF无线")]
+        public byte WifiMode { get; set; }
+
+        /// <summary>
         /// WiFi账号
         /// </summary>
         [SugarColumn(ColumnName = "wf_ssid", ColumnDescription = "WiFi账号")]

@@ -1674,7 +1674,6 @@ namespace Base.UI.MenuDevice
                     HeartCycle = actXET.para.heartcycle,
                     AccMode = actXET.para.accmode,
                     AlarmMode = actXET.para.alarmode,
-                    WifiMode = actXET.wlan.wifimode,
                     TimeOff = actXET.para.timeoff,
                     TimeBack = actXET.para.timeback,
                     TimeZero = actXET.para.timezero,
@@ -1682,10 +1681,15 @@ namespace Base.UI.MenuDevice
                     DispTheme = actXET.para.disptheme,
                     DispLan = actXET.para.displan,
                     Unhook = actXET.para.unhook,
-                    AngCorr = actXET.para.angcorr.ToString(),
                     AdSpeed = actXET.para.adspeed,
                     AutoZero = actXET.para.autozero.ToString(),
                     TrackZero = actXET.para.trackzero.ToString(),
+                    Amenable = actXET.para.amenable.ToString(),
+                    Screwmax = actXET.para.screwmax,
+                    Runmode = actXET.para.runmode,
+                    Auploaden = actXET.para.auploaden,
+                    AngCorr = actXET.para.angcorr.ToString(),
+                    AngleResist = actXET.para.angle_resist,
                 };
                 DSWrenchWork wrenchWork = new DSWrenchWork
                 {
@@ -1718,6 +1722,7 @@ namespace Base.UI.MenuDevice
                     Baud = actXET.wlan.rs485_baud,
                     Stopbit = actXET.wlan.rs485_stopbit,
                     Parity = actXET.wlan.rs485_parity,
+                    WifiMode = actXET.wlan.wifimode,
                     WFSsid = actXET.wlan.wf_ssid,
                     WFPwd = actXET.wlan.wf_pwd,
                     WFIp = actXET.wlan.wf_ip,

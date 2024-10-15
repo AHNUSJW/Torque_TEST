@@ -43,6 +43,18 @@ namespace DBHelper
         public uint ScrewsId { get; set; }
 
         /// <summary>
+        /// 螺丝数量
+        /// </summary>
+        [SugarColumn(ColumnName = "screw_num", ColumnDescription = "螺丝数量", ColumnDataType = "tinyint unsigned ")]
+        public byte ScrewNum { get; set; }
+
+        /// <summary>
+        /// 螺丝顺序
+        /// </summary>
+        [SugarColumn(ColumnName = "screw_seq", ColumnDescription = "螺丝顺序", ColumnDataType = "tinyint unsigned ")]
+        public byte ScrewSeq { get; set; }
+
+        /// <summary>
         /// 拧紧结果
         /// </summary>
         [SugarColumn(ColumnName = "result", ColumnDescription = "拧紧结果", Length = 10)]

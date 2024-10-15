@@ -204,7 +204,7 @@ namespace Model
                 data[i].memable        = false;
                 data[i].update         = false;
                 data[i].error          = false;
-                data[i].mark           = 0;
+                data[i].mark           = 1;
                 data[i].angle_decimal  = 0;
                 data[i].begin_series   = 0;
                 data[i].begin_group    = 0;
@@ -215,8 +215,8 @@ namespace Model
                 data[i].alarm[2]       = 0;
                 data[i].angle_resist   = 0;
                 data[i].mode           = 0;
-                data[i].screwCnt       = 0;
-                data[i].work_num        = 0;
+                data[i].screwNum       = 0;
+                data[i].work_ID        = 0;
                 data[i].work_psq       = 0;
                 data[i].screwSeq       = 0;
             }
@@ -441,8 +441,8 @@ namespace Model
                 data[i].alarm[2]       = xet.data[i].alarm[2];
                 data[i].angle_resist   = xet.data[i].angle_resist;
                 data[i].mode           = xet.data[i].mode;
-                data[i].screwCnt       = xet.data[i].screwCnt;
-                data[i].work_num        = xet.data[i].work_num;
+                data[i].screwNum       = xet.data[i].screwNum;
+                data[i].work_ID        = xet.data[i].work_ID;
                 data[i].work_psq       = xet.data[i].work_psq;
                 data[i].screwSeq       = xet.data[i].screwSeq;
             }

@@ -8,10 +8,19 @@ using System.Diagnostics;
 using Microsoft.Win32;
 
 //Lumi 20240509
+//Ricardo 20241014
 
 //用户权限role 0-普通用户 1-管理员 20-工厂超级用户 30-制造商
 //新建账号权限为0-普通用户
 //工厂账号不能在此页面修改密码
+
+/*
+   默认三个初始账户
+   普通用户:    user       密码: 无      用户权限:0x00
+   管理员用户:  admin      密码: 123     用户权限:0x01
+   工厂用户:    XhTorque   密码: 123     用户权限:0x20
+   制造商用户:  暂定       密码: 暂定    用户权限:0x30
+ */
 
 namespace Base.UI.MenuUser
 {
@@ -23,6 +32,8 @@ namespace Base.UI.MenuUser
         private String myPSW = "";
         private String myRole = "0";
         private String myDatPath = MyDevice.userDAT;
+        private readonly String manuAccount = "XhTorque";
+        private readonly String manuPwd = "123";
 
         public MenuAccountForm()
         {
@@ -81,6 +92,20 @@ namespace Base.UI.MenuUser
                 isNew = true;
                 //增加初始用户
                 comboBox1.Items.Add("user");
+            }
+
+            //增加默认账户数量
+            if (!comboBox1.Items.Contains("user"))
+            {
+                comboBox1.Items.Add("user");
+            }
+            if (!comboBox1.Items.Contains("admin"))
+            {
+                comboBox1.Items.Add("admin");
+            }
+            if (!comboBox1.Items.Contains(manuAccount))
+            {
+                comboBox1.Items.Add(manuAccount);
             }
 
             //用户名加载
@@ -185,7 +210,7 @@ namespace Base.UI.MenuUser
         private void button3_Click(object sender, EventArgs e)
         {
             //工厂使用超级账号密码
-            if ((comboBox1.Text == "XhTorque"))
+            if ((comboBox1.Text == manuAccount))
             {
                 warning_NI("账号" + comboBox1.Text + "不支持修改密码");
                 return;
@@ -232,7 +257,7 @@ namespace Base.UI.MenuUser
         private void login_button1_Click()
         {
             //工厂使用超级账号密码
-            if ((comboBox1.Text == "XhTorque") && (textBox1.Text == "123"))
+            if ((comboBox1.Text == manuAccount) && (textBox1.Text == manuPwd))
             {
                 myUser = comboBox1.Text;
                 myPSW = textBox1.Text;

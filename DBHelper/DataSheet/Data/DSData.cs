@@ -67,6 +67,18 @@ namespace DBHelper
         public string PointNum { get; set; }
 
         /// <summary>
+        /// 螺丝数量
+        /// </summary>
+        [SugarColumn(ColumnName = "screwnum", ColumnDescription = "螺丝数量", ColumnDataType = "tinyint unsigned ")]
+        public byte ScrewNum { get; set; }
+
+        /// <summary>
+        /// 螺丝顺序
+        /// </summary>
+        [SugarColumn(ColumnName = "screwseq", ColumnDescription = "螺丝顺序", ColumnDataType = "tinyint unsigned ")]
+        public byte ScrewSeq { get; set; }
+
+        /// <summary>
         /// 设备站点
         /// </summary>
         /// 如何是通过sugarsql自建表，定义byte类型时需要添加语句ColumnDataType = "tinyint unsigned "，否则默认是tinyint型
@@ -94,6 +106,12 @@ namespace DBHelper
         public uint Stamp { get; set; }
 
         /// <summary>
+        /// 删除标记
+        /// </summary>
+        [SugarColumn(ColumnName = "mark", ColumnDescription = "删除标记", ColumnDataType = "tinyint unsigned ")]
+        public byte Mark { get; set; }
+
+        /// <summary>
         /// 实时扭矩
         /// </summary>
         [SugarColumn(ColumnName = "torque", ColumnDescription = "实时扭矩", IsNullable = true)]
@@ -112,6 +130,12 @@ namespace DBHelper
         public string TorqueUnit { get; set; }
 
         /// <summary>
+        /// 角度小数点
+        /// </summary>
+        [SugarColumn(ColumnName = "angle_decimal", ColumnDescription = "角度小数点", ColumnDataType = "tinyint unsigned ")]
+        public byte AngleDecimal { get; set; }
+
+        /// <summary>
         /// 实时角度
         /// </summary>
         [SugarColumn(ColumnName = "angle", ColumnDescription = "实时角度", IsNullable = true)]
@@ -122,6 +146,30 @@ namespace DBHelper
         /// </summary>
         [SugarColumn(ColumnName = "angle_acc", ColumnDescription = "累加角度")]
         public double AngleAcc { get; set; }
+
+        /// <summary>
+        /// 重复拧紧
+        /// </summary>
+        [SugarColumn(ColumnName = "angle_resist", ColumnDescription = "重复拧紧")]
+        public double AngleResist { get; set; }
+
+        /// <summary>
+        /// 扭矩结果
+        /// </summary>
+        [SugarColumn(ColumnName = "torque_result", ColumnDescription = "扭矩结果")]
+        public string TorqueResult { get; set; }
+
+        /// <summary>
+        /// 角度结果
+        /// </summary>
+        [SugarColumn(ColumnName = "angle_result", ColumnDescription = "角度结果")]
+        public string AngleResult { get; set; }
+
+        /// <summary>
+        /// 复拧结果
+        /// </summary>
+        [SugarColumn(ColumnName = "resist_result", ColumnDescription = "复拧结果")]
+        public string ResistResult { get; set; }
 
         /// <summary>
         /// 数据结果
@@ -184,10 +232,22 @@ namespace DBHelper
         public string Error { get; set; }
 
         /// <summary>
-        /// 报警数值
+        /// 报警数值0
         /// </summary>
-        [SugarColumn(ColumnName = "alarm", ColumnDescription = "报警数值", Length = 255, IsNullable = true)]
-        public string Alarm { get; set; }
+        [SugarColumn(ColumnName = "alarm0", ColumnDescription = "报警数值0", IsNullable = true)]
+        public string Alarm0 { get; set; }
+
+        /// <summary>
+        /// 报警数值1
+        /// </summary>
+        [SugarColumn(ColumnName = "alarm1", ColumnDescription = "报警数值1", IsNullable = true)]
+        public string Alarm1 { get; set; }
+
+        /// <summary>
+        /// 报警数值2
+        /// </summary>
+        [SugarColumn(ColumnName = "alarm2", ColumnDescription = "报警数值2", IsNullable = true)]
+        public string Alarm2 { get; set; }
 
         /// <summary>
         /// 分表字段 在插入的时候会根据这个字段插入哪个表，在更新删除的时候用这个字段找出相关表

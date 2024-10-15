@@ -391,6 +391,7 @@ namespace DBHelper
                                     it.Baud == wrenchWlan.Baud &&
                                     it.Stopbit == wrenchWlan.Stopbit &&
                                     it.Parity == wrenchWlan.Parity &&
+                                    it.WifiMode == wrenchWlan.WifiMode &&
                                     it.WFSsid == wrenchWlan.WFSsid &&
                                     it.WFPwd == wrenchWlan.WFPwd &&
                                     it.WFIp == wrenchWlan.WFIp &&
@@ -418,6 +419,7 @@ namespace DBHelper
                                           it.Baud == wrenchWlan.Baud &&
                                           it.Stopbit == wrenchWlan.Stopbit &&
                                           it.Parity == wrenchWlan.Parity &&
+                                          it.WifiMode == wrenchWlan.WifiMode &&
                                           it.WFSsid == wrenchWlan.WFSsid &&
                                           it.WFPwd == wrenchWlan.WFPwd &&
                                           it.WFIp == wrenchWlan.WFIp &&

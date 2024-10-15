@@ -43,6 +43,12 @@ namespace DBHelper
         public string ImagePath { get; set; }
 
         /// <summary>
+        /// 重复拧紧角度
+        /// </summary>
+        [SugarColumn(ColumnName = "angle_resist", ColumnDescription = "重复拧紧角度", IsNullable = true)]
+        public double AngleResist { get; set; }
+
+        /// <summary>
         /// 备用，供后期数据库增加字段用，无需显示在软件上
         /// </summary>
         [SugarColumn(ColumnName = "reserve", ColumnDescription = "备用")]

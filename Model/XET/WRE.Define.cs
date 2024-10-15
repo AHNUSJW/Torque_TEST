@@ -247,8 +247,8 @@ namespace Model
 
         /**************04专有参数**************/
         public Byte         mode;                                       //工单模式AxMx
-        public Byte         screwCnt;                                   //螺栓数量
-        public UInt32       work_num;                                   //工单号
+        public Byte         screwNum;                                   //螺栓数量
+        public UInt32       work_ID;                                   //工单号
         public UInt64       work_psq;                                   //工单序列号
         public Byte         screwSeq;                                   //螺栓下标
 

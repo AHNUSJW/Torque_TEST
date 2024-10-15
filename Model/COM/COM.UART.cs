@@ -2508,12 +2508,12 @@ namespace Model
                             }
                             else if (MyDevice.mBUS[sAddress].data[0].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mBUS[sAddress].data[0].mark = mePort_GetByte(12);
-                                //MyDevice.mBUS[sAddress].data[0].mode = mePort_GetByte(13);
-                                //MyDevice.mBUS[sAddress].data[0].screwCnt = mePort_GetByte(14);
-                                //MyDevice.mBUS[sAddress].data[0].work_num = mePort_GetUInt32(15);
-                                //MyDevice.mBUS[sAddress].data[0].work_psq = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
-                                //MyDevice.mBUS[sAddress].data[0].screwSeq = mePort_GetByte(25);
+                                MyDevice.mBUS[sAddress].data[0].mark      = mePort_GetByte(12);
+                                MyDevice.mBUS[sAddress].data[0].mode      = mePort_GetByte(13);
+                                MyDevice.mBUS[sAddress].data[0].screwNum  = mePort_GetByte(14);
+                                MyDevice.mBUS[sAddress].data[0].work_ID   = mePort_GetUInt32(15);
+                                MyDevice.mBUS[sAddress].data[0].work_psq  = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
+                                MyDevice.mBUS[sAddress].data[0].screwSeq  = mePort_GetByte(25);
                             }
 
                             //第二包
@@ -2564,12 +2564,12 @@ namespace Model
                             }
                             else if (MyDevice.mBUS[sAddress].data[1].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mBUS[sAddress].data[1].mark = mePort_GetByte(40);
-                                //MyDevice.mBUS[sAddress].data[1].mode = mePort_GetByte(41);
-                                //MyDevice.mBUS[sAddress].data[1].screwCnt = mePort_GetByte(42);
-                                //MyDevice.mBUS[sAddress].data[1].work_num = mePort_GetUInt32(43);
-                                //MyDevice.mBUS[sAddress].data[1].work_psq = (ulong)(mePort_GetUInt16(47) * Math.Pow(10, 9) + mePort_GetUInt32(49));//6位
-                                //MyDevice.mBUS[sAddress].data[1].screwSeq = mePort_GetByte(53);
+                                MyDevice.mBUS[sAddress].data[1].mark      = mePort_GetByte(40);
+                                MyDevice.mBUS[sAddress].data[1].mode      = mePort_GetByte(41);
+                                MyDevice.mBUS[sAddress].data[1].screwNum  = mePort_GetByte(42);
+                                MyDevice.mBUS[sAddress].data[1].work_ID   = mePort_GetUInt32(43);
+                                MyDevice.mBUS[sAddress].data[1].work_psq  = (ulong)(mePort_GetUInt16(47) * Math.Pow(10, 9) + mePort_GetUInt32(49));//6位
+                                MyDevice.mBUS[sAddress].data[1].screwSeq  = mePort_GetByte(53);
                             }
 
                             //第三包
@@ -2620,12 +2620,12 @@ namespace Model
                             }
                             else if (MyDevice.mBUS[sAddress].data[2].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mBUS[sAddress].data[2].mark = mePort_GetByte(68);
-                                //MyDevice.mBUS[sAddress].data[2].mode = mePort_GetByte(69);
-                                //MyDevice.mBUS[sAddress].data[2].screwCnt = mePort_GetByte(70);
-                                //MyDevice.mBUS[sAddress].data[2].work_num = mePort_GetUInt32(71);
-                                //MyDevice.mBUS[sAddress].data[2].work_psq = (ulong)(mePort_GetUInt16(75) * Math.Pow(10, 9) + mePort_GetUInt32(77));//6位
-                                //MyDevice.mBUS[sAddress].data[2].screwSeq = mePort_GetByte(81);
+                                MyDevice.mBUS[sAddress].data[2].mark     = mePort_GetByte(68);
+                                MyDevice.mBUS[sAddress].data[2].mode     = mePort_GetByte(69);
+                                MyDevice.mBUS[sAddress].data[2].screwNum = mePort_GetByte(70);
+                                MyDevice.mBUS[sAddress].data[2].work_ID  = mePort_GetUInt32(71);
+                                MyDevice.mBUS[sAddress].data[2].work_psq = (ulong)(mePort_GetUInt16(75) * Math.Pow(10, 9) + mePort_GetUInt32(77));//6位
+                                MyDevice.mBUS[sAddress].data[2].screwSeq = mePort_GetByte(81);
                             }
 
                             //第四包
@@ -2676,12 +2676,12 @@ namespace Model
                             }
                             else if (MyDevice.mBUS[sAddress].data[3].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mBUS[sAddress].data[3].mark = mePort_GetByte(96);
-                                //MyDevice.mBUS[sAddress].data[3].mode = mePort_GetByte(97);
-                                //MyDevice.mBUS[sAddress].data[3].screwCnt = mePort_GetByte(98);
-                                //MyDevice.mBUS[sAddress].data[3].work_num = mePort_GetUInt32(99);
-                                //MyDevice.mBUS[sAddress].data[3].work_psq = (ulong)(mePort_GetUInt16(103) * Math.Pow(10, 9) + mePort_GetUInt32(105));//6位
-                                //MyDevice.mBUS[sAddress].data[3].screwSeq = mePort_GetByte(109);
+                                MyDevice.mBUS[sAddress].data[3].mark     = mePort_GetByte(96);
+                                MyDevice.mBUS[sAddress].data[3].mode     = mePort_GetByte(97);
+                                MyDevice.mBUS[sAddress].data[3].screwNum = mePort_GetByte(98);
+                                MyDevice.mBUS[sAddress].data[3].work_ID  = mePort_GetUInt32(99);
+                                MyDevice.mBUS[sAddress].data[3].work_psq = (ulong)(mePort_GetUInt16(103) * Math.Pow(10, 9) + mePort_GetUInt32(105));//6位
+                                MyDevice.mBUS[sAddress].data[3].screwSeq = mePort_GetByte(109);
                             }
 
                             //第五包
@@ -2732,12 +2732,12 @@ namespace Model
                             }
                             else if (MyDevice.mBUS[sAddress].data[4].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mBUS[sAddress].data[4].mark = mePort_GetByte(124);
-                                //MyDevice.mBUS[sAddress].data[4].mode = mePort_GetByte(125);
-                                //MyDevice.mBUS[sAddress].data[4].screwCnt = mePort_GetByte(126);
-                                //MyDevice.mBUS[sAddress].data[4].work_num = mePort_GetUInt32(127);
-                                //MyDevice.mBUS[sAddress].data[4].work_psq = (ulong)(mePort_GetUInt16(131) * Math.Pow(10, 9) + mePort_GetUInt32(133));//6位
-                                //MyDevice.mBUS[sAddress].data[4].screwSeq = mePort_GetByte(137);
+                                MyDevice.mBUS[sAddress].data[4].mark     = mePort_GetByte(124);
+                                MyDevice.mBUS[sAddress].data[4].mode     = mePort_GetByte(125);
+                                MyDevice.mBUS[sAddress].data[4].screwNum = mePort_GetByte(126);
+                                MyDevice.mBUS[sAddress].data[4].work_ID  = mePort_GetUInt32(127);
+                                MyDevice.mBUS[sAddress].data[4].work_psq = (ulong)(mePort_GetUInt16(131) * Math.Pow(10, 9) + mePort_GetUInt32(133));//6位
+                                MyDevice.mBUS[sAddress].data[4].screwSeq = mePort_GetByte(137);
                             }
 
                             List<DSData> sqlDataList = new List<DSData>();//存入数据库的数据列表
@@ -2913,34 +2913,44 @@ namespace Model
 
                                     sqlDataList.Add(new DSData()
                                     {
-                                        DataId = 1,
-                                        DataType = MyDevice.DataType,
-                                        Bohrcode = MyDevice.mBUS[sAddress].devc.bohrcode,
-                                        DevType = MyDevice.mBUS[sAddress].devc.series + "-" + MyDevice.mBUS[sAddress].devc.type,
-                                        WorkId = MyDevice.WorkId,
-                                        WorkNum = MyDevice.WorkNum,
-                                        SequenceId = MyDevice.SequenceId,
-                                        PointNum = MyDevice.PointNum,
-                                        DevAddr = sAddress,
-                                        VinId = MyDevice.Vin,
-                                        DType = data.dtype,
-                                        Stamp = data.stamp,
-                                        Torque = data.torque / (double)MyDevice.mBUS[sAddress].torqueMultiple,
-                                        TorquePeak = (data.dtype == 0xF2 ? data.torseries_pk : data.torgroup_pk) / (double)MyDevice.mBUS[sAddress].torqueMultiple,
-                                        TorqueUnit = data.torque_unit.ToString(),
-                                        Angle = data.angle / (double)MyDevice.mBUS[sAddress].angleMultiple,
-                                        AngleAcc = data.angle_acc / (double)MyDevice.mBUS[sAddress].angleMultiple,
-                                        DataResult = MyDevice.DataResult,
-                                        ModePt = data.mode_pt,
-                                        ModeAx = data.mode_ax,
-                                        ModeMx = data.mode_mx,
-                                        Battery = data.battery,
-                                        KeyBuf = data.keybuf,
-                                        KeyLock = data.keylock.ToString(),
-                                        MemAble = data.memable.ToString(),
-                                        Update = data.update.ToString(),
-                                        Error = "",
-                                        Alarm = data.dtype == 0xF3 ? $"{data.alarm[0]},{data.alarm[1]},{data.alarm[2]}" : "",
+                                        DataId       = 1,
+                                        DataType     = MyDevice.DataType,
+                                        Bohrcode     = MyDevice.mBUS[sAddress].devc.bohrcode,
+                                        DevType      = MyDevice.mBUS[sAddress].devc.series + "-" + MyDevice.mBUS[sAddress].devc.type,
+                                        WorkId       = MyDevice.WorkId,
+                                        WorkNum      = (data.dtype == 0xF4) ? data.work_ID.ToString() : MyDevice.WorkNum,
+                                        SequenceId   = (data.dtype == 0xF4) ? data.work_psq.ToString() : MyDevice.SequenceId,
+                                        PointNum     = MyDevice.PointNum,
+                                        ScrewNum     = (byte)((data.dtype == 0xF4) ? data.screwNum : 1),
+                                        ScrewSeq     = (byte)((data.dtype == 0xF4) ? data.screwSeq : 0),
+                                        DevAddr      = sAddress,
+                                        VinId        = MyDevice.Vin,
+                                        DType        = data.dtype,
+                                        Stamp        = data.stamp,
+                                        Mark         = data.mark,
+                                        Torque       = data.torque / (double)MyDevice.mBUS[sAddress].torqueMultiple,
+                                        TorquePeak   = (data.dtype == 0xF2 ? data.torseries_pk : data.torgroup_pk) / (double)MyDevice.mBUS[sAddress].torqueMultiple,
+                                        TorqueUnit   = data.torque_unit.ToString(),
+                                        AngleDecimal = data.angle_decimal,
+                                        Angle        = data.angle / (double)MyDevice.mBUS[sAddress].angleMultiple,
+                                        AngleAcc     = data.angle_acc / (double)MyDevice.mBUS[sAddress].angleMultiple,
+                                        AngleResist  = (data.dtype == 0xF3) ? data.angle_resist / (double)Math.Pow(10, angleDecimal) : 0,
+                                        TorqueResult = MyDevice.TorqueResult,
+                                        AngleResult  = MyDevice.AngleResult,
+                                        ResistResult = MyDevice.ResistResult,
+                                        DataResult   = MyDevice.DataResult,
+                                        ModePt       = data.mode_pt,
+                                        ModeAx       = (byte)((data.dtype == 0xF4) ? data.mode >> 0x04 : data.mode_ax),
+                                        ModeMx       = (byte)((data.dtype == 0xF4) ? data.mode & 0x0F : data.mode_mx),
+                                        Battery      = data.battery,
+                                        KeyBuf       = data.keybuf,
+                                        KeyLock      = data.keylock.ToString(),
+                                        MemAble      = data.memable.ToString(),
+                                        Update       = data.update.ToString(),
+                                        Error        = "",
+                                        Alarm0       = data.dtype == 0xF3 ? $"{data.alarm[0]}" : "",
+                                        Alarm1       = data.dtype == 0xF3 ? $"{data.alarm[1]}" : "",
+                                        Alarm2       = data.dtype == 0xF3 ? $"{data.alarm[2]}" : "",
                                         CreateTime = new DateTime(),
                                     });
                                 }
@@ -3026,12 +3036,12 @@ namespace Model
                             }
                             else if (MyDevice.mBUS[sAddress].data[0].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mBUS[sAddress].data[0].mark        = mePort_GetByte(12);
-                                //MyDevice.mBUS[sAddress].data[0].mode        = mePort_GetByte(13);
-                                //MyDevice.mBUS[sAddress].data[0].screwCnt    = mePort_GetByte(14);
-                                //MyDevice.mBUS[sAddress].data[0].work_num     = mePort_GetUInt32(15);
-                                //MyDevice.mBUS[sAddress].data[0].work_psq    = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
-                                //MyDevice.mBUS[sAddress].data[0].screwSeq    = mePort_GetByte(25);
+                                MyDevice.mBUS[sAddress].data[0].mark        = mePort_GetByte(12);
+                                MyDevice.mBUS[sAddress].data[0].mode        = mePort_GetByte(13);
+                                MyDevice.mBUS[sAddress].data[0].screwNum    = mePort_GetByte(14);
+                                MyDevice.mBUS[sAddress].data[0].work_ID     = mePort_GetUInt32(15);
+                                MyDevice.mBUS[sAddress].data[0].work_psq    = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
+                                MyDevice.mBUS[sAddress].data[0].screwSeq    = mePort_GetByte(25);
                             }
 
                             //第二包
@@ -3085,12 +3095,12 @@ namespace Model
                             }
                             else if (MyDevice.mBUS[sAddress].data[1].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mBUS[sAddress].data[1].mark        = mePort_GetByte(40);
-                                //MyDevice.mBUS[sAddress].data[1].mode        = mePort_GetByte(41);
-                                //MyDevice.mBUS[sAddress].data[1].screwCnt    = mePort_GetByte(42);
-                                //MyDevice.mBUS[sAddress].data[1].work_num     = mePort_GetUInt32(43);
-                                //MyDevice.mBUS[sAddress].data[1].work_psq    = (ulong)(mePort_GetUInt16(47) * Math.Pow(10, 9) + mePort_GetUInt32(49));//6位
-                                //MyDevice.mBUS[sAddress].data[1].screwSeq    = mePort_GetByte(53);
+                                MyDevice.mBUS[sAddress].data[1].mark        = mePort_GetByte(40);
+                                MyDevice.mBUS[sAddress].data[1].mode        = mePort_GetByte(41);
+                                MyDevice.mBUS[sAddress].data[1].screwNum    = mePort_GetByte(42);
+                                MyDevice.mBUS[sAddress].data[1].work_ID     = mePort_GetUInt32(43);
+                                MyDevice.mBUS[sAddress].data[1].work_psq    = (ulong)(mePort_GetUInt16(47) * Math.Pow(10, 9) + mePort_GetUInt32(49));//6位
+                                MyDevice.mBUS[sAddress].data[1].screwSeq    = mePort_GetByte(53);
                             }
 
                             //第三包
@@ -3144,12 +3154,12 @@ namespace Model
                             }
                             else if (MyDevice.mBUS[sAddress].data[2].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mBUS[sAddress].data[2].mark        = mePort_GetByte(68);
-                                //MyDevice.mBUS[sAddress].data[2].mode        = mePort_GetByte(69);
-                                //MyDevice.mBUS[sAddress].data[2].screwCnt    = mePort_GetByte(70);
-                                //MyDevice.mBUS[sAddress].data[2].work_num     = mePort_GetUInt32(71);
-                                //MyDevice.mBUS[sAddress].data[2].work_psq    = (ulong)(mePort_GetUInt16(75) * Math.Pow(10, 9) + mePort_GetUInt32(77));//6位
-                                //MyDevice.mBUS[sAddress].data[2].screwSeq    = mePort_GetByte(81);
+                                MyDevice.mBUS[sAddress].data[2].mark        = mePort_GetByte(68);
+                                MyDevice.mBUS[sAddress].data[2].mode        = mePort_GetByte(69);
+                                MyDevice.mBUS[sAddress].data[2].screwNum    = mePort_GetByte(70);
+                                MyDevice.mBUS[sAddress].data[2].work_ID     = mePort_GetUInt32(71);
+                                MyDevice.mBUS[sAddress].data[2].work_psq    = (ulong)(mePort_GetUInt16(75) * Math.Pow(10, 9) + mePort_GetUInt32(77));//6位
+                                MyDevice.mBUS[sAddress].data[2].screwSeq    = mePort_GetByte(81);
                             }
 
                             //第四包
@@ -3203,12 +3213,12 @@ namespace Model
                             }
                             else if (MyDevice.mBUS[sAddress].data[3].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mBUS[sAddress].data[3].mark        = mePort_GetByte(96);
-                                //MyDevice.mBUS[sAddress].data[3].mode        = mePort_GetByte(97);
-                                //MyDevice.mBUS[sAddress].data[3].screwCnt    = mePort_GetByte(98);
-                                //MyDevice.mBUS[sAddress].data[3].work_num     = mePort_GetUInt32(99);
-                                //MyDevice.mBUS[sAddress].data[3].work_psq    = (ulong)(mePort_GetUInt16(103) * Math.Pow(10, 9) + mePort_GetUInt32(105));//6位
-                                //MyDevice.mBUS[sAddress].data[3].screwSeq    = mePort_GetByte(109);
+                                MyDevice.mBUS[sAddress].data[3].mark        = mePort_GetByte(96);
+                                MyDevice.mBUS[sAddress].data[3].mode        = mePort_GetByte(97);
+                                MyDevice.mBUS[sAddress].data[3].screwNum    = mePort_GetByte(98);
+                                MyDevice.mBUS[sAddress].data[3].work_ID     = mePort_GetUInt32(99);
+                                MyDevice.mBUS[sAddress].data[3].work_psq    = (ulong)(mePort_GetUInt16(103) * Math.Pow(10, 9) + mePort_GetUInt32(105));//6位
+                                MyDevice.mBUS[sAddress].data[3].screwSeq    = mePort_GetByte(109);
                             }
 
                             //第五包
@@ -3262,12 +3272,12 @@ namespace Model
                             }
                             else if (MyDevice.mBUS[sAddress].data[4].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mBUS[sAddress].data[4].mark        = mePort_GetByte(124);
-                                //MyDevice.mBUS[sAddress].data[4].mode        = mePort_GetByte(125);
-                                //MyDevice.mBUS[sAddress].data[4].screwCnt    = mePort_GetByte(126);
-                                //MyDevice.mBUS[sAddress].data[4].work_num     = mePort_GetUInt32(127);
-                                //MyDevice.mBUS[sAddress].data[4].work_psq    = (ulong)(mePort_GetUInt16(131) * Math.Pow(10, 9) + mePort_GetUInt32(133));//6位
-                                //MyDevice.mBUS[sAddress].data[4].screwSeq    = mePort_GetByte(137);
+                                MyDevice.mBUS[sAddress].data[4].mark        = mePort_GetByte(124);
+                                MyDevice.mBUS[sAddress].data[4].mode        = mePort_GetByte(125);
+                                MyDevice.mBUS[sAddress].data[4].screwNum    = mePort_GetByte(126);
+                                MyDevice.mBUS[sAddress].data[4].work_ID     = mePort_GetUInt32(127);
+                                MyDevice.mBUS[sAddress].data[4].work_psq    = (ulong)(mePort_GetUInt16(131) * Math.Pow(10, 9) + mePort_GetUInt32(133));//6位
+                                MyDevice.mBUS[sAddress].data[4].screwSeq    = mePort_GetByte(137);
                             }
 
                             List<DSData> sqlDataList = new List<DSData>();//存入数据库的数据列表
@@ -3451,41 +3461,44 @@ namespace Model
 
                                     sqlDataList.Add(new DSData()
                                     {
-                                        DataId = 1,
-                                        DataType = MyDevice.DataType,
-                                        Bohrcode = MyDevice.mBUS[sAddress].devc.bohrcode,
-                                        DevType = MyDevice.mBUS[sAddress].devc.series + "-" + MyDevice.mBUS[sAddress].devc.type,
-                                        //WorkType = (data.dtype == 0xF4) ? "离线工单" : "",
-                                        WorkId = MyDevice.WorkId,
-                                        WorkNum = (data.dtype == 0xF4) ? data.work_num.ToString() : MyDevice.WorkNum,
-                                        SequenceId = (data.dtype == 0xF4) ? data.work_psq.ToString() : MyDevice.SequenceId,
-                                        PointNum = MyDevice.PointNum,
-                                        //ScrewNum = (byte)((data.dtype == 0xF4) ? data.screwCnt : 1),
-                                        //ScrewSeq = (byte)((data.dtype == 0xF4) ? data.screwSeq : 0),
-                                        DevAddr = sAddress,
-                                        VinId = MyDevice.Vin,
-                                        DType = data.dtype,
-                                        Stamp = data.stamp,
-                                        Torque = data.torque / (double)MyDevice.mBUS[sAddress].torqueMultiple,
-                                        TorquePeak = (data.dtype == 0xF2 ? data.torseries_pk : data.torgroup_pk) / (double)MyDevice.mBUS[sAddress].torqueMultiple,
-                                        TorqueUnit = data.torque_unit.ToString(),
-                                        Angle = data.angle / (double)MyDevice.mBUS[sAddress].angleMultiple,
-                                        AngleAcc = data.angle_acc / (double)MyDevice.mBUS[sAddress].angleMultiple,
-                                        //AngleResist = (data.dtype == 0xF3) ? data.angle_resist / (double)Math.Pow(10, angleDecimal) : 0,
-                                        //TorqueResult = MyDevice.TorqueResult,
-                                        //AngleResult = MyDevice.AngleResult,
-                                        //ResistResult = MyDevice.ResistResult,
-                                        DataResult = MyDevice.DataResult,
-                                        ModePt = data.mode_pt,
-                                        ModeAx = (byte)((data.dtype == 0xF4) ? data.mode >> 0x04 : data.mode_ax),
-                                        ModeMx = (byte)((data.dtype == 0xF4) ? data.mode & 0x0F : data.mode_mx),
-                                        Battery = data.battery,
-                                        KeyBuf = data.keybuf,
-                                        KeyLock = data.keylock.ToString(),
-                                        MemAble = data.memable.ToString(),
-                                        Update = data.update.ToString(),
-                                        Error = "",
-                                        Alarm = data.dtype == 0xF3 ? $"{data.alarm[0]},{data.alarm[1]},{data.alarm[2]}" : "",
+                                        DataId       = 1,
+                                        DataType     = MyDevice.DataType,
+                                        Bohrcode     = MyDevice.mBUS[sAddress].devc.bohrcode,
+                                        DevType      = MyDevice.mBUS[sAddress].devc.series + "-" + MyDevice.mBUS[sAddress].devc.type,
+                                        WorkId       = MyDevice.WorkId,
+                                        WorkNum      = (data.dtype == 0xF4) ? data.work_ID.ToString() : MyDevice.WorkNum,
+                                        SequenceId   = (data.dtype == 0xF4) ? data.work_psq.ToString() : MyDevice.SequenceId,
+                                        PointNum     = MyDevice.PointNum,
+                                        ScrewNum     = (byte)((data.dtype == 0xF4) ? data.screwNum : 1),
+                                        ScrewSeq     = (byte)((data.dtype == 0xF4) ? data.screwSeq : 0),
+                                        DevAddr      = sAddress,
+                                        VinId        = MyDevice.Vin,
+                                        DType        = data.dtype,
+                                        Stamp        = data.stamp,
+                                        Mark         = data.mark,
+                                        Torque       = data.torque / (double)MyDevice.mBUS[sAddress].torqueMultiple,
+                                        TorquePeak   = (data.dtype == 0xF2 ? data.torseries_pk : data.torgroup_pk) / (double)MyDevice.mBUS[sAddress].torqueMultiple,
+                                        TorqueUnit   = data.torque_unit.ToString(),
+                                        AngleDecimal = data.angle_decimal,
+                                        Angle        = data.angle / (double)MyDevice.mBUS[sAddress].angleMultiple,
+                                        AngleAcc     = data.angle_acc / (double)MyDevice.mBUS[sAddress].angleMultiple,
+                                        AngleResist  = (data.dtype == 0xF3) ? data.angle_resist / (double)Math.Pow(10, angleDecimal) : 0,
+                                        TorqueResult = MyDevice.TorqueResult,
+                                        AngleResult  = MyDevice.AngleResult,
+                                        ResistResult = MyDevice.ResistResult,
+                                        DataResult   = MyDevice.DataResult,
+                                        ModePt       = data.mode_pt,
+                                        ModeAx       = (byte)((data.dtype == 0xF4) ? data.mode >> 0x04 : data.mode_ax),
+                                        ModeMx       = (byte)((data.dtype == 0xF4) ? data.mode & 0x0F : data.mode_mx),
+                                        Battery      = data.battery,
+                                        KeyBuf       = data.keybuf,
+                                        KeyLock      = data.keylock.ToString(),
+                                        MemAble      = data.memable.ToString(),
+                                        Update       = data.update.ToString(),
+                                        Error        = "",
+                                        Alarm0       = data.dtype == 0xF3 ? $"{data.alarm[0]}" : "",
+                                        Alarm1       = data.dtype == 0xF3 ? $"{data.alarm[1]}" : "",
+                                        Alarm2       = data.dtype == 0xF3 ? $"{data.alarm[2]}" : "",
                                         CreateTime = new DateTime(),
                                     });
                                 }
