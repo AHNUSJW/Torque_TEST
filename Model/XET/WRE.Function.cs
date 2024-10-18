@@ -128,6 +128,8 @@ namespace Model
             para.runmode        = 0;
             para.auploaden      = 0;
             para.devrole        = 0;
+            para.usbEn          = 0;
+            para.wirelessEn     = 0;
 
             for (byte i = 0; i < 5; i++)
             {
@@ -215,7 +217,7 @@ namespace Model
                 data[i].alarm[2]       = 0;
                 data[i].angle_resist   = 0;
                 data[i].mode           = 0;
-                data[i].screwNum       = 0;
+                data[i].screwNum       = 1;
                 data[i].work_ID        = 0;
                 data[i].work_psq       = 0;
                 data[i].screwSeq       = 0;
@@ -355,6 +357,8 @@ namespace Model
             para.runmode        = xet.para.runmode;
             para.auploaden      = xet.para.auploaden;
             para.devrole        = xet.para.devrole;
+            para.usbEn          = xet.para.usbEn;
+            para.wirelessEn     = xet.para.wirelessEn;
 
             for (byte i = 0; i < 5; i++)
             {

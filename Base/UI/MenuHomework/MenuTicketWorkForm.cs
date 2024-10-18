@@ -31,7 +31,7 @@ namespace Base.UI.MenuHomework
         private bool isFirstLoad = true;                                                                //是否第一次加载
         private bool isBegin = true;                                                                    //是否从头开始拧（针对扫码的已完成工单）
 
-        private XET actXET;             //操作的设备
+        private XET actXET;                   //操作的设备
 
         private double torque = 0;            //实时扭矩
         private double angle = 0;             //实时角度
@@ -44,6 +44,7 @@ namespace Base.UI.MenuHomework
         private int ticketNumLen = 4;         //工单号限定长度
         private int sequenceLen = 6;          //序列号限定长度
         private int ticketEncodeLen = 10;     //工单编码限定长度——工单编码 = 工单号 + 序列号
+        private double angleResit = 0;           //工单绑定的复拧角度（仅扭矩优先模式触发）
         private DSProductInfo meProductInfo = new DSProductInfo();
         private List<DSProductResults> meProductResults = new List<DSProductResults>();
 
@@ -75,6 +76,7 @@ namespace Base.UI.MenuHomework
             tb_alarm3.Enabled = false;
 
             label1.Text = "工单号：" + meTicketInfo.WoNum;//更新工单号
+            angleResit = meTicketInfo.AngleResist;
             isAllPointPassShow = false;
             isBegin = true;
 
@@ -185,6 +187,29 @@ namespace Base.UI.MenuHomework
             else
             {
                 MyDevice.myTaskManager.UpdateUI -= updateUI;
+            }
+
+
+            //初始化加入复拧
+            if (MyDevice.devSum > 0)
+            {
+                for (int i = 0; i < MyDevice.AddrList.Count; i++)
+                {
+                    if ((MyDevice.protocol.type == COMP.XF && MyDevice.mXF[MyDevice.AddrList[i]].sTATE == STATE.WORKING) ||
+                        (MyDevice.protocol.type == COMP.TCP && MyDevice.mTCP[MyDevice.AddrList[i]].sTATE == STATE.WORKING) ||
+                        (MyDevice.protocol.type == COMP.RS485 && MyDevice.mRS[MyDevice.AddrList[i]].sTATE == STATE.WORKING) ||
+                        (MyDevice.protocol.type == COMP.UART && MyDevice.mBUS[MyDevice.AddrList[i]].sTATE == STATE.WORKING)
+                    )
+                    {
+                        //仅07，09系列有复拧
+                        if (MyDevice.mBUS[MyDevice.AddrList[i]].devc.type == TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR ||
+                            MyDevice.mBUS[MyDevice.AddrList[i]].devc.type == TYPE.TQ_XH_XL01_09 - (UInt16)ADDROFFSET.TQ_XH_ADDR
+                            )
+                        {
+                            MyDevice.myTaskManager.AddUserCommand(MyDevice.AddrList[i], ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK3_PARA, this.Name);
+                        }
+                    }
+                }
             }
         }
 
@@ -362,6 +387,7 @@ namespace Base.UI.MenuHomework
                         WorkNum = targetWorknum,
                         SequenceId = targetSequenceId,
                         ImagePath = JDBC.GetProductsByWorkId(targetWorkId).First().ImagePath,
+                        AngleResist = JDBC.GetProductsByWorkId(targetWorkId).First().AngleResist,
                     };
 
                     List<DSProductInfo> allProduct = JDBC.GetAllProducts();
@@ -410,6 +436,8 @@ namespace Base.UI.MenuHomework
                             PointNumber = item.PointNumber,
                             PointPosition = item.PointPosition,
                             ScrewId = item.ScrewsId,
+                            ScrewNum = item.ScrewNum,
+                            ScrewSeq = item.ScrewSeq,
                             Name = screwAlarm.Name,
                             Specification = screwAlarm.Specification,
                             Torque_unit = screwAlarm.Torque_unit,
@@ -535,6 +563,8 @@ namespace Base.UI.MenuHomework
                         WorkId = item.WorkId,
                         PointPosition = item.PointPosition,
                         ScrewsId = item.ScrewId,
+                        ScrewNum = item.ScrewNum,
+                        ScrewSeq = item.ScrewSeq,
                         Result = item.Result,
                     });
                     ReadPointWrenchList.Add(new DSRelationsPointWrench
@@ -690,6 +720,17 @@ namespace Base.UI.MenuHomework
 
                     label_torqueAlarm.Text = "预设扭矩 " + screw.Alarm0 + " " + tb_Unit.Text;
                     label_angleAlarm.Text = "预设角度 ";
+
+                    if (actXET == null)
+                    {
+
+                    }
+                    if (actXET != null && 
+                        (actXET.devc.type != TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR || actXET.devc.type != TYPE.TQ_XH_XL01_09 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
+                        )
+                    {
+                        label_angleAlarm.Text = "复拧角度 " + angleResit;
+                    }
                     break;
 
                 case "SA":
@@ -718,6 +759,13 @@ namespace Base.UI.MenuHomework
 
                     label_torqueAlarm.Text = "预设扭矩 " + "( " + screw.Alarm0 + ", " + screw.Alarm1 + " )" + " " + tb_Unit.Text;
                     label_angleAlarm.Text = "预设角度 ";
+
+                    if (actXET != null &&
+                        (actXET.devc.type != TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR || actXET.devc.type != TYPE.TQ_XH_XL01_09 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
+                        )
+                    {
+                        label_angleAlarm.Text = "复拧角度 " + angleResit;
+                    }
                     break;
 
                 case "MA":
@@ -806,18 +854,21 @@ namespace Base.UI.MenuHomework
             {
                 case "EN":
                     actXET.para.mode_ax = 0;
+                    actXET.para.angle_resist = (int)(angleResit * Math.Pow(10, actXET.para.angle_decimal));
                     break;
                 case "EA":
                     actXET.para.mode_ax = 1;
                     break;
                 case "SN":
                     actXET.para.mode_ax = 2;
+                    actXET.para.angle_resist = (int)(angleResit * Math.Pow(10, actXET.para.angle_decimal));
                     break;
                 case "SA":
                     actXET.para.mode_ax = 3;
                     break;
                 case "MN":
                     actXET.para.mode_ax = 4;
+                    actXET.para.angle_resist = (int)(angleResit * Math.Pow(10, actXET.para.angle_decimal));
                     break;
                 case "MA":
                     actXET.para.mode_ax = 5;
@@ -957,7 +1008,7 @@ namespace Base.UI.MenuHomework
                                 {
                                     isDataValid = true;
                                     //扭矩优先模式下再判断复拧角度
-                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, actXET.para.angle_resist);
+                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, angleResit);
                                 }
                                 else
                                 {
@@ -980,7 +1031,7 @@ namespace Base.UI.MenuHomework
                                 if (actXET.alam.MN_low[actXET.para.mode_mx, (int)actXET.para.torque_unit] <= torque && torque <= actXET.alam.MN_high[actXET.para.mode_mx, (int)actXET.para.torque_unit])
                                 {
                                     isDataValid = true;
-                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, actXET.para.angle_resist);
+                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, angleResit);
                                 }
                                 else
                                 {

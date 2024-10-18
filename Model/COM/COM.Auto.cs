@@ -300,6 +300,19 @@ namespace Model
                             MyDevice.actDev.auto.dataTick++;
                             //Console.WriteLine(MyDevice.actDev.wlan.addr + ": " + MyDevice.actDev.fifo.index + "---正常-----" + MyDevice.actDev.auto.fifoIndex);
 
+                            int tempFxNum = 0;//5包中的有效数值数量
+                            for (int i = 0; i < 5; i++)
+                            {
+                                if (MyDevice.actDev.data[i].dtype == 0xF1 ||
+                                    MyDevice.actDev.data[i].dtype == 0xF2 ||
+                                    MyDevice.actDev.data[i].dtype == 0xF3
+                                    )
+                                {
+                                    tempFxNum++;
+                                }
+                            }
+                            MyDevice.actDev.auto.validDataCnt += tempFxNum;
+
                             if (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
                             {
                                 //触发UI更新事件
@@ -406,12 +419,17 @@ namespace Model
                                     Console.WriteLine(MyDevice.actDev.wlan.addr + ": " + MyDevice.actDev.fifo.index + "---异常--------------" + MyDevice.actDev.auto.fifoIndex);
                                     //MyDevice.actDev.auto.fifoIndex -= 5 * 28;//回退到上一条是为了防止丢失的数据是5包中的其一
                                     MyDevice.actDev.auto.dataTick--;
+                                    MyDevice.actDev.auto.validDataCnt -= tempFxNum;
                                     MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
                                 }
                             }
 
+
+                            Console.WriteLine("更新UI");
+                            TriggerUpdateUI(CurrentCommand);
                             break;
                         case TASKS.WRITE_FIFOCLEAR:
+                            MyDevice.actDev.auto.validDataCnt = 0;
                             MyDevice.actDev.auto.dataTick = 0;
                             MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK1_FIFO;
                             break;
@@ -419,8 +437,6 @@ namespace Model
                             break;
                     }
 
-                    Console.WriteLine("更新UI");
-                    TriggerUpdateUI(CurrentCommand);
                 }
                 //工单
                 else if (mode == AutoMode.UserAndTicketWork)
@@ -501,7 +517,15 @@ namespace Model
                                     else
                                     {
                                         MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
-                                        MyDevice.actDev.auto.fifoIndex += 5 * 28;
+                                        if ((MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_08 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 11) ||
+                                                (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 41))
+                                        {
+                                            MyDevice.actDev.auto.fifoIndex += 5 * 32;
+                                        }
+                                        else
+                                        {
+                                            MyDevice.actDev.auto.fifoIndex += 5 * 28;
+                                        }
 
                                         if (MyDevice.actDev.auto.readDataNum >= MyDevice.actDev.auto.fifoCount)
                                             MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;//读出的包超出缓存数，清缓存
@@ -510,7 +534,7 @@ namespace Model
                                 //1.收到的index不是连续性，说明数据丢失，重新读该条
                                 else
                                 {
-                                    MyDevice.actDev.auto.fifoIndex -= 5 * 28;
+                                    MyDevice.actDev.auto.readDataNum = MyDevice.actDev.auto.readDataNum - 5;
                                     MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
                                 }
                             }
@@ -529,7 +553,15 @@ namespace Model
                                     else
                                     {
                                         MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
-                                        MyDevice.actDev.auto.fifoIndex += 5 * 28;
+                                        if ((MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_08 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 11) ||
+                                                (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 41))
+                                        {
+                                            MyDevice.actDev.auto.fifoIndex += 5 * 32;
+                                        }
+                                        else
+                                        {
+                                            MyDevice.actDev.auto.fifoIndex += 5 * 28;
+                                        }
 
                                         if (MyDevice.actDev.auto.readDataNum >= MyDevice.actDev.auto.fifoCount)
                                             MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;//读出的包超出缓存数，清缓存
@@ -538,7 +570,7 @@ namespace Model
                                 //1.收到的index不是连续性，说明数据丢失，重新读该条
                                 else
                                 {
-                                    MyDevice.actDev.auto.fifoIndex -= 5 * 28;
+                                    MyDevice.actDev.auto.readDataNum = MyDevice.actDev.auto.readDataNum - 5;
                                     MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
                                 }
                             }
@@ -686,7 +718,8 @@ namespace Model
             {
                 WrenchId = mDev.wlan.addr.ToString(),
                 TaskState = mDev.auto.nextTask,
-                SeqWriteNum = mDev.auto.dataTick * 5,
+                //SeqWriteNum = mDev.auto.dataTick * 5,
+                SeqWriteNum = mDev.auto.validDataCnt,
                 SeqWriteIndex = mDev.auto.fifoIndex
             };
 

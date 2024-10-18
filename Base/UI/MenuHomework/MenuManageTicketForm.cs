@@ -67,7 +67,8 @@ namespace Base.UI.MenuHomework
                                 ticketInfo.WoBat, 
                                 ticketInfo.WoNum, 
                                 ticketInfo.WoStamp, 
-                                ticketInfo.WoName, 
+                                ticketInfo.WoName,
+                                ticketInfo.AngleResist,
                                 ticketInfo.Note, 
                                 ticketInfo.Reserve);
                 dataGridView1.Rows.Add(row);
@@ -106,6 +107,7 @@ namespace Base.UI.MenuHomework
                                 ticketInfo.WoNum,
                                 ticketInfo.WoStamp,
                                 ticketInfo.WoName,
+                                ticketInfo.AngleResist,
                                 ticketInfo.Note,
                                 ticketInfo.Reserve);
                 dataGridView1.Rows.Add(row);
@@ -346,6 +348,7 @@ namespace Base.UI.MenuHomework
                                     ticketInfo.WoNum,
                                     ticketInfo.WoStamp,
                                     ticketInfo.WoName,
+                                    ticketInfo.AngleResist,
                                     ticketInfo.Note,
                                     ticketInfo.Reserve);
                     dataGridView1.Rows.Add(row);
@@ -416,6 +419,7 @@ namespace Base.UI.MenuHomework
                                 ticketInfo.WoNum,
                                 ticketInfo.WoStamp,
                                 ticketInfo.WoName,
+                                ticketInfo.AngleResist,
                                 ticketInfo.Note,
                                 ticketInfo.Reserve);
                 dataGridView1.Rows.Add(row);

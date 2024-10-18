@@ -170,6 +170,7 @@ namespace Base.UI.MenuHomework
                 Alarm2        = tb_alarm3.Text,
                 Description   = tb_description.Text,
             };
+
             try
             {
                 if (IsCreate)
@@ -208,6 +209,35 @@ namespace Base.UI.MenuHomework
             {
                 e.Handled = true; // 阻止非法字符输入
             }
+        }
+
+        private double ConvertToDouble(string targetValue, string errorText)
+        {
+            double doubleValue = 0;
+            // 尝试将输入转换为double
+            if (double.TryParse(targetValue, out double result))
+            {
+                // 检查是否大于0
+                if (result > 0)
+                {
+                    // 有效值
+                    doubleValue = result;
+                }
+                else
+                {
+                    // 值小于0，弹出提示框
+                    MessageBox.Show($"{errorText}请输入大于0的数字。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return -1;
+                }
+            }
+            else
+            {
+                // 转换失败，弹出提示框
+                MessageBox.Show($"{errorText}输入的格式不正确，请输入一个有效的数字。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return -1;
+            }
+
+            return doubleValue;
         }
     }
 }

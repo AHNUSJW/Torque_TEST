@@ -46,6 +46,7 @@ namespace Model
         private String rxStr = null;
         private UInt32 tempStamp = 0;                         //程序F39版本及以上F3数据帧的stamp删除了，故需要通过继承上一个F2继承
         private Byte angleDecimal = 0;                        //角度小数点（用于计算复拧角度）
+        private UNIT inheritUnit = 0;                         //F3继承F2的单位
         private int f2Num = 0;
         private object lockObj = new object();
 
@@ -1232,10 +1233,10 @@ namespace Model
                     meTXD[idx++] = MyDevice.mTCP[sAddress].para.devrole;
 
                     //预留6个字节
-                    meTXD[idx++] = 0xFF;
-                    meTXD[idx++] = 0xFF;
-                    meTXD[idx++] = 0xFF;
-                    meTXD[idx++] = 0xFF;
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = MyDevice.mTCP[sAddress].para.usbEn;
+                    meTXD[idx++] = 0x00;
+                    meTXD[idx++] = MyDevice.mTCP[sAddress].para.wirelessEn;
                     meTXD[idx++] = 0xFF;
                     meTXD[idx++] = 0xFF;
 
@@ -2116,6 +2117,8 @@ namespace Model
                         MyDevice.mTCP[sAddress].para.runmode         = mePort_GetByte(56);
                         MyDevice.mTCP[sAddress].para.auploaden       = mePort_GetByte(58);
                         MyDevice.mTCP[sAddress].para.devrole         = mePort_GetByte(60);
+                        MyDevice.mTCP[sAddress].para.usbEn           = mePort_GetByte(62);
+                        MyDevice.mTCP[sAddress].para.wirelessEn      = mePort_GetByte(64);
 
                         MyDevice.mTCP[sAddress].para.angcorr         = mePort_GetFloat(67);
                         MyDevice.mTCP[sAddress].para.angle_resist    = mePort_GetInt32(71);
@@ -2716,6 +2719,9 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[0].begin_series  = mePort_GetUInt32(23);
                                 MyDevice.mTCP[sAddress].data[0].begin_group   = mePort_GetUInt32(27);
                                 MyDevice.mTCP[sAddress].data[0].len           = mePort_GetUInt16(31);
+
+                                angleDecimal = MyDevice.mTCP[sAddress].data[0].angle_decimal;
+                                inheritUnit  = MyDevice.mTCP[sAddress].data[0].torque_unit;
                             }
                             else if (MyDevice.mTCP[sAddress].data[0].dtype == 0xF3)  //03一组结果帧
                             {
@@ -2734,15 +2740,18 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[0].alarm[0]     = mePort_GetInt32(27);
                                 MyDevice.mTCP[sAddress].data[0].alarm[1]     = mePort_GetInt32(31);
                                 MyDevice.mTCP[sAddress].data[0].alarm[2]     = mePort_GetInt32(35);
+
+                                MyDevice.mTCP[sAddress].data[0].angle_decimal = angleDecimal; //继承F2的小数点
+                                MyDevice.mTCP[sAddress].data[0].torque_unit   = inheritUnit;  //继承F2的扭矩单位
                             }
                             else if (MyDevice.mTCP[sAddress].data[0].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mTCP[sAddress].data[0].mark = mePort_GetByte(12);
-                                //MyDevice.mTCP[sAddress].data[0].mode = mePort_GetByte(13);
-                                //MyDevice.mTCP[sAddress].data[0].screwCnt = mePort_GetByte(14);
-                                //MyDevice.mTCP[sAddress].data[0].work_num = mePort_GetUInt32(15);
-                                //MyDevice.mTCP[sAddress].data[0].work_psq = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
-                                //MyDevice.mTCP[sAddress].data[0].screwSeq = mePort_GetByte(25);
+                                MyDevice.mTCP[sAddress].data[0].mark      = mePort_GetByte(12);
+                                MyDevice.mTCP[sAddress].data[0].mode      = mePort_GetByte(13);
+                                MyDevice.mTCP[sAddress].data[0].screwNum  = mePort_GetByte(14);
+                                MyDevice.mTCP[sAddress].data[0].work_ID   = mePort_GetUInt32(15);
+                                MyDevice.mTCP[sAddress].data[0].work_psq  = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
+                                MyDevice.mTCP[sAddress].data[0].screwSeq  = mePort_GetByte(25);
                             }
 
                             //第二包
@@ -2772,6 +2781,9 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[1].begin_series  = mePort_GetUInt32(55);
                                 MyDevice.mTCP[sAddress].data[1].begin_group   = mePort_GetUInt32(59);
                                 MyDevice.mTCP[sAddress].data[1].len           = mePort_GetUInt16(63);
+
+                                angleDecimal = MyDevice.mTCP[sAddress].data[1].angle_decimal;
+                                inheritUnit = MyDevice.mTCP[sAddress].data[1].torque_unit;
                             }
                             else if (MyDevice.mTCP[sAddress].data[1].dtype == 0xF3)  //03一组结果帧
                             {
@@ -2790,15 +2802,18 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[1].alarm[0]     = mePort_GetInt32(59);
                                 MyDevice.mTCP[sAddress].data[1].alarm[1]     = mePort_GetInt32(63);
                                 MyDevice.mTCP[sAddress].data[1].alarm[2]     = mePort_GetInt32(67);
+
+                                MyDevice.mTCP[sAddress].data[1].angle_decimal = angleDecimal; //继承F2的小数点
+                                MyDevice.mTCP[sAddress].data[1].torque_unit = inheritUnit;  //继承F2的扭矩单位
                             }
                             else if (MyDevice.mTCP[sAddress].data[1].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mTCP[sAddress].data[1].mark = mePort_GetByte(40);
-                                //MyDevice.mTCP[sAddress].data[1].mode = mePort_GetByte(41);
-                                //MyDevice.mTCP[sAddress].data[1].screwCnt = mePort_GetByte(42);
-                                //MyDevice.mTCP[sAddress].data[1].work_num = mePort_GetUInt32(43);
-                                //MyDevice.mTCP[sAddress].data[1].work_psq = (ulong)(mePort_GetUInt16(47) * Math.Pow(10, 9) + mePort_GetUInt32(49));//6位
-                                //MyDevice.mTCP[sAddress].data[1].screwSeq = mePort_GetByte(53);
+                                MyDevice.mTCP[sAddress].data[1].mark      = mePort_GetByte(44);
+                                MyDevice.mTCP[sAddress].data[1].mode      = mePort_GetByte(45);
+                                MyDevice.mTCP[sAddress].data[1].screwNum  = mePort_GetByte(46);
+                                MyDevice.mTCP[sAddress].data[1].work_ID   = mePort_GetUInt32(47);
+                                MyDevice.mTCP[sAddress].data[1].work_psq  = (ulong)(mePort_GetUInt16(51) * Math.Pow(10, 9) + mePort_GetUInt32(53));//6位
+                                MyDevice.mTCP[sAddress].data[1].screwSeq  = mePort_GetByte(57);
                             }
 
                             //第三包
@@ -2828,6 +2843,9 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[2].begin_series  = mePort_GetUInt32(87);
                                 MyDevice.mTCP[sAddress].data[2].begin_group   = mePort_GetUInt32(91);
                                 MyDevice.mTCP[sAddress].data[2].len           = mePort_GetUInt16(95);
+
+                                angleDecimal = MyDevice.mTCP[sAddress].data[2].angle_decimal;
+                                inheritUnit = MyDevice.mTCP[sAddress].data[2].torque_unit;
                             }
                             else if (MyDevice.mTCP[sAddress].data[2].dtype == 0xF3)  //03一组结果帧
                             {
@@ -2846,15 +2864,18 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[2].alarm[0]     = mePort_GetInt32(91);
                                 MyDevice.mTCP[sAddress].data[2].alarm[1]     = mePort_GetInt32(95);
                                 MyDevice.mTCP[sAddress].data[2].alarm[2]     = mePort_GetInt32(99);
+
+                                MyDevice.mTCP[sAddress].data[2].angle_decimal = angleDecimal; //继承F2的小数点
+                                MyDevice.mTCP[sAddress].data[2].torque_unit = inheritUnit;  //继承F2的扭矩单位
                             }
                             else if (MyDevice.mTCP[sAddress].data[2].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mTCP[sAddress].data[2].mark = mePort_GetByte(68);
-                                //MyDevice.mTCP[sAddress].data[2].mode = mePort_GetByte(69);
-                                //MyDevice.mTCP[sAddress].data[2].screwCnt = mePort_GetByte(70);
-                                //MyDevice.mTCP[sAddress].data[2].work_num = mePort_GetUInt32(71);
-                                //MyDevice.mTCP[sAddress].data[2].work_psq = (ulong)(mePort_GetUInt16(75) * Math.Pow(10, 9) + mePort_GetUInt32(77));//6位
-                                //MyDevice.mTCP[sAddress].data[2].screwSeq = mePort_GetByte(81);
+                                MyDevice.mTCP[sAddress].data[2].mark     = mePort_GetByte(76);
+                                MyDevice.mTCP[sAddress].data[2].mode     = mePort_GetByte(77);
+                                MyDevice.mTCP[sAddress].data[2].screwNum = mePort_GetByte(78);
+                                MyDevice.mTCP[sAddress].data[2].work_ID  = mePort_GetUInt32(79);
+                                MyDevice.mTCP[sAddress].data[2].work_psq = (ulong)(mePort_GetUInt16(83) * Math.Pow(10, 9) + mePort_GetUInt32(85));//6位
+                                MyDevice.mTCP[sAddress].data[2].screwSeq = mePort_GetByte(89);
                             }
 
                             //第四包
@@ -2884,6 +2905,9 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[3].begin_series  = mePort_GetUInt32(119);
                                 MyDevice.mTCP[sAddress].data[3].begin_group   = mePort_GetUInt32(123);
                                 MyDevice.mTCP[sAddress].data[3].len           = mePort_GetUInt16(127);
+
+                                angleDecimal = MyDevice.mTCP[sAddress].data[3].angle_decimal;
+                                inheritUnit = MyDevice.mTCP[sAddress].data[3].torque_unit;
                             }
                             else if (MyDevice.mTCP[sAddress].data[3].dtype == 0xF3)  //03一组结果帧
                             {
@@ -2902,15 +2926,18 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[3].alarm[0]     = mePort_GetInt32(123);
                                 MyDevice.mTCP[sAddress].data[3].alarm[1]     = mePort_GetInt32(127);
                                 MyDevice.mTCP[sAddress].data[3].alarm[2]     = mePort_GetInt32(131);
+
+                                MyDevice.mTCP[sAddress].data[3].angle_decimal = angleDecimal; //继承F2的小数点
+                                MyDevice.mTCP[sAddress].data[3].torque_unit = inheritUnit;  //继承F2的扭矩单位
                             }
                             else if (MyDevice.mTCP[sAddress].data[3].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mTCP[sAddress].data[3].mark = mePort_GetByte(96);
-                                //MyDevice.mTCP[sAddress].data[3].mode = mePort_GetByte(97);
-                                //MyDevice.mTCP[sAddress].data[3].screwCnt = mePort_GetByte(98);
-                                //MyDevice.mTCP[sAddress].data[3].work_num = mePort_GetUInt32(99);
-                                //MyDevice.mTCP[sAddress].data[3].work_psq = (ulong)(mePort_GetUInt16(103) * Math.Pow(10, 9) + mePort_GetUInt32(105));//6位
-                                //MyDevice.mTCP[sAddress].data[3].screwSeq = mePort_GetByte(109);
+                                MyDevice.mTCP[sAddress].data[3].mark     = mePort_GetByte(108);
+                                MyDevice.mTCP[sAddress].data[3].mode     = mePort_GetByte(109);
+                                MyDevice.mTCP[sAddress].data[3].screwNum = mePort_GetByte(110);
+                                MyDevice.mTCP[sAddress].data[3].work_ID  = mePort_GetUInt32(111);
+                                MyDevice.mTCP[sAddress].data[3].work_psq = (ulong)(mePort_GetUInt16(115) * Math.Pow(10, 9) + mePort_GetUInt32(117));//6位
+                                MyDevice.mTCP[sAddress].data[3].screwSeq = mePort_GetByte(121);
                             }
 
                             //第五包
@@ -2940,6 +2967,9 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[4].begin_series  = mePort_GetUInt32(151);
                                 MyDevice.mTCP[sAddress].data[4].begin_group   = mePort_GetUInt32(155);
                                 MyDevice.mTCP[sAddress].data[4].len           = mePort_GetUInt16(159);
+
+                                angleDecimal = MyDevice.mTCP[sAddress].data[4].angle_decimal;
+                                inheritUnit = MyDevice.mTCP[sAddress].data[4].torque_unit;
                             }
                             else if (MyDevice.mTCP[sAddress].data[4].dtype == 0xF3)  //03一组结果帧
                             {
@@ -2958,36 +2988,21 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[4].alarm[0]     = mePort_GetInt32(155);
                                 MyDevice.mTCP[sAddress].data[4].alarm[1]     = mePort_GetInt32(159);
                                 MyDevice.mTCP[sAddress].data[4].alarm[2]     = mePort_GetInt32(163);
+
+                                MyDevice.mTCP[sAddress].data[4].angle_decimal = angleDecimal; //继承F2的小数点
+                                MyDevice.mTCP[sAddress].data[4].torque_unit = inheritUnit;  //继承F2的扭矩单位
                             }
                             else if (MyDevice.mTCP[sAddress].data[4].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mTCP[sAddress].data[4].mark = mePort_GetByte(124);
-                                //MyDevice.mTCP[sAddress].data[4].mode = mePort_GetByte(125);
-                                //MyDevice.mTCP[sAddress].data[4].screwCnt = mePort_GetByte(126);
-                                //MyDevice.mTCP[sAddress].data[4].work_num = mePort_GetUInt32(127);
-                                //MyDevice.mTCP[sAddress].data[4].work_psq = (ulong)(mePort_GetUInt16(131) * Math.Pow(10, 9) + mePort_GetUInt32(133));//6位
-                                //MyDevice.mTCP[sAddress].data[4].screwSeq = mePort_GetByte(137);
+                                MyDevice.mTCP[sAddress].data[4].mark     = mePort_GetByte(140);
+                                MyDevice.mTCP[sAddress].data[4].mode     = mePort_GetByte(141);
+                                MyDevice.mTCP[sAddress].data[4].screwNum = mePort_GetByte(142);
+                                MyDevice.mTCP[sAddress].data[4].work_ID  = mePort_GetUInt32(143);
+                                MyDevice.mTCP[sAddress].data[4].work_psq = (ulong)(mePort_GetUInt16(147) * Math.Pow(10, 9) + mePort_GetUInt32(149));//6位
+                                MyDevice.mTCP[sAddress].data[4].screwSeq = mePort_GetByte(153);
                             }
 
                             List<DSData> sqlDataList = new List<DSData>();//存入数据库的数据列表
-
-                            foreach (DATA data1 in MyDevice.mTCP[sAddress].data)
-                            {
-                                if (data1.dtype == 0xF2)
-                                {
-                                    f2Num++;
-                                    Console.WriteLine("F2类型" + data1.dtype + "++++++++++++++" + data1.stamp + "_" + data1.torseries_pk);
-                                    Console.WriteLine("F2数量" + f2Num);
-                                    for (int i = 0; i < 5; i++)
-                                    {
-                                        Console.WriteLine($"抓峰值: " + MyDevice.mTCP[sAddress].data[i].dtype + "_" + MyDevice.mTCP[sAddress].data[i].stamp);
-                                    }
-                                }
-                                else
-                                {
-                                    //Console.WriteLine(data1.dtype + "______" + data1.stamp);
-                                }
-                            }
 
                             // 遍历数组并将每个元素的拷贝添加到 List 集合中
                             foreach (DATA data in MyDevice.mTCP[sAddress].data)
@@ -2997,7 +3012,12 @@ namespace Model
                                     if (data.dtype == 0xF1 && data.torque == 0 && data.angle == 0) break;
                                     MyDevice.mTCP[sAddress].dataList.Add(data);
 
-                                    MyDevice.DataResult = "NG";
+                                    //结果初始化
+                                    MyDevice.TorqueResult = "";
+                                    MyDevice.AngleResult  = "";
+                                    MyDevice.ResistResult = "";
+                                    MyDevice.DataResult   = "";
+
                                     //分析结果
                                     if (data.dtype == 0xF3)
                                     {
@@ -3008,83 +3028,115 @@ namespace Model
                                             case 0:
                                             //SN模式
                                             case 2:
-                                                //峰值扭矩 >= 预设扭矩 = 合格
-                                                if (data.torgroup_pk >= data.alarm[0])
+                                                MyDevice.AngleResult = "";
+                                                //峰值扭矩 >= 预设扭矩 && 累加角度 >= 复拧角度
+                                                MyDevice.TorqueResult = (data.torgroup_pk >= data.alarm[0]) ? "pass" : "NG";
+
+                                                if (MyDevice.TorqueResult == "pass")
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.ResistResult = (data.angle_acc >= data.angle_resist) ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.ResistResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.ResistResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //EA模式
                                             case 1:
                                             //SA模式
                                             case 3:
+                                                MyDevice.ResistResult = "";
                                                 //峰值扭矩 >= 预设扭矩 && 峰值角度 >= 预设角度 = 合格
-                                                if (data.torgroup_pk >= data.alarm[0] && data.angle_acc >= data.alarm[1])
+                                                if (data.torgroup_pk >= data.alarm[0])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = data.angle_acc >= data.alarm[1] ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //MN模式
                                             case 4:
-                                                // 扭矩下限 <= 峰值扭矩 <= 扭矩上限  = 合格
+                                                MyDevice.AngleResult = "";
+                                                // 扭矩下限 <= 峰值扭矩 <= 扭矩上限  && 累加角度 >= 复拧角度= 合格
                                                 if (data.alarm[0] <= data.torgroup_pk && data.torgroup_pk <= data.alarm[1])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.ResistResult = data.angle_acc >= data.angle_resist ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.ResistResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.ResistResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //MA模式
                                             case 5:
+                                                MyDevice.ResistResult = "";
                                                 //峰值扭矩 >= 预设扭矩 && 角度下限 <= 峰值角度 <= 角度上限 = 合格
-                                                if (data.torgroup_pk >= data.alarm[0]
-                                                    && data.alarm[1] <= data.angle_acc && data.angle_acc <= data.alarm[2])
+                                                if (data.torgroup_pk >= data.alarm[0])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = data.alarm[1] <= data.angle_acc && data.angle_acc <= data.alarm[2] ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //AZ模式
                                             case 6:
-                                                //峰值扭矩 >= 预设扭矩
+                                                MyDevice.AngleResult = "";
+                                                //峰值扭矩 >= 预设扭矩 && 累加角度 >= 复拧角度= 合格
                                                 if (data.torgroup_pk >= data.alarm[2])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.ResistResult = data.angle_acc >= data.angle_resist ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.ResistResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.ResistResult == "pass") ? "pass" : "NG";
                                                 break;
                                             default:
                                                 break;
                                         }
 
                                         //是否超量程(F3没有单位，所以需要继承上一个F2的单位)
-                                        if (MyDevice.mTCP[sAddress].dataList.Count > 1 &&
-                                            data.torgroup_pk > MyDevice.mTCP[sAddress].devc.torque_over[(int)MyDevice.mTCP[sAddress].dataList[MyDevice.mTCP[sAddress].dataList.Count - 2].torque_unit])
+                                        //if (MyDevice.mTCP[sAddress].dataList.Count > 1 &&
+                                        //    data.torgroup_pk > MyDevice.mTCP[sAddress].devc.torque_over[(int)MyDevice.mTCP[sAddress].dataList[MyDevice.mTCP[sAddress].dataList.Count - 2].torque_unit])
+                                        //{
+                                        //    MyDevice.DataResult = "error";
+                                        //    data.torque_unit = MyDevice.mTCP[sAddress].dataList[MyDevice.mTCP[sAddress].dataList.Count - 2].torque_unit;
+                                        //}
+
+                                        //超量程
+                                        if (data.torgroup_pk > MyDevice.mTCP[sAddress].devc.torque_over[(int)data.torque_unit])
                                         {
+                                            MyDevice.TorqueResult = "error";
                                             MyDevice.DataResult = "error";
-                                            data.torque_unit = MyDevice.mTCP[sAddress].dataList[MyDevice.mTCP[sAddress].dataList.Count - 2].torque_unit;
                                         }
                                     }
                                     else if (data.dtype == 0xF2
                                         && (MyDevice.mTCP[sAddress].devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR
                                         || MyDevice.mTCP[sAddress].devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR))
                                     {
+                                        MyDevice.ResistResult = "";//F2无复拧角度
                                         //根据模式
                                         switch (MyDevice.mTCP[sAddress].para.mode_ax)
                                         {
@@ -3092,13 +3144,16 @@ namespace Model
                                             case 0:
                                             //SN模式
                                             case 2:
+                                                MyDevice.AngleResult = "";
                                                 //峰值扭矩 >= 预设扭矩 = 合格
                                                 if (data.torseries_pk >= MyDevice.mTCP[sAddress].alam.SN_target[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit])
                                                 {
+                                                    MyDevice.TorqueResult = "pass";
                                                     MyDevice.DataResult = "pass";
                                                 }
                                                 else
                                                 {
+                                                    MyDevice.TorqueResult = "NG";
                                                     MyDevice.DataResult = "NG";
                                                 }
                                                 break;
@@ -3107,42 +3162,52 @@ namespace Model
                                             //SA模式
                                             case 3:
                                                 //峰值扭矩 >= 预设扭矩 && 峰值角度 >= 预设角度 = 合格
-                                                if (data.torseries_pk >= MyDevice.mTCP[sAddress].alam.SA_pre[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit]
-                                                    && data.angle_acc >= MyDevice.mTCP[sAddress].alam.SA_ang[MyDevice.mTCP[sAddress].para.mode_mx])
+                                                if (data.torseries_pk >= MyDevice.mTCP[sAddress].alam.SA_pre[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = data.angle_acc >= MyDevice.mTCP[sAddress].alam.SA_ang[MyDevice.mTCP[sAddress].para.mode_mx] ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //MN模式
                                             case 4:
+                                                MyDevice.AngleResult = "";
                                                 // 扭矩下限 <= 峰值扭矩 <= 扭矩上限  = 合格
                                                 if (MyDevice.mTCP[sAddress].alam.MN_low[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit] <= data.torseries_pk
                                                     && data.torseries_pk <= MyDevice.mTCP[sAddress].alam.MN_high[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit])
                                                 {
+                                                    MyDevice.TorqueResult = "pass";
                                                     MyDevice.DataResult = "pass";
                                                 }
                                                 else
                                                 {
+                                                    MyDevice.TorqueResult = "NG";
                                                     MyDevice.DataResult = "NG";
                                                 }
                                                 break;
                                             //MA模式
                                             case 5:
                                                 //峰值扭矩 >= 预设扭矩 && 角度下限 <= 峰值角度 <= 角度上限 = 合格
-                                                if (data.torseries_pk >= MyDevice.mTCP[sAddress].alam.MA_pre[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit]
-                                                    && MyDevice.mTCP[sAddress].alam.MA_low[MyDevice.mTCP[sAddress].para.mode_mx] <= data.angle_acc
-                                                    && data.angle_acc <= MyDevice.mTCP[sAddress].alam.MA_high[MyDevice.mTCP[sAddress].para.mode_mx])
+                                                if (data.torseries_pk >= MyDevice.mTCP[sAddress].alam.MA_pre[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = MyDevice.mTCP[sAddress].alam.MA_low[MyDevice.mTCP[sAddress].para.mode_mx] <= data.angle_acc
+                                                                           && data.angle_acc <= MyDevice.mTCP[sAddress].alam.MA_high[MyDevice.mTCP[sAddress].para.mode_mx]
+                                                                           ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //AZ模式
                                             case 6:
@@ -3154,6 +3219,7 @@ namespace Model
                                         //是否超量程
                                         if (data.torseries_pk > MyDevice.mTCP[sAddress].devc.torque_over[(int)data.torque_unit])
                                         {
+                                            MyDevice.TorqueResult = "error";
                                             MyDevice.DataResult = "error";
                                         }
                                     }
@@ -3175,12 +3241,12 @@ namespace Model
                                         DType        = data.dtype,
                                         Stamp        = data.stamp,
                                         Mark         = data.mark,
-                                        Torque       = data.torque / (double)MyDevice.mTCP[sAddress].torqueMultiple,
-                                        TorquePeak   = (data.dtype == 0xF2 ? data.torseries_pk : data.torgroup_pk) / (double)MyDevice.mTCP[sAddress].torqueMultiple,
+                                        Torque       = data.torque / (double)Math.Pow(10, MyDevice.mTCP[sAddress].devc.torque_decimal),
+                                        TorquePeak   = (data.dtype == 0xF2 ? data.torseries_pk : data.torgroup_pk) / (double)Math.Pow(10, MyDevice.mTCP[sAddress].devc.torque_decimal),
                                         TorqueUnit   = data.torque_unit.ToString(),
-                                        AngleDecimal = data.angle_decimal,
-                                        Angle        = data.angle / (double)MyDevice.mTCP[sAddress].angleMultiple,
-                                        AngleAcc     = data.angle_acc / (double)MyDevice.mTCP[sAddress].angleMultiple,
+                                        AngleDecimal = data.dtype != 0xF1 ? data.angle_decimal : MyDevice.mTCP[sAddress].para.angle_decimal,
+                                        Angle        = data.angle / (double)(int)Math.Pow(10, data.dtype != 0xF1 ? data.angle_decimal : MyDevice.mTCP[sAddress].para.angle_decimal),
+                                        AngleAcc     = data.angle_acc / (double)(int)Math.Pow(10, data.dtype != 0xF1 ? data.angle_decimal : MyDevice.mTCP[sAddress].para.angle_decimal),
                                         AngleResist  = (data.dtype == 0xF3) ? data.angle_resist / (double)Math.Pow(10, angleDecimal) : 0,
                                         TorqueResult = MyDevice.TorqueResult,
                                         AngleResult  = MyDevice.AngleResult,
@@ -3249,8 +3315,6 @@ namespace Model
                             }
                             else if (MyDevice.mTCP[sAddress].data[0].dtype == 0xF2)  //02一次结果帧
                             {
-                                if (MyDevice.mTCP[sAddress].devc.version >= 39) tempStamp = MyDevice.mTCP[sAddress].data[0].stamp;
-
                                 MyDevice.mTCP[sAddress].data[0].mark = mePort_GetByte(12);
                                 MyDevice.mTCP[sAddress].data[0].torque_unit = (UNIT)mePort_GetByte(13);
                                 MyDevice.mTCP[sAddress].data[0].angle_decimal = mePort_GetByte(14);
@@ -3259,6 +3323,14 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[0].begin_series = mePort_GetUInt32(23);
                                 MyDevice.mTCP[sAddress].data[0].begin_group = mePort_GetUInt32(27);
                                 MyDevice.mTCP[sAddress].data[0].len = mePort_GetUInt16(31);
+
+                                if (MyDevice.mTCP[sAddress].devc.version >= 39)
+                                {
+                                    tempStamp = MyDevice.mTCP[sAddress].data[0].stamp;
+                                }
+
+                                angleDecimal = MyDevice.mTCP[sAddress].data[0].angle_decimal;
+                                inheritUnit = MyDevice.mTCP[sAddress].data[0].torque_unit;
                             }
                             else if (MyDevice.mTCP[sAddress].data[0].dtype == 0xF3)  //03一组结果帧
                             {
@@ -3268,7 +3340,7 @@ namespace Model
                                     MyDevice.mTCP[sAddress].data[0].angle_resist = mePort_GetInt32(7);
                                 }
 
-                                MyDevice.mTCP[sAddress].data[0].mode_pt = mePort_GetByte(12);
+                                MyDevice.mTCP[sAddress].data[0].mark = mePort_GetByte(12);
                                 MyDevice.mTCP[sAddress].data[0].mode_ax = mePort_GetByte(13);
                                 MyDevice.mTCP[sAddress].data[0].mode_mx = mePort_GetByte(14);
                                 MyDevice.mTCP[sAddress].data[0].torgroup_pk = mePort_GetInt32(15);
@@ -3276,15 +3348,18 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[0].alarm[0] = mePort_GetInt32(23);
                                 MyDevice.mTCP[sAddress].data[0].alarm[1] = mePort_GetInt32(27);
                                 MyDevice.mTCP[sAddress].data[0].alarm[2] = mePort_GetInt32(31);
+
+                                MyDevice.mTCP[sAddress].data[0].angle_decimal = angleDecimal; //继承F2的小数点
+                                MyDevice.mTCP[sAddress].data[0].torque_unit = inheritUnit;  //继承F2的扭矩单位
                             }
                             else if (MyDevice.mTCP[sAddress].data[0].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mTCP[sAddress].data[0].mark = mePort_GetByte(12);
-                                //MyDevice.mTCP[sAddress].data[0].mode = mePort_GetByte(13);
-                                //MyDevice.mTCP[sAddress].data[0].screwCnt = mePort_GetByte(14);
-                                //MyDevice.mTCP[sAddress].data[0].work_num = mePort_GetUInt32(15);
-                                //MyDevice.mTCP[sAddress].data[0].work_psq = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
-                                //MyDevice.mTCP[sAddress].data[0].screwSeq = mePort_GetByte(25);
+                                MyDevice.mTCP[sAddress].data[0].mark = mePort_GetByte(12);
+                                MyDevice.mTCP[sAddress].data[0].mode = mePort_GetByte(13);
+                                MyDevice.mTCP[sAddress].data[0].screwNum = mePort_GetByte(14);
+                                MyDevice.mTCP[sAddress].data[0].work_ID = mePort_GetUInt32(15);
+                                MyDevice.mTCP[sAddress].data[0].work_psq = (ulong)(mePort_GetUInt16(19) * Math.Pow(10, 9) + mePort_GetUInt32(21));//6位
+                                MyDevice.mTCP[sAddress].data[0].screwSeq = mePort_GetByte(25);
                             }
 
                             //第二包
@@ -3304,8 +3379,6 @@ namespace Model
                             }
                             else if (MyDevice.mTCP[sAddress].data[1].dtype == 0xF2)  //02一次结果帧
                             {
-                                if (MyDevice.mTCP[sAddress].devc.version >= 39) tempStamp = MyDevice.mTCP[sAddress].data[1].stamp;
-
                                 MyDevice.mTCP[sAddress].data[1].mark = mePort_GetByte(40);
                                 MyDevice.mTCP[sAddress].data[1].torque_unit = (UNIT)mePort_GetByte(41);
                                 MyDevice.mTCP[sAddress].data[1].angle_decimal = mePort_GetByte(42);
@@ -3314,6 +3387,14 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[1].begin_series = mePort_GetUInt32(51);
                                 MyDevice.mTCP[sAddress].data[1].begin_group = mePort_GetUInt32(55);
                                 MyDevice.mTCP[sAddress].data[1].len = mePort_GetUInt16(59);
+
+                                if (MyDevice.mTCP[sAddress].devc.version >= 39)
+                                {
+                                    tempStamp = MyDevice.mTCP[sAddress].data[1].stamp;
+                                }
+
+                                angleDecimal = MyDevice.mTCP[sAddress].data[1].angle_decimal;
+                                inheritUnit = MyDevice.mTCP[sAddress].data[1].torque_unit;
                             }
                             else if (MyDevice.mTCP[sAddress].data[1].dtype == 0xF3)  //03一组结果帧
                             {
@@ -3323,7 +3404,7 @@ namespace Model
                                     MyDevice.mTCP[sAddress].data[1].angle_resist = mePort_GetInt32(35);
                                 }
 
-                                MyDevice.mTCP[sAddress].data[1].mode_pt = mePort_GetByte(40);
+                                MyDevice.mTCP[sAddress].data[1].mark = mePort_GetByte(40);
                                 MyDevice.mTCP[sAddress].data[1].mode_ax = mePort_GetByte(41);
                                 MyDevice.mTCP[sAddress].data[1].mode_mx = mePort_GetByte(42);
                                 MyDevice.mTCP[sAddress].data[1].torgroup_pk = mePort_GetInt32(43);
@@ -3331,15 +3412,18 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[1].alarm[0] = mePort_GetInt32(51);
                                 MyDevice.mTCP[sAddress].data[1].alarm[1] = mePort_GetInt32(55);
                                 MyDevice.mTCP[sAddress].data[1].alarm[2] = mePort_GetInt32(59);
+
+                                MyDevice.mTCP[sAddress].data[1].angle_decimal = angleDecimal; //继承F2的小数点
+                                MyDevice.mTCP[sAddress].data[1].torque_unit = inheritUnit;  //继承F2的扭矩单位
                             }
                             else if (MyDevice.mTCP[sAddress].data[1].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mTCP[sAddress].data[1].mark = mePort_GetByte(40);
-                                //MyDevice.mTCP[sAddress].data[1].mode = mePort_GetByte(41);
-                                //MyDevice.mTCP[sAddress].data[1].screwCnt = mePort_GetByte(42);
-                                //MyDevice.mTCP[sAddress].data[1].work_num = mePort_GetUInt32(43);
-                                //MyDevice.mTCP[sAddress].data[1].work_psq = (ulong)(mePort_GetUInt16(47) * Math.Pow(10, 9) + mePort_GetUInt32(49));//6位
-                                //MyDevice.mTCP[sAddress].data[1].screwSeq = mePort_GetByte(53);
+                                MyDevice.mTCP[sAddress].data[1].mark = mePort_GetByte(40);
+                                MyDevice.mTCP[sAddress].data[1].mode = mePort_GetByte(41);
+                                MyDevice.mTCP[sAddress].data[1].screwNum = mePort_GetByte(42);
+                                MyDevice.mTCP[sAddress].data[1].work_ID = mePort_GetUInt32(43);
+                                MyDevice.mTCP[sAddress].data[1].work_psq = (ulong)(mePort_GetUInt16(47) * Math.Pow(10, 9) + mePort_GetUInt32(49));//6位
+                                MyDevice.mTCP[sAddress].data[1].screwSeq = mePort_GetByte(53);
                             }
 
                             //第三包
@@ -3359,8 +3443,6 @@ namespace Model
                             }
                             else if (MyDevice.mTCP[sAddress].data[2].dtype == 0xF2)  //02一次结果帧
                             {
-                                if (MyDevice.mTCP[sAddress].devc.version >= 39) tempStamp = MyDevice.mTCP[sAddress].data[2].stamp;
-
                                 MyDevice.mTCP[sAddress].data[2].mark = mePort_GetByte(68);
                                 MyDevice.mTCP[sAddress].data[2].torque_unit = (UNIT)mePort_GetByte(69);
                                 MyDevice.mTCP[sAddress].data[2].angle_decimal = mePort_GetByte(70);
@@ -3369,6 +3451,14 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[2].begin_series = mePort_GetUInt32(79);
                                 MyDevice.mTCP[sAddress].data[2].begin_group = mePort_GetUInt32(83);
                                 MyDevice.mTCP[sAddress].data[2].len = mePort_GetUInt16(87);
+
+                                if (MyDevice.mTCP[sAddress].devc.version >= 39)
+                                {
+                                    tempStamp = MyDevice.mTCP[sAddress].data[2].stamp;
+                                }
+
+                                angleDecimal = MyDevice.mTCP[sAddress].data[2].angle_decimal;
+                                inheritUnit = MyDevice.mTCP[sAddress].data[2].torque_unit;
                             }
                             else if (MyDevice.mTCP[sAddress].data[2].dtype == 0xF3)  //03一组结果帧
                             {
@@ -3378,7 +3468,7 @@ namespace Model
                                     MyDevice.mTCP[sAddress].data[2].angle_resist = mePort_GetInt32(63);
                                 }
 
-                                MyDevice.mTCP[sAddress].data[2].mode_pt = mePort_GetByte(68);
+                                MyDevice.mTCP[sAddress].data[2].mark = mePort_GetByte(68);
                                 MyDevice.mTCP[sAddress].data[2].mode_ax = mePort_GetByte(69);
                                 MyDevice.mTCP[sAddress].data[2].mode_mx = mePort_GetByte(70);
                                 MyDevice.mTCP[sAddress].data[2].torgroup_pk = mePort_GetInt32(71);
@@ -3386,15 +3476,18 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[2].alarm[0] = mePort_GetInt32(79);
                                 MyDevice.mTCP[sAddress].data[2].alarm[1] = mePort_GetInt32(83);
                                 MyDevice.mTCP[sAddress].data[2].alarm[2] = mePort_GetInt32(87);
+
+                                MyDevice.mTCP[sAddress].data[2].angle_decimal = angleDecimal; //继承F2的小数点
+                                MyDevice.mTCP[sAddress].data[2].torque_unit = inheritUnit;  //继承F2的扭矩单位
                             }
                             else if (MyDevice.mTCP[sAddress].data[2].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mTCP[sAddress].data[2].mark = mePort_GetByte(68);
-                                //MyDevice.mTCP[sAddress].data[2].mode = mePort_GetByte(69);
-                                //MyDevice.mTCP[sAddress].data[2].screwCnt = mePort_GetByte(70);
-                                //MyDevice.mTCP[sAddress].data[2].work_num = mePort_GetUInt32(71);
-                                //MyDevice.mTCP[sAddress].data[2].work_psq = (ulong)(mePort_GetUInt16(75) * Math.Pow(10, 9) + mePort_GetUInt32(77));//6位
-                                //MyDevice.mTCP[sAddress].data[2].screwSeq = mePort_GetByte(81);
+                                MyDevice.mTCP[sAddress].data[2].mark = mePort_GetByte(68);
+                                MyDevice.mTCP[sAddress].data[2].mode = mePort_GetByte(69);
+                                MyDevice.mTCP[sAddress].data[2].screwNum = mePort_GetByte(70);
+                                MyDevice.mTCP[sAddress].data[2].work_ID = mePort_GetUInt32(71);
+                                MyDevice.mTCP[sAddress].data[2].work_psq = (ulong)(mePort_GetUInt16(75) * Math.Pow(10, 9) + mePort_GetUInt32(77));//6位
+                                MyDevice.mTCP[sAddress].data[2].screwSeq = mePort_GetByte(81);
                             }
 
                             //第四包
@@ -3414,8 +3507,6 @@ namespace Model
                             }
                             else if (MyDevice.mTCP[sAddress].data[3].dtype == 0xF2)  //02一次结果帧
                             {
-                                if (MyDevice.mTCP[sAddress].devc.version >= 39) tempStamp = MyDevice.mTCP[sAddress].data[3].stamp;
-
                                 MyDevice.mTCP[sAddress].data[3].mark = mePort_GetByte(96);
                                 MyDevice.mTCP[sAddress].data[3].torque_unit = (UNIT)mePort_GetByte(97);
                                 MyDevice.mTCP[sAddress].data[3].angle_decimal = mePort_GetByte(98);
@@ -3424,6 +3515,14 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[3].begin_series = mePort_GetUInt32(107);
                                 MyDevice.mTCP[sAddress].data[3].begin_group = mePort_GetUInt32(111);
                                 MyDevice.mTCP[sAddress].data[3].len = mePort_GetUInt16(115);
+
+                                if (MyDevice.mTCP[sAddress].devc.version >= 39)
+                                {
+                                    tempStamp = MyDevice.mTCP[sAddress].data[3].stamp;
+                                }
+
+                                angleDecimal = MyDevice.mTCP[sAddress].data[3].angle_decimal;
+                                inheritUnit = MyDevice.mTCP[sAddress].data[3].torque_unit;
                             }
                             else if (MyDevice.mTCP[sAddress].data[3].dtype == 0xF3)  //03一组结果帧
                             {
@@ -3433,7 +3532,7 @@ namespace Model
                                     MyDevice.mTCP[sAddress].data[3].angle_resist = mePort_GetInt32(91);
                                 }
 
-                                MyDevice.mTCP[sAddress].data[3].mode_pt = mePort_GetByte(96);
+                                MyDevice.mTCP[sAddress].data[3].mark = mePort_GetByte(96);
                                 MyDevice.mTCP[sAddress].data[3].mode_ax = mePort_GetByte(97);
                                 MyDevice.mTCP[sAddress].data[3].mode_mx = mePort_GetByte(98);
                                 MyDevice.mTCP[sAddress].data[3].torgroup_pk = mePort_GetInt32(99);
@@ -3441,15 +3540,18 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[3].alarm[0] = mePort_GetInt32(107);
                                 MyDevice.mTCP[sAddress].data[3].alarm[1] = mePort_GetInt32(111);
                                 MyDevice.mTCP[sAddress].data[3].alarm[2] = mePort_GetInt32(115);
+
+                                MyDevice.mTCP[sAddress].data[3].angle_decimal = angleDecimal; //继承F2的小数点
+                                MyDevice.mTCP[sAddress].data[3].torque_unit = inheritUnit;  //继承F2的扭矩单位
                             }
                             else if (MyDevice.mTCP[sAddress].data[3].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mTCP[sAddress].data[3].mark = mePort_GetByte(96);
-                                //MyDevice.mTCP[sAddress].data[3].mode = mePort_GetByte(97);
-                                //MyDevice.mTCP[sAddress].data[3].screwCnt = mePort_GetByte(98);
-                                //MyDevice.mTCP[sAddress].data[3].work_num = mePort_GetUInt32(99);
-                                //MyDevice.mTCP[sAddress].data[3].work_psq = (ulong)(mePort_GetUInt16(103) * Math.Pow(10, 9) + mePort_GetUInt32(105));//6位
-                                //MyDevice.mTCP[sAddress].data[3].screwSeq = mePort_GetByte(109);
+                                MyDevice.mTCP[sAddress].data[3].mark = mePort_GetByte(96);
+                                MyDevice.mTCP[sAddress].data[3].mode = mePort_GetByte(97);
+                                MyDevice.mTCP[sAddress].data[3].screwNum = mePort_GetByte(98);
+                                MyDevice.mTCP[sAddress].data[3].work_ID = mePort_GetUInt32(99);
+                                MyDevice.mTCP[sAddress].data[3].work_psq = (ulong)(mePort_GetUInt16(103) * Math.Pow(10, 9) + mePort_GetUInt32(105));//6位
+                                MyDevice.mTCP[sAddress].data[3].screwSeq = mePort_GetByte(109);
                             }
 
                             //第五包
@@ -3469,8 +3571,6 @@ namespace Model
                             }
                             else if (MyDevice.mTCP[sAddress].data[4].dtype == 0xF2)  //02一次结果帧
                             {
-                                if (MyDevice.mTCP[sAddress].devc.version >= 39) tempStamp = MyDevice.mTCP[sAddress].data[4].stamp;
-
                                 MyDevice.mTCP[sAddress].data[4].mark = mePort_GetByte(124);
                                 MyDevice.mTCP[sAddress].data[4].torque_unit = (UNIT)mePort_GetByte(125);
                                 MyDevice.mTCP[sAddress].data[4].angle_decimal = mePort_GetByte(126);
@@ -3479,6 +3579,14 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[4].begin_series = mePort_GetUInt32(135);
                                 MyDevice.mTCP[sAddress].data[4].begin_group = mePort_GetUInt32(139);
                                 MyDevice.mTCP[sAddress].data[4].len = mePort_GetUInt16(143);
+
+                                if (MyDevice.mTCP[sAddress].devc.version >= 39)
+                                {
+                                    tempStamp = MyDevice.mTCP[sAddress].data[4].stamp;
+                                }
+
+                                angleDecimal = MyDevice.mTCP[sAddress].data[4].angle_decimal;
+                                inheritUnit = MyDevice.mTCP[sAddress].data[4].torque_unit;
                             }
                             else if (MyDevice.mTCP[sAddress].data[4].dtype == 0xF3)  //03一组结果帧
                             {
@@ -3496,36 +3604,21 @@ namespace Model
                                 MyDevice.mTCP[sAddress].data[4].alarm[0] = mePort_GetInt32(135);
                                 MyDevice.mTCP[sAddress].data[4].alarm[1] = mePort_GetInt32(139);
                                 MyDevice.mTCP[sAddress].data[4].alarm[2] = mePort_GetInt32(143);
+
+                                MyDevice.mTCP[sAddress].data[4].angle_decimal = angleDecimal; //继承F2的小数点
+                                MyDevice.mTCP[sAddress].data[4].torque_unit = inheritUnit;  //继承F2的扭矩单位
                             }
                             else if (MyDevice.mTCP[sAddress].data[4].dtype == 0xF4)  //04一组工单结果帧
                             {
-                                //MyDevice.mTCP[sAddress].data[4].mark = mePort_GetByte(124);
-                                //MyDevice.mTCP[sAddress].data[4].mode = mePort_GetByte(125);
-                                //MyDevice.mTCP[sAddress].data[4].screwCnt = mePort_GetByte(126);
-                                //MyDevice.mTCP[sAddress].data[4].work_num = mePort_GetUInt32(127);
-                                //MyDevice.mTCP[sAddress].data[4].work_psq = (ulong)(mePort_GetUInt16(131) * Math.Pow(10, 9) + mePort_GetUInt32(133));//6位
-                                //MyDevice.mTCP[sAddress].data[4].screwSeq = mePort_GetByte(137);
+                                MyDevice.mTCP[sAddress].data[4].mark = mePort_GetByte(124);
+                                MyDevice.mTCP[sAddress].data[4].mode = mePort_GetByte(125);
+                                MyDevice.mTCP[sAddress].data[4].screwNum = mePort_GetByte(126);
+                                MyDevice.mTCP[sAddress].data[4].work_ID = mePort_GetUInt32(127);
+                                MyDevice.mTCP[sAddress].data[4].work_psq = (ulong)(mePort_GetUInt16(131) * Math.Pow(10, 9) + mePort_GetUInt32(133));//6位
+                                MyDevice.mTCP[sAddress].data[4].screwSeq = mePort_GetByte(137);
                             }
 
                             List<DSData> sqlDataList = new List<DSData>();//存入数据库的数据列表
-
-                            foreach (DATA data1 in MyDevice.mTCP[sAddress].data)
-                            {
-                                if (data1.dtype == 0xF2)
-                                {
-                                    f2Num++;
-                                    Console.WriteLine("F2类型" + data1.dtype + "++++++++++++++" + data1.stamp + "_" + data1.torseries_pk);
-                                    Console.WriteLine("F2数量" + f2Num);
-                                    for (int i = 0; i < 5; i++)
-                                    {
-                                        Console.WriteLine($"抓峰值: " + MyDevice.mTCP[sAddress].data[i].dtype + "_" + MyDevice.mTCP[sAddress].data[i].stamp);
-                                    }
-                                }
-                                else
-                                {
-                                    //Console.WriteLine(data1.dtype + "______" + data1.stamp);
-                                }
-                            }
 
                             // 遍历数组并将每个元素的拷贝添加到 List 集合中
                             foreach (DATA data in MyDevice.mTCP[sAddress].data)
@@ -3535,7 +3628,11 @@ namespace Model
                                     if (data.dtype == 0xF1 && data.torque == 0 && data.angle == 0) break;
                                     MyDevice.mTCP[sAddress].dataList.Add(data);
 
-                                    MyDevice.DataResult = "NG";
+                                    //结果初始化
+                                    MyDevice.TorqueResult = "";
+                                    MyDevice.AngleResult = "";
+                                    MyDevice.ResistResult = "";
+                                    MyDevice.DataResult = "";
                                     //分析结果
                                     if (data.dtype == 0xF3)
                                     {
@@ -3546,83 +3643,116 @@ namespace Model
                                             case 0:
                                             //SN模式
                                             case 2:
-                                                //峰值扭矩 >= 预设扭矩 = 合格
-                                                if (data.torgroup_pk >= data.alarm[0])
+                                                MyDevice.AngleResult = "";
+                                                //峰值扭矩 >= 预设扭矩 && 累加角度 >= 复拧角度
+                                                MyDevice.TorqueResult = (data.torgroup_pk >= data.alarm[0]) ? "pass" : "NG";
+
+                                                if (MyDevice.TorqueResult == "pass")
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.ResistResult = (data.angle_acc >= data.angle_resist) ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.ResistResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.ResistResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //EA模式
                                             case 1:
                                             //SA模式
                                             case 3:
+                                                MyDevice.ResistResult = "";
                                                 //峰值扭矩 >= 预设扭矩 && 峰值角度 >= 预设角度 = 合格
-                                                if (data.torgroup_pk >= data.alarm[0] && data.angle_acc >= data.alarm[1])
+                                                if (data.torgroup_pk >= data.alarm[0])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = data.angle_acc >= data.alarm[1] ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //MN模式
                                             case 4:
-                                                // 扭矩下限 <= 峰值扭矩 <= 扭矩上限  = 合格
+                                                MyDevice.AngleResult = "";
+                                                // 扭矩下限 <= 峰值扭矩 <= 扭矩上限  && 累加角度 >= 复拧角度= 合格
                                                 if (data.alarm[0] <= data.torgroup_pk && data.torgroup_pk <= data.alarm[1])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.ResistResult = data.angle_acc >= data.angle_resist ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.ResistResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.ResistResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //MA模式
                                             case 5:
+                                                MyDevice.ResistResult = "";
                                                 //峰值扭矩 >= 预设扭矩 && 角度下限 <= 峰值角度 <= 角度上限 = 合格
-                                                if (data.torgroup_pk >= data.alarm[0]
-                                                    && data.alarm[1] <= data.angle_acc && data.angle_acc <= data.alarm[2])
+                                                if (data.torgroup_pk >= data.alarm[0])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = data.alarm[1] <= data.angle_acc && data.angle_acc <= data.alarm[2] ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //AZ模式
                                             case 6:
-                                                //峰值扭矩 >= 预设扭矩
+                                                MyDevice.AngleResult = "";
+                                                //峰值扭矩 >= 预设扭矩 && 累加角度 >= 复拧角度= 合格
                                                 if (data.torgroup_pk >= data.alarm[2])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.ResistResult = data.angle_acc >= data.angle_resist ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.ResistResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.ResistResult == "pass") ? "pass" : "NG";
                                                 break;
                                             default:
                                                 break;
                                         }
 
-                                        //是否超量程(F3没有单位，所以需要继承上一个F2的单位)
-                                        if (MyDevice.mTCP[sAddress].dataList.Count > 1 &&
-                                            data.torgroup_pk > MyDevice.mTCP[sAddress].devc.torque_over[(int)MyDevice.mTCP[sAddress].dataList[MyDevice.mTCP[sAddress].dataList.Count - 2].torque_unit])
+                                        ////是否超量程(F3没有单位，所以需要继承上一个F2的单位)
+                                        //if (MyDevice.mTCP[sAddress].dataList.Count > 1 &&
+                                        //    data.torgroup_pk > MyDevice.mTCP[sAddress].devc.torque_over[(int)MyDevice.mTCP[sAddress].dataList[MyDevice.mTCP[sAddress].dataList.Count - 2].torque_unit])
+                                        //{
+                                        //    MyDevice.DataResult = "error";
+                                        //    data.torque_unit = MyDevice.mTCP[sAddress].dataList[MyDevice.mTCP[sAddress].dataList.Count - 2].torque_unit;
+                                        //}
+
+                                        //超量程
+                                        if (data.torgroup_pk > MyDevice.mTCP[sAddress].devc.torque_over[(int)data.torque_unit])
                                         {
+                                            MyDevice.TorqueResult = "error";
                                             MyDevice.DataResult = "error";
-                                            data.torque_unit = MyDevice.mTCP[sAddress].dataList[MyDevice.mTCP[sAddress].dataList.Count - 2].torque_unit;
                                         }
                                     }
                                     else if (data.dtype == 0xF2
                                         && (MyDevice.mTCP[sAddress].devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR
                                         || MyDevice.mTCP[sAddress].devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR))
                                     {
+                                        MyDevice.ResistResult = "";//F2无复拧角度
+
                                         //根据模式
                                         switch (MyDevice.mTCP[sAddress].para.mode_ax)
                                         {
@@ -3630,13 +3760,16 @@ namespace Model
                                             case 0:
                                             //SN模式
                                             case 2:
+                                                MyDevice.AngleResult = "";
                                                 //峰值扭矩 >= 预设扭矩 = 合格
                                                 if (data.torseries_pk >= MyDevice.mTCP[sAddress].alam.SN_target[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit])
                                                 {
+                                                    MyDevice.TorqueResult = "pass";
                                                     MyDevice.DataResult = "pass";
                                                 }
                                                 else
                                                 {
+                                                    MyDevice.TorqueResult = "NG";
                                                     MyDevice.DataResult = "NG";
                                                 }
                                                 break;
@@ -3645,42 +3778,52 @@ namespace Model
                                             //SA模式
                                             case 3:
                                                 //峰值扭矩 >= 预设扭矩 && 峰值角度 >= 预设角度 = 合格
-                                                if (data.torseries_pk >= MyDevice.mTCP[sAddress].alam.SA_pre[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit]
-                                                    && data.angle_acc >= MyDevice.mTCP[sAddress].alam.SA_ang[MyDevice.mTCP[sAddress].para.mode_mx])
+                                                if (data.torseries_pk >= MyDevice.mTCP[sAddress].alam.SA_pre[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = data.angle_acc >= MyDevice.mTCP[sAddress].alam.SA_ang[MyDevice.mTCP[sAddress].para.mode_mx] ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //MN模式
                                             case 4:
+                                                MyDevice.AngleResult = "";
                                                 // 扭矩下限 <= 峰值扭矩 <= 扭矩上限  = 合格
                                                 if (MyDevice.mTCP[sAddress].alam.MN_low[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit] <= data.torseries_pk
                                                     && data.torseries_pk <= MyDevice.mTCP[sAddress].alam.MN_high[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit])
                                                 {
+                                                    MyDevice.TorqueResult = "pass";
                                                     MyDevice.DataResult = "pass";
                                                 }
                                                 else
                                                 {
+                                                    MyDevice.TorqueResult = "NG";
                                                     MyDevice.DataResult = "NG";
                                                 }
                                                 break;
                                             //MA模式
                                             case 5:
                                                 //峰值扭矩 >= 预设扭矩 && 角度下限 <= 峰值角度 <= 角度上限 = 合格
-                                                if (data.torseries_pk >= MyDevice.mTCP[sAddress].alam.MA_pre[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit]
-                                                    && MyDevice.mTCP[sAddress].alam.MA_low[MyDevice.mTCP[sAddress].para.mode_mx] <= data.angle_acc
-                                                    && data.angle_acc <= MyDevice.mTCP[sAddress].alam.MA_high[MyDevice.mTCP[sAddress].para.mode_mx])
+                                                if (data.torseries_pk >= MyDevice.mTCP[sAddress].alam.MA_pre[MyDevice.mTCP[sAddress].para.mode_mx, (int)data.torque_unit])
                                                 {
-                                                    MyDevice.DataResult = "pass";
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = MyDevice.mTCP[sAddress].alam.MA_low[MyDevice.mTCP[sAddress].para.mode_mx] <= data.angle_acc
+                                                                           && data.angle_acc <= MyDevice.mTCP[sAddress].alam.MA_high[MyDevice.mTCP[sAddress].para.mode_mx]
+                                                                           ? "pass" : "NG";
                                                 }
                                                 else
                                                 {
-                                                    MyDevice.DataResult = "NG";
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
                                                 }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
                                                 break;
                                             //AZ模式
                                             case 6:
@@ -3692,50 +3835,56 @@ namespace Model
                                         //是否超量程
                                         if (data.torseries_pk > MyDevice.mTCP[sAddress].devc.torque_over[(int)data.torque_unit])
                                         {
+                                            MyDevice.TorqueResult = "error";
                                             MyDevice.DataResult = "error";
                                         }
+
+                                    }
+                                    else if (data.dtype == 0xF4)
+                                    {
+                                        Console.WriteLine(data.mode);
                                     }
 
                                     sqlDataList.Add(new DSData()
                                     {
-                                        DataId       = 1,
-                                        DataType     = MyDevice.DataType,
-                                        Bohrcode     = MyDevice.mTCP[sAddress].devc.bohrcode,
-                                        DevType      = MyDevice.mTCP[sAddress].devc.series + "-" + MyDevice.mTCP[sAddress].devc.type,
-                                        WorkId       = MyDevice.WorkId,
-                                        WorkNum      = (data.dtype == 0xF4) ? data.work_ID.ToString() : MyDevice.WorkNum,
-                                        SequenceId   = (data.dtype == 0xF4) ? data.work_psq.ToString() : MyDevice.SequenceId,
-                                        PointNum     = MyDevice.PointNum,
-                                        ScrewNum     = (byte)((data.dtype == 0xF4) ? data.screwNum : 1),
-                                        ScrewSeq     = (byte)((data.dtype == 0xF4) ? data.screwSeq : 0),
-                                        DevAddr      = sAddress,
-                                        VinId        = MyDevice.Vin,
-                                        DType        = data.dtype,
-                                        Stamp        = data.stamp,
-                                        Mark         = data.mark,
-                                        Torque       = data.torque / (double)MyDevice.mTCP[sAddress].torqueMultiple,
-                                        TorquePeak   = (data.dtype == 0xF2 ? data.torseries_pk : data.torgroup_pk) / (double)MyDevice.mTCP[sAddress].torqueMultiple,
-                                        TorqueUnit   = data.torque_unit.ToString(),
-                                        AngleDecimal = data.angle_decimal,
-                                        Angle        = data.angle / (double)MyDevice.mTCP[sAddress].angleMultiple,
-                                        AngleAcc     = data.angle_acc / (double)MyDevice.mTCP[sAddress].angleMultiple,
-                                        AngleResist  = (data.dtype == 0xF3) ? data.angle_resist / (double)Math.Pow(10, angleDecimal) : 0,
+                                        DataId = 1,
+                                        DataType = MyDevice.DataType,
+                                        Bohrcode = MyDevice.mTCP[sAddress].devc.bohrcode,
+                                        DevType = MyDevice.mTCP[sAddress].devc.series + "-" + MyDevice.mTCP[sAddress].devc.type,
+                                        WorkId = MyDevice.WorkId,
+                                        WorkNum = (data.dtype == 0xF4) ? data.work_ID.ToString() : MyDevice.WorkNum,
+                                        SequenceId = (data.dtype == 0xF4) ? data.work_psq.ToString() : MyDevice.SequenceId,
+                                        PointNum = MyDevice.PointNum,
+                                        ScrewNum = (byte)((data.dtype == 0xF4) ? data.screwNum : 1),
+                                        ScrewSeq = (byte)((data.dtype == 0xF4) ? data.screwSeq : 0),
+                                        DevAddr = sAddress,
+                                        VinId = MyDevice.Vin,
+                                        DType = data.dtype,
+                                        Stamp = data.stamp,
+                                        Mark = data.mark,
+                                        Torque = data.torque / (double)Math.Pow(10, MyDevice.mTCP[sAddress].devc.torque_decimal),
+                                        TorquePeak = (data.dtype == 0xF2 ? data.torseries_pk : data.torgroup_pk) / (double)Math.Pow(10, MyDevice.mTCP[sAddress].devc.torque_decimal),
+                                        TorqueUnit = data.torque_unit.ToString(),
+                                        AngleDecimal = data.dtype != 0xF1 ? data.angle_decimal : MyDevice.mTCP[sAddress].para.angle_decimal,
+                                        Angle = data.angle / (double)Math.Pow(10, data.dtype != 0xF1 ? data.angle_decimal : MyDevice.mTCP[sAddress].para.angle_decimal),
+                                        AngleAcc = data.angle_acc / (double)Math.Pow(10, data.dtype != 0xF1 ? data.angle_decimal : MyDevice.mTCP[sAddress].para.angle_decimal),
+                                        AngleResist = (data.dtype == 0xF3) ? data.angle_resist / (double)Math.Pow(10, data.angle_decimal) : 0,
                                         TorqueResult = MyDevice.TorqueResult,
-                                        AngleResult  = MyDevice.AngleResult,
+                                        AngleResult = MyDevice.AngleResult,
                                         ResistResult = MyDevice.ResistResult,
-                                        DataResult   = MyDevice.DataResult,
-                                        ModePt       = data.mode_pt,
-                                        ModeAx       = (byte)((data.dtype == 0xF4) ? data.mode >> 0x04 : data.mode_ax),
-                                        ModeMx       = (byte)((data.dtype == 0xF4) ? data.mode & 0x0F : data.mode_mx),
-                                        Battery      = data.battery,
-                                        KeyBuf       = data.keybuf,
-                                        KeyLock      = data.keylock.ToString(),
-                                        MemAble      = data.memable.ToString(),
-                                        Update       = data.update.ToString(),
-                                        Error        = "",
-                                        Alarm0       = data.dtype == 0xF3 ? $"{data.alarm[0]}" : "",
-                                        Alarm1       = data.dtype == 0xF3 ? $"{data.alarm[1]}" : "",
-                                        Alarm2       = data.dtype == 0xF3 ? $"{data.alarm[2]}" : "",
+                                        DataResult = MyDevice.DataResult,
+                                        ModePt = data.mode_pt,
+                                        ModeAx = (byte)((data.dtype == 0xF4) ? data.mode >> 0x04 : data.mode_ax),
+                                        ModeMx = (byte)((data.dtype == 0xF4) ? data.mode & 0x0F : data.mode_mx),
+                                        Battery = data.battery,
+                                        KeyBuf = data.keybuf,
+                                        KeyLock = data.keylock.ToString(),
+                                        MemAble = data.memable.ToString(),
+                                        Update = data.update.ToString(),
+                                        Error = "",
+                                        Alarm0 = data.dtype == 0xF3 ? $"{data.alarm[0]}" : "",
+                                        Alarm1 = data.dtype == 0xF3 ? $"{data.alarm[1]}" : "",
+                                        Alarm2 = data.dtype == 0xF3 ? $"{data.alarm[2]}" : "",
                                         CreateTime = new DateTime(),
                                     });
                                 }

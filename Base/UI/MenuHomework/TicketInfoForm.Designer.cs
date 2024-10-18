@@ -54,6 +54,8 @@
             this.label11 = new System.Windows.Forms.Label();
             this.tb_WoBat = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.tb_AngleResist = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label2
@@ -97,7 +99,7 @@
             // 
             this.bt_create.Font = new System.Drawing.Font("宋体", 10.8F);
             this.bt_create.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_create.Location = new System.Drawing.Point(287, 578);
+            this.bt_create.Location = new System.Drawing.Point(287, 618);
             this.bt_create.Margin = new System.Windows.Forms.Padding(2);
             this.bt_create.Name = "bt_create";
             this.bt_create.Size = new System.Drawing.Size(80, 38);
@@ -131,7 +133,7 @@
             // tb_note
             // 
             this.tb_note.Font = new System.Drawing.Font("宋体", 10.8F);
-            this.tb_note.Location = new System.Drawing.Point(137, 522);
+            this.tb_note.Location = new System.Drawing.Point(138, 569);
             this.tb_note.Margin = new System.Windows.Forms.Padding(2);
             this.tb_note.MaxLength = 15;
             this.tb_note.Name = "tb_note";
@@ -143,7 +145,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 10.8F);
             this.label4.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label4.Location = new System.Drawing.Point(73, 525);
+            this.label4.Location = new System.Drawing.Point(74, 572);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(37, 15);
@@ -349,11 +351,35 @@
             this.label12.TabIndex = 64;
             this.label12.Text = "工单批号";
             // 
+            // tb_AngleResist
+            // 
+            this.tb_AngleResist.Font = new System.Drawing.Font("宋体", 10.8F);
+            this.tb_AngleResist.Location = new System.Drawing.Point(138, 522);
+            this.tb_AngleResist.Margin = new System.Windows.Forms.Padding(2);
+            this.tb_AngleResist.MaxLength = 15;
+            this.tb_AngleResist.Name = "tb_AngleResist";
+            this.tb_AngleResist.Size = new System.Drawing.Size(200, 24);
+            this.tb_AngleResist.TabIndex = 68;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("宋体", 10.8F);
+            this.label13.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label13.Location = new System.Drawing.Point(67, 526);
+            this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(67, 15);
+            this.label13.TabIndex = 69;
+            this.label13.Text = "复拧角度";
+            // 
             // TicketInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(417, 646);
+            this.ClientSize = new System.Drawing.Size(417, 667);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.tb_AngleResist);
             this.Controls.Add(this.tb_WoStamp);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.tb_WoBat);
@@ -415,5 +441,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox tb_WoBat;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox tb_AngleResist;
+        private System.Windows.Forms.Label label13;
     }
 }

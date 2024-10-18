@@ -28,6 +28,7 @@ namespace Model
         public UInt32 fifoCount = 0;     //fifo中data数量
         public UInt32 fifoIndex = 0;     //读fifo的起始下标
         public int dataTick = 0;         //发送读数据指令次数
+        public int validDataCnt = 0;     //读5包中拿到的有效数据
         public int readDataNum = 0;      //读取data包数
         public int requiredCount = 1;    //需要发送指令次数
         public int sentCount = 0;        //已发送次数

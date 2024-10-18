@@ -460,7 +460,6 @@ namespace DBHelper
                 Torque = it.Torque,
                 TorqueUnit = it.TorqueUnit,
                 TorquePeak = it.TorquePeak,
-                AngleDecimal = it.AngleDecimal,
                 Angle = it.Angle,
                 AngleAcc = it.AngleAcc,
                 AngleResist = it.AngleResist,

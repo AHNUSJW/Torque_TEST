@@ -35,6 +35,11 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.EditTicketToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DelTicketToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.GenerateBarcodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.GenerateQRcodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -47,12 +52,8 @@
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.EditTicketToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DelTicketToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.GenerateBarcodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.GenerateQRcodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -138,6 +139,7 @@
             this.Column10,
             this.Column11,
             this.Column3,
+            this.Column2,
             this.Column12});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(3, 103);
@@ -151,6 +153,44 @@
             this.dataGridView1.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dataGridView1_CellPainting);
             this.dataGridView1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyUp);
             this.dataGridView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.EditTicketToolStripMenuItem,
+            this.DelTicketToolStripMenuItem,
+            this.GenerateBarcodeToolStripMenuItem,
+            this.GenerateQRcodeToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(137, 92);
+            // 
+            // EditTicketToolStripMenuItem
+            // 
+            this.EditTicketToolStripMenuItem.Name = "EditTicketToolStripMenuItem";
+            this.EditTicketToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.EditTicketToolStripMenuItem.Text = "编辑工单";
+            this.EditTicketToolStripMenuItem.Click += new System.EventHandler(this.EditTicketToolStripMenuItem_Click);
+            // 
+            // DelTicketToolStripMenuItem
+            // 
+            this.DelTicketToolStripMenuItem.Name = "DelTicketToolStripMenuItem";
+            this.DelTicketToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.DelTicketToolStripMenuItem.Text = "删除工单";
+            this.DelTicketToolStripMenuItem.Click += new System.EventHandler(this.DelTicketToolStripMenuItem_Click);
+            // 
+            // GenerateBarcodeToolStripMenuItem
+            // 
+            this.GenerateBarcodeToolStripMenuItem.Name = "GenerateBarcodeToolStripMenuItem";
+            this.GenerateBarcodeToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.GenerateBarcodeToolStripMenuItem.Text = "生成条形码";
+            this.GenerateBarcodeToolStripMenuItem.Click += new System.EventHandler(this.GenerateBarcodeToolStripMenuItem_Click);
+            // 
+            // GenerateQRcodeToolStripMenuItem
+            // 
+            this.GenerateQRcodeToolStripMenuItem.Name = "GenerateQRcodeToolStripMenuItem";
+            this.GenerateQRcodeToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.GenerateQRcodeToolStripMenuItem.Text = "生成二维码";
+            this.GenerateQRcodeToolStripMenuItem.Click += new System.EventHandler(this.GenerateQRcodeToolStripMenuItem_Click);
             // 
             // Column1
             // 
@@ -220,48 +260,15 @@
             this.Column3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "复拧角度";
+            this.Column2.Name = "Column2";
+            // 
             // Column12
             // 
             this.Column12.HeaderText = "备注";
             this.Column12.Name = "Column12";
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.EditTicketToolStripMenuItem,
-            this.DelTicketToolStripMenuItem,
-            this.GenerateBarcodeToolStripMenuItem,
-            this.GenerateQRcodeToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 114);
-            // 
-            // EditTicketToolStripMenuItem
-            // 
-            this.EditTicketToolStripMenuItem.Name = "EditTicketToolStripMenuItem";
-            this.EditTicketToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.EditTicketToolStripMenuItem.Text = "编辑工单";
-            this.EditTicketToolStripMenuItem.Click += new System.EventHandler(this.EditTicketToolStripMenuItem_Click);
-            // 
-            // DelTicketToolStripMenuItem
-            // 
-            this.DelTicketToolStripMenuItem.Name = "DelTicketToolStripMenuItem";
-            this.DelTicketToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.DelTicketToolStripMenuItem.Text = "删除工单";
-            this.DelTicketToolStripMenuItem.Click += new System.EventHandler(this.DelTicketToolStripMenuItem_Click);
-            // 
-            // GenerateBarcodeToolStripMenuItem
-            // 
-            this.GenerateBarcodeToolStripMenuItem.Name = "GenerateBarcodeToolStripMenuItem";
-            this.GenerateBarcodeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.GenerateBarcodeToolStripMenuItem.Text = "生成条形码";
-            this.GenerateBarcodeToolStripMenuItem.Click += new System.EventHandler(this.GenerateBarcodeToolStripMenuItem_Click);
-            // 
-            // GenerateQRcodeToolStripMenuItem
-            // 
-            this.GenerateQRcodeToolStripMenuItem.Name = "GenerateQRcodeToolStripMenuItem";
-            this.GenerateQRcodeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.GenerateQRcodeToolStripMenuItem.Text = "生成二维码";
-            this.GenerateQRcodeToolStripMenuItem.Click += new System.EventHandler(this.GenerateQRcodeToolStripMenuItem_Click);
             // 
             // MenuManageTicketForm
             // 
@@ -287,6 +294,13 @@
         private System.Windows.Forms.Button btn_Create;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem DelTicketToolStripMenuItem;
+        private System.Windows.Forms.Button btn_Delete;
+        private System.Windows.Forms.ToolStripMenuItem EditTicketToolStripMenuItem;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ToolStripMenuItem GenerateBarcodeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem GenerateQRcodeToolStripMenuItem;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column13;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column14;
@@ -299,13 +313,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column11;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column12;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem DelTicketToolStripMenuItem;
-        private System.Windows.Forms.Button btn_Delete;
-        private System.Windows.Forms.ToolStripMenuItem EditTicketToolStripMenuItem;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.ToolStripMenuItem GenerateBarcodeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem GenerateQRcodeToolStripMenuItem;
     }
 }

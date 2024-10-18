@@ -56,6 +56,7 @@
             this.btn_Import = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.label_result = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -68,7 +69,6 @@
             this.label_torqueAlarm = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -404,6 +404,17 @@
             this.panel1.Size = new System.Drawing.Size(1176, 95);
             this.panel1.TabIndex = 0;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label4.Location = new System.Drawing.Point(35, 55);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(74, 22);
+            this.label4.TabIndex = 177;
+            this.label4.Text = "序列号：";
+            this.label4.Visible = false;
+            // 
             // panel6
             // 
             this.panel6.BackColor = System.Drawing.Color.CadetBlue;
@@ -538,17 +549,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 87.63158F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1182, 820);
             this.tableLayoutPanel1.TabIndex = 1;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(35, 55);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(74, 22);
-            this.label4.TabIndex = 177;
-            this.label4.Text = "序列号：";
-            this.label4.Visible = false;
             // 
             // MenuTicketWorkForm
             // 

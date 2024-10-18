@@ -47,7 +47,8 @@ namespace Base.UI.MenuHomework
                 tb_WoNum.Text     = row.Cells[9].Value.ToString();
                 tb_WoStamp.Text   = row.Cells[10].Value.ToString();
                 tb_WoName.Text    = row.Cells[11].Value.ToString();
-                tb_note.Text      = row.Cells[12].Value.ToString();
+                tb_AngleResist.Text = row.Cells[12].Value.ToString();
+                tb_note.Text      = row.Cells[13].Value.ToString();
             }
         }
 
@@ -106,6 +107,38 @@ namespace Base.UI.MenuHomework
                 return;
             }
 
+            double tempAngleResist = 0;//临时复拧角度
+
+            // 尝试将输入转换为double
+            if (double.TryParse(tb_AngleResist.Text, out double result))
+            {
+                // 检查是否大于等于0
+                if (result >= 0)
+                {
+                    // 有效值
+                    tempAngleResist = result;
+                }
+                else
+                {
+                    // 值小于0，弹出提示框
+                    MessageBox.Show("复拧角度请输入大于或等于0的数字。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            else
+            {
+                if (tb_AngleResist.Text == "")
+                {
+                    tempAngleResist = 0;
+                }
+                else
+                {
+                    // 转换失败，弹出提示框
+                    MessageBox.Show("复拧角度输入的格式不正确，请输入一个有效的数字。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
             //工单详细信息
             DSTicketInfo myTicketInfo = new DSTicketInfo
             {
@@ -120,6 +153,7 @@ namespace Base.UI.MenuHomework
                 WoNum     = tb_WoNum.Text,
                 WoStamp   = tb_WoStamp.Text,
                 WoName    = tb_WoName.Text,
+                AngleResist = tempAngleResist,
                 Note      = tb_note.Text,
             };
 
@@ -162,6 +196,7 @@ namespace Base.UI.MenuHomework
                     WorkNum = myTicketInfo.WoNum,
                     SequenceId = "0".PadLeft(sequenceLen, '0'),
                     ImagePath = tb_ImagePath.Text.Replace("\\", "/"),
+                    AngleResist = myTicketInfo.AngleResist
                 };
 
                 //产品表新增一条纪录

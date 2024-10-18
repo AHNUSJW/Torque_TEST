@@ -1180,7 +1180,7 @@ namespace Base.UI.MenuDevice
             }
             else
             {
-                MyDevice.myTaskManager.AddUserCommand(actXET.wlan.addr, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK3_WLAN, this.Name);
+                MyDevice.myTaskManager.AddUserCommand(oldAddr, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK3_WLAN, this.Name);
             }
         }
 

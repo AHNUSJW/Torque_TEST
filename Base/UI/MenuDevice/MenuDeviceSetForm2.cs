@@ -1056,7 +1056,7 @@ namespace Base.UI.MenuDevice
             }
             else
             {
-                MyDevice.myTaskManager.AddUserCommand(actXET.wlan.addr, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK3_WLAN, this.Name);
+                MyDevice.myTaskManager.AddUserCommand(oldAddr, ProtocolFunc.Protocol_Sequence_SendCOM, TASKS.REG_BLOCK3_WLAN, this.Name);
                 //修改波特率需要发送重启串口指令
                 MyDevice.myTaskManager.AddUserCommand(actXET.wlan.addr, ProtocolFunc.Protocol_Write_SendCOM, TASKS.WRITE_RESET, this.Name);
             }

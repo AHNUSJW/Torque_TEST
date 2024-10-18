@@ -75,7 +75,7 @@ namespace DBHelper
         /// <summary>
         /// 心跳回复帧数
         /// </summary>
-        [SugarColumn(ColumnName = "heartcount", ColumnDescription = "心跳回复帧数")]
+        [SugarColumn(ColumnName = "heartcount", ColumnDescription = "心跳回复帧数", ColumnDataType = "tinyint unsigned ")]
         public byte HeartCount { get; set; }
 
         /// <summary>
@@ -93,43 +93,43 @@ namespace DBHelper
         /// <summary>
         /// 声光报警
         /// </summary>
-        [SugarColumn(ColumnName = "alarmode", ColumnDescription = "声光报警")]
+        [SugarColumn(ColumnName = "alarmode", ColumnDescription = "声光报警", ColumnDataType = "tinyint unsigned ")]
         public byte AlarmMode { get; set; }
 
         /// <summary>
         /// 自动关机时间
         /// </summary>
-        [SugarColumn(ColumnName = "timeoff", ColumnDescription = "自动关机时间")]
+        [SugarColumn(ColumnName = "timeoff", ColumnDescription = "自动关机时间", ColumnDataType = "tinyint unsigned ")]
         public byte TimeOff { get; set; }
 
         /// <summary>
         /// 自动关背光时间
         /// </summary>
-        [SugarColumn(ColumnName = "timeback", ColumnDescription = "自动关背光时间")]
+        [SugarColumn(ColumnName = "timeback", ColumnDescription = "自动关背光时间", ColumnDataType = "tinyint unsigned ")]
         public byte TimeBack { get; set; }
 
         /// <summary>
         /// 自动归零时间
         /// </summary>
-        [SugarColumn(ColumnName = "timezero", ColumnDescription = "自动归零时间")]
+        [SugarColumn(ColumnName = "timezero", ColumnDescription = "自动归零时间", ColumnDataType = "tinyint unsigned ")]
         public byte TimeZero { get; set; }
 
         /// <summary>
         /// 横屏竖屏
         /// </summary>
-        [SugarColumn(ColumnName = "disptype", ColumnDescription = "横屏竖屏")]
+        [SugarColumn(ColumnName = "disptype", ColumnDescription = "横屏竖屏", ColumnDataType = "tinyint unsigned ")]
         public byte DispType { get; set; }
 
         /// <summary>
         /// 主题
         /// </summary>
-        [SugarColumn(ColumnName = "disptheme", ColumnDescription = "主题")]
+        [SugarColumn(ColumnName = "disptheme", ColumnDescription = "主题", ColumnDataType = "tinyint unsigned ")]
         public byte DispTheme { get; set; }
 
         /// <summary>
         /// 语言
         /// </summary>
-        [SugarColumn(ColumnName = "displan", ColumnDescription = "语言")]
+        [SugarColumn(ColumnName = "displan", ColumnDescription = "语言", ColumnDataType = "tinyint unsigned ")]
         public byte DispLan { get; set; }
 
         /// <summary>
@@ -141,13 +141,13 @@ namespace DBHelper
         /// <summary>
         /// adc采样速率和增益
         /// </summary>
-        [SugarColumn(ColumnName = "adspeed", ColumnDescription = "adc采样速率和增益")]
+        [SugarColumn(ColumnName = "adspeed", ColumnDescription = "adc采样速率和增益", ColumnDataType = "tinyint unsigned ")]
         public byte AdSpeed { get; set; }
 
         /// <summary>
         /// 归零范围
         /// </summary>
-        [SugarColumn(ColumnName = "autozero", ColumnDescription = "归零范围")]
+        [SugarColumn(ColumnName = "autozero", ColumnDescription = "归零范围", ColumnDataType = "tinyint unsigned ")]
         public string AutoZero { get; set; }
 
         /// <summary>
@@ -165,19 +165,19 @@ namespace DBHelper
         /// <summary>
         /// 离线工单有效数量
         /// </summary>
-        [SugarColumn(ColumnName = "screwmax", ColumnDescription = "离线工单有效数量")]
+        [SugarColumn(ColumnName = "screwmax", ColumnDescription = "离线工单有效数量", ColumnDataType = "tinyint unsigned ")]
         public byte Screwmax { get; set; }
 
         /// <summary>
         /// 离线执行工单模式
         /// </summary>
-        [SugarColumn(ColumnName = "runmode", ColumnDescription = "离线执行工单模式")]
+        [SugarColumn(ColumnName = "runmode", ColumnDescription = "离线执行工单模式", ColumnDataType = "tinyint unsigned ")]
         public byte Runmode { get; set; }
 
         /// <summary>
         /// 设备主动上传的使能控制
         /// </summary>
-        [SugarColumn(ColumnName = "auploaden", ColumnDescription = "设备主动上传的使能控制")]
+        [SugarColumn(ColumnName = "auploaden", ColumnDescription = "设备主动上传的使能控制", ColumnDataType = "tinyint unsigned ")]
         public byte Auploaden { get; set; }
 
         /// <summary>

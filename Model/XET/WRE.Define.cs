@@ -143,6 +143,8 @@ namespace Model
         public byte         runmode;                                    //离线执行工单模式，0无，1手动，2自动
         public byte         auploaden;                                  //设备主动上传的使能控制
         public byte         devrole;                                    //tcp server还是tcp client
+        public byte         usbEn;                                      //USB通信使能
+        public byte         wirelessEn;                                 //无线通信方式使能
 
         public float        angcorr;                                    //角度修正系数
         public Int32        angle_resist;                               //复拧角度（angle_acc < angle_resist则提示重复拧紧）
@@ -248,7 +250,7 @@ namespace Model
         /**************04专有参数**************/
         public Byte         mode;                                       //工单模式AxMx
         public Byte         screwNum;                                   //螺栓数量
-        public UInt32       work_ID;                                   //工单号
+        public UInt32       work_ID;                                    //工单号
         public UInt64       work_psq;                                   //工单序列号
         public Byte         screwSeq;                                   //螺栓下标
 
