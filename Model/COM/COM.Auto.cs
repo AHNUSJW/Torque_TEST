@@ -305,7 +305,8 @@ namespace Model
                             {
                                 if (MyDevice.actDev.data[i].dtype == 0xF1 ||
                                     MyDevice.actDev.data[i].dtype == 0xF2 ||
-                                    MyDevice.actDev.data[i].dtype == 0xF3
+                                    MyDevice.actDev.data[i].dtype == 0xF3 ||
+                                    MyDevice.actDev.data[i].dtype == 0xF4
                                     )
                                 {
                                     tempFxNum++;
@@ -479,6 +480,20 @@ namespace Model
                             MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
                             break;
                         case TASKS.REG_BLOCK2_DAT:
+                            int tempFxNum = 0;//5包中的有效数值数量
+                            for (int i = 0; i < 5; i++)
+                            {
+                                if (MyDevice.actDev.data[i].dtype == 0xF1 ||
+                                    MyDevice.actDev.data[i].dtype == 0xF2 ||
+                                    MyDevice.actDev.data[i].dtype == 0xF3 ||
+                                    MyDevice.actDev.data[i].dtype == 0xF4
+                                    )
+                                {
+                                    tempFxNum++;
+                                }
+                            }
+                            MyDevice.actDev.auto.validDataCnt += tempFxNum;
+
                             if (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
                             {
                                 MyDevice.actDev.auto.readDataNum = MyDevice.actDev.auto.readDataNum + 5;
@@ -506,7 +521,7 @@ namespace Model
                             {
                                 if (MyDevice.actDev.fifo.index == MyDevice.actDev.auto.fifoIndex)
                                 {
-                                    MyDevice.actDev.auto.readDataNum = MyDevice.actDev.auto.readDataNum + 5;
+                                    MyDevice.actDev.auto.readDataNum = MyDevice.actDev.auto.readDataNum + tempFxNum;
 
                                     //判断该数据是否合格
                                     TriggerUpdateUI(CurrentCommand);
@@ -534,7 +549,7 @@ namespace Model
                                 //1.收到的index不是连续性，说明数据丢失，重新读该条
                                 else
                                 {
-                                    MyDevice.actDev.auto.readDataNum = MyDevice.actDev.auto.readDataNum - 5;
+                                    MyDevice.actDev.auto.readDataNum = MyDevice.actDev.auto.readDataNum - tempFxNum;
                                     MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
                                 }
                             }
@@ -542,7 +557,7 @@ namespace Model
                             {
                                 if (MyDevice.actDev.fifo.index == MyDevice.actDev.auto.fifoIndex)
                                 {
-                                    MyDevice.actDev.auto.readDataNum = MyDevice.actDev.auto.readDataNum + 5;
+                                    MyDevice.actDev.auto.readDataNum = MyDevice.actDev.auto.readDataNum + tempFxNum;
 
                                     //判断该数据是否合格
                                     TriggerUpdateUI(CurrentCommand);
@@ -570,7 +585,7 @@ namespace Model
                                 //1.收到的index不是连续性，说明数据丢失，重新读该条
                                 else
                                 {
-                                    MyDevice.actDev.auto.readDataNum = MyDevice.actDev.auto.readDataNum - 5;
+                                    MyDevice.actDev.auto.readDataNum = MyDevice.actDev.auto.readDataNum - tempFxNum;
                                     MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
                                 }
                             }
@@ -579,6 +594,7 @@ namespace Model
                             //合格清缓存并且切点
                             TriggerUpdateUI(CurrentCommand);
                             MyDevice.actDev.auto.readDataNum = 0;
+                            MyDevice.actDev.auto.validDataCnt = 0;
                             MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK1_FIFO;
                             break;
                         default:
@@ -751,7 +767,8 @@ namespace Model
             {
                 WrenchId = mDev.wlan.addr.ToString(),
                 TaskState = mDev.auto.nextTask,
-                SeqWriteNum = 0x1FFFFFFF,
+                //SeqWriteNum = 0x1FFFFFFF,
+                SeqWriteNum = mDev.auto.validDataCnt,
                 SeqWriteIndex = mDev.auto.fifoIndex
             };
 
@@ -1273,6 +1290,11 @@ namespace Model
                     MyDevice.actDev.wlan.addr = newaddr;
                     ExecuteCommand(command);
                     MyDevice.protocol.addr = newaddr;
+                    //特殊情况，由于有线连接下，发送地址固定成1，故校验的时候也需要1。
+                    if (MyDevice.protocol.type == COMP.UART)
+                    {
+                        MyDevice.protocol.addr = 1;
+                    }
                     break;
 
                 default:

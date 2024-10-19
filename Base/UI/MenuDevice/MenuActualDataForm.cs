@@ -1,17 +1,15 @@
 ﻿using DBHelper;
-using HZH_Controls.Controls;
 using Library;
 using Model;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 //Ricardo  20240328
@@ -100,6 +98,14 @@ namespace Base.UI.MenuDevice
             //dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;//表格自动填充
 
             dataGridView1.ReadOnly = true; // 如果只需要展示数据，设置为只读可以提高性能
+
+            saveDt.Columns.Add("序号", typeof(int));
+            saveDt.Columns.Add("作业号", typeof(string));
+            saveDt.Columns.Add("时间标志", typeof(string));
+            saveDt.Columns.Add("设备ID", typeof(string));
+            saveDt.Columns.Add("数据类型", typeof(string));
+            saveDt.Columns.Add("实时扭矩", typeof(string));
+            saveDt.Columns.Add("实时角度", typeof(double));
 
             #endregion
 
@@ -358,6 +364,7 @@ namespace Base.UI.MenuDevice
             //清除表格数据
             dataGridView1.Rows.Clear();
             lines = 0;
+            saveDt.Rows.Clear();
 
             if (MyDevice.AddrList.IndexOf(MyDevice.protocol.addr) != -1)
             {
@@ -545,9 +552,18 @@ namespace Base.UI.MenuDevice
                         string filePath = DialogSave.FileName;
 
                         // 将DataTable数据转换为CSV文件并保存到用户选择的路径
-                        if (saveActualDataToCsv2(filePath))
+                        //if (SaveActualDataToCsv_1(filePath))
+                        //{
+                        //    MessageBox.Show("导出数据成功！");
+                        //}
+
+                        if (SaveActualDataToCsv_2(filePath, saveDt))
                         {
                             MessageBox.Show("导出数据成功！");
+                        }
+                        else
+                        {
+                            MessageBox.Show("导出数据失败，请重新导入！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         return;
                     }
@@ -641,6 +657,8 @@ namespace Base.UI.MenuDevice
                         dataGridView1.Rows[idx].Cells[3].Value = actXET.wlan.addr;
                         dataGridView1.Rows[idx].Cells[4].Value = torque + " " + torqueUnit;
                         dataGridView1.Rows[idx].Cells[5].Value = angle + " °";
+
+                        DtAddRow(saveDt, actXET.data[i], actXET, torque, angle);
                     }
                     else if (actXET.data[i].dtype == 0xF2)
                     {
@@ -655,6 +673,8 @@ namespace Base.UI.MenuDevice
                         dataGridView1.Rows[idx].Cells[3].Value = actXET.wlan.addr;
                         dataGridView1.Rows[idx].Cells[4].Value = torque + " " + torqueUnit;
                         dataGridView1.Rows[idx].Cells[5].Value = angle + " °";
+
+                        DtAddRow(saveDt, actXET.data[i], actXET, torque, angle);
                     }
 
                     label3.Text = "扭矩峰值：" + torque + torqueUnit;
@@ -682,7 +702,7 @@ namespace Base.UI.MenuDevice
                     }
                     else
                     {
-                        //label2.Text = "无需重复拧紧";
+                        label2.Text = "";
                     }
 
                     //更新作业号
@@ -792,11 +812,15 @@ namespace Base.UI.MenuDevice
                         {
                             Console.WriteLine(actXET.data[i].mode_pt + "_" + actXET.data[i].dtype);
                             dataGridView1.Rows[idx].Cells[0].Value = (++lines).ToString();
+
+                            DtAddRow(saveDt, actXET.data[i], actXET, torque, angle);
                         }
                         else if (actXET.data[i].dtype == 0xF2)
                         {
                             Console.WriteLine("抓住02");
                             dataGridView1.Rows[idx].Cells[0].Value = "☆" + (++lines);
+
+                            DtAddRow(saveDt, actXET.data[i], actXET, torque, angle);
                         }
                         else if (actXET.data[i].dtype == 0xF3)
                         {
@@ -813,6 +837,7 @@ namespace Base.UI.MenuDevice
 
                         TorquedataGroups[actXET.opsn].Add(torque);
                         AngledataGroups[actXET.opsn].Add(angle);
+
                     }
 
                     //判断数据结果是否合格
@@ -1197,7 +1222,7 @@ namespace Base.UI.MenuDevice
         #region 表格数据存储为csv
 
         // 数据表保存为csv文件
-        public bool saveActualDataToExcel(string mePath)
+        public bool SaveActualDataToExcel(string mePath)
         {
             //空
             if (mePath == null)
@@ -1233,8 +1258,8 @@ namespace Base.UI.MenuDevice
             }
         }
 
-        //存储为csv，指定格式，用于数据分析
-        public bool saveActualDataToCsv2(string filePath)
+        //存储为csv，指定格式，用于数据分析(存储作业号下的所有数据，包括过程和峰值)
+        public bool SaveActualDataToCsv_1(string filePath)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("序号", typeof(int));
@@ -1349,6 +1374,90 @@ namespace Base.UI.MenuDevice
                 MessageBox.Show("csv文件被打开，请先关闭");
             }
             return false;
+        }
+
+        //存储为csv,用于数据分析(同步表格，峰值模式下会筛去过程数据)
+        public bool SaveActualDataToCsv_2(string filePath, DataTable dataTable)
+        {
+            if (dataTable != null && dataTable.Rows.Count != 0)
+            {
+                // 确保文件路径目录存在
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+            }
+            else
+            {
+                return false;
+            }
+
+            //判断是否能打开文件
+            try
+            {
+                // 创建文件并写入数据
+                using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
+                {
+                    // 写入表头
+                    for (int i = 0; i < dataTable.Columns.Count; i++)
+                    {
+                        writer.Write(dataTable.Columns[i]);
+                        if (i < dataTable.Columns.Count - 1)
+                        {
+                            writer.Write(",");
+                        }
+                    }
+                    writer.WriteLine();
+
+                    // 写入数据行
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        for (int i = 0; i < dataTable.Columns.Count; i++)
+                        {
+                            string cellValue = row[i].ToString();
+                            //if (decimal.TryParse(cellValue, out decimal number) && cellValue.Length > 10)
+                            //{
+                            //    cellValue = $"'{cellValue}"; // 加上单引号前缀，防止科学计数法
+                            //}
+                            writer.Write(cellValue);
+                            if (i < dataTable.Columns.Count - 1)
+                            {
+                                writer.Write(",");
+                            }
+                        }
+                        writer.WriteLine();
+                    }
+
+                    return true;
+                }
+            }
+            catch (IOException)
+            {
+                // 文件被占用
+                MessageBox.Show("csv文件被打开，请先关闭");
+            }
+            return false;
+        }
+
+        public void DtAddRow(DataTable dataTable, DATA data, XET xet, double tor, double ang)
+        {
+            string tempUnit = "";
+            //单位更新
+            switch (data.torque_unit)
+            {
+                case UNIT.UNIT_nm: tempUnit = "N·m"; break;
+                case UNIT.UNIT_lbfin: tempUnit = "lbf·in"; break;
+                case UNIT.UNIT_lbfft: tempUnit = "lbf·ft"; break;
+                case UNIT.UNIT_kgcm: tempUnit = "kgf·cm"; break;
+                case UNIT.UNIT_kgm: tempUnit = "kgf·m"; break;
+                default: break;
+            }
+
+            dataTable.Rows.Add(new object[] { dataTable.Rows.Count + 1,
+                                              xet.opsn,
+                                              data.stamp,
+                                              xet.wlan.addr,
+                                              data.dtype == 0xF1 ? "过程数据" : "峰值数据",
+                                              tor + " " + tempUnit,
+                                              ang,
+            });
         }
 
         #endregion

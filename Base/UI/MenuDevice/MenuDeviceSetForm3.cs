@@ -10,6 +10,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 //Ricardo 20240801
 
@@ -442,6 +443,22 @@ namespace Base.UI.MenuDevice
             //脱钩保持时间
             ucTextBoxEx_unhook.InputText = actXET.para.unhook.ToString();
 
+            //USB通信使能
+            ucCombox_usbEN.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "关闭"),
+                new KeyValuePair<string, string>("1", "开启")
+            };
+            ucCombox_usbEN.SelectedIndex = actXET.para.usbEn > 1 ? 1 : actXET.para.usbEn;
+
+            //无线通信使能
+            ucCombox_wirelessEn.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "关闭"),
+                new KeyValuePair<string, string>("1", "开启")
+            };
+            ucCombox_wirelessEn.SelectedIndex = actXET.para.wirelessEn > 1 ? 1 : actXET.para.wirelessEn;
+
             #endregion
 
             #region WLAN设置
@@ -549,6 +566,7 @@ namespace Base.UI.MenuDevice
             switch (MyDevice.userRole)
             {
                 case "0":
+                    groupBox4.Visible = false;
                     groupBox6.Visible = false;
 
                     label_fifomode.Enabled = false;
@@ -575,16 +593,23 @@ namespace Base.UI.MenuDevice
                     ucTextBoxEx_timeback.Enabled = false;
                     label_timezero.Enabled = false;
                     ucTextBoxEx_timezero.Enabled = false;
-                    label_disptype.Enabled = false;
-                    ucCombox_disptype.Enabled = false;
-                    label_disptheme.Enabled = false;
-                    ucCombox_disptheme.Enabled = false;
-                    label_displan.Enabled = false;
-                    ucCombox_displan.Enabled = false;
+                    label_disptype.Visible = false;
+                    ucCombox_disptype.Visible = false;
+                    label_disptheme.Visible = false;
+                    ucCombox_disptheme.Visible = false;
+                    label_displan.Visible = false;
+                    ucCombox_displan.Visible = false;
 
                     bt_UpdateMode.Enabled = false;
+
+                    groupBox24.Visible             = false;
+                    label_usbEn.Enabled            = false;
+                    ucCombox_usbEN.Enabled         = false;
+                    label_wirelessEn.Enabled       = false;
+                    ucCombox_wirelessEn.Enabled    = false;
                     break;
                 case "1":
+                    groupBox4.Visible = false;
                     groupBox6.Visible = false;
 
                     label_fifomode.Enabled = true;
@@ -611,17 +636,24 @@ namespace Base.UI.MenuDevice
                     ucTextBoxEx_timeback.Enabled = true;
                     label_timezero.Enabled = true;
                     ucTextBoxEx_timezero.Enabled = true;
-                    label_disptype.Enabled = true;
-                    ucCombox_disptype.Enabled = false;
-                    label_disptheme.Enabled = true;
-                    ucCombox_disptheme.Enabled = true;
-                    label_displan.Enabled = true;
-                    ucCombox_displan.Enabled = true;
+                    label_disptype.Visible = false;
+                    ucCombox_disptype.Visible = false;
+                    label_disptheme.Visible = false;
+                    ucCombox_disptheme.Visible = false;
+                    label_displan.Visible = false;
+                    ucCombox_displan.Visible = false;
 
                     bt_UpdateMode.Enabled = true;
+
+                    groupBox24.Visible             = false;
+                    label_usbEn.Enabled            = false;
+                    ucCombox_usbEN.Enabled         = false;
+                    label_wirelessEn.Enabled       = false;
+                    ucCombox_wirelessEn.Enabled    = false;
                     break;
                 default:
                 case "32":
+                    groupBox4.Visible = false;
                     groupBox6.Visible = false;
 
                     label_fifomode.Enabled = true;
@@ -648,14 +680,20 @@ namespace Base.UI.MenuDevice
                     ucTextBoxEx_timeback.Enabled = true;
                     label_timezero.Enabled = true;
                     ucTextBoxEx_timezero.Enabled = true;
-                    label_disptype.Enabled = true;
-                    ucCombox_disptype.Enabled = true;
-                    label_disptheme.Enabled = true;
-                    ucCombox_disptheme.Enabled = true;
-                    label_displan.Enabled = true;
-                    ucCombox_displan.Enabled = true;
+                    label_disptype.Visible = false;
+                    ucCombox_disptype.Visible = false;
+                    label_disptheme.Visible = false;
+                    ucCombox_disptheme.Visible = false;
+                    label_displan.Visible = false;
+                    ucCombox_displan.Visible = false;
 
                     bt_UpdateMode.Enabled = true;
+
+                    groupBox24.Visible             = true;
+                    label_usbEn.Enabled            = true;
+                    ucCombox_usbEN.Enabled         = true;
+                    label_wirelessEn.Enabled       = true;
+                    ucCombox_wirelessEn.Enabled    = true;
                     break;
             }
             //WLAN设置
@@ -1021,6 +1059,8 @@ namespace Base.UI.MenuDevice
                 actXET.para.disptype = (byte)ucCombox_disptype.SelectedIndex;
                 actXET.para.disptheme = (byte)ucCombox_disptheme.SelectedIndex;
                 actXET.para.displan = (byte)ucCombox_displan.SelectedIndex;
+                actXET.para.usbEn = (byte)ucCombox_usbEN.SelectedIndex;
+                actXET.para.wirelessEn = (byte)ucCombox_wirelessEn.SelectedIndex;
                 if (UInt16.TryParse(ucTextBoxEx_unhook.InputText, out UInt16 unhook))
                 {
                     actXET.para.unhook = unhook;

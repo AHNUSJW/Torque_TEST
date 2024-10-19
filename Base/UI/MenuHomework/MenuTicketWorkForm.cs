@@ -721,12 +721,8 @@ namespace Base.UI.MenuHomework
                     label_torqueAlarm.Text = "预设扭矩 " + screw.Alarm0 + " " + tb_Unit.Text;
                     label_angleAlarm.Text = "预设角度 ";
 
-                    if (actXET == null)
-                    {
-
-                    }
-                    if (actXET != null && 
-                        (actXET.devc.type != TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR || actXET.devc.type != TYPE.TQ_XH_XL01_09 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
+                    if (MyDevice.actDev != null && 
+                        (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR || MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_09 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
                         )
                     {
                         label_angleAlarm.Text = "复拧角度 " + angleResit;
@@ -760,8 +756,8 @@ namespace Base.UI.MenuHomework
                     label_torqueAlarm.Text = "预设扭矩 " + "( " + screw.Alarm0 + ", " + screw.Alarm1 + " )" + " " + tb_Unit.Text;
                     label_angleAlarm.Text = "预设角度 ";
 
-                    if (actXET != null &&
-                        (actXET.devc.type != TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR || actXET.devc.type != TYPE.TQ_XH_XL01_09 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
+                    if (MyDevice.actDev != null &&
+                        (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR || MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_09 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
                         )
                     {
                         label_angleAlarm.Text = "复拧角度 " + angleResit;
@@ -1004,11 +1000,11 @@ namespace Base.UI.MenuHomework
                                 break;
                             case "SN":
                                 //峰值扭矩 >= 预设扭矩 = 合格
-                                if (torque >= actXET.alam.SN_target[actXET.para.mode_mx, (int)actXET.para.torque_unit])
+                                if (torque >= actXET.alam.SN_target[actXET.data[i].mode_mx, (int)actXET.data[i].torque_unit])
                                 {
                                     isDataValid = true;
                                     //扭矩优先模式下再判断复拧角度
-                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, angleResit);
+                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, angleResit * (int)Math.Pow(10, actXET.para.angle_decimal));
                                 }
                                 else
                                 {
@@ -1017,7 +1013,7 @@ namespace Base.UI.MenuHomework
                                 break;
                             case "SA":
                                 //峰值扭矩 >= 预设扭矩 && 峰值角度 >= 预设角度 = 合格
-                                if (torque >= actXET.alam.SA_pre[actXET.para.mode_mx, (int)actXET.para.torque_unit] && angle >= actXET.alam.SA_ang[actXET.para.mode_mx])
+                                if (torque >= actXET.alam.SA_pre[actXET.data[i].mode_mx, (int)actXET.data[i].torque_unit] && angle >= actXET.alam.SA_ang[actXET.data[i].mode_mx])
                                 {
                                     isDataValid = true;
                                 }
@@ -1028,10 +1024,10 @@ namespace Base.UI.MenuHomework
                                 break;
                             case "MN":
                                 // 扭矩下限 <= 峰值扭矩 <= 扭矩上限  = 合格
-                                if (actXET.alam.MN_low[actXET.para.mode_mx, (int)actXET.para.torque_unit] <= torque && torque <= actXET.alam.MN_high[actXET.para.mode_mx, (int)actXET.para.torque_unit])
+                                if (actXET.alam.MN_low[actXET.data[i].mode_mx, (int)actXET.data[i].torque_unit] <= torque && torque <= actXET.alam.MN_high[actXET.data[i].mode_mx, (int)actXET.data[i].torque_unit])
                                 {
                                     isDataValid = true;
-                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, angleResit);
+                                    isDataValid = !IsAngleResist(actXET.data[i], actXET, angle, angleResit * (int)Math.Pow(10, actXET.para.angle_decimal));
                                 }
                                 else
                                 {
@@ -1040,8 +1036,8 @@ namespace Base.UI.MenuHomework
                                 break;
                             case "MA":
                                 //峰值扭矩 >= 预设扭矩 && 角度下限 <= 峰值角度 <= 角度上限 = 合格
-                                if (torque >= actXET.alam.MA_pre[actXET.para.mode_mx, (int)actXET.para.torque_unit]
-                                    && actXET.alam.MA_low[actXET.para.mode_mx] <= angle && angle <= actXET.alam.MA_high[actXET.para.mode_mx])
+                                if (torque >= actXET.alam.MA_pre[actXET.data[i].mode_mx, (int)actXET.data[i].torque_unit]
+                                    && actXET.alam.MA_low[actXET.data[i].mode_mx] <= angle && angle <= actXET.alam.MA_high[actXET.data[i].mode_mx])
                                 {
                                     isDataValid = true;
                                 }

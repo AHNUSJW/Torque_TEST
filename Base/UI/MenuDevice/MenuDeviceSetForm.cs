@@ -416,6 +416,22 @@ namespace Base.UI.MenuDevice
             }
             ucTextBoxEx_angleResist.InputText = (actXET.para.angle_resist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
 
+            //USB通信使能
+            ucCombox_usbEN.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "关闭"),
+                new KeyValuePair<string, string>("1", "开启")
+            };
+            ucCombox_usbEN.SelectedIndex = actXET.para.usbEn > 1 ? 1 : actXET.para.usbEn;
+
+            //无线通信使能
+            ucCombox_wirelessEn.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "关闭"),
+                new KeyValuePair<string, string>("1", "开启")
+            };
+            ucCombox_wirelessEn.SelectedIndex = actXET.para.wirelessEn > 1 ? 1 : actXET.para.wirelessEn;
+
             #endregion
 
             #region WLAN设置
@@ -697,6 +713,12 @@ namespace Base.UI.MenuDevice
                     ucCombox_displan.Enabled       = false;
 
                     bt_UpdateMode.Enabled          = false;
+
+                    groupBox24.Visible             = false;
+                    label_usbEn.Enabled            = false;
+                    ucCombox_usbEN.Enabled         = false;
+                    label_wirelessEn.Enabled       = false;
+                    ucCombox_wirelessEn.Enabled    = false;
                     break;
                 case "1":
                     groupBox6.Visible              = false;
@@ -733,6 +755,12 @@ namespace Base.UI.MenuDevice
                     ucCombox_displan.Enabled       = true;
 
                     bt_UpdateMode.Enabled          = true;
+
+                    groupBox24.Visible             = false;
+                    label_usbEn.Enabled            = false;
+                    ucCombox_usbEN.Enabled         = false;
+                    label_wirelessEn.Enabled       = false;
+                    ucCombox_wirelessEn.Enabled    = false;
                     break;
                 default:
                 case "32":
@@ -770,6 +798,12 @@ namespace Base.UI.MenuDevice
                     ucCombox_displan.Enabled       = true;
 
                     bt_UpdateMode.Enabled          = true;
+
+                    groupBox24.Visible             = true;
+                    label_usbEn.Enabled            = true;
+                    ucCombox_usbEN.Enabled         = true;
+                    label_wirelessEn.Enabled       = true;
+                    ucCombox_wirelessEn.Enabled    = true;
                     break;
             }
             //WLAN设置
@@ -1366,6 +1400,8 @@ namespace Base.UI.MenuDevice
                 actXET.para.disptype = (byte)ucCombox_disptype.SelectedIndex;
                 actXET.para.disptheme = (byte)ucCombox_disptheme.SelectedIndex;
                 actXET.para.displan = (byte)ucCombox_displan.SelectedIndex;
+                actXET.para.usbEn = (byte)ucCombox_usbEN.SelectedIndex;
+                actXET.para.wirelessEn = (byte)ucCombox_wirelessEn.SelectedIndex;
                 if (UInt16.TryParse(ucTextBoxEx_unhook.InputText, out UInt16 unhook))
                 {
                     actXET.para.unhook = unhook;
@@ -1613,6 +1649,9 @@ namespace Base.UI.MenuDevice
         //更新工单设置
         private void btn_UpdateTicket_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("开发中...");
+            return;
+
             if (ucDataGridView1.SelectRows.Count == 0)
             {
                 MessageBox.Show("未选择设备");
