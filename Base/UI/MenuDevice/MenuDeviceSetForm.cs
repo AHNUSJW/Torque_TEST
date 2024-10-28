@@ -104,6 +104,15 @@ namespace Base.UI.MenuDevice
 
             #region 接收器和路由器配置提示
 
+            //接收器配置信息
+            var test = MyRecXFSettings.ReadDevConfig();
+            groupBox12.Location = new Point(label_wifiIp.Location.X, groupBox8.Location.Y + groupBox8.Height + 10);
+            groupBox11.Location = new Point(label_wifiIp.Location.X, groupBox12.Location.Y + groupBox12.Height + 10);
+            label_recIP.Text += $" 192.168.{test.IpWiFi}.1";
+            label_recPort.Text += " " + test.PortWiFi;
+            label_recWIFIName.Text += " " + test.SsidWiFi;
+            label_recWIFIPwd.Text += " " + test.PswdWiFi;
+
             //本地ip与wifi名称
             //wifi名称加载时间较长，故使用异步
             //await避免阻塞UI主线程, 使该控件在页面加载后再更新
@@ -141,16 +150,42 @@ namespace Base.UI.MenuDevice
                     label_curWIFIName.Text += " " + wifiSsid;
                 }
 
+                //配置选择
+                Action action = () =>
+                {
+                    //ucCombox_wirelessSelection.SelectedIndex = 0;
+                    if (ucTextBoxEx_wifiIp.InputText == label_recIP.Text.Split(' ')[1] &&
+                        ucTextBoxEx_port.InputText == label_recPort.Text.Split(' ')[1] &&
+                        ucTextBoxEx_ssid.InputText == label_recWIFIName.Text.Split(' ')[1] &&
+                        ucTextBoxEx_pwd.InputText == label_recWIFIPwd.Text.Split(' ')[1]
+                        )
+                    {
+                        ucCombox_wirelessSelection.SelectedIndex = 0;
+                    }
+                    else if (ucTextBoxEx_wifiIp.InputText == label_curIP.Text.Split(' ')[1] &&
+                             ucTextBoxEx_port.InputText == "5678" &&
+                             ucTextBoxEx_ssid.InputText == label_curWIFIName.Text.Split(' ')[1]
+                    )
+                    {
+                        ucCombox_wirelessSelection.SelectedIndex = 1;
+                    }
+                    else
+                    {
+                        ucCombox_wirelessSelection.SelectedIndex = -1;
+                    }
+                };
+
+                // 异步调用
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(action);
+                }
+                else
+                {
+                    action();
+                }
             });
 
-            //接收器配置信息
-            var test = MyRecXFSettings.ReadDevConfig();
-            groupBox12.Location = new Point(label_wifiIp.Location.X, groupBox8.Location.Y + groupBox8.Height + 10);
-            groupBox11.Location = new Point(label_wifiIp.Location.X, groupBox12.Location.Y + groupBox12.Height + 10);
-            label_recIP.Text += $" 192.168.{test.IpWiFi}.1";
-            label_recPort.Text += " " + test.PortWiFi;
-            label_recWIFIName.Text += " " + test.SsidWiFi;
-            label_recWIFIPwd.Text += " " + test.PswdWiFi;
 
             #endregion
 
@@ -422,7 +457,7 @@ namespace Base.UI.MenuDevice
                 new KeyValuePair<string, string>("0", "关闭"),
                 new KeyValuePair<string, string>("1", "开启")
             };
-            ucCombox_usbEN.SelectedIndex = actXET.para.usbEn > 1 ? 1 : actXET.para.usbEn;
+            ucCombox_usbEN.SelectedIndex = actXET.para.usbEn == 0x55 ? 0 : 1;
 
             //无线通信使能
             ucCombox_wirelessEn.Source = new List<KeyValuePair<string, string>>
@@ -430,7 +465,7 @@ namespace Base.UI.MenuDevice
                 new KeyValuePair<string, string>("0", "关闭"),
                 new KeyValuePair<string, string>("1", "开启")
             };
-            ucCombox_wirelessEn.SelectedIndex = actXET.para.wirelessEn > 1 ? 1 : actXET.para.wirelessEn;
+            ucCombox_wirelessEn.SelectedIndex = actXET.para.wirelessEn == 0x55 ? 0 : 1;
 
             #endregion
 
@@ -503,6 +538,13 @@ namespace Base.UI.MenuDevice
             };
             ucCombox_wifimode.SelectedIndex = actXET.wlan.wifimode;
 
+            //配置选择
+            ucCombox_wirelessSelection.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "接收器配置"),
+                new KeyValuePair<string, string>("1", "路由器配置")
+            };
+            
             #endregion
 
             #region 高级设置
@@ -825,6 +867,10 @@ namespace Base.UI.MenuDevice
                     ucTextBoxEx_pwd.Enabled     = true;
 
                     bt_UpdateWLAN.Enabled       = true;
+
+                    label_wirelessSelection.Enabled = true;
+                    ucCombox_wirelessSelection.Enabled = true;
+                    label_tip.Enabled = true;
                     break;
                 default:
                 case "0":
@@ -841,6 +887,10 @@ namespace Base.UI.MenuDevice
                     ucTextBoxEx_pwd.Enabled     = false;
 
                     bt_UpdateWLAN.Enabled       = false;
+
+                    label_wirelessSelection.Enabled = false;
+                    ucCombox_wirelessSelection.Enabled = false;
+                    label_tip.Enabled = false;
                     break;
             }
             //高级设置
@@ -1340,13 +1390,14 @@ namespace Base.UI.MenuDevice
                 return;
             }
 
-            if (ucTextBoxEx_heartcount.InputText == ""
-                || ucTextBoxEx_heartcycle.InputText == ""
-                || ucTextBoxEx_timeoff.InputText == ""
-                || ucTextBoxEx_timeback.InputText == ""
-                || ucTextBoxEx_timezero.InputText == ""
-                || ucTextBoxEx_unhook.InputText == ""
-                || (ucTextBoxEx_angleResist.InputText == "" && ucTextBoxEx_angleResist.Visible == true))
+            if ((ucTextBoxEx_heartcount.InputText == ""    && ucTextBoxEx_heartcount.Visible == true)
+                || (ucTextBoxEx_heartcycle.InputText == "" && ucTextBoxEx_heartcycle.Visible == true)
+                || (ucTextBoxEx_timeoff.InputText == ""    && ucTextBoxEx_timeoff.Visible == true)
+                || (ucTextBoxEx_timeback.InputText == ""   && ucTextBoxEx_timeback.Visible == true)
+                || (ucTextBoxEx_timezero.InputText == ""   && ucTextBoxEx_timezero.Visible == true)
+                || (ucTextBoxEx_unhook.InputText == ""     && ucTextBoxEx_unhook.Visible == true)
+                || (ucTextBoxEx_angleResist.InputText == "" && ucTextBoxEx_angleResist.Visible == true)
+                )
             {
                 MessageBox.Show("有参数未填写, 请检查所有参数", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -1400,8 +1451,8 @@ namespace Base.UI.MenuDevice
                 actXET.para.disptype = (byte)ucCombox_disptype.SelectedIndex;
                 actXET.para.disptheme = (byte)ucCombox_disptheme.SelectedIndex;
                 actXET.para.displan = (byte)ucCombox_displan.SelectedIndex;
-                actXET.para.usbEn = (byte)ucCombox_usbEN.SelectedIndex;
-                actXET.para.wirelessEn = (byte)ucCombox_wirelessEn.SelectedIndex;
+                actXET.para.usbEn = (byte)((byte)ucCombox_usbEN.SelectedIndex == 0x00 ? 0x55 : 0x00);
+                actXET.para.wirelessEn = (byte)((byte)ucCombox_wirelessEn.SelectedIndex == 0x00 ? 0x55 : 0x00);
                 if (UInt16.TryParse(ucTextBoxEx_unhook.InputText, out UInt16 unhook))
                 {
                     actXET.para.unhook = unhook;
@@ -2959,6 +3010,86 @@ namespace Base.UI.MenuDevice
             }
         }
 
+        //配置选择
+        private void ucCombox_wirelessSelection_SelectedChangedEvent(object sender, EventArgs e)
+        {
+            //IP地址格式校验
+            string ipPattern1 = @"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\." +
+               @"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\." +
+               @"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\." +
+               @"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+
+            if (ucCombox_wirelessSelection.SelectedIndex == 0)
+            {
+                label_wifiIp.Text = "接收器 IP:";
+                label_ssid.Text = "接收器WiFi名称:";
+                label_pwd.Text = "接收器WiFi密码:";
+
+                label_tip.Visible = false;
+
+                try
+                {
+                    ucTextBoxEx_wifiIp.InputText = label_recIP.Text.Split(' ')[1];
+                    ucTextBoxEx_port.InputText = label_recPort.Text.Split(' ')[1];
+                    ucTextBoxEx_ssid.InputText = label_recWIFIName.Text.Split(' ')[1];
+                    ucTextBoxEx_pwd.InputText = label_recWIFIPwd.Text.Split(' ')[1];
+
+                    if (!Regex.IsMatch(ucTextBoxEx_wifiIp.InputText, ipPattern1))
+                    {
+                        MessageBox.Show("IP格式不正确，请重新输入，示例192.168.1.1");
+                        ucTextBoxEx_wifiIp.InputText = "192.168.1.1";
+                        ucTextBoxEx_port.InputText = "";
+                        ucTextBoxEx_ssid.InputText = "";
+                        ucTextBoxEx_pwd.InputText = "";
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("请重新输入参数");
+                    ucTextBoxEx_wifiIp.InputText = "";
+                    ucTextBoxEx_port.InputText = "";
+                    ucTextBoxEx_ssid.InputText = "";
+                    ucTextBoxEx_pwd.InputText = "";
+                }
+
+            }
+            else if (ucCombox_wirelessSelection.SelectedIndex == 1)
+            {
+                label_wifiIp.Text = "本地WiFi IP:";
+                label_ssid.Text = "本地WiFi名称:";
+                label_pwd.Text = "本地WiFi密码:";
+
+                label_tip.Visible = true;
+
+                try
+                {
+                    ucTextBoxEx_wifiIp.InputText = label_curIP.Text.Split(' ')[1];
+                    ucTextBoxEx_port.InputText = "5678";
+                    ucTextBoxEx_ssid.InputText = label_curWIFIName.Text.Split(' ')[1];
+                    ucTextBoxEx_pwd.InputText = actXET.wlan.wf_pwd != "12345678" ? actXET.wlan.wf_pwd : "";
+
+                    if (!Regex.IsMatch(ucTextBoxEx_wifiIp.InputText, ipPattern1))
+                    {
+                        MessageBox.Show("IP格式不正确，请重新输入，示例192.168.1.1");
+                        ucTextBoxEx_wifiIp.InputText = "192.168.1.1";
+                        ucTextBoxEx_port.InputText = "";
+                        ucTextBoxEx_ssid.InputText = "";
+                        ucTextBoxEx_pwd.InputText = "";
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("请重新输入参数");
+                    ucTextBoxEx_wifiIp.InputText = "";
+                    ucTextBoxEx_port.InputText = "";
+                    ucTextBoxEx_ssid.InputText = "";
+                    ucTextBoxEx_pwd.InputText = "";
+                }
+            }
+        }
+
         //工单数值初始化
         private void TicketInit()
         {
@@ -3261,5 +3392,6 @@ namespace Base.UI.MenuDevice
                 }
             }
         }
+
     }
 }

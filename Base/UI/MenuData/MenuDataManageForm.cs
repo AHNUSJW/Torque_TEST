@@ -602,6 +602,7 @@ namespace Base.UI.MenuData
             dataTable.Columns.Add("峰值角度", typeof(string));
             dataTable.Columns.Add("扭矩结果", typeof(string));
             dataTable.Columns.Add("角度结果", typeof(string));
+            dataTable.Columns.Add("是否复拧", typeof(string));
             dataTable.Columns.Add("作业时间", typeof(string));
             //dataTable.Columns.Add("时间标识", typeof(string));
             //dataTable.Columns.Add("设备编号", typeof(string));
@@ -655,8 +656,9 @@ namespace Base.UI.MenuData
                                                   filteredList[i].Angle,
                                                   filteredList[i].TorquePeak + " " + tempUint,
                                                   filteredList[i].AngleAcc,
-                                                  filteredList[i].DataResult,
-                                                  filteredList[i].DataResult,
+                                                  filteredList[i].TorqueResult,
+                                                  filteredList[i].AngleResult,
+                                                  filteredList[i].ResistResult,
                                                   filteredList[i].CreateTime,
                                                   //filteredList[i].Stamp,
                                                   //filteredList[i].Bohrcode,
@@ -709,6 +711,7 @@ namespace Base.UI.MenuData
                 dataTable.Columns.Add("峰值角度", typeof(string));
                 dataTable.Columns.Add("扭矩结果", typeof(string));
                 dataTable.Columns.Add("角度结果", typeof(string));
+                dataTable.Columns.Add("是否复拧", typeof(string));
                 dataTable.Columns.Add("作业时间", typeof(string));
                 //dataTable.Columns.Add("时间标识", typeof(string));
                 //dataTable.Columns.Add("设备编号", typeof(string));
@@ -752,8 +755,9 @@ namespace Base.UI.MenuData
                                                   filteredList[i].Angle,
                                                   filteredList[i].TorquePeak + " " + tempUint,
                                                   filteredList[i].AngleAcc,
-                                                  filteredList[i].DataResult,
-                                                  filteredList[i].DataResult,
+                                                  filteredList[i].TorqueResult,
+                                                  filteredList[i].AngleResult,
+                                                  filteredList[i].ResistResult,
                                                   filteredList[i].CreateTime,
                                                   //filteredList[i].Stamp,
                                                   //filteredList[i].Bohrcode,
@@ -807,6 +811,7 @@ namespace Base.UI.MenuData
                 dataTable.Columns.Add("峰值角度", typeof(string));
                 dataTable.Columns.Add("扭矩结果", typeof(string));
                 dataTable.Columns.Add("角度结果", typeof(string));
+                dataTable.Columns.Add("是否复拧", typeof(string));
                 dataTable.Columns.Add("作业时间", typeof(string));
                 //dataTable.Columns.Add("时间标识", typeof(string));
                 //dataTable.Columns.Add("设备编号", typeof(string));
@@ -850,8 +855,9 @@ namespace Base.UI.MenuData
                                                   filteredList[i].Angle,
                                                   filteredList[i].TorquePeak + " " + tempUint,
                                                   filteredList[i].AngleAcc,
-                                                  filteredList[i].DataResult,
-                                                  filteredList[i].DataResult,
+                                                  filteredList[i].TorqueResult,
+                                                  filteredList[i].AngleResult,
+                                                  filteredList[i].ResistResult,
                                                   filteredList[i].CreateTime,
                                                   //filteredList[i].Stamp,
                                                   //filteredList[i].Bohrcode,

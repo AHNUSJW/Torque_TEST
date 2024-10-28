@@ -6,7 +6,7 @@
 namespace DBHelper
 {
     /// <summary>
-    /// 工单点位表
+    /// 工单结果表
     /// </summary>
     [SugarTable("product_results", "工单结果表")]
     public class DSProductResults

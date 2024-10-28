@@ -64,6 +64,11 @@
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox24 = new System.Windows.Forms.GroupBox();
+            this.ucCombox_wirelessEn = new HZH_Controls.Controls.UCCombox();
+            this.label_wirelessEn = new System.Windows.Forms.Label();
+            this.ucCombox_usbEN = new HZH_Controls.Controls.UCCombox();
+            this.label_usbEn = new System.Windows.Forms.Label();
             this.groupBox22 = new System.Windows.Forms.GroupBox();
             this.ucTextBoxEx_angleResist = new HZH_Controls.Controls.UCTextBoxEx();
             this.label_angleResist = new System.Windows.Forms.Label();
@@ -240,11 +245,9 @@
             this.label41 = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
             this.graphicalOverlayComponent1 = new HZH_Controls.Controls.GraphicalOverlayComponent(this.components);
-            this.groupBox24 = new System.Windows.Forms.GroupBox();
-            this.label_usbEn = new System.Windows.Forms.Label();
-            this.ucCombox_usbEN = new HZH_Controls.Controls.UCCombox();
-            this.ucCombox_wirelessEn = new HZH_Controls.Controls.UCCombox();
-            this.label_wirelessEn = new System.Windows.Forms.Label();
+            this.label_wirelessSelection = new System.Windows.Forms.Label();
+            this.ucCombox_wirelessSelection = new HZH_Controls.Controls.UCCombox();
+            this.label_tip = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -253,6 +256,7 @@
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabPage2.SuspendLayout();
+            this.groupBox24.SuspendLayout();
             this.groupBox22.SuspendLayout();
             this.groupBox10.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -280,7 +284,6 @@
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.groupBox21.SuspendLayout();
-            this.groupBox24.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -814,6 +817,92 @@
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "模式设置";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox24
+            // 
+            this.groupBox24.Controls.Add(this.ucCombox_wirelessEn);
+            this.groupBox24.Controls.Add(this.label_wirelessEn);
+            this.groupBox24.Controls.Add(this.ucCombox_usbEN);
+            this.groupBox24.Controls.Add(this.label_usbEn);
+            this.groupBox24.Location = new System.Drawing.Point(450, 570);
+            this.groupBox24.Name = "groupBox24";
+            this.groupBox24.Size = new System.Drawing.Size(432, 126);
+            this.groupBox24.TabIndex = 147;
+            this.groupBox24.TabStop = false;
+            // 
+            // ucCombox_wirelessEn
+            // 
+            this.ucCombox_wirelessEn.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_wirelessEn.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessEn.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_wirelessEn.ConerRadius = 5;
+            this.ucCombox_wirelessEn.DropPanelHeight = -1;
+            this.ucCombox_wirelessEn.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessEn.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_wirelessEn.IsRadius = true;
+            this.ucCombox_wirelessEn.IsShowRect = true;
+            this.ucCombox_wirelessEn.ItemWidth = 70;
+            this.ucCombox_wirelessEn.Location = new System.Drawing.Point(205, 67);
+            this.ucCombox_wirelessEn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_wirelessEn.Name = "ucCombox_wirelessEn";
+            this.ucCombox_wirelessEn.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessEn.RectWidth = 1;
+            this.ucCombox_wirelessEn.SelectedIndex = -1;
+            this.ucCombox_wirelessEn.SelectedValue = "";
+            this.ucCombox_wirelessEn.Size = new System.Drawing.Size(173, 32);
+            this.ucCombox_wirelessEn.Source = null;
+            this.ucCombox_wirelessEn.TabIndex = 90;
+            this.ucCombox_wirelessEn.TextValue = null;
+            this.ucCombox_wirelessEn.TriangleColor = System.Drawing.Color.Blue;
+            // 
+            // label_wirelessEn
+            // 
+            this.label_wirelessEn.AutoSize = true;
+            this.label_wirelessEn.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.label_wirelessEn.ForeColor = System.Drawing.Color.Blue;
+            this.label_wirelessEn.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_wirelessEn.Location = new System.Drawing.Point(49, 77);
+            this.label_wirelessEn.Name = "label_wirelessEn";
+            this.label_wirelessEn.Size = new System.Drawing.Size(111, 22);
+            this.label_wirelessEn.TabIndex = 89;
+            this.label_wirelessEn.Text = "屏蔽无线通信:";
+            // 
+            // ucCombox_usbEN
+            // 
+            this.ucCombox_usbEN.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_usbEN.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_usbEN.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_usbEN.ConerRadius = 5;
+            this.ucCombox_usbEN.DropPanelHeight = -1;
+            this.ucCombox_usbEN.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_usbEN.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_usbEN.IsRadius = true;
+            this.ucCombox_usbEN.IsShowRect = true;
+            this.ucCombox_usbEN.ItemWidth = 70;
+            this.ucCombox_usbEN.Location = new System.Drawing.Point(205, 21);
+            this.ucCombox_usbEN.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_usbEN.Name = "ucCombox_usbEN";
+            this.ucCombox_usbEN.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_usbEN.RectWidth = 1;
+            this.ucCombox_usbEN.SelectedIndex = -1;
+            this.ucCombox_usbEN.SelectedValue = "";
+            this.ucCombox_usbEN.Size = new System.Drawing.Size(173, 32);
+            this.ucCombox_usbEN.Source = null;
+            this.ucCombox_usbEN.TabIndex = 88;
+            this.ucCombox_usbEN.TextValue = null;
+            this.ucCombox_usbEN.TriangleColor = System.Drawing.Color.Blue;
+            // 
+            // label_usbEn
+            // 
+            this.label_usbEn.AutoSize = true;
+            this.label_usbEn.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.label_usbEn.ForeColor = System.Drawing.Color.Blue;
+            this.label_usbEn.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_usbEn.Location = new System.Drawing.Point(49, 31);
+            this.label_usbEn.Name = "label_usbEn";
+            this.label_usbEn.Size = new System.Drawing.Size(112, 22);
+            this.label_usbEn.TabIndex = 80;
+            this.label_usbEn.Text = "屏蔽USB通信:";
             // 
             // groupBox22
             // 
@@ -2042,6 +2131,9 @@
             // 
             // groupBox8
             // 
+            this.groupBox8.Controls.Add(this.label_tip);
+            this.groupBox8.Controls.Add(this.label_wirelessSelection);
+            this.groupBox8.Controls.Add(this.ucCombox_wirelessSelection);
             this.groupBox8.Controls.Add(this.label_wifimode);
             this.groupBox8.Controls.Add(this.ucCombox_wifimode);
             this.groupBox8.Controls.Add(this.ucTextBoxEx_wifiIp);
@@ -4213,91 +4305,59 @@
             // 
             this.graphicalOverlayComponent1.Owner = null;
             // 
-            // groupBox24
+            // label_wirelessSelection
             // 
-            this.groupBox24.Controls.Add(this.ucCombox_wirelessEn);
-            this.groupBox24.Controls.Add(this.label_wirelessEn);
-            this.groupBox24.Controls.Add(this.ucCombox_usbEN);
-            this.groupBox24.Controls.Add(this.label_usbEn);
-            this.groupBox24.Location = new System.Drawing.Point(450, 570);
-            this.groupBox24.Name = "groupBox24";
-            this.groupBox24.Size = new System.Drawing.Size(432, 126);
-            this.groupBox24.TabIndex = 147;
-            this.groupBox24.TabStop = false;
+            this.label_wirelessSelection.AutoSize = true;
+            this.label_wirelessSelection.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.label_wirelessSelection.ForeColor = System.Drawing.Color.Blue;
+            this.label_wirelessSelection.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_wirelessSelection.Location = new System.Drawing.Point(549, 82);
+            this.label_wirelessSelection.Name = "label_wirelessSelection";
+            this.label_wirelessSelection.Size = new System.Drawing.Size(79, 22);
+            this.label_wirelessSelection.TabIndex = 143;
+            this.label_wirelessSelection.Text = "配置选择:";
             // 
-            // label_usbEn
+            // ucCombox_wirelessSelection
             // 
-            this.label_usbEn.AutoSize = true;
-            this.label_usbEn.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_usbEn.ForeColor = System.Drawing.Color.Blue;
-            this.label_usbEn.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_usbEn.Location = new System.Drawing.Point(49, 31);
-            this.label_usbEn.Name = "label_usbEn";
-            this.label_usbEn.Size = new System.Drawing.Size(112, 22);
-            this.label_usbEn.TabIndex = 80;
-            this.label_usbEn.Text = "屏蔽USB通信:";
+            this.ucCombox_wirelessSelection.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_wirelessSelection.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessSelection.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_wirelessSelection.ConerRadius = 5;
+            this.ucCombox_wirelessSelection.DropPanelHeight = -1;
+            this.ucCombox_wirelessSelection.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessSelection.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_wirelessSelection.IsRadius = true;
+            this.ucCombox_wirelessSelection.IsShowRect = true;
+            this.ucCombox_wirelessSelection.ItemWidth = 70;
+            this.ucCombox_wirelessSelection.Location = new System.Drawing.Point(704, 77);
+            this.ucCombox_wirelessSelection.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_wirelessSelection.Name = "ucCombox_wirelessSelection";
+            this.ucCombox_wirelessSelection.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessSelection.RectWidth = 1;
+            this.ucCombox_wirelessSelection.SelectedIndex = -1;
+            this.ucCombox_wirelessSelection.SelectedValue = "";
+            this.ucCombox_wirelessSelection.Size = new System.Drawing.Size(173, 32);
+            this.ucCombox_wirelessSelection.Source = null;
+            this.ucCombox_wirelessSelection.TabIndex = 144;
+            this.ucCombox_wirelessSelection.TextValue = null;
+            this.ucCombox_wirelessSelection.TriangleColor = System.Drawing.Color.Blue;
+            this.ucCombox_wirelessSelection.SelectedChangedEvent += new System.EventHandler(this.ucCombox_wirelessSelection_SelectedChangedEvent);
             // 
-            // ucCombox_usbEN
+            // label_tip
             // 
-            this.ucCombox_usbEN.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_usbEN.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_usbEN.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_usbEN.ConerRadius = 5;
-            this.ucCombox_usbEN.DropPanelHeight = -1;
-            this.ucCombox_usbEN.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_usbEN.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_usbEN.IsRadius = true;
-            this.ucCombox_usbEN.IsShowRect = true;
-            this.ucCombox_usbEN.ItemWidth = 70;
-            this.ucCombox_usbEN.Location = new System.Drawing.Point(205, 21);
-            this.ucCombox_usbEN.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_usbEN.Name = "ucCombox_usbEN";
-            this.ucCombox_usbEN.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_usbEN.RectWidth = 1;
-            this.ucCombox_usbEN.SelectedIndex = -1;
-            this.ucCombox_usbEN.SelectedValue = "";
-            this.ucCombox_usbEN.Size = new System.Drawing.Size(173, 32);
-            this.ucCombox_usbEN.Source = null;
-            this.ucCombox_usbEN.TabIndex = 88;
-            this.ucCombox_usbEN.TextValue = null;
-            this.ucCombox_usbEN.TriangleColor = System.Drawing.Color.Blue;
-            // 
-            // ucCombox_wirelessEn
-            // 
-            this.ucCombox_wirelessEn.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_wirelessEn.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wirelessEn.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_wirelessEn.ConerRadius = 5;
-            this.ucCombox_wirelessEn.DropPanelHeight = -1;
-            this.ucCombox_wirelessEn.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wirelessEn.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_wirelessEn.IsRadius = true;
-            this.ucCombox_wirelessEn.IsShowRect = true;
-            this.ucCombox_wirelessEn.ItemWidth = 70;
-            this.ucCombox_wirelessEn.Location = new System.Drawing.Point(205, 67);
-            this.ucCombox_wirelessEn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_wirelessEn.Name = "ucCombox_wirelessEn";
-            this.ucCombox_wirelessEn.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wirelessEn.RectWidth = 1;
-            this.ucCombox_wirelessEn.SelectedIndex = -1;
-            this.ucCombox_wirelessEn.SelectedValue = "";
-            this.ucCombox_wirelessEn.Size = new System.Drawing.Size(173, 32);
-            this.ucCombox_wirelessEn.Source = null;
-            this.ucCombox_wirelessEn.TabIndex = 90;
-            this.ucCombox_wirelessEn.TextValue = null;
-            this.ucCombox_wirelessEn.TriangleColor = System.Drawing.Color.Blue;
-            // 
-            // label_wirelessEn
-            // 
-            this.label_wirelessEn.AutoSize = true;
-            this.label_wirelessEn.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_wirelessEn.ForeColor = System.Drawing.Color.Blue;
-            this.label_wirelessEn.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_wirelessEn.Location = new System.Drawing.Point(49, 77);
-            this.label_wirelessEn.Name = "label_wirelessEn";
-            this.label_wirelessEn.Size = new System.Drawing.Size(111, 22);
-            this.label_wirelessEn.TabIndex = 89;
-            this.label_wirelessEn.Text = "屏蔽无线通信:";
+            this.label_tip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_tip.AutoSize = true;
+            this.label_tip.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_tip.ForeColor = System.Drawing.Color.Blue;
+            this.label_tip.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_tip.Location = new System.Drawing.Point(549, 173);
+            this.label_tip.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_tip.Name = "label_tip";
+            this.label_tip.Size = new System.Drawing.Size(189, 21);
+            this.label_tip.TabIndex = 145;
+            this.label_tip.Text = "请确认本地WIFI密码正确";
+            this.label_tip.Visible = false;
             // 
             // MenuDeviceSetForm
             // 
@@ -4320,6 +4380,8 @@
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabPage2.ResumeLayout(false);
+            this.groupBox24.ResumeLayout(false);
+            this.groupBox24.PerformLayout();
             this.groupBox22.ResumeLayout(false);
             this.groupBox22.PerformLayout();
             this.groupBox10.ResumeLayout(false);
@@ -4371,8 +4433,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.groupBox21.ResumeLayout(false);
             this.groupBox21.PerformLayout();
-            this.groupBox24.ResumeLayout(false);
-            this.groupBox24.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -4595,5 +4655,8 @@
         private System.Windows.Forms.Label label_usbEn;
         private HZH_Controls.Controls.UCCombox ucCombox_wirelessEn;
         private System.Windows.Forms.Label label_wirelessEn;
+        private System.Windows.Forms.Label label_wirelessSelection;
+        private HZH_Controls.Controls.UCCombox ucCombox_wirelessSelection;
+        private System.Windows.Forms.Label label_tip;
     }
 }

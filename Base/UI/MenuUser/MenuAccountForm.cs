@@ -18,7 +18,7 @@ using Microsoft.Win32;
    默认三个初始账户
    普通用户:    user       密码: 无      用户权限:0x00
    管理员用户:  admin      密码: 123     用户权限:0x01
-   工厂用户:    XhTorque   密码: 123     用户权限:0x20
+   工厂用户:    XhTorque   密码: XGD9861     用户权限:0x20
    制造商用户:  暂定       密码: 暂定    用户权限:0x30
  */
 
@@ -33,7 +33,7 @@ namespace Base.UI.MenuUser
         private String myRole = "0";
         private String myDatPath = MyDevice.userDAT;
         private readonly String manuAccount = "XhTorque";
-        private readonly String manuPwd = "123";
+        private readonly String manuPwd = "XGD9861";
 
         public MenuAccountForm()
         {

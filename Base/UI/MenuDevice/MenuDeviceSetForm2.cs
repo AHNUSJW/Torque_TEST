@@ -376,7 +376,7 @@ namespace Base.UI.MenuDevice
                 new KeyValuePair<string, string>("0", "关闭"),
                 new KeyValuePair<string, string>("1", "开启")
             };
-            ucCombox_usbEN.SelectedIndex = actXET.para.usbEn > 1 ? 1 : actXET.para.usbEn;
+            ucCombox_usbEN.SelectedIndex = actXET.para.usbEn == 0x55 ? 0 : 1;
 
             //无线通信使能
             ucCombox_wirelessEn.Source = new List<KeyValuePair<string, string>>
@@ -384,7 +384,7 @@ namespace Base.UI.MenuDevice
                 new KeyValuePair<string, string>("0", "关闭"),
                 new KeyValuePair<string, string>("1", "开启")
             };
-            ucCombox_wirelessEn.SelectedIndex = actXET.para.wirelessEn > 1 ? 1 : actXET.para.wirelessEn;
+            ucCombox_wirelessEn.SelectedIndex = actXET.para.wirelessEn == 0x55 ? 0 : 1;
 
             #endregion
 
@@ -982,8 +982,8 @@ namespace Base.UI.MenuDevice
                 actXET.para.disptype = (byte)ucCombox_disptype.SelectedIndex;
                 actXET.para.disptheme = (byte)ucCombox_disptheme.SelectedIndex;
                 actXET.para.displan = (byte)ucCombox_displan.SelectedIndex;
-                actXET.para.usbEn = (byte)ucCombox_usbEN.SelectedIndex;
-                actXET.para.wirelessEn = (byte)ucCombox_wirelessEn.SelectedIndex;
+                actXET.para.usbEn = (byte)((byte)ucCombox_usbEN.SelectedIndex == 0x00 ? 0x55 : 0x00);
+                actXET.para.wirelessEn = (byte)((byte)ucCombox_wirelessEn.SelectedIndex == 0x00 ? 0x55 : 0x00);
                 if (UInt16.TryParse(ucTextBoxEx_unhook.InputText, out UInt16 unhook))
                 {
                     actXET.para.unhook = unhook;

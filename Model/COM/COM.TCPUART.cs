@@ -47,7 +47,7 @@ namespace Model
         private UInt32 tempStamp = 0;                         //程序F39版本及以上F3数据帧的stamp删除了，故需要通过继承上一个F2继承
         private Byte angleDecimal = 0;                        //角度小数点（用于计算复拧角度）
         private UNIT inheritUnit = 0;                         //F3继承F2的单位
-        private int f2Num = 0;
+        private bool isInvalidByte = false;
         private object lockObj = new object();
 
         public String rxString
@@ -320,7 +320,7 @@ namespace Model
                         //粘包字节未处理干净(回复的包是上一个不同指令的回复)
                         if (rxRnt != 0)
                         {
-                            Thread.Sleep(50);
+                            Thread.Sleep(100);
                             if (rxRnt >= 8)
                             {
                                 lock (lockObj)
@@ -328,8 +328,17 @@ namespace Model
                                     while (rxRnt >= 8)
                                     {
                                         Console.WriteLine("处理粘包");
+                                        //暂停自动任务管理
                                         mePort_DataReceived();
-                                        Thread.Sleep(50);
+                                        //暂停自动任务管理
+                                        if (isInvalidByte == false)
+                                        {
+                                            Thread.Sleep(100);
+                                        }
+                                        else
+                                        {
+                                            Thread.Sleep(0);
+                                        }
                                     }
                                 }
                             }
@@ -4356,6 +4365,7 @@ namespace Model
                     return;
                 }
 
+                isInvalidByte = false;
                 //串口有数据时，接受数据并处理
                 //循环校验每个字节
                 if (rxRnt >= 8)
@@ -4380,6 +4390,7 @@ namespace Model
 
                             default:
                                 mePort_DataRemove(1);
+                                isInvalidByte = true;
                                 break;
                         }
                     }
@@ -4387,6 +4398,7 @@ namespace Model
                     {
                         Console.WriteLine(meRXD[rxRead]);
                         mePort_DataRemove(1);
+                        isInvalidByte = true;
                     }
                 }
             }

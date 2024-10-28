@@ -123,11 +123,9 @@ XhTorque_S9(Ricardo)
 
 待增功能：
 生成报告pdf
-工单生产二维码
 数据管理(MES系统共享)
-数据另存(excel、tmp)
 
 账号和密码：
-工厂账号      用户名 XhTorque   密码 123
+工厂账号      用户名 XhTorque   密码 XGD9861
 管理员账号    用户名 admin      密码 123
 普通账号      用户名 user       无密码

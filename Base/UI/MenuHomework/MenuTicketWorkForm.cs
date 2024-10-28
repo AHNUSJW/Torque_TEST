@@ -2,9 +2,13 @@
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -39,6 +43,7 @@ namespace Base.UI.MenuHomework
         private double anglePeak = 0;         //峰值角度
         private byte torUnit = 0;             //扭矩单位
         private bool isDataValid = false;     //工单拧紧结果是否合格
+        private DataTable saveDt = new DataTable();//存储数据表
 
         private bool isScanCode = false;      //是否扫码
         private int ticketNumLen = 4;         //工单号限定长度
@@ -79,6 +84,9 @@ namespace Base.UI.MenuHomework
             angleResit = meTicketInfo.AngleResist;
             isAllPointPassShow = false;
             isBegin = true;
+
+            saveDt = new DataTable();
+            DataTableInit(saveDt);
 
             pictureBox1.BackgroundImageLayout = ImageLayout.Stretch;//使图片充满整个控件
             try
@@ -240,6 +248,8 @@ namespace Base.UI.MenuHomework
             MyDevice.DataResult = "NG";
             MyDevice.Vin = "";
 
+            //默认存储csv
+            //SaveActualDataToCsv(Application.StartupPath + @"\dat\在线工单数据\XhTorque在线工单数据汇总表" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv", saveDt); //导出目录);
         }
 
         //左键选点位
@@ -964,6 +974,8 @@ namespace Base.UI.MenuHomework
                     {
                         torque = actXET.data[i].torque;
                         torUnit = (byte)actXET.data[i].torque_unit;
+
+                        //DtAddRow(saveDt, actXET.data[i], actXET, "NG", MyDevice.Vin, meTicketInfo.WoNum, meProductInfo == null ? "" : meProductInfo.SequenceId);
                     }
                     else if (actXET.data[i].dtype == 0xF2)
                     {
@@ -986,6 +998,8 @@ namespace Base.UI.MenuHomework
                     if (torque > actXET.devc.torque_over[torUnit])
                     {
                         isDataValid = false;
+
+                        //if (actXET.data[i].dtype == 0xF3) DtAddRow(saveDt, actXET.data[i], actXET, "error", MyDevice.Vin, meTicketInfo.WoNum, meProductInfo == null ? "" : meProductInfo.SequenceId);
                         return isDataValid;
                     }
 
@@ -1051,6 +1065,8 @@ namespace Base.UI.MenuHomework
                             default:
                                 break;
                         }
+
+                        //DtAddRow(saveDt, actXET.data[i], actXET, isDataValid ? "pass" : "NG", MyDevice.Vin, meTicketInfo.WoNum, meProductInfo == null ? "" : meProductInfo.SequenceId);
                     }
                 }
             }
@@ -1070,6 +1086,8 @@ namespace Base.UI.MenuHomework
                     if (actXET.data[i].dtype == 0xF1)
                     {
                         torque = actXET.data[i].torque;
+
+                        //DtAddRow(saveDt, actXET.data[i], actXET, "NG", MyDevice.Vin, meTicketInfo.WoNum, meProductInfo == null ? "" : meProductInfo.SequenceId);
                     }
                     else if (actXET.data[i].dtype == 0xF2)
                     {
@@ -1087,6 +1105,8 @@ namespace Base.UI.MenuHomework
                     if (torque > actXET.devc.torque_over[(int)actXET.data[i].torque_unit])
                     {
                         isDataValid = false;
+
+                        //if (actXET.data[i].dtype == 0xF2) DtAddRow(saveDt, actXET.data[i], actXET, "error", MyDevice.Vin, meTicketInfo.WoNum, meProductInfo == null ? "" : meProductInfo.SequenceId);
                         return isDataValid;
                     }
 
@@ -1105,7 +1125,6 @@ namespace Base.UI.MenuHomework
                                 if (torque >= actXET.alam.SN_target[actXET.para.mode_mx, (int)actXET.para.torque_unit])
                                 {
                                     isDataValid = true;
-                                    return isDataValid;
                                 }
                                 else
                                 {
@@ -1117,7 +1136,6 @@ namespace Base.UI.MenuHomework
                                 if (torque >= actXET.alam.SA_pre[actXET.para.mode_mx, (int)actXET.para.torque_unit] && angle >= actXET.alam.SA_ang[actXET.para.mode_mx])
                                 {
                                     isDataValid = true;
-                                    return isDataValid;
                                 }
                                 else
                                 {
@@ -1129,7 +1147,6 @@ namespace Base.UI.MenuHomework
                                 if (actXET.alam.MN_low[actXET.para.mode_mx, (int)actXET.para.torque_unit] <= torque && torque <= actXET.alam.MN_high[actXET.para.mode_mx, (int)actXET.para.torque_unit])
                                 {
                                     isDataValid = true;
-                                    return isDataValid;
                                 }
                                 else
                                 {
@@ -1142,7 +1159,6 @@ namespace Base.UI.MenuHomework
                                     && actXET.alam.MA_low[actXET.para.mode_mx] <= angle && angle <= actXET.alam.MA_high[actXET.para.mode_mx])
                                 {
                                     isDataValid = true;
-                                    return isDataValid;
                                 }
                                 else
                                 {
@@ -1154,6 +1170,7 @@ namespace Base.UI.MenuHomework
                             default:
                                 break;
                         }
+                        //DtAddRow(saveDt, actXET.data[i], actXET, isDataValid ? "pass" : "NG", MyDevice.Vin, meTicketInfo.WoNum, meProductInfo == null ? "" : meProductInfo.SequenceId);
                     }
 
                 }
@@ -1564,6 +1581,125 @@ namespace Base.UI.MenuHomework
         {
             ReWinformLayout(this.ClientRectangle, x, y, this);
 
+        }
+
+        #endregion
+
+        #region 存储CSV
+
+        //数据表初始化
+        private void DataTableInit(DataTable dt)
+        {
+            dt.Columns.Add("序号", typeof(int));
+            dt.Columns.Add("工单名称", typeof(string));
+            dt.Columns.Add("序列号", typeof(string));
+            dt.Columns.Add("作业号", typeof(string));
+            dt.Columns.Add("设备唯一编号", typeof(string));
+            dt.Columns.Add("设备型号", typeof(string));
+            dt.Columns.Add("点位号", typeof(string));
+            dt.Columns.Add("设备站点", typeof(string));
+            dt.Columns.Add("创建时间", typeof(string));
+            dt.Columns.Add("数据类型", typeof(string));
+            dt.Columns.Add("时间标识", typeof(string));
+            dt.Columns.Add("扭矩", typeof(string));
+            dt.Columns.Add("扭矩峰值", typeof(string));
+            dt.Columns.Add("角度", typeof(string));
+            dt.Columns.Add("角度累加", typeof(string));
+            dt.Columns.Add("拧紧结果", typeof(string));
+        }
+
+        //存储为csv,用于数据分析(同步表格，峰值模式下会筛去过程数据)
+        public bool SaveActualDataToCsv(string filePath, DataTable dataTable)
+        {
+            if (dataTable != null && dataTable.Rows.Count != 0)
+            {
+                // 确保文件路径目录存在
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+            }
+            else
+            {
+                return false;
+            }
+
+            //判断是否能打开文件
+            try
+            {
+                // 创建文件并写入数据
+                using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
+                {
+                    // 写入表头
+                    for (int i = 0; i < dataTable.Columns.Count; i++)
+                    {
+                        writer.Write(dataTable.Columns[i]);
+                        if (i < dataTable.Columns.Count - 1)
+                        {
+                            writer.Write(",");
+                        }
+                    }
+                    writer.WriteLine();
+
+                    // 写入数据行
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        for (int i = 0; i < dataTable.Columns.Count; i++)
+                        {
+                            string cellValue = row[i].ToString();
+                            //if (decimal.TryParse(cellValue, out decimal number) && cellValue.Length > 10)
+                            //{
+                            //    cellValue = $"'{cellValue}"; // 加上单引号前缀，防止科学计数法
+                            //}
+                            writer.Write(cellValue);
+                            if (i < dataTable.Columns.Count - 1)
+                            {
+                                writer.Write(",");
+                            }
+                        }
+                        writer.WriteLine();
+                    }
+
+                    return true;
+                }
+            }
+            catch (IOException)
+            {
+                // 文件被占用
+                MessageBox.Show("csv文件被打开，请先关闭");
+            }
+            return false;
+        }
+
+        //数据表增加数据
+        public void DtAddRow(DataTable dataTable, DATA data, XET xet, string result, string vin, string workNum, string seq)
+        {
+            string tempUnit = "";
+            //单位更新
+            switch (data.torque_unit)
+            {
+                case UNIT.UNIT_nm: tempUnit = "N·m"; break;
+                case UNIT.UNIT_lbfin: tempUnit = "lbf·in"; break;
+                case UNIT.UNIT_lbfft: tempUnit = "lbf·ft"; break;
+                case UNIT.UNIT_kgcm: tempUnit = "kgf·cm"; break;
+                case UNIT.UNIT_kgm: tempUnit = "kgf·m"; break;
+                default: break;
+            }
+
+            dataTable.Rows.Add(new object[] { dataTable.Rows.Count + 1,
+                                              workNum,
+                                              seq,
+                                              vin,
+                                              xet.devc.bohrcode,
+                                              xet.devc.series + "_" + xet.devc.type,
+                                              MyDevice.PointNum,
+                                              xet.wlan.addr,
+                                              DateTime.Now,
+                                              data.dtype,
+                                              data.stamp,
+                                              data.torque / (double)Math.Pow(10, xet.devc.torque_decimal) + " " + tempUnit,
+                                              (data.dtype == 0xF2 ? data.torseries_pk : data.torgroup_pk) / (double)Math.Pow(10, xet.devc.torque_decimal),
+                                              data.angle / (double)Math.Pow(10, data.dtype != 0xF1 ? data.angle_decimal : xet.para.angle_decimal),
+                                              data.angle_acc / (double)Math.Pow(10, data.dtype != 0xF1 ? data.angle_decimal : xet.para.angle_decimal),
+                                              result,
+            });
         }
 
         #endregion

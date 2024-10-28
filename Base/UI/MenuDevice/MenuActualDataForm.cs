@@ -752,6 +752,181 @@ namespace Base.UI.MenuDevice
             dataGridView1.Refresh(); // 手动刷新 DataGridView
         }
 
+        // 更新数据表（参数data）
+        private void updateDataTable_XH07(DATA[] tempData)
+        {
+            // 暂时挂起布局逻辑
+            dataGridView1.SuspendLayout();
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (tempData[i].dtype == 0xF1 || tempData[i].dtype == 0xF2 || tempData[i].dtype == 0xF3)
+                {
+                    if (tempData[i].dtype == 0xF1 && tempData[i].torque == 0 && tempData[i].angle == 0) break;
+
+                    //获取实时数据
+                    if (tempData[i].dtype == 0xF1)
+                    {
+                        torque = tempData[i].torque / (double)actXET.torqueMultiple;
+                        torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Add(torque);
+                        //单位更新
+                        switch (tempData[i].torque_unit)
+                        {
+                            case UNIT.UNIT_nm: torqueUnit = "N·m"; break;
+                            case UNIT.UNIT_lbfin: torqueUnit = "lbf·in"; break;
+                            case UNIT.UNIT_lbfft: torqueUnit = "lbf·ft"; break;
+                            case UNIT.UNIT_kgcm: torqueUnit = "kgf·cm"; break;
+                            case UNIT.UNIT_kgm: torqueUnit = "kgf·m"; break;
+                            default: break;
+                        }
+                    }
+                    else if (tempData[i].dtype == 0xF2)
+                    {
+                        torque = tempData[i].torseries_pk / (double)actXET.torqueMultiple;
+                        torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Add(0);                         //用于画曲线描点对应的02值
+                                                                                                                       //单位更新
+                        switch (tempData[i].torque_unit)
+                        {
+                            case UNIT.UNIT_nm: torqueUnit = "N·m"; break;
+                            case UNIT.UNIT_lbfin: torqueUnit = "lbf·in"; break;
+                            case UNIT.UNIT_lbfft: torqueUnit = "lbf·ft"; break;
+                            case UNIT.UNIT_kgcm: torqueUnit = "kgf·cm"; break;
+                            case UNIT.UNIT_kgm: torqueUnit = "kgf·m"; break;
+                            default: break;
+                        }
+                    }
+                    else if (tempData[i].dtype == 0xF3)
+                    {
+                        torque = tempData[i].torgroup_pk / (double)actXET.torqueMultiple;
+                        torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Add(0);
+                    }
+
+
+                    if (tempData[i].dtype == 0xF1)
+                    {
+                        angle = tempData[i].angle / (double)actXET.angleMultiple;
+                        angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Add(angle);
+                        angleOld = angle;
+                        label2.Text = "";
+                    }
+                    else
+                    {
+                        angle = tempData[i].angle_acc / (double)actXET.angleMultiple;
+                        angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Add(angleOld);
+                    }
+
+
+                    //计算峰值扭矩和峰值角度
+                    torquePeak = Math.Abs(torque) > Math.Abs(torquePeak) ? torque : torquePeak;
+                    anglePeak = Math.Abs(angle) > Math.Abs(anglePeak) ? angle : anglePeak;
+
+                    //更新表格
+                    int idx;            //实时表格的行数下标
+
+                    if (tempData[i].dtype == 0xF1)
+                    {
+                        idx = dataGridView1.Rows.Add();
+                        dataGridView1.Rows[idx].Cells[0].Value = (++lines).ToString();
+                        dataGridView1.Rows[idx].Cells[1].Value = actXET.opsn;
+                        dataGridView1.Rows[idx].Cells[2].Value = tempData[i].stamp;
+                        dataGridView1.Rows[idx].Cells[3].Value = actXET.wlan.addr;
+                        dataGridView1.Rows[idx].Cells[4].Value = torque + " " + torqueUnit;
+                        dataGridView1.Rows[idx].Cells[5].Value = angle + " °";
+
+                        DtAddRow(saveDt, tempData[i], actXET, torque, angle);
+                    }
+                    else if (tempData[i].dtype == 0xF2)
+                    {
+                        //dataGridView1.Rows[idx].Cells[0].Value = "☆" + (++lines);
+                    }
+                    else if (tempData[i].dtype == 0xF3)
+                    {
+                        idx = dataGridView1.Rows.Add();
+                        dataGridView1.Rows[idx].Cells[0].Value = "★" + (++lines);
+                        dataGridView1.Rows[idx].Cells[1].Value = actXET.opsn;
+                        dataGridView1.Rows[idx].Cells[2].Value = tempData[i].stamp;
+                        dataGridView1.Rows[idx].Cells[3].Value = actXET.wlan.addr;
+                        dataGridView1.Rows[idx].Cells[4].Value = torque + " " + torqueUnit;
+                        dataGridView1.Rows[idx].Cells[5].Value = angle + " °";
+
+                        DtAddRow(saveDt, tempData[i], actXET, torque, angle);
+                    }
+
+                    label3.Text = "扭矩峰值：" + torque + torqueUnit;
+                    label4.Text = "角度峰值：" + angle + "°";
+
+                    TorquedataGroups[actXET.opsn].Add(torque);
+                    AngledataGroups[actXET.opsn].Add(angle);
+
+                    //判断数据结果是否合格
+                    if (IsValid(tempData[i], actXET, torque * actXET.torqueMultiple, angle * actXET.angleMultiple))
+                    {
+                        dataGroupResults[actXET.opsn] = true;
+                        panel3.BackColor = Color.Green;
+                    }
+                    else
+                    {
+                        dataGroupResults[actXET.opsn] = false;
+                        panel3.BackColor = Color.CadetBlue;
+                    }
+
+                    //判断数据结果是否要重复拧紧
+                    if (IsAngleResist(tempData[i], actXET, angle * actXET.angleMultiple, actXET.para.angle_resist))
+                    {
+                        label2.Text = "需要重复拧紧";
+                    }
+                    else
+                    {
+                        label2.Text = "";
+                    }
+
+                    //更新作业号
+                    if (tempData[i].dtype == 0xF3)
+                    {
+                        try
+                        {
+                            //计算残余扭矩
+                            //label2.Text = "残余扭矩值: " + GetResidualTorque(1, new List<double>(TorquedataGroups[actXET.opsn]), new List<double>(AngledataGroups[actXET.opsn]));
+                        }
+                        catch
+                        {
+                            Console.WriteLine("异常");
+                        }
+
+                        snbatArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)]++;
+                        opsnTimeArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = System.DateTime.Now.ToString("yyyyMMddHHmm");
+                        actXET.snBat = snbatArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];    //读取结果帧作业号更新
+                        actXET.opsn = actXET.wlan.addr + opsnTimeArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] + " " + actXET.snBat.ToString().PadLeft(4, '0');
+
+                        //新增新的扭矩角度作业
+                        TorquedataGroups.Add(actXET.opsn, new List<double>());
+                        AngledataGroups.Add(actXET.opsn, new List<double>());
+                        dataGroupResults.Add(actXET.opsn, false);
+                    }
+
+                    //移到最后一行
+                    if (dataGridView1.RowCount > 1)
+                    {
+                        dataGridView1.FirstDisplayedScrollingRowIndex = dataGridView1.RowCount - 1;
+                    }
+
+                }
+            }
+
+            // 解除选择
+            dataGridView1.ClearSelection();
+
+            //超过5000行删除
+            while (dataGridView1.Rows.Count > 5000)
+            {
+                dataGridView1.Rows.RemoveAt(0);
+            }
+
+            //恢复布局逻辑，并手动刷新 DataGridView
+            dataGridView1.ResumeLayout();
+            dataGridView1.Refresh(); // 手动刷新 DataGridView
+        }
+
         // 更新数据表
         private void updateDataTable_XH06()
         {
@@ -854,6 +1029,153 @@ namespace Base.UI.MenuDevice
 
                     //更新作业号
                     if (actXET.data[i].dtype == 0xF2)
+                    {
+
+                        //计算残余扭矩
+                        try
+                        {
+                            label2.Text = "残余扭矩值: " + GetResidualTorque(1, new List<double>(TorquedataGroups[actXET.opsn]), new List<double>(AngledataGroups[actXET.opsn]));
+                        }
+                        catch
+                        {
+                            Console.WriteLine("异常");
+                        }
+
+                        snbatArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)]++;
+                        opsnTimeArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = System.DateTime.Now.ToString("yyyyMMddHHmm");
+                        actXET.snBat = snbatArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];    //读取结果帧作业号更新
+                        actXET.opsn = actXET.wlan.addr + opsnTimeArr[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] + " " + actXET.snBat.ToString().PadLeft(4, '0');
+
+                        //新增新的扭矩角度作业
+                        TorquedataGroups.Add(actXET.opsn, new List<double>());
+                        AngledataGroups.Add(actXET.opsn, new List<double>());
+                        dataGroupResults.Add(actXET.opsn, false);
+                    }
+
+                    //移到最后一行
+                    if (dataGridView1.RowCount > 1)
+                    {
+                        dataGridView1.FirstDisplayedScrollingRowIndex = dataGridView1.RowCount - 1;
+                    }
+                }
+            }
+
+            // 解除选择
+            dataGridView1.ClearSelection();
+
+            //超过5000行删除
+            while (dataGridView1.Rows.Count > 5000)
+            {
+                dataGridView1.Rows.RemoveAt(0);
+            }
+
+            //恢复布局逻辑，并手动刷新 DataGridView
+            dataGridView1.ResumeLayout();
+            dataGridView1.Refresh(); // 手动刷新 DataGridView
+        }
+
+        // 更新数据表（参数data）
+        private void updateDataTable_XH06(DATA[] tempData_06)
+        {
+            // 暂时挂起布局逻辑
+            dataGridView1.SuspendLayout();
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (tempData_06[i].dtype == 0xF1 || tempData_06[i].dtype == 0xF2)
+                {
+                    //if (actXET.data[i].dtype == 0xF2)
+                    //{
+                    //    Console.WriteLine("进入表格的F2" + actXET.data[i].torseries_pk);
+                    //}
+                    if (tempData_06[i].dtype == 0xF1 && tempData_06[i].torque == 0 && tempData_06[i].angle == 0) break;
+
+
+                    //单位更新
+                    switch (tempData_06[i].torque_unit)
+                    {
+                        case UNIT.UNIT_nm: torqueUnit = "N·m"; break;
+                        case UNIT.UNIT_lbfin: torqueUnit = "lbf·in"; break;
+                        case UNIT.UNIT_lbfft: torqueUnit = "lbf·ft"; break;
+                        case UNIT.UNIT_kgcm: torqueUnit = "kgf·cm"; break;
+                        case UNIT.UNIT_kgm: torqueUnit = "kgf·m"; break;
+                        default: break;
+                    }
+
+                    //获取实时数据
+                    if (tempData_06[i].dtype == 0xF1)
+                    {
+                        torque = tempData_06[i].torque / (double)actXET.torqueMultiple;
+                        torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Add(torque);
+
+                        angle = tempData_06[i].angle / (double)actXET.angleMultiple;
+                        angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Add(angle);
+                        angleOld = angle;
+                    }
+                    else if (tempData_06[i].dtype == 0xF2)
+                    {
+                        torque = tempData_06[i].torseries_pk / (double)actXET.torqueMultiple;
+                        torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Add(0);                         //用于画曲线描点对应的02值
+
+                        angle = tempData_06[i].angle_acc / (double)actXET.angleMultiple;
+                        angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Add(angleOld);
+                    }
+
+                    //计算峰值扭矩和峰值角度
+                    torquePeak = Math.Abs(torque) > Math.Abs(torquePeak) ? torque : torquePeak;
+                    anglePeak = Math.Abs(angle) > Math.Abs(anglePeak) ? angle : anglePeak;
+
+                    if (!(tempData_06[i].mode_pt == 1 && tempData_06[i].dtype == 0xF1))
+                    {
+                        //更新表格
+                        int idx = dataGridView1.Rows.Add();            //实时表格的行数下标
+
+                        if (tempData_06[i].dtype == 0xF1)
+                        {
+                            Console.WriteLine(tempData_06[i].mode_pt + "_" + tempData_06[i].dtype);
+                            dataGridView1.Rows[idx].Cells[0].Value = (++lines).ToString();
+
+                            DtAddRow(saveDt, tempData_06[i], actXET, torque, angle);
+                        }
+                        else if (tempData_06[i].dtype == 0xF2)
+                        {
+                            Console.WriteLine("抓住02");
+                            dataGridView1.Rows[idx].Cells[0].Value = "☆" + (++lines);
+
+                            DtAddRow(saveDt, tempData_06[i], actXET, torque, angle);
+                        }
+                        else if (tempData_06[i].dtype == 0xF3)
+                        {
+                            dataGridView1.Rows[idx].Cells[0].Value = "★" + (++lines);
+                        }
+
+                        dataGridView1.Rows[idx].Cells[1].Value = actXET.opsn;
+                        dataGridView1.Rows[idx].Cells[2].Value = tempData_06[i].stamp;
+                        dataGridView1.Rows[idx].Cells[3].Value = actXET.wlan.addr;
+                        dataGridView1.Rows[idx].Cells[4].Value = torque + " " + torqueUnit;
+                        dataGridView1.Rows[idx].Cells[5].Value = angle + " °";
+                        label3.Text = "扭矩峰值：" + torque + torqueUnit;
+                        label4.Text = "角度峰值：" + angle + "°";
+
+                        TorquedataGroups[actXET.opsn].Add(torque);
+                        AngledataGroups[actXET.opsn].Add(angle);
+
+                    }
+
+                    //判断数据结果是否合格
+                    if (IsValid(tempData_06[i], actXET, torque * actXET.torqueMultiple, angle * actXET.angleMultiple))
+                    {
+                        dataGroupResults[actXET.opsn] = true;
+                        panel3.BackColor = Color.Green;
+                    }
+                    else
+                    {
+                        dataGroupResults[actXET.opsn] = false;
+                        panel3.BackColor = Color.CadetBlue;
+                    }
+
+                    //更新作业号
+                    if (tempData_06[i].dtype == 0xF2)
                     {
 
                         //计算残余扭矩
@@ -1046,6 +1368,165 @@ namespace Base.UI.MenuDevice
                                 {
                                     //07按照dtype=F3划分成n段，实时更新最后一段
                                     if (actXET.data[i].dtype == 0xF3)
+                                    {
+                                        string index2 = AngledataGroups.Keys.ElementAt(AngledataGroups.Count - 2);//当前作业号的上一个
+                                        pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_XY(new Tuple<double[], double[]>(AngledataGroups[index2].ToArray(), TorquedataGroups[index2].ToArray()));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //画曲线(底层)（参数data）
+        private void pictureBoxScope_draw(DATA[] tempDrawData)
+        {
+            //获取坐标轴上下限
+            for (int i = 0; i < 5; i++)
+            {
+                newTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = tempDrawData[i].dtype == 0xF2 ? (tempDrawData[i].torseries_pk / (actXET.torqueMultiple * 10) + 1) * 10 : (tempDrawData[i].torque / (actXET.torqueMultiple * 10) + 1) * 10;
+                newTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = newTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] > oldTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] ? newTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] : oldTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                oldTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = newTorqueUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+
+                newTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = tempDrawData[i].dtype == 0xF2 ? (tempDrawData[i].torseries_pk / (actXET.torqueMultiple * 10) - 1) * 10 : (tempDrawData[i].torque / (actXET.torqueMultiple * 10) - 1) * 10;
+                newTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = newTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] < oldTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] ? newTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] : oldTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                oldTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = newTorqueLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+
+                newAngleUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = tempDrawData[i].dtype == 0xF2 ? (tempDrawData[i].angle_acc / (actXET.angleMultiple * 10) + 1) * 10 : (tempDrawData[i].angle / (actXET.angleMultiple * 10) + 1) * 10;
+                newAngleUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = newAngleUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] > oldAngleUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] ? newAngleUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] : oldAngleUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                oldAngleUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = newAngleUpper[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+
+                newAngleLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = tempDrawData[i].dtype == 0xF2 ? (tempDrawData[i].angle_acc / (actXET.angleMultiple * 10) - 1) * 10 : (tempDrawData[i].angle / (actXET.angleMultiple * 10) - 1) * 10;
+                newAngleLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = newAngleLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] < oldAngleLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] ? newAngleLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] : oldAngleLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+                oldAngleLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)] = newAngleLower[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)];
+            }
+
+            //根据曲线模式调整曲线上下限
+            switch (ucCombox1.SelectedIndex)
+            {
+                case 0:
+                    //x轴上下限
+                    myDrawPicture.LimitLowerX = 0;
+
+                    //y轴上下限
+                    myDrawPicture.LimitUpperLeftY = newTorqueUpper.Max();
+                    myDrawPicture.LimitLowerLeftY = newTorqueLower.Min();
+                    break;
+                case 1:
+                    //x轴上下限
+                    myDrawPicture.LimitLowerX = 0;
+
+                    //y轴上下限
+                    myDrawPicture.LimitUpperLeftY = newAngleUpper.Max();
+                    myDrawPicture.LimitLowerLeftY = newAngleLower.Min();
+                    break;
+                case 2:
+                    break;
+                default:
+                    break;
+            }
+
+            //横轴数量(网格)
+            myDrawPicture.HorizontalAxisNum = 11;
+
+            //画x轴,y轴,网格
+            //pictureBox1.BackgroundImage = myPictures[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].GetBackgroundImage();
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (tempDrawData[i].dtype == 0xF1 || tempDrawData[i].dtype == 0xF2 || tempDrawData[i].dtype == 0xF3)
+                {
+                    if (tempDrawData[i].dtype == 0xF1 && tempDrawData[i].torque == 0 && tempDrawData[i].angle == 0) break;
+
+                    //获取实时数据
+                    torque = tempDrawData[i].dtype == 0xF1 ? tempDrawData[i].torque / (double)actXET.torqueMultiple : 0;
+
+                    if (tempDrawData[i].dtype == 0xF1)
+                    {
+                        angle = tempDrawData[i].angle / (double)actXET.angleMultiple;
+                        angleOld = angle;
+                    }
+                    else
+                    {
+                        angle = angleOld;
+                    }
+
+                    //遇到数据F2/F3才更新曲线
+                    if (tempDrawData[i].dtype == 0xF2 || tempDrawData[i].dtype == 0xF3)
+                    {
+                        pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();//画x轴,y轴
+                        pictureBox1.Image = null;
+
+                        if (myPictures.Count > 0)
+                        {
+                            myDrawPicture = new DrawPicture(pictureBox1.Height, pictureBox1.Width, BackgroundImageType.OnlyXYAxis);
+
+                            //横轴数量(网格)
+                            myDrawPicture.HorizontalAxisNum = 11;
+
+                            //扭矩数组和角度数组
+                            double[][] torqueData = { };
+                            double[][] angleData = { };
+
+                            if (ucCombox1.SelectedIndex == 0 && torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
+                            {
+                                myDrawPicture.LimitUpperLeftY = newTorqueUpper.Max();
+                                myDrawPicture.LimitLowerLeftY = newTorqueLower.Min();
+                                pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
+
+                                // 将 List<List<double>> 转换为 double[][]
+                                torqueData = torqueLists.ConvertAll(list => list.ToArray()).ToArray();
+                                pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_Y(torqueData);
+                            }
+                            else if (ucCombox1.SelectedIndex == 1 && angleLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
+                            {
+                                myDrawPicture.LimitUpperLeftY = newAngleUpper.Max();
+                                myDrawPicture.LimitLowerLeftY = newAngleLower.Min();
+                                pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
+
+                                // 将 List<List<double>> 转换为 double[][]
+                                angleData = angleLists.ConvertAll(list => list.ToArray()).ToArray();
+                                pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_Y(angleData);
+                            }
+                            else if (ucCombox1.SelectedIndex == 2 && torqueLists[MyDevice.AddrList.IndexOf(MyDevice.protocol.addr)].Count > 0)
+                            {
+                                myDrawPicture.LimitUpperLeftY = newTorqueUpper.Max();
+                                myDrawPicture.LimitLowerLeftY = newTorqueLower.Min();
+                                pictureBox1.BackgroundImage = myDrawPicture.GetBackgroundImage();
+
+                                /*
+                                //更新所有数据
+                                torqueData = torqueLists.ConvertAll(list => list.ToArray()).ToArray();
+                                angleData = angleLists.ConvertAll(list => list.ToArray()).ToArray();
+
+                                // 创建存储 Tuple 的数组
+                                Tuple<double[], double[]>[] curves = new Tuple<double[], double[]>[torqueData.Length];
+
+                                // 遍历数组，创建 Tuple 并添加到 curves 数组中
+                                for (int j = 0; j < torqueData.Length; j++)
+                                {
+                                    curves[j] = Tuple.Create(angleData[j], torqueData[j]);
+                                }
+                                pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_XY(curves);
+                                */
+
+                                /************更新最后一个02或者03对应的过程数据**********/
+
+                                //06按照dtype=F2划分成n段，实时更新最后一段
+                                if (actXET.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || actXET.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
+                                {
+                                    if (tempDrawData[i].dtype == 0xF2)
+                                    {
+                                        string index1 = AngledataGroups.Keys.ElementAt(AngledataGroups.Count - 2);//当前作业号的上一个
+                                        pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_XY(new Tuple<double[], double[]>(AngledataGroups[index1].ToArray(), TorquedataGroups[index1].ToArray()));
+                                    }
+                                }
+                                else
+                                {
+                                    //07按照dtype=F3划分成n段，实时更新最后一段
+                                    if (tempDrawData[i].dtype == 0xF3)
                                     {
                                         string index2 = AngledataGroups.Keys.ElementAt(AngledataGroups.Count - 2);//当前作业号的上一个
                                         pictureBox1.Image = myDrawPicture.GetForegroundImageFromDevs_XY(new Tuple<double[], double[]>(AngledataGroups[index2].ToArray(), TorquedataGroups[index2].ToArray()));
@@ -1436,6 +1917,7 @@ namespace Base.UI.MenuDevice
             return false;
         }
 
+        //数据表增加数据
         public void DtAddRow(DataTable dataTable, DATA data, XET xet, double tor, double ang)
         {
             string tempUnit = "";
@@ -1623,13 +2105,17 @@ namespace Base.UI.MenuDevice
                         case TASKS.REG_BLOCK2_DAT:
                             if (actXET.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || actXET.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
                             {
-                                updateDataTable_XH06();
-                                pictureBoxScope_draw();
+                                //updateDataTable_XH06();
+                                //pictureBoxScope_draw();
+                                updateDataTable_XH06(dataSnapshot);//利用数据快照，防止actXet.data因为粘包解析的过快导致上一包未处理完就被覆盖
+                                pictureBoxScope_draw(dataSnapshot);
                             }
                             else
                             {
-                                updateDataTable_XH07();
-                                pictureBoxScope_draw();
+                                //updateDataTable_XH07();
+                                //pictureBoxScope_draw();
+                                updateDataTable_XH07(dataSnapshot);
+                                pictureBoxScope_draw(dataSnapshot);
                             }
                             break;
                         default:
