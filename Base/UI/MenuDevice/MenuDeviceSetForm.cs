@@ -10,6 +10,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 //Ricardo 20240227
 //Lumi 20240507
@@ -428,8 +429,8 @@ namespace Base.UI.MenuDevice
             };
             ucCombox_displan.SelectedIndex = actXET.para.displan;
 
-            //脱钩保持时间
-            ucTextBoxEx_unhook.InputText = actXET.para.unhook.ToString();
+            //扭矩修正系数
+            ucTextBoxEx_torcorr.InputText = actXET.para.torcorr.ToString();
 
             //设置重复拧紧角度格式
             switch (actXET.para.angle_decimal)
@@ -451,21 +452,17 @@ namespace Base.UI.MenuDevice
             }
             ucTextBoxEx_angleResist.InputText = (actXET.para.angle_resist * 1.0 / (int)Math.Pow(10, actXET.para.angle_decimal)).ToString();
 
-            //USB通信使能
-            ucCombox_usbEN.Source = new List<KeyValuePair<string, string>>
+            //校准时间
+            if (actXET.work.caltime != 0)
             {
-                new KeyValuePair<string, string>("0", "关闭"),
-                new KeyValuePair<string, string>("1", "开启")
-            };
-            ucCombox_usbEN.SelectedIndex = actXET.para.usbEn == 0x55 ? 0 : 1;
+                dateTimePicker_caltime.Value = MyDevice.UInt32ToDateTime(actXET.work.caltime);
+            }
 
-            //无线通信使能
-            ucCombox_wirelessEn.Source = new List<KeyValuePair<string, string>>
+            //复校时间
+            if (actXET.work.calremind != 0)
             {
-                new KeyValuePair<string, string>("0", "关闭"),
-                new KeyValuePair<string, string>("1", "开启")
-            };
-            ucCombox_wirelessEn.SelectedIndex = actXET.para.wirelessEn == 0x55 ? 0 : 1;
+                dateTimePicker_calremind.Value = MyDevice.UInt32ToDateTime(actXET.work.calremind);
+            }
 
             #endregion
 
@@ -547,7 +544,7 @@ namespace Base.UI.MenuDevice
             
             #endregion
 
-            #region 高级设置
+            #region 工厂设置
 
             //标定零点
             tb_adZero.InputText = actXET.devc.ad_zero.ToString();
@@ -621,17 +618,58 @@ namespace Base.UI.MenuDevice
                 }
             }
 
-            //校准时间
-            if (actXET.work.caltime != 0)
-            {
-                dateTimePicker_caltime.Value = MyDevice.UInt32ToDateTime(actXET.work.caltime);
-            }
+            //脱钩保持时间
+            ucTextBoxEx_unhook.InputText = actXET.para.unhook.ToString();
 
-            //复校时间
-            if (actXET.work.calremind != 0)
+            //USB通信使能
+            ucCombox_usbEN.Source = new List<KeyValuePair<string, string>>
             {
-                dateTimePicker_calremind.Value = MyDevice.UInt32ToDateTime(actXET.work.calremind);
-            }
+                new KeyValuePair<string, string>("0", "关闭"),
+                new KeyValuePair<string, string>("1", "开启")
+            };
+            ucCombox_usbEN.SelectedIndex = actXET.para.usbEn == 0x55 ? 0 : 1;
+
+            //无线通信使能
+            ucCombox_wirelessEn.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "关闭"),
+                new KeyValuePair<string, string>("1", "开启")
+            };
+            ucCombox_wirelessEn.SelectedIndex = actXET.para.wirelessEn == 0x55 ? 0 : 1;
+
+            //扭矩采样速度
+            ucCombox_adspeed.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "10Hz"),//0x08
+                new KeyValuePair<string, string>("1", "40Hz"),//0x18
+                new KeyValuePair<string, string>("2", "640Hz"),//0x28
+                new KeyValuePair<string, string>("3", "1280Hz")//0x38
+            };
+            //ucCombox_adspeed.SelectedIndex = actXET.para.adspeed;
+
+            //归零范围
+            ucCombox_autozero.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "不归零"),//0x00
+                new KeyValuePair<string, string>("1", "归零范围2%"),//0x02
+                new KeyValuePair<string, string>("2", "归零范围4%"),//0x04
+                new KeyValuePair<string, string>("3", "归零范围10%"),//0x0A
+                new KeyValuePair<string, string>("4", "归零范围20%"),//0x14
+                new KeyValuePair<string, string>("5", "归零范围50%")//0x32
+            };
+            //ucCombox_autozero.SelectedIndex = (int)actXET.para.autozero;
+
+            //零点跟踪
+            ucCombox_trackzero.Source = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("0", "无零点跟踪"),//0x00
+                new KeyValuePair<string, string>("1", "零点跟踪10%"),//0x01
+                new KeyValuePair<string, string>("2", "零点跟踪20%"),//0x02
+                new KeyValuePair<string, string>("3", "零点跟踪30%"),//0x03
+                new KeyValuePair<string, string>("4", "零点跟踪40%"),//0x04
+                new KeyValuePair<string, string>("5", "零点跟踪50%")//0x05
+            };
+            //ucCombox_trackzero.SelectedIndex = (int)actXET.para.trackzero;
 
             #endregion
 
@@ -721,8 +759,6 @@ namespace Base.UI.MenuDevice
             switch (MyDevice.userRole)
             {
                 case "0":
-                    groupBox6.Visible              = false;
-                                               
                     label_fifomode.Enabled         = false;
                     ucCombox_fifomode.Enabled      = false;
                     label_fiforec.Enabled          = false;
@@ -747,24 +783,26 @@ namespace Base.UI.MenuDevice
                     ucTextBoxEx_timeback.Enabled   = false;
                     label_timezero.Enabled         = false;
                     ucTextBoxEx_timezero.Enabled   = false;
-                    label_disptype.Enabled         = false;
-                    ucCombox_disptype.Enabled      = false;
-                    label_disptheme.Enabled        = false;
-                    ucCombox_disptheme.Enabled     = false;
-                    label_displan.Enabled          = false;
-                    ucCombox_displan.Enabled       = false;
+                    label_torcorr.Enabled          = false;
+                    ucTextBoxEx_torcorr.Enabled    = false;
+                    label_angleResist.Enabled      = false;
+                    ucTextBoxEx_angleResist .Enabled = false;    
+                    label_caltime.Enabled          = false;
+                    dateTimePicker_caltime.Enabled = false;
+                    label_calremind.Enabled        = false;
+                    dateTimePicker_calremind .Enabled = false;
+
+                    groupBox4.Visible              = false;
+                    //label_disptype.Enabled         = false;
+                    //ucCombox_disptype.Enabled      = false;
+                    //label_disptheme.Enabled        = false;
+                    //ucCombox_disptheme.Enabled     = false;
+                    //label_displan.Enabled          = false;
+                    //ucCombox_displan.Enabled       = false;
 
                     bt_UpdateMode.Enabled          = false;
-
-                    groupBox24.Visible             = false;
-                    label_usbEn.Enabled            = false;
-                    ucCombox_usbEN.Enabled         = false;
-                    label_wirelessEn.Enabled       = false;
-                    ucCombox_wirelessEn.Enabled    = false;
                     break;
                 case "1":
-                    groupBox6.Visible              = false;
-
                     label_fifomode.Enabled         = true;
                     ucCombox_fifomode.Enabled      = true;
                     label_fiforec.Enabled          = true;
@@ -788,26 +826,28 @@ namespace Base.UI.MenuDevice
                     label_timeback.Enabled         = true;
                     ucTextBoxEx_timeback.Enabled   = true;
                     label_timezero.Enabled         = true;
-                    ucTextBoxEx_timezero.Enabled   = true;
-                    label_disptype.Enabled         = true;
-                    ucCombox_disptype.Enabled      = true;
-                    label_disptheme.Enabled        = true;
-                    ucCombox_disptheme.Enabled     = true;
-                    label_displan.Enabled          = true;
-                    ucCombox_displan.Enabled       = true;
+                    ucTextBoxEx_timezero.Enabled   = true;       
+                    label_torcorr.Enabled          = true;
+                    ucTextBoxEx_torcorr.Enabled    = true;
+                    label_angleResist.Enabled      = true;
+                    ucTextBoxEx_angleResist .Enabled = true;               
+                    label_caltime.Enabled          = true;
+                    dateTimePicker_caltime.Enabled = true;
+                    label_calremind.Enabled        = true;
+                    dateTimePicker_calremind .Enabled = true;
+
+                    groupBox4.Visible = false;
+                    //label_disptype.Enabled         = true;
+                    //ucCombox_disptype.Enabled      = true;
+                    //label_disptheme.Enabled        = true;
+                    //ucCombox_disptheme.Enabled     = true;
+                    //label_displan.Enabled          = true;
+                    //ucCombox_displan.Enabled       = true;
 
                     bt_UpdateMode.Enabled          = true;
-
-                    groupBox24.Visible             = false;
-                    label_usbEn.Enabled            = false;
-                    ucCombox_usbEN.Enabled         = false;
-                    label_wirelessEn.Enabled       = false;
-                    ucCombox_wirelessEn.Enabled    = false;
                     break;
                 default:
                 case "32":
-                    groupBox6.Visible = false;
-
                     label_fifomode.Enabled         = true;
                     ucCombox_fifomode.Enabled      = true;
                     label_fiforec.Enabled          = true;
@@ -831,21 +871,25 @@ namespace Base.UI.MenuDevice
                     label_timeback.Enabled         = true;
                     ucTextBoxEx_timeback.Enabled   = true;
                     label_timezero.Enabled         = true;
-                    ucTextBoxEx_timezero.Enabled   = true;
-                    label_disptype.Enabled         = true;
-                    ucCombox_disptype.Enabled      = true;
-                    label_disptheme.Enabled        = true;
-                    ucCombox_disptheme.Enabled     = true;
-                    label_displan.Enabled          = true;
-                    ucCombox_displan.Enabled       = true;
+                    ucTextBoxEx_timezero.Enabled   = true;        
+                    label_torcorr.Enabled          = true;
+                    ucTextBoxEx_torcorr.Enabled    = true;
+                    label_angleResist.Enabled      = true;
+                    ucTextBoxEx_angleResist .Enabled = true;
+                    label_caltime.Enabled          = true;
+                    dateTimePicker_caltime.Enabled = true;
+                    label_calremind.Enabled        = true;
+                    dateTimePicker_calremind .Enabled = true;
+
+                    groupBox4.Visible              = false;            
+                    //label_disptype.Enabled         = true;
+                    //ucCombox_disptype.Enabled      = true;
+                    //label_disptheme.Enabled        = true;
+                    //ucCombox_disptheme.Enabled     = true;
+                    //label_displan.Enabled          = true;
+                    //ucCombox_displan.Enabled       = true;
 
                     bt_UpdateMode.Enabled          = true;
-
-                    groupBox24.Visible             = true;
-                    label_usbEn.Enabled            = true;
-                    ucCombox_usbEN.Enabled         = true;
-                    label_wirelessEn.Enabled       = true;
-                    ucCombox_wirelessEn.Enabled    = true;
                     break;
             }
             //WLAN设置
@@ -893,7 +937,7 @@ namespace Base.UI.MenuDevice
                     label_tip.Enabled = false;
                     break;
             }
-            //高级设置
+            //工厂设置
             switch (MyDevice.userRole)
             {
                 case "0":
@@ -922,9 +966,23 @@ namespace Base.UI.MenuDevice
                     tb_adNegOutPut4.Enabled = false;
                     tb_adNegOutPut5.Enabled = false;
 
+                    label_calUnit.Enabled    = false;
                     ucCombox_calUnit.Enabled = false;
+                    label_calType.Enabled    = false;
                     ucCombox_calType.Enabled = false;
+                    label_capacity.Enabled   = false;
                     ucCombox_capacity.Enabled = false;
+
+                    label_unhook.Enabled        = false;
+                    ucTextBoxEx_unhook.Enabled  = false;
+
+                    groupBox24.Visible          = false;
+                    label_usbEn.Enabled         = false;
+                    ucCombox_usbEN.Enabled      = false;
+                    label_wirelessEn.Enabled    = false;
+                    ucCombox_wirelessEn.Enabled = false;
+
+                    groupBox6.Visible           = false;
 
                     btn_SuperUpdate.Enabled = false;
                     break;
@@ -952,10 +1010,24 @@ namespace Base.UI.MenuDevice
                     tb_adNegOutPut3.Enabled = true;
                     tb_adNegOutPut4.Enabled = true;
                     tb_adNegOutPut5.Enabled = true;
-
+                    
+                    label_calUnit.Enabled    = true;
                     ucCombox_calUnit.Enabled = true;
+                    label_calType.Enabled    = true;
                     ucCombox_calType.Enabled = true;
+                    label_capacity.Enabled   = true;
                     ucCombox_capacity.Enabled = true;
+
+                    label_unhook.Enabled        = true;
+                    ucTextBoxEx_unhook.Enabled  = true;
+                    
+                    groupBox24.Visible           = true;
+                    label_usbEn.Enabled          = true;
+                    ucCombox_usbEN.Enabled       = true;
+                    label_wirelessEn.Enabled     = true;
+                    ucCombox_wirelessEn.Enabled  = true;
+
+                    groupBox6.Visible       = true;
 
                     btn_SuperUpdate.Enabled = true;
                     break;
@@ -995,7 +1067,6 @@ namespace Base.UI.MenuDevice
                 case TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR:
                     ucCombox_point.Enabled = false;
                     groupBox22.Visible = false;
-                    groupBox4.Visible = false;
                     break;
 
                 default:
@@ -1004,7 +1075,6 @@ namespace Base.UI.MenuDevice
                 case TYPE.TQ_XH_XL01_09 - 1280:
                     ucCombox_point.Enabled = true;
                     groupBox22.Visible = true;
-                    groupBox4.Visible = true;
                     break;
             }
 
@@ -1395,7 +1465,7 @@ namespace Base.UI.MenuDevice
                 || (ucTextBoxEx_timeoff.InputText == ""    && ucTextBoxEx_timeoff.Visible == true)
                 || (ucTextBoxEx_timeback.InputText == ""   && ucTextBoxEx_timeback.Visible == true)
                 || (ucTextBoxEx_timezero.InputText == ""   && ucTextBoxEx_timezero.Visible == true)
-                || (ucTextBoxEx_unhook.InputText == ""     && ucTextBoxEx_unhook.Visible == true)
+                || (ucTextBoxEx_torcorr.InputText == "" && ucTextBoxEx_torcorr.Visible == true)
                 || (ucTextBoxEx_angleResist.InputText == "" && ucTextBoxEx_angleResist.Visible == true)
                 )
             {
@@ -1448,14 +1518,25 @@ namespace Base.UI.MenuDevice
                 {
                     actXET.para.timezero = timezero;
                 }
-                actXET.para.disptype = (byte)ucCombox_disptype.SelectedIndex;
-                actXET.para.disptheme = (byte)ucCombox_disptheme.SelectedIndex;
-                actXET.para.displan = (byte)ucCombox_displan.SelectedIndex;
-                actXET.para.usbEn = (byte)((byte)ucCombox_usbEN.SelectedIndex == 0x00 ? 0x55 : 0x00);
-                actXET.para.wirelessEn = (byte)((byte)ucCombox_wirelessEn.SelectedIndex == 0x00 ? 0x55 : 0x00);
-                if (UInt16.TryParse(ucTextBoxEx_unhook.InputText, out UInt16 unhook))
+
+                //更新校准时间
+                actXET.work.caltime = MyDevice.DateTimeToUInt32((DateTime)dateTimePicker_caltime.Value);
+                actXET.work.calremind = MyDevice.DateTimeToUInt32((DateTime)dateTimePicker_calremind.Value);
+
+                if (actXET.work.calremind < actXET.work.caltime)
                 {
-                    actXET.para.unhook = unhook;
+                    MessageBox.Show("复校时间不能早于校准时间，请重新设置", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                //actXET.para.disptype = (byte)ucCombox_disptype.SelectedIndex;
+                //actXET.para.disptheme = (byte)ucCombox_disptheme.SelectedIndex;
+                //actXET.para.displan = (byte)ucCombox_displan.SelectedIndex;
+
+                //扭矩修正系数
+                if (float.TryParse(ucTextBoxEx_torcorr.InputText, out float torcorr))
+                {
+                    actXET.para.torcorr = torcorr;
                 }
 
                 //复拧角度
@@ -1476,6 +1557,7 @@ namespace Base.UI.MenuDevice
 
             List<TASKS> tasks = new List<TASKS>
             {
+                TASKS.REG_BLOCK5_INFO,
                 TASKS.REG_BLOCK3_PARA,
             };
 
@@ -1624,11 +1706,11 @@ namespace Base.UI.MenuDevice
             }
         }
 
-        //更新高级设置
+        //更新工厂设置
         private void btn_SuperUpdate_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("开发中...");
-            return;
+            //MessageBox.Show("开发中...");
+            //return;
 
             //按键状态
             btn_SuperUpdate.BackColor = Color.Firebrick;
@@ -1649,16 +1731,6 @@ namespace Base.UI.MenuDevice
 
                 /********更新参数***********/
 
-                //更新校准时间
-                actXET.work.caltime = MyDevice.DateTimeToUInt32((DateTime)dateTimePicker_caltime.Value);
-                actXET.work.calremind = MyDevice.DateTimeToUInt32((DateTime)dateTimePicker_calremind.Value);
-
-                if (actXET.work.calremind <= actXET.work.caltime)
-                {
-                    MessageBox.Show("复校时间不能早于校准时间，请重新设置", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
                 //更新内码相关参数(必须工厂权限)
                 actXET.devc.calunit     = (UNIT)ucCombox_calUnit.SelectedIndex;
                 actXET.devc.caltype  = (byte)ucCombox_calType.SelectedIndex;
@@ -1674,6 +1746,13 @@ namespace Base.UI.MenuDevice
                 if (tb_adNegOutPut3.InputText != "") actXET.devc.ad_neg_point3 = Convert.ToInt32(tb_adNegOutPut3.InputText);
                 if (tb_adNegOutPut4.InputText != "") actXET.devc.ad_neg_point4 = Convert.ToInt32(tb_adNegOutPut4.InputText);
                 if (tb_adNegOutPut5.InputText != "") actXET.devc.ad_neg_point5 = Convert.ToInt32(tb_adNegOutPut5.InputText);
+
+                actXET.para.usbEn = (byte)((byte)ucCombox_usbEN.SelectedIndex == 0x00 ? 0x55 : 0x00);
+                actXET.para.wirelessEn = (byte)((byte)ucCombox_wirelessEn.SelectedIndex == 0x00 ? 0x55 : 0x00);
+                if (UInt16.TryParse(ucTextBoxEx_unhook.InputText, out UInt16 unhook))
+                {
+                    actXET.para.unhook = unhook;
+                }
             }
 
             selectNum = 0;
@@ -1687,7 +1766,7 @@ namespace Base.UI.MenuDevice
 
             List<TASKS> tasks = new List<TASKS>
             {
-                TASKS.REG_BLOCK5_INFO,
+                TASKS.REG_BLOCK3_PARA,
                 TASKS.REG_BLOCK4_CAL1,
             };
 
@@ -2490,12 +2569,12 @@ namespace Base.UI.MenuDevice
                         MyDevice.myTaskManager.AddUserCommand(MyDevice.protocol.addr, ProtocolFunc.Protocol_Write_SendCOM, TASKS.WRITE_MEMABLE, Convert.ToByte(MyDevice.userRole), this.Name);
                     }
                 }
-                //高级设置
+                //工厂设置
                 else if (buttonClicked == "bt_SuperUpdate")
                 {
                     switch (currentCommand.TaskState)
                     {
-                        case TASKS.REG_BLOCK5_INFO:
+                        case TASKS.REG_BLOCK4_CAL1:
                             updateDatabaseWrench();
 
                             selectNum++;
@@ -2631,7 +2710,7 @@ namespace Base.UI.MenuDevice
                     Screwmax = actXET.para.screwmax,
                     Runmode = actXET.para.runmode,
                     Auploaden = actXET.para.auploaden,
-                    AngCorr = actXET.para.angcorr.ToString(),
+                    AngCorr = actXET.para.torcorr.ToString(),
                     AngleResist = actXET.para.angle_resist,
                 };
                 DSWrenchWork wrenchWork = new DSWrenchWork

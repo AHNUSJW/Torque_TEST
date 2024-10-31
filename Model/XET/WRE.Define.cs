@@ -146,7 +146,7 @@ namespace Model
         public byte         usbEn;                                      //USB通信使能
         public byte         wirelessEn;                                 //无线通信方式使能
 
-        public float        angcorr;                                    //角度修正系数
+        public float        torcorr;                                    //扭矩修正系数
         public Int32        angle_resist;                               //复拧角度（angle_acc < angle_resist则提示重复拧紧）
     }
 

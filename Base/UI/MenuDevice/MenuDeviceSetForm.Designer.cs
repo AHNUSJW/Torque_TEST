@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.ucDataGridView1 = new HZH_Controls.Controls.UCDataGridView();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,26 +63,16 @@
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.groupBox24 = new System.Windows.Forms.GroupBox();
-            this.ucCombox_wirelessEn = new HZH_Controls.Controls.UCCombox();
-            this.label_wirelessEn = new System.Windows.Forms.Label();
-            this.ucCombox_usbEN = new HZH_Controls.Controls.UCCombox();
-            this.label_usbEn = new System.Windows.Forms.Label();
+            this.groupBox18 = new System.Windows.Forms.GroupBox();
+            this.dateTimePicker_calremind = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker_caltime = new System.Windows.Forms.DateTimePicker();
+            this.label_calremind = new System.Windows.Forms.Label();
+            this.label_caltime = new System.Windows.Forms.Label();
             this.groupBox22 = new System.Windows.Forms.GroupBox();
+            this.ucTextBoxEx_torcorr = new HZH_Controls.Controls.UCTextBoxEx();
+            this.label_torcorr = new System.Windows.Forms.Label();
             this.ucTextBoxEx_angleResist = new HZH_Controls.Controls.UCTextBoxEx();
             this.label_angleResist = new System.Windows.Forms.Label();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.label_angcorr = new System.Windows.Forms.Label();
-            this.ucCombox_adspeed = new HZH_Controls.Controls.UCCombox();
-            this.ucCombox_angcorr = new HZH_Controls.Controls.UCCombox();
-            this.label_adspeed = new System.Windows.Forms.Label();
-            this.label_trackzero = new System.Windows.Forms.Label();
-            this.label_autozero = new System.Windows.Forms.Label();
-            this.ucCombox_autozero = new HZH_Controls.Controls.UCCombox();
-            this.ucCombox_trackzero = new HZH_Controls.Controls.UCCombox();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.ucTextBoxEx_unhook = new HZH_Controls.Controls.UCTextBoxEx();
-            this.label_unhook = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.ucTextBoxEx_timezero = new HZH_Controls.Controls.UCTextBoxEx();
             this.ucTextBoxEx_timeback = new HZH_Controls.Controls.UCTextBoxEx();
@@ -136,6 +125,9 @@
             this.label_curWIFIName = new System.Windows.Forms.Label();
             this.bt_UpdateWLAN = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.label_tip = new System.Windows.Forms.Label();
+            this.label_wirelessSelection = new System.Windows.Forms.Label();
+            this.ucCombox_wirelessSelection = new HZH_Controls.Controls.UCCombox();
             this.label_wifimode = new System.Windows.Forms.Label();
             this.ucCombox_wifimode = new HZH_Controls.Controls.UCCombox();
             this.ucTextBoxEx_wifiIp = new HZH_Controls.Controls.UCTextBoxEx();
@@ -152,7 +144,47 @@
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.ucTextBoxEx_addr = new HZH_Controls.Controls.UCTextBoxEx();
             this.label_addr = new System.Windows.Forms.Label();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.btn_UpdateTicket = new System.Windows.Forms.Button();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column11 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Column12 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column17 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column18 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBox21 = new System.Windows.Forms.GroupBox();
+            this.ucCombox_screwMax = new HZH_Controls.Controls.UCCombox();
+            this.ucCombox_runMode = new HZH_Controls.Controls.UCCombox();
+            this.label41 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.btn_SuperUpdate = new System.Windows.Forms.Button();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.ucCombox_adspeed = new HZH_Controls.Controls.UCCombox();
+            this.label_adspeed = new System.Windows.Forms.Label();
+            this.label_trackzero = new System.Windows.Forms.Label();
+            this.label_autozero = new System.Windows.Forms.Label();
+            this.ucCombox_autozero = new HZH_Controls.Controls.UCCombox();
+            this.ucCombox_trackzero = new HZH_Controls.Controls.UCCombox();
+            this.groupBox24 = new System.Windows.Forms.GroupBox();
+            this.ucCombox_wirelessEn = new HZH_Controls.Controls.UCCombox();
+            this.label_wirelessEn = new System.Windows.Forms.Label();
+            this.ucCombox_usbEN = new HZH_Controls.Controls.UCCombox();
+            this.label_usbEn = new System.Windows.Forms.Label();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.ucTextBoxEx_unhook = new HZH_Controls.Controls.UCTextBoxEx();
+            this.label_unhook = new System.Windows.Forms.Label();
+            this.groupBox17 = new System.Windows.Forms.GroupBox();
+            this.ucCombox_capacity = new HZH_Controls.Controls.UCCombox();
+            this.ucCombox_calUnit = new HZH_Controls.Controls.UCCombox();
+            this.ucCombox_calType = new HZH_Controls.Controls.UCCombox();
+            this.label_calType = new System.Windows.Forms.Label();
+            this.label_capacity = new System.Windows.Forms.Label();
+            this.label_calUnit = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
             this.groupBox20 = new System.Windows.Forms.GroupBox();
             this.label38 = new System.Windows.Forms.Label();
@@ -160,18 +192,6 @@
             this.groupBox19 = new System.Windows.Forms.GroupBox();
             this.label37 = new System.Windows.Forms.Label();
             this.tb_adZero = new HZH_Controls.Controls.UCTextBoxEx();
-            this.groupBox18 = new System.Windows.Forms.GroupBox();
-            this.dateTimePicker_calremind = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePicker_caltime = new System.Windows.Forms.DateTimePicker();
-            this.label35 = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
-            this.groupBox17 = new System.Windows.Forms.GroupBox();
-            this.ucCombox_capacity = new HZH_Controls.Controls.UCCombox();
-            this.ucCombox_calUnit = new HZH_Controls.Controls.UCCombox();
-            this.ucCombox_calType = new HZH_Controls.Controls.UCCombox();
-            this.label36 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.label33 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
@@ -226,28 +246,14 @@
             this.tb_adPos2 = new HZH_Controls.Controls.UCTextBoxEx();
             this.label3 = new System.Windows.Forms.Label();
             this.tb_adPos1 = new HZH_Controls.Controls.UCTextBoxEx();
-            this.btn_SuperUpdate = new System.Windows.Forms.Button();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.btn_UpdateTicket = new System.Windows.Forms.Button();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column11 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Column12 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column17 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column18 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupBox21 = new System.Windows.Forms.GroupBox();
-            this.ucCombox_screwMax = new HZH_Controls.Controls.UCCombox();
-            this.ucCombox_runMode = new HZH_Controls.Controls.UCCombox();
-            this.label41 = new System.Windows.Forms.Label();
-            this.label40 = new System.Windows.Forms.Label();
-            this.graphicalOverlayComponent1 = new HZH_Controls.Controls.GraphicalOverlayComponent(this.components);
-            this.label_wirelessSelection = new System.Windows.Forms.Label();
-            this.ucCombox_wirelessSelection = new HZH_Controls.Controls.UCCombox();
-            this.label_tip = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -256,10 +262,8 @@
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabPage2.SuspendLayout();
-            this.groupBox24.SuspendLayout();
+            this.groupBox18.SuspendLayout();
             this.groupBox22.SuspendLayout();
-            this.groupBox10.SuspendLayout();
-            this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -272,18 +276,20 @@
             this.groupBox8.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.groupBox7.SuspendLayout();
-            this.tabPage4.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            this.groupBox21.SuspendLayout();
+            this.tabPage6.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            this.groupBox24.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox17.SuspendLayout();
             this.groupBox20.SuspendLayout();
             this.groupBox19.SuspendLayout();
-            this.groupBox18.SuspendLayout();
-            this.groupBox17.SuspendLayout();
             this.groupBox16.SuspendLayout();
             this.groupBox15.SuspendLayout();
             this.groupBox14.SuspendLayout();
             this.groupBox13.SuspendLayout();
-            this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
-            this.groupBox21.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -343,8 +349,8 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -801,10 +807,8 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.groupBox24);
+            this.tabPage2.Controls.Add(this.groupBox18);
             this.tabPage2.Controls.Add(this.groupBox22);
-            this.tabPage2.Controls.Add(this.groupBox10);
-            this.tabPage2.Controls.Add(this.groupBox6);
             this.tabPage2.Controls.Add(this.groupBox5);
             this.tabPage2.Controls.Add(this.groupBox4);
             this.tabPage2.Controls.Add(this.groupBox3);
@@ -818,101 +822,130 @@
             this.tabPage2.Text = "模式设置";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // groupBox24
+            // groupBox18
             // 
-            this.groupBox24.Controls.Add(this.ucCombox_wirelessEn);
-            this.groupBox24.Controls.Add(this.label_wirelessEn);
-            this.groupBox24.Controls.Add(this.ucCombox_usbEN);
-            this.groupBox24.Controls.Add(this.label_usbEn);
-            this.groupBox24.Location = new System.Drawing.Point(450, 570);
-            this.groupBox24.Name = "groupBox24";
-            this.groupBox24.Size = new System.Drawing.Size(432, 126);
-            this.groupBox24.TabIndex = 147;
-            this.groupBox24.TabStop = false;
+            this.groupBox18.Controls.Add(this.dateTimePicker_calremind);
+            this.groupBox18.Controls.Add(this.dateTimePicker_caltime);
+            this.groupBox18.Controls.Add(this.label_calremind);
+            this.groupBox18.Controls.Add(this.label_caltime);
+            this.groupBox18.Location = new System.Drawing.Point(461, 3);
+            this.groupBox18.Name = "groupBox18";
+            this.groupBox18.Size = new System.Drawing.Size(450, 168);
+            this.groupBox18.TabIndex = 147;
+            this.groupBox18.TabStop = false;
+            this.groupBox18.Text = "审计校准";
             // 
-            // ucCombox_wirelessEn
+            // dateTimePicker_calremind
             // 
-            this.ucCombox_wirelessEn.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_wirelessEn.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wirelessEn.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_wirelessEn.ConerRadius = 5;
-            this.ucCombox_wirelessEn.DropPanelHeight = -1;
-            this.ucCombox_wirelessEn.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wirelessEn.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_wirelessEn.IsRadius = true;
-            this.ucCombox_wirelessEn.IsShowRect = true;
-            this.ucCombox_wirelessEn.ItemWidth = 70;
-            this.ucCombox_wirelessEn.Location = new System.Drawing.Point(205, 67);
-            this.ucCombox_wirelessEn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_wirelessEn.Name = "ucCombox_wirelessEn";
-            this.ucCombox_wirelessEn.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wirelessEn.RectWidth = 1;
-            this.ucCombox_wirelessEn.SelectedIndex = -1;
-            this.ucCombox_wirelessEn.SelectedValue = "";
-            this.ucCombox_wirelessEn.Size = new System.Drawing.Size(173, 32);
-            this.ucCombox_wirelessEn.Source = null;
-            this.ucCombox_wirelessEn.TabIndex = 90;
-            this.ucCombox_wirelessEn.TextValue = null;
-            this.ucCombox_wirelessEn.TriangleColor = System.Drawing.Color.Blue;
+            this.dateTimePicker_calremind.Location = new System.Drawing.Point(189, 77);
+            this.dateTimePicker_calremind.Name = "dateTimePicker_calremind";
+            this.dateTimePicker_calremind.Size = new System.Drawing.Size(172, 21);
+            this.dateTimePicker_calremind.TabIndex = 23;
             // 
-            // label_wirelessEn
+            // dateTimePicker_caltime
             // 
-            this.label_wirelessEn.AutoSize = true;
-            this.label_wirelessEn.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_wirelessEn.ForeColor = System.Drawing.Color.Blue;
-            this.label_wirelessEn.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_wirelessEn.Location = new System.Drawing.Point(49, 77);
-            this.label_wirelessEn.Name = "label_wirelessEn";
-            this.label_wirelessEn.Size = new System.Drawing.Size(111, 22);
-            this.label_wirelessEn.TabIndex = 89;
-            this.label_wirelessEn.Text = "屏蔽无线通信:";
+            this.dateTimePicker_caltime.Location = new System.Drawing.Point(188, 31);
+            this.dateTimePicker_caltime.Name = "dateTimePicker_caltime";
+            this.dateTimePicker_caltime.Size = new System.Drawing.Size(171, 21);
+            this.dateTimePicker_caltime.TabIndex = 22;
             // 
-            // ucCombox_usbEN
+            // label_calremind
             // 
-            this.ucCombox_usbEN.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_usbEN.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_usbEN.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_usbEN.ConerRadius = 5;
-            this.ucCombox_usbEN.DropPanelHeight = -1;
-            this.ucCombox_usbEN.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_usbEN.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_usbEN.IsRadius = true;
-            this.ucCombox_usbEN.IsShowRect = true;
-            this.ucCombox_usbEN.ItemWidth = 70;
-            this.ucCombox_usbEN.Location = new System.Drawing.Point(205, 21);
-            this.ucCombox_usbEN.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_usbEN.Name = "ucCombox_usbEN";
-            this.ucCombox_usbEN.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_usbEN.RectWidth = 1;
-            this.ucCombox_usbEN.SelectedIndex = -1;
-            this.ucCombox_usbEN.SelectedValue = "";
-            this.ucCombox_usbEN.Size = new System.Drawing.Size(173, 32);
-            this.ucCombox_usbEN.Source = null;
-            this.ucCombox_usbEN.TabIndex = 88;
-            this.ucCombox_usbEN.TextValue = null;
-            this.ucCombox_usbEN.TriangleColor = System.Drawing.Color.Blue;
+            this.label_calremind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_calremind.AutoSize = true;
+            this.label_calremind.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_calremind.ForeColor = System.Drawing.Color.Blue;
+            this.label_calremind.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_calremind.Location = new System.Drawing.Point(50, 77);
+            this.label_calremind.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_calremind.Name = "label_calremind";
+            this.label_calremind.Size = new System.Drawing.Size(79, 22);
+            this.label_calremind.TabIndex = 21;
+            this.label_calremind.Text = "复校时间:";
             // 
-            // label_usbEn
+            // label_caltime
             // 
-            this.label_usbEn.AutoSize = true;
-            this.label_usbEn.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_usbEn.ForeColor = System.Drawing.Color.Blue;
-            this.label_usbEn.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_usbEn.Location = new System.Drawing.Point(49, 31);
-            this.label_usbEn.Name = "label_usbEn";
-            this.label_usbEn.Size = new System.Drawing.Size(112, 22);
-            this.label_usbEn.TabIndex = 80;
-            this.label_usbEn.Text = "屏蔽USB通信:";
+            this.label_caltime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_caltime.AutoSize = true;
+            this.label_caltime.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_caltime.ForeColor = System.Drawing.Color.Blue;
+            this.label_caltime.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_caltime.Location = new System.Drawing.Point(48, 31);
+            this.label_caltime.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_caltime.Name = "label_caltime";
+            this.label_caltime.Size = new System.Drawing.Size(79, 22);
+            this.label_caltime.TabIndex = 20;
+            this.label_caltime.Text = "校准时间:";
             // 
             // groupBox22
             // 
+            this.groupBox22.Controls.Add(this.label49);
+            this.groupBox22.Controls.Add(this.label48);
+            this.groupBox22.Controls.Add(this.ucTextBoxEx_torcorr);
+            this.groupBox22.Controls.Add(this.label_torcorr);
             this.groupBox22.Controls.Add(this.ucTextBoxEx_angleResist);
             this.groupBox22.Controls.Add(this.label_angleResist);
-            this.groupBox22.Location = new System.Drawing.Point(448, 174);
+            this.groupBox22.Location = new System.Drawing.Point(461, 177);
             this.groupBox22.Name = "groupBox22";
-            this.groupBox22.Size = new System.Drawing.Size(432, 76);
+            this.groupBox22.Size = new System.Drawing.Size(450, 169);
             this.groupBox22.TabIndex = 146;
             this.groupBox22.TabStop = false;
+            // 
+            // ucTextBoxEx_torcorr
+            // 
+            this.ucTextBoxEx_torcorr.BackColor = System.Drawing.Color.Transparent;
+            this.ucTextBoxEx_torcorr.ConerRadius = 5;
+            this.ucTextBoxEx_torcorr.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.ucTextBoxEx_torcorr.DecLength = 0;
+            this.ucTextBoxEx_torcorr.FillColor = System.Drawing.Color.Empty;
+            this.ucTextBoxEx_torcorr.FocusBorderColor = System.Drawing.Color.DodgerBlue;
+            this.ucTextBoxEx_torcorr.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucTextBoxEx_torcorr.InputText = "";
+            this.ucTextBoxEx_torcorr.InputType = HZH_Controls.TextInputType.Regex;
+            this.ucTextBoxEx_torcorr.IsFocusColor = false;
+            this.ucTextBoxEx_torcorr.IsRadius = true;
+            this.ucTextBoxEx_torcorr.IsShowClearBtn = false;
+            this.ucTextBoxEx_torcorr.IsShowKeyboard = false;
+            this.ucTextBoxEx_torcorr.IsShowRect = true;
+            this.ucTextBoxEx_torcorr.IsShowSearchBtn = false;
+            this.ucTextBoxEx_torcorr.KeyBoardType = HZH_Controls.Controls.KeyBoardType.UCKeyBorderAll_EN;
+            this.ucTextBoxEx_torcorr.Location = new System.Drawing.Point(186, 17);
+            this.ucTextBoxEx_torcorr.Margin = new System.Windows.Forms.Padding(0);
+            this.ucTextBoxEx_torcorr.MaxValue = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.ucTextBoxEx_torcorr.MinValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.ucTextBoxEx_torcorr.Name = "ucTextBoxEx_torcorr";
+            this.ucTextBoxEx_torcorr.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
+            this.ucTextBoxEx_torcorr.PasswordChar = '\0';
+            this.ucTextBoxEx_torcorr.PromptColor = System.Drawing.Color.White;
+            this.ucTextBoxEx_torcorr.PromptFont = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.ucTextBoxEx_torcorr.PromptText = "";
+            this.ucTextBoxEx_torcorr.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.ucTextBoxEx_torcorr.RectWidth = 1;
+            this.ucTextBoxEx_torcorr.RegexPattern = "^\\d{0,7}(\\.\\d{0,3})?$";
+            this.ucTextBoxEx_torcorr.Size = new System.Drawing.Size(173, 32);
+            this.ucTextBoxEx_torcorr.TabIndex = 147;
+            // 
+            // label_torcorr
+            // 
+            this.label_torcorr.AutoSize = true;
+            this.label_torcorr.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.label_torcorr.ForeColor = System.Drawing.Color.Blue;
+            this.label_torcorr.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_torcorr.Location = new System.Drawing.Point(51, 27);
+            this.label_torcorr.Name = "label_torcorr";
+            this.label_torcorr.Size = new System.Drawing.Size(111, 22);
+            this.label_torcorr.TabIndex = 146;
+            this.label_torcorr.Text = "扭矩修正系数:";
             // 
             // ucTextBoxEx_angleResist
             // 
@@ -932,7 +965,7 @@
             this.ucTextBoxEx_angleResist.IsShowRect = true;
             this.ucTextBoxEx_angleResist.IsShowSearchBtn = false;
             this.ucTextBoxEx_angleResist.KeyBoardType = HZH_Controls.Controls.KeyBoardType.UCKeyBorderAll_EN;
-            this.ucTextBoxEx_angleResist.Location = new System.Drawing.Point(204, 26);
+            this.ucTextBoxEx_angleResist.Location = new System.Drawing.Point(188, 67);
             this.ucTextBoxEx_angleResist.Margin = new System.Windows.Forms.Padding(0);
             this.ucTextBoxEx_angleResist.MaxValue = new decimal(new int[] {
             100000,
@@ -962,243 +995,17 @@
             this.label_angleResist.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_angleResist.ForeColor = System.Drawing.Color.Blue;
             this.label_angleResist.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_angleResist.Location = new System.Drawing.Point(49, 31);
+            this.label_angleResist.Location = new System.Drawing.Point(51, 72);
             this.label_angleResist.Name = "label_angleResist";
             this.label_angleResist.Size = new System.Drawing.Size(111, 22);
             this.label_angleResist.TabIndex = 80;
             this.label_angleResist.Text = "重复拧紧角度:";
             // 
-            // groupBox10
-            // 
-            this.groupBox10.Controls.Add(this.label_angcorr);
-            this.groupBox10.Controls.Add(this.ucCombox_adspeed);
-            this.groupBox10.Controls.Add(this.ucCombox_angcorr);
-            this.groupBox10.Controls.Add(this.label_adspeed);
-            this.groupBox10.Controls.Add(this.label_trackzero);
-            this.groupBox10.Controls.Add(this.label_autozero);
-            this.groupBox10.Controls.Add(this.ucCombox_autozero);
-            this.groupBox10.Controls.Add(this.ucCombox_trackzero);
-            this.groupBox10.Location = new System.Drawing.Point(450, 349);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(432, 215);
-            this.groupBox10.TabIndex = 95;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Visible = false;
-            // 
-            // label_angcorr
-            // 
-            this.label_angcorr.AutoSize = true;
-            this.label_angcorr.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_angcorr.ForeColor = System.Drawing.Color.Blue;
-            this.label_angcorr.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_angcorr.Location = new System.Drawing.Point(49, 31);
-            this.label_angcorr.Name = "label_angcorr";
-            this.label_angcorr.Size = new System.Drawing.Size(111, 22);
-            this.label_angcorr.TabIndex = 81;
-            this.label_angcorr.Text = "角度修正系数:";
-            // 
-            // ucCombox_adspeed
-            // 
-            this.ucCombox_adspeed.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_adspeed.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_adspeed.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_adspeed.ConerRadius = 5;
-            this.ucCombox_adspeed.DropPanelHeight = -1;
-            this.ucCombox_adspeed.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_adspeed.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_adspeed.IsRadius = true;
-            this.ucCombox_adspeed.IsShowRect = true;
-            this.ucCombox_adspeed.ItemWidth = 70;
-            this.ucCombox_adspeed.Location = new System.Drawing.Point(203, 72);
-            this.ucCombox_adspeed.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_adspeed.Name = "ucCombox_adspeed";
-            this.ucCombox_adspeed.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_adspeed.RectWidth = 1;
-            this.ucCombox_adspeed.SelectedIndex = -1;
-            this.ucCombox_adspeed.SelectedValue = "";
-            this.ucCombox_adspeed.Size = new System.Drawing.Size(173, 32);
-            this.ucCombox_adspeed.Source = null;
-            this.ucCombox_adspeed.TabIndex = 82;
-            this.ucCombox_adspeed.TextValue = null;
-            this.ucCombox_adspeed.TriangleColor = System.Drawing.Color.Blue;
-            // 
-            // ucCombox_angcorr
-            // 
-            this.ucCombox_angcorr.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_angcorr.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_angcorr.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_angcorr.ConerRadius = 5;
-            this.ucCombox_angcorr.DropPanelHeight = -1;
-            this.ucCombox_angcorr.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_angcorr.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_angcorr.IsRadius = true;
-            this.ucCombox_angcorr.IsShowRect = true;
-            this.ucCombox_angcorr.ItemWidth = 70;
-            this.ucCombox_angcorr.Location = new System.Drawing.Point(202, 26);
-            this.ucCombox_angcorr.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_angcorr.Name = "ucCombox_angcorr";
-            this.ucCombox_angcorr.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_angcorr.RectWidth = 1;
-            this.ucCombox_angcorr.SelectedIndex = -1;
-            this.ucCombox_angcorr.SelectedValue = "";
-            this.ucCombox_angcorr.Size = new System.Drawing.Size(173, 32);
-            this.ucCombox_angcorr.Source = null;
-            this.ucCombox_angcorr.TabIndex = 83;
-            this.ucCombox_angcorr.TextValue = null;
-            this.ucCombox_angcorr.TriangleColor = System.Drawing.Color.Blue;
-            // 
-            // label_adspeed
-            // 
-            this.label_adspeed.AutoSize = true;
-            this.label_adspeed.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_adspeed.ForeColor = System.Drawing.Color.Blue;
-            this.label_adspeed.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_adspeed.Location = new System.Drawing.Point(49, 77);
-            this.label_adspeed.Name = "label_adspeed";
-            this.label_adspeed.Size = new System.Drawing.Size(155, 22);
-            this.label_adspeed.TabIndex = 85;
-            this.label_adspeed.Text = "adc采样速率和增益:";
-            // 
-            // label_trackzero
-            // 
-            this.label_trackzero.AutoSize = true;
-            this.label_trackzero.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_trackzero.ForeColor = System.Drawing.Color.Blue;
-            this.label_trackzero.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_trackzero.Location = new System.Drawing.Point(49, 170);
-            this.label_trackzero.Name = "label_trackzero";
-            this.label_trackzero.Size = new System.Drawing.Size(79, 22);
-            this.label_trackzero.TabIndex = 89;
-            this.label_trackzero.Text = "零点跟踪:";
-            // 
-            // label_autozero
-            // 
-            this.label_autozero.AutoSize = true;
-            this.label_autozero.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_autozero.ForeColor = System.Drawing.Color.Blue;
-            this.label_autozero.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_autozero.Location = new System.Drawing.Point(49, 123);
-            this.label_autozero.Name = "label_autozero";
-            this.label_autozero.Size = new System.Drawing.Size(79, 22);
-            this.label_autozero.TabIndex = 86;
-            this.label_autozero.Text = "归零范围:";
-            // 
-            // ucCombox_autozero
-            // 
-            this.ucCombox_autozero.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_autozero.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_autozero.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_autozero.ConerRadius = 5;
-            this.ucCombox_autozero.DropPanelHeight = -1;
-            this.ucCombox_autozero.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_autozero.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_autozero.IsRadius = true;
-            this.ucCombox_autozero.IsShowRect = true;
-            this.ucCombox_autozero.ItemWidth = 70;
-            this.ucCombox_autozero.Location = new System.Drawing.Point(204, 118);
-            this.ucCombox_autozero.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_autozero.Name = "ucCombox_autozero";
-            this.ucCombox_autozero.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_autozero.RectWidth = 1;
-            this.ucCombox_autozero.SelectedIndex = -1;
-            this.ucCombox_autozero.SelectedValue = "";
-            this.ucCombox_autozero.Size = new System.Drawing.Size(173, 32);
-            this.ucCombox_autozero.Source = null;
-            this.ucCombox_autozero.TabIndex = 88;
-            this.ucCombox_autozero.TextValue = null;
-            this.ucCombox_autozero.TriangleColor = System.Drawing.Color.Blue;
-            // 
-            // ucCombox_trackzero
-            // 
-            this.ucCombox_trackzero.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_trackzero.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_trackzero.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_trackzero.ConerRadius = 5;
-            this.ucCombox_trackzero.DropPanelHeight = -1;
-            this.ucCombox_trackzero.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_trackzero.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_trackzero.IsRadius = true;
-            this.ucCombox_trackzero.IsShowRect = true;
-            this.ucCombox_trackzero.ItemWidth = 70;
-            this.ucCombox_trackzero.Location = new System.Drawing.Point(205, 165);
-            this.ucCombox_trackzero.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_trackzero.Name = "ucCombox_trackzero";
-            this.ucCombox_trackzero.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_trackzero.RectWidth = 1;
-            this.ucCombox_trackzero.SelectedIndex = -1;
-            this.ucCombox_trackzero.SelectedValue = "";
-            this.ucCombox_trackzero.Size = new System.Drawing.Size(173, 32);
-            this.ucCombox_trackzero.Source = null;
-            this.ucCombox_trackzero.TabIndex = 87;
-            this.ucCombox_trackzero.TextValue = null;
-            this.ucCombox_trackzero.TriangleColor = System.Drawing.Color.Blue;
-            // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.ucTextBoxEx_unhook);
-            this.groupBox6.Controls.Add(this.label_unhook);
-            this.groupBox6.Location = new System.Drawing.Point(449, 270);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(432, 76);
-            this.groupBox6.TabIndex = 94;
-            this.groupBox6.TabStop = false;
-            // 
-            // ucTextBoxEx_unhook
-            // 
-            this.ucTextBoxEx_unhook.BackColor = System.Drawing.Color.Transparent;
-            this.ucTextBoxEx_unhook.ConerRadius = 5;
-            this.ucTextBoxEx_unhook.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.ucTextBoxEx_unhook.DecLength = 0;
-            this.ucTextBoxEx_unhook.FillColor = System.Drawing.Color.Empty;
-            this.ucTextBoxEx_unhook.FocusBorderColor = System.Drawing.Color.DodgerBlue;
-            this.ucTextBoxEx_unhook.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucTextBoxEx_unhook.InputText = "";
-            this.ucTextBoxEx_unhook.InputType = HZH_Controls.TextInputType.PositiveInteger;
-            this.ucTextBoxEx_unhook.IsFocusColor = false;
-            this.ucTextBoxEx_unhook.IsRadius = true;
-            this.ucTextBoxEx_unhook.IsShowClearBtn = false;
-            this.ucTextBoxEx_unhook.IsShowKeyboard = false;
-            this.ucTextBoxEx_unhook.IsShowRect = true;
-            this.ucTextBoxEx_unhook.IsShowSearchBtn = false;
-            this.ucTextBoxEx_unhook.KeyBoardType = HZH_Controls.Controls.KeyBoardType.UCKeyBorderAll_EN;
-            this.ucTextBoxEx_unhook.Location = new System.Drawing.Point(204, 26);
-            this.ucTextBoxEx_unhook.Margin = new System.Windows.Forms.Padding(0);
-            this.ucTextBoxEx_unhook.MaxValue = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.ucTextBoxEx_unhook.MinValue = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.ucTextBoxEx_unhook.Name = "ucTextBoxEx_unhook";
-            this.ucTextBoxEx_unhook.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.ucTextBoxEx_unhook.PasswordChar = '\0';
-            this.ucTextBoxEx_unhook.PromptColor = System.Drawing.Color.White;
-            this.ucTextBoxEx_unhook.PromptFont = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.ucTextBoxEx_unhook.PromptText = "";
-            this.ucTextBoxEx_unhook.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.ucTextBoxEx_unhook.RectWidth = 1;
-            this.ucTextBoxEx_unhook.RegexPattern = "";
-            this.ucTextBoxEx_unhook.Size = new System.Drawing.Size(173, 32);
-            this.ucTextBoxEx_unhook.TabIndex = 144;
-            // 
-            // label_unhook
-            // 
-            this.label_unhook.AutoSize = true;
-            this.label_unhook.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_unhook.ForeColor = System.Drawing.Color.Blue;
-            this.label_unhook.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_unhook.Location = new System.Drawing.Point(49, 31);
-            this.label_unhook.Name = "label_unhook";
-            this.label_unhook.Size = new System.Drawing.Size(111, 22);
-            this.label_unhook.TabIndex = 80;
-            this.label_unhook.Text = "脱钩保持时间:";
-            // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.label36);
+            this.groupBox5.Controls.Add(this.label35);
+            this.groupBox5.Controls.Add(this.label34);
             this.groupBox5.Controls.Add(this.ucTextBoxEx_timezero);
             this.groupBox5.Controls.Add(this.ucTextBoxEx_timeback);
             this.groupBox5.Controls.Add(this.ucTextBoxEx_timeoff);
@@ -1229,7 +1036,7 @@
             this.ucTextBoxEx_timezero.IsShowRect = true;
             this.ucTextBoxEx_timezero.IsShowSearchBtn = false;
             this.ucTextBoxEx_timezero.KeyBoardType = HZH_Controls.Controls.KeyBoardType.UCKeyBorderAll_EN;
-            this.ucTextBoxEx_timezero.Location = new System.Drawing.Point(204, 119);
+            this.ucTextBoxEx_timezero.Location = new System.Drawing.Point(169, 117);
             this.ucTextBoxEx_timezero.Margin = new System.Windows.Forms.Padding(0);
             this.ucTextBoxEx_timezero.MaxValue = new decimal(new int[] {
             255,
@@ -1271,7 +1078,7 @@
             this.ucTextBoxEx_timeback.IsShowRect = true;
             this.ucTextBoxEx_timeback.IsShowSearchBtn = false;
             this.ucTextBoxEx_timeback.KeyBoardType = HZH_Controls.Controls.KeyBoardType.UCKeyBorderAll_EN;
-            this.ucTextBoxEx_timeback.Location = new System.Drawing.Point(203, 73);
+            this.ucTextBoxEx_timeback.Location = new System.Drawing.Point(168, 71);
             this.ucTextBoxEx_timeback.Margin = new System.Windows.Forms.Padding(0);
             this.ucTextBoxEx_timeback.MaxValue = new decimal(new int[] {
             255,
@@ -1313,7 +1120,7 @@
             this.ucTextBoxEx_timeoff.IsShowRect = true;
             this.ucTextBoxEx_timeoff.IsShowSearchBtn = false;
             this.ucTextBoxEx_timeoff.KeyBoardType = HZH_Controls.Controls.KeyBoardType.UCKeyBorderAll_EN;
-            this.ucTextBoxEx_timeoff.Location = new System.Drawing.Point(202, 27);
+            this.ucTextBoxEx_timeoff.Location = new System.Drawing.Point(167, 25);
             this.ucTextBoxEx_timeoff.Margin = new System.Windows.Forms.Padding(0);
             this.ucTextBoxEx_timeoff.MaxValue = new decimal(new int[] {
             255,
@@ -1343,11 +1150,11 @@
             this.label_timeoff.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_timeoff.ForeColor = System.Drawing.Color.Blue;
             this.label_timeoff.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_timeoff.Location = new System.Drawing.Point(49, 31);
+            this.label_timeoff.Location = new System.Drawing.Point(44, 30);
             this.label_timeoff.Name = "label_timeoff";
-            this.label_timeoff.Size = new System.Drawing.Size(154, 22);
+            this.label_timeoff.Size = new System.Drawing.Size(122, 22);
             this.label_timeoff.TabIndex = 64;
-            this.label_timeoff.Text = "自动关机时间(min):";
+            this.label_timeoff.Text = "自动关机(min):";
             // 
             // label_timeback
             // 
@@ -1355,11 +1162,11 @@
             this.label_timeback.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_timeback.ForeColor = System.Drawing.Color.Blue;
             this.label_timeback.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_timeback.Location = new System.Drawing.Point(49, 77);
+            this.label_timeback.Location = new System.Drawing.Point(44, 76);
             this.label_timeback.Name = "label_timeback";
-            this.label_timeback.Size = new System.Drawing.Size(147, 22);
+            this.label_timeback.Size = new System.Drawing.Size(115, 22);
             this.label_timeback.TabIndex = 65;
-            this.label_timeback.Text = "自动关背光时间(s):";
+            this.label_timeback.Text = "自动关背光(s):";
             // 
             // label_timezero
             // 
@@ -1367,11 +1174,11 @@
             this.label_timezero.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_timezero.ForeColor = System.Drawing.Color.Blue;
             this.label_timezero.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_timezero.Location = new System.Drawing.Point(49, 123);
+            this.label_timezero.Location = new System.Drawing.Point(44, 122);
             this.label_timezero.Name = "label_timezero";
-            this.label_timezero.Size = new System.Drawing.Size(131, 22);
+            this.label_timezero.Size = new System.Drawing.Size(99, 22);
             this.label_timezero.TabIndex = 73;
-            this.label_timezero.Text = "自动归零时间(s):";
+            this.label_timezero.Text = "自动归零(s):";
             // 
             // groupBox4
             // 
@@ -1381,9 +1188,9 @@
             this.groupBox4.Controls.Add(this.ucCombox_disptype);
             this.groupBox4.Controls.Add(this.ucCombox_displan);
             this.groupBox4.Controls.Add(this.label_displan);
-            this.groupBox4.Location = new System.Drawing.Point(449, -1);
+            this.groupBox4.Location = new System.Drawing.Point(461, 349);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(432, 172);
+            this.groupBox4.Size = new System.Drawing.Size(450, 172);
             this.groupBox4.TabIndex = 92;
             this.groupBox4.TabStop = false;
             // 
@@ -1411,7 +1218,7 @@
             this.ucCombox_disptheme.IsRadius = true;
             this.ucCombox_disptheme.IsShowRect = true;
             this.ucCombox_disptheme.ItemWidth = 70;
-            this.ucCombox_disptheme.Location = new System.Drawing.Point(204, 72);
+            this.ucCombox_disptheme.Location = new System.Drawing.Point(190, 72);
             this.ucCombox_disptheme.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ucCombox_disptheme.Name = "ucCombox_disptheme";
             this.ucCombox_disptheme.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -1448,7 +1255,7 @@
             this.ucCombox_disptype.IsRadius = true;
             this.ucCombox_disptype.IsShowRect = true;
             this.ucCombox_disptype.ItemWidth = 70;
-            this.ucCombox_disptype.Location = new System.Drawing.Point(203, 26);
+            this.ucCombox_disptype.Location = new System.Drawing.Point(189, 26);
             this.ucCombox_disptype.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ucCombox_disptype.Name = "ucCombox_disptype";
             this.ucCombox_disptype.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -1473,7 +1280,7 @@
             this.ucCombox_displan.IsRadius = true;
             this.ucCombox_displan.IsShowRect = true;
             this.ucCombox_displan.ItemWidth = 70;
-            this.ucCombox_displan.Location = new System.Drawing.Point(205, 118);
+            this.ucCombox_displan.Location = new System.Drawing.Point(191, 118);
             this.ucCombox_displan.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ucCombox_displan.Name = "ucCombox_displan";
             this.ucCombox_displan.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -1516,7 +1323,7 @@
             this.label_accmode.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_accmode.ForeColor = System.Drawing.Color.Blue;
             this.label_accmode.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_accmode.Location = new System.Drawing.Point(49, 31);
+            this.label_accmode.Location = new System.Drawing.Point(44, 31);
             this.label_accmode.Name = "label_accmode";
             this.label_accmode.Size = new System.Drawing.Size(79, 22);
             this.label_accmode.TabIndex = 63;
@@ -1528,7 +1335,7 @@
             this.label_alarmode.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_alarmode.ForeColor = System.Drawing.Color.Blue;
             this.label_alarmode.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_alarmode.Location = new System.Drawing.Point(49, 77);
+            this.label_alarmode.Location = new System.Drawing.Point(44, 77);
             this.label_alarmode.Name = "label_alarmode";
             this.label_alarmode.Size = new System.Drawing.Size(111, 22);
             this.label_alarmode.TabIndex = 66;
@@ -1546,7 +1353,7 @@
             this.ucCombox_alarmode.IsRadius = true;
             this.ucCombox_alarmode.IsShowRect = true;
             this.ucCombox_alarmode.ItemWidth = 70;
-            this.ucCombox_alarmode.Location = new System.Drawing.Point(203, 72);
+            this.ucCombox_alarmode.Location = new System.Drawing.Point(167, 72);
             this.ucCombox_alarmode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ucCombox_alarmode.Name = "ucCombox_alarmode";
             this.ucCombox_alarmode.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -1571,7 +1378,7 @@
             this.ucCombox_accmode.IsRadius = true;
             this.ucCombox_accmode.IsShowRect = true;
             this.ucCombox_accmode.ItemWidth = 20;
-            this.ucCombox_accmode.Location = new System.Drawing.Point(202, 26);
+            this.ucCombox_accmode.Location = new System.Drawing.Point(166, 26);
             this.ucCombox_accmode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ucCombox_accmode.Name = "ucCombox_accmode";
             this.ucCombox_accmode.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -1586,6 +1393,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label33);
+            this.groupBox2.Controls.Add(this.label32);
             this.groupBox2.Controls.Add(this.ucTextBoxEx_heartcycle);
             this.groupBox2.Controls.Add(this.ucTextBoxEx_heartcount);
             this.groupBox2.Controls.Add(this.label_heartcycle);
@@ -1616,7 +1425,7 @@
             this.ucTextBoxEx_heartcycle.IsShowRect = true;
             this.ucTextBoxEx_heartcycle.IsShowSearchBtn = false;
             this.ucTextBoxEx_heartcycle.KeyBoardType = HZH_Controls.Controls.KeyBoardType.UCKeyBorderAll_EN;
-            this.ucTextBoxEx_heartcycle.Location = new System.Drawing.Point(204, 118);
+            this.ucTextBoxEx_heartcycle.Location = new System.Drawing.Point(166, 114);
             this.ucTextBoxEx_heartcycle.Margin = new System.Windows.Forms.Padding(0);
             this.ucTextBoxEx_heartcycle.MaxValue = new decimal(new int[] {
             65535,
@@ -1658,7 +1467,7 @@
             this.ucTextBoxEx_heartcount.IsShowRect = true;
             this.ucTextBoxEx_heartcount.IsShowSearchBtn = false;
             this.ucTextBoxEx_heartcount.KeyBoardType = HZH_Controls.Controls.KeyBoardType.UCKeyBorderAll_EN;
-            this.ucTextBoxEx_heartcount.Location = new System.Drawing.Point(203, 72);
+            this.ucTextBoxEx_heartcount.Location = new System.Drawing.Point(165, 68);
             this.ucTextBoxEx_heartcount.Margin = new System.Windows.Forms.Padding(0);
             this.ucTextBoxEx_heartcount.MaxValue = new decimal(new int[] {
             255,
@@ -1688,7 +1497,7 @@
             this.label_heartcycle.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_heartcycle.ForeColor = System.Drawing.Color.Blue;
             this.label_heartcycle.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_heartcycle.Location = new System.Drawing.Point(49, 123);
+            this.label_heartcycle.Location = new System.Drawing.Point(44, 122);
             this.label_heartcycle.Name = "label_heartcycle";
             this.label_heartcycle.Size = new System.Drawing.Size(115, 22);
             this.label_heartcycle.TabIndex = 59;
@@ -1700,7 +1509,7 @@
             this.label_heart.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_heart.ForeColor = System.Drawing.Color.Blue;
             this.label_heart.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_heart.Location = new System.Drawing.Point(49, 31);
+            this.label_heart.Location = new System.Drawing.Point(44, 30);
             this.label_heart.Name = "label_heart";
             this.label_heart.Size = new System.Drawing.Size(79, 22);
             this.label_heart.TabIndex = 52;
@@ -1712,7 +1521,7 @@
             this.label_heartcount.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_heartcount.ForeColor = System.Drawing.Color.Blue;
             this.label_heartcount.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_heartcount.Location = new System.Drawing.Point(49, 77);
+            this.label_heartcount.Location = new System.Drawing.Point(44, 76);
             this.label_heartcount.Name = "label_heartcount";
             this.label_heartcount.Size = new System.Drawing.Size(111, 22);
             this.label_heartcount.TabIndex = 53;
@@ -1730,7 +1539,7 @@
             this.ucCombox_heart.IsRadius = true;
             this.ucCombox_heart.IsShowRect = true;
             this.ucCombox_heart.ItemWidth = 70;
-            this.ucCombox_heart.Location = new System.Drawing.Point(203, 26);
+            this.ucCombox_heart.Location = new System.Drawing.Point(165, 22);
             this.ucCombox_heart.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ucCombox_heart.Name = "ucCombox_heart";
             this.ucCombox_heart.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -1764,7 +1573,7 @@
             this.label_fifomode.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_fifomode.ForeColor = System.Drawing.Color.Blue;
             this.label_fifomode.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_fifomode.Location = new System.Drawing.Point(49, 31);
+            this.label_fifomode.Location = new System.Drawing.Point(44, 31);
             this.label_fifomode.Name = "label_fifomode";
             this.label_fifomode.Size = new System.Drawing.Size(79, 22);
             this.label_fifomode.TabIndex = 51;
@@ -1776,7 +1585,7 @@
             this.label_fiforec.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_fiforec.ForeColor = System.Drawing.Color.Blue;
             this.label_fiforec.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_fiforec.Location = new System.Drawing.Point(49, 77);
+            this.label_fiforec.Location = new System.Drawing.Point(44, 77);
             this.label_fiforec.Name = "label_fiforec";
             this.label_fiforec.Size = new System.Drawing.Size(79, 22);
             this.label_fiforec.TabIndex = 54;
@@ -1788,7 +1597,7 @@
             this.label_fifospeed.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.label_fifospeed.ForeColor = System.Drawing.Color.Blue;
             this.label_fifospeed.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_fifospeed.Location = new System.Drawing.Point(49, 123);
+            this.label_fifospeed.Location = new System.Drawing.Point(44, 123);
             this.label_fifospeed.Name = "label_fifospeed";
             this.label_fifospeed.Size = new System.Drawing.Size(79, 22);
             this.label_fifospeed.TabIndex = 55;
@@ -1806,7 +1615,7 @@
             this.ucCombox_fifospeed.IsRadius = true;
             this.ucCombox_fifospeed.IsShowRect = true;
             this.ucCombox_fifospeed.ItemWidth = 70;
-            this.ucCombox_fifospeed.Location = new System.Drawing.Point(204, 118);
+            this.ucCombox_fifospeed.Location = new System.Drawing.Point(166, 117);
             this.ucCombox_fifospeed.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ucCombox_fifospeed.Name = "ucCombox_fifospeed";
             this.ucCombox_fifospeed.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -1831,7 +1640,7 @@
             this.ucCombox_fiforec.IsRadius = true;
             this.ucCombox_fiforec.IsShowRect = true;
             this.ucCombox_fiforec.ItemWidth = 70;
-            this.ucCombox_fiforec.Location = new System.Drawing.Point(203, 72);
+            this.ucCombox_fiforec.Location = new System.Drawing.Point(165, 71);
             this.ucCombox_fiforec.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ucCombox_fiforec.Name = "ucCombox_fiforec";
             this.ucCombox_fiforec.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -1856,7 +1665,7 @@
             this.ucCombox_fifomode.IsRadius = true;
             this.ucCombox_fifomode.IsShowRect = true;
             this.ucCombox_fifomode.ItemWidth = 20;
-            this.ucCombox_fifomode.Location = new System.Drawing.Point(203, 26);
+            this.ucCombox_fifomode.Location = new System.Drawing.Point(165, 25);
             this.ucCombox_fifomode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ucCombox_fifomode.Name = "ucCombox_fifomode";
             this.ucCombox_fifomode.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -1873,7 +1682,7 @@
             // 
             this.bt_UpdateMode.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bt_UpdateMode.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_UpdateMode.Location = new System.Drawing.Point(913, 647);
+            this.bt_UpdateMode.Location = new System.Drawing.Point(781, 643);
             this.bt_UpdateMode.Name = "bt_UpdateMode";
             this.bt_UpdateMode.Size = new System.Drawing.Size(100, 50);
             this.bt_UpdateMode.TabIndex = 75;
@@ -2154,6 +1963,60 @@
             this.groupBox8.Size = new System.Drawing.Size(1027, 223);
             this.groupBox8.TabIndex = 138;
             this.groupBox8.TabStop = false;
+            // 
+            // label_tip
+            // 
+            this.label_tip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_tip.AutoSize = true;
+            this.label_tip.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_tip.ForeColor = System.Drawing.Color.Blue;
+            this.label_tip.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_tip.Location = new System.Drawing.Point(549, 173);
+            this.label_tip.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_tip.Name = "label_tip";
+            this.label_tip.Size = new System.Drawing.Size(189, 21);
+            this.label_tip.TabIndex = 145;
+            this.label_tip.Text = "请确认本地WIFI密码正确";
+            this.label_tip.Visible = false;
+            // 
+            // label_wirelessSelection
+            // 
+            this.label_wirelessSelection.AutoSize = true;
+            this.label_wirelessSelection.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.label_wirelessSelection.ForeColor = System.Drawing.Color.Blue;
+            this.label_wirelessSelection.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_wirelessSelection.Location = new System.Drawing.Point(549, 82);
+            this.label_wirelessSelection.Name = "label_wirelessSelection";
+            this.label_wirelessSelection.Size = new System.Drawing.Size(79, 22);
+            this.label_wirelessSelection.TabIndex = 143;
+            this.label_wirelessSelection.Text = "配置选择:";
+            // 
+            // ucCombox_wirelessSelection
+            // 
+            this.ucCombox_wirelessSelection.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_wirelessSelection.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessSelection.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_wirelessSelection.ConerRadius = 5;
+            this.ucCombox_wirelessSelection.DropPanelHeight = -1;
+            this.ucCombox_wirelessSelection.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessSelection.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_wirelessSelection.IsRadius = true;
+            this.ucCombox_wirelessSelection.IsShowRect = true;
+            this.ucCombox_wirelessSelection.ItemWidth = 70;
+            this.ucCombox_wirelessSelection.Location = new System.Drawing.Point(704, 77);
+            this.ucCombox_wirelessSelection.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_wirelessSelection.Name = "ucCombox_wirelessSelection";
+            this.ucCombox_wirelessSelection.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessSelection.RectWidth = 1;
+            this.ucCombox_wirelessSelection.SelectedIndex = -1;
+            this.ucCombox_wirelessSelection.SelectedValue = "";
+            this.ucCombox_wirelessSelection.Size = new System.Drawing.Size(173, 32);
+            this.ucCombox_wirelessSelection.Source = null;
+            this.ucCombox_wirelessSelection.TabIndex = 144;
+            this.ucCombox_wirelessSelection.TextValue = null;
+            this.ucCombox_wirelessSelection.TriangleColor = System.Drawing.Color.Blue;
+            this.ucCombox_wirelessSelection.SelectedChangedEvent += new System.EventHandler(this.ucCombox_wirelessSelection_SelectedChangedEvent);
             // 
             // label_wifimode
             // 
@@ -2550,53 +2413,680 @@
             this.label_addr.TabIndex = 22;
             this.label_addr.Text = "站点地址：";
             // 
-            // tabPage4
+            // tabPage5
             // 
-            this.tabPage4.Controls.Add(this.label39);
-            this.tabPage4.Controls.Add(this.groupBox20);
-            this.tabPage4.Controls.Add(this.groupBox19);
-            this.tabPage4.Controls.Add(this.groupBox18);
-            this.tabPage4.Controls.Add(this.groupBox17);
-            this.tabPage4.Controls.Add(this.label31);
-            this.tabPage4.Controls.Add(this.label30);
-            this.tabPage4.Controls.Add(this.label29);
-            this.tabPage4.Controls.Add(this.label28);
-            this.tabPage4.Controls.Add(this.label27);
-            this.tabPage4.Controls.Add(this.label26);
-            this.tabPage4.Controls.Add(this.label25);
-            this.tabPage4.Controls.Add(this.label24);
-            this.tabPage4.Controls.Add(this.label23);
-            this.tabPage4.Controls.Add(this.groupBox16);
-            this.tabPage4.Controls.Add(this.groupBox15);
-            this.tabPage4.Controls.Add(this.label2);
-            this.tabPage4.Controls.Add(this.groupBox14);
-            this.tabPage4.Controls.Add(this.groupBox13);
-            this.tabPage4.Controls.Add(this.btn_SuperUpdate);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1033, 713);
-            this.tabPage4.TabIndex = 2;
-            this.tabPage4.Text = "高级配置";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.tabPage5.Controls.Add(this.btn_UpdateTicket);
+            this.tabPage5.Controls.Add(this.dataGridView2);
+            this.tabPage5.Controls.Add(this.groupBox21);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(1033, 713);
+            this.tabPage5.TabIndex = 3;
+            this.tabPage5.Text = "工单设置";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // btn_UpdateTicket
+            // 
+            this.btn_UpdateTicket.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btn_UpdateTicket.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.btn_UpdateTicket.Location = new System.Drawing.Point(925, 631);
+            this.btn_UpdateTicket.Name = "btn_UpdateTicket";
+            this.btn_UpdateTicket.Size = new System.Drawing.Size(100, 50);
+            this.btn_UpdateTicket.TabIndex = 56;
+            this.btn_UpdateTicket.Text = "更 新";
+            this.btn_UpdateTicket.UseVisualStyleBackColor = true;
+            this.btn_UpdateTicket.Click += new System.EventHandler(this.btn_UpdateTicket_Click);
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column10,
+            this.Column11,
+            this.Column12,
+            this.Column13,
+            this.Column14,
+            this.Column15,
+            this.Column16,
+            this.Column17,
+            this.Column18});
+            this.dataGridView2.Location = new System.Drawing.Point(6, 89);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.RowTemplate.Height = 23;
+            this.dataGridView2.Size = new System.Drawing.Size(888, 592);
+            this.dataGridView2.TabIndex = 1;
+            this.dataGridView2.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellEndEdit);
+            this.dataGridView2.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView2_CellValidating);
+            this.dataGridView2.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView2_EditingControlShowing);
+            // 
+            // Column10
+            // 
+            this.Column10.HeaderText = "序号";
+            this.Column10.Name = "Column10";
+            // 
+            // Column11
+            // 
+            this.Column11.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.Column11.HeaderText = "Ax模式";
+            this.Column11.Items.AddRange(new object[] {
+            "SN",
+            "SA",
+            "MN",
+            "MA"});
+            this.Column11.Name = "Column11";
+            this.Column11.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column11.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Column12
+            // 
+            this.Column12.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.Column12.HeaderText = "Mx模式";
+            this.Column12.Items.AddRange(new object[] {
+            "M0",
+            "M1",
+            "M2",
+            "M3",
+            "M4",
+            "M5",
+            "M6",
+            "M7",
+            "M8",
+            "M9"});
+            this.Column12.Name = "Column12";
+            this.Column12.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column12.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Column13
+            // 
+            this.Column13.HeaderText = "报警值1";
+            this.Column13.Name = "Column13";
+            // 
+            // Column14
+            // 
+            this.Column14.HeaderText = "报警值2";
+            this.Column14.Name = "Column14";
+            // 
+            // Column15
+            // 
+            this.Column15.HeaderText = "报警值3";
+            this.Column15.Name = "Column15";
+            // 
+            // Column16
+            // 
+            this.Column16.HeaderText = "螺栓数量";
+            this.Column16.Name = "Column16";
+            // 
+            // Column17
+            // 
+            this.Column17.HeaderText = "工单号";
+            this.Column17.Name = "Column17";
+            // 
+            // Column18
+            // 
+            this.Column18.HeaderText = "序列号";
+            this.Column18.Name = "Column18";
+            // 
+            // groupBox21
+            // 
+            this.groupBox21.Controls.Add(this.ucCombox_screwMax);
+            this.groupBox21.Controls.Add(this.ucCombox_runMode);
+            this.groupBox21.Controls.Add(this.label41);
+            this.groupBox21.Controls.Add(this.label40);
+            this.groupBox21.Location = new System.Drawing.Point(6, 19);
+            this.groupBox21.Name = "groupBox21";
+            this.groupBox21.Size = new System.Drawing.Size(1021, 64);
+            this.groupBox21.TabIndex = 0;
+            this.groupBox21.TabStop = false;
+            this.groupBox21.Text = "基本配置";
+            // 
+            // ucCombox_screwMax
+            // 
+            this.ucCombox_screwMax.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_screwMax.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_screwMax.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_screwMax.ConerRadius = 5;
+            this.ucCombox_screwMax.DropPanelHeight = -1;
+            this.ucCombox_screwMax.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_screwMax.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_screwMax.IsRadius = true;
+            this.ucCombox_screwMax.IsShowRect = true;
+            this.ucCombox_screwMax.ItemWidth = 70;
+            this.ucCombox_screwMax.Location = new System.Drawing.Point(206, 22);
+            this.ucCombox_screwMax.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_screwMax.Name = "ucCombox_screwMax";
+            this.ucCombox_screwMax.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_screwMax.RectWidth = 1;
+            this.ucCombox_screwMax.SelectedIndex = -1;
+            this.ucCombox_screwMax.SelectedValue = "";
+            this.ucCombox_screwMax.Size = new System.Drawing.Size(124, 32);
+            this.ucCombox_screwMax.Source = null;
+            this.ucCombox_screwMax.TabIndex = 86;
+            this.ucCombox_screwMax.TextValue = null;
+            this.ucCombox_screwMax.TriangleColor = System.Drawing.Color.Blue;
+            this.ucCombox_screwMax.SelectedChangedEvent += new System.EventHandler(this.ucCombox_screwMax_SelectedChangedEvent);
+            // 
+            // ucCombox_runMode
+            // 
+            this.ucCombox_runMode.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_runMode.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_runMode.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_runMode.ConerRadius = 5;
+            this.ucCombox_runMode.DropPanelHeight = -1;
+            this.ucCombox_runMode.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_runMode.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.ucCombox_runMode.IsRadius = true;
+            this.ucCombox_runMode.IsShowRect = true;
+            this.ucCombox_runMode.ItemWidth = 70;
+            this.ucCombox_runMode.Location = new System.Drawing.Point(572, 22);
+            this.ucCombox_runMode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_runMode.Name = "ucCombox_runMode";
+            this.ucCombox_runMode.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_runMode.RectWidth = 1;
+            this.ucCombox_runMode.SelectedIndex = -1;
+            this.ucCombox_runMode.SelectedValue = "";
+            this.ucCombox_runMode.Size = new System.Drawing.Size(141, 32);
+            this.ucCombox_runMode.Source = null;
+            this.ucCombox_runMode.TabIndex = 83;
+            this.ucCombox_runMode.TextValue = null;
+            this.ucCombox_runMode.TriangleColor = System.Drawing.Color.Blue;
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.label41.ForeColor = System.Drawing.Color.Blue;
+            this.label41.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label41.Location = new System.Drawing.Point(443, 27);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(122, 22);
+            this.label41.TabIndex = 79;
+            this.label41.Text = "执行工单模式：";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.label40.ForeColor = System.Drawing.Color.Blue;
+            this.label40.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label40.Location = new System.Drawing.Point(19, 27);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(180, 22);
+            this.label40.TabIndex = 78;
+            this.label40.Text = "离线工单数量（1-32）:";
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.btn_SuperUpdate);
+            this.tabPage6.Controls.Add(this.groupBox10);
+            this.tabPage6.Controls.Add(this.groupBox24);
+            this.tabPage6.Controls.Add(this.groupBox6);
+            this.tabPage6.Controls.Add(this.groupBox17);
+            this.tabPage6.Controls.Add(this.label39);
+            this.tabPage6.Controls.Add(this.groupBox20);
+            this.tabPage6.Controls.Add(this.groupBox19);
+            this.tabPage6.Controls.Add(this.label31);
+            this.tabPage6.Controls.Add(this.label30);
+            this.tabPage6.Controls.Add(this.label29);
+            this.tabPage6.Controls.Add(this.label28);
+            this.tabPage6.Controls.Add(this.label27);
+            this.tabPage6.Controls.Add(this.label26);
+            this.tabPage6.Controls.Add(this.label25);
+            this.tabPage6.Controls.Add(this.label24);
+            this.tabPage6.Controls.Add(this.label23);
+            this.tabPage6.Controls.Add(this.groupBox16);
+            this.tabPage6.Controls.Add(this.groupBox15);
+            this.tabPage6.Controls.Add(this.label2);
+            this.tabPage6.Controls.Add(this.groupBox14);
+            this.tabPage6.Controls.Add(this.groupBox13);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(1033, 713);
+            this.tabPage6.TabIndex = 4;
+            this.tabPage6.Text = "工厂设置";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // btn_SuperUpdate
+            // 
+            this.btn_SuperUpdate.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btn_SuperUpdate.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.btn_SuperUpdate.Location = new System.Drawing.Point(883, 642);
+            this.btn_SuperUpdate.Name = "btn_SuperUpdate";
+            this.btn_SuperUpdate.Size = new System.Drawing.Size(100, 50);
+            this.btn_SuperUpdate.TabIndex = 151;
+            this.btn_SuperUpdate.Text = "更 新";
+            this.btn_SuperUpdate.UseVisualStyleBackColor = true;
+            this.btn_SuperUpdate.Click += new System.EventHandler(this.btn_SuperUpdate_Click);
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.ucCombox_adspeed);
+            this.groupBox10.Controls.Add(this.label_adspeed);
+            this.groupBox10.Controls.Add(this.label_trackzero);
+            this.groupBox10.Controls.Add(this.label_autozero);
+            this.groupBox10.Controls.Add(this.ucCombox_autozero);
+            this.groupBox10.Controls.Add(this.ucCombox_trackzero);
+            this.groupBox10.Location = new System.Drawing.Point(36, 436);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(364, 182);
+            this.groupBox10.TabIndex = 150;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Visible = false;
+            // 
+            // ucCombox_adspeed
+            // 
+            this.ucCombox_adspeed.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_adspeed.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_adspeed.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_adspeed.ConerRadius = 5;
+            this.ucCombox_adspeed.DropPanelHeight = -1;
+            this.ucCombox_adspeed.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_adspeed.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_adspeed.IsRadius = true;
+            this.ucCombox_adspeed.IsShowRect = true;
+            this.ucCombox_adspeed.ItemWidth = 70;
+            this.ucCombox_adspeed.Location = new System.Drawing.Point(148, 22);
+            this.ucCombox_adspeed.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_adspeed.Name = "ucCombox_adspeed";
+            this.ucCombox_adspeed.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_adspeed.RectWidth = 1;
+            this.ucCombox_adspeed.SelectedIndex = -1;
+            this.ucCombox_adspeed.SelectedValue = "";
+            this.ucCombox_adspeed.Size = new System.Drawing.Size(159, 32);
+            this.ucCombox_adspeed.Source = null;
+            this.ucCombox_adspeed.TabIndex = 82;
+            this.ucCombox_adspeed.TextValue = null;
+            this.ucCombox_adspeed.TriangleColor = System.Drawing.Color.Blue;
+            // 
+            // label_adspeed
+            // 
+            this.label_adspeed.AutoSize = true;
+            this.label_adspeed.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_adspeed.ForeColor = System.Drawing.Color.Blue;
+            this.label_adspeed.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_adspeed.Location = new System.Drawing.Point(25, 27);
+            this.label_adspeed.Name = "label_adspeed";
+            this.label_adspeed.Size = new System.Drawing.Size(110, 21);
+            this.label_adspeed.TabIndex = 85;
+            this.label_adspeed.Text = "扭矩采样速度:";
+            // 
+            // label_trackzero
+            // 
+            this.label_trackzero.AutoSize = true;
+            this.label_trackzero.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_trackzero.ForeColor = System.Drawing.Color.Blue;
+            this.label_trackzero.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_trackzero.Location = new System.Drawing.Point(25, 119);
+            this.label_trackzero.Name = "label_trackzero";
+            this.label_trackzero.Size = new System.Drawing.Size(78, 21);
+            this.label_trackzero.TabIndex = 89;
+            this.label_trackzero.Text = "零点跟踪:";
+            // 
+            // label_autozero
+            // 
+            this.label_autozero.AutoSize = true;
+            this.label_autozero.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_autozero.ForeColor = System.Drawing.Color.Blue;
+            this.label_autozero.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_autozero.Location = new System.Drawing.Point(25, 73);
+            this.label_autozero.Name = "label_autozero";
+            this.label_autozero.Size = new System.Drawing.Size(78, 21);
+            this.label_autozero.TabIndex = 86;
+            this.label_autozero.Text = "归零范围:";
+            // 
+            // ucCombox_autozero
+            // 
+            this.ucCombox_autozero.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_autozero.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_autozero.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_autozero.ConerRadius = 5;
+            this.ucCombox_autozero.DropPanelHeight = -1;
+            this.ucCombox_autozero.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_autozero.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_autozero.IsRadius = true;
+            this.ucCombox_autozero.IsShowRect = true;
+            this.ucCombox_autozero.ItemWidth = 70;
+            this.ucCombox_autozero.Location = new System.Drawing.Point(148, 68);
+            this.ucCombox_autozero.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_autozero.Name = "ucCombox_autozero";
+            this.ucCombox_autozero.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_autozero.RectWidth = 1;
+            this.ucCombox_autozero.SelectedIndex = -1;
+            this.ucCombox_autozero.SelectedValue = "";
+            this.ucCombox_autozero.Size = new System.Drawing.Size(159, 32);
+            this.ucCombox_autozero.Source = null;
+            this.ucCombox_autozero.TabIndex = 88;
+            this.ucCombox_autozero.TextValue = null;
+            this.ucCombox_autozero.TriangleColor = System.Drawing.Color.Blue;
+            // 
+            // ucCombox_trackzero
+            // 
+            this.ucCombox_trackzero.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_trackzero.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_trackzero.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_trackzero.ConerRadius = 5;
+            this.ucCombox_trackzero.DropPanelHeight = -1;
+            this.ucCombox_trackzero.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_trackzero.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_trackzero.IsRadius = true;
+            this.ucCombox_trackzero.IsShowRect = true;
+            this.ucCombox_trackzero.ItemWidth = 70;
+            this.ucCombox_trackzero.Location = new System.Drawing.Point(148, 114);
+            this.ucCombox_trackzero.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_trackzero.Name = "ucCombox_trackzero";
+            this.ucCombox_trackzero.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_trackzero.RectWidth = 1;
+            this.ucCombox_trackzero.SelectedIndex = -1;
+            this.ucCombox_trackzero.SelectedValue = "";
+            this.ucCombox_trackzero.Size = new System.Drawing.Size(159, 32);
+            this.ucCombox_trackzero.Source = null;
+            this.ucCombox_trackzero.TabIndex = 87;
+            this.ucCombox_trackzero.TextValue = null;
+            this.ucCombox_trackzero.TriangleColor = System.Drawing.Color.Blue;
+            // 
+            // groupBox24
+            // 
+            this.groupBox24.Controls.Add(this.ucCombox_wirelessEn);
+            this.groupBox24.Controls.Add(this.label_wirelessEn);
+            this.groupBox24.Controls.Add(this.ucCombox_usbEN);
+            this.groupBox24.Controls.Add(this.label_usbEn);
+            this.groupBox24.Location = new System.Drawing.Point(36, 304);
+            this.groupBox24.Name = "groupBox24";
+            this.groupBox24.Size = new System.Drawing.Size(364, 126);
+            this.groupBox24.TabIndex = 149;
+            this.groupBox24.TabStop = false;
+            // 
+            // ucCombox_wirelessEn
+            // 
+            this.ucCombox_wirelessEn.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_wirelessEn.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessEn.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_wirelessEn.ConerRadius = 5;
+            this.ucCombox_wirelessEn.DropPanelHeight = -1;
+            this.ucCombox_wirelessEn.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessEn.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_wirelessEn.IsRadius = true;
+            this.ucCombox_wirelessEn.IsShowRect = true;
+            this.ucCombox_wirelessEn.ItemWidth = 70;
+            this.ucCombox_wirelessEn.Location = new System.Drawing.Point(148, 67);
+            this.ucCombox_wirelessEn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_wirelessEn.Name = "ucCombox_wirelessEn";
+            this.ucCombox_wirelessEn.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_wirelessEn.RectWidth = 1;
+            this.ucCombox_wirelessEn.SelectedIndex = -1;
+            this.ucCombox_wirelessEn.SelectedValue = "";
+            this.ucCombox_wirelessEn.Size = new System.Drawing.Size(159, 32);
+            this.ucCombox_wirelessEn.Source = null;
+            this.ucCombox_wirelessEn.TabIndex = 90;
+            this.ucCombox_wirelessEn.TextValue = null;
+            this.ucCombox_wirelessEn.TriangleColor = System.Drawing.Color.Blue;
+            // 
+            // label_wirelessEn
+            // 
+            this.label_wirelessEn.AutoSize = true;
+            this.label_wirelessEn.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_wirelessEn.ForeColor = System.Drawing.Color.Blue;
+            this.label_wirelessEn.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_wirelessEn.Location = new System.Drawing.Point(20, 77);
+            this.label_wirelessEn.Name = "label_wirelessEn";
+            this.label_wirelessEn.Size = new System.Drawing.Size(110, 21);
+            this.label_wirelessEn.TabIndex = 89;
+            this.label_wirelessEn.Text = "屏蔽无线通信:";
+            // 
+            // ucCombox_usbEN
+            // 
+            this.ucCombox_usbEN.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_usbEN.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_usbEN.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_usbEN.ConerRadius = 5;
+            this.ucCombox_usbEN.DropPanelHeight = -1;
+            this.ucCombox_usbEN.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_usbEN.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_usbEN.IsRadius = true;
+            this.ucCombox_usbEN.IsShowRect = true;
+            this.ucCombox_usbEN.ItemWidth = 70;
+            this.ucCombox_usbEN.Location = new System.Drawing.Point(148, 21);
+            this.ucCombox_usbEN.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_usbEN.Name = "ucCombox_usbEN";
+            this.ucCombox_usbEN.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_usbEN.RectWidth = 1;
+            this.ucCombox_usbEN.SelectedIndex = -1;
+            this.ucCombox_usbEN.SelectedValue = "";
+            this.ucCombox_usbEN.Size = new System.Drawing.Size(159, 32);
+            this.ucCombox_usbEN.Source = null;
+            this.ucCombox_usbEN.TabIndex = 88;
+            this.ucCombox_usbEN.TextValue = null;
+            this.ucCombox_usbEN.TriangleColor = System.Drawing.Color.Blue;
+            // 
+            // label_usbEn
+            // 
+            this.label_usbEn.AutoSize = true;
+            this.label_usbEn.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_usbEn.ForeColor = System.Drawing.Color.Blue;
+            this.label_usbEn.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_usbEn.Location = new System.Drawing.Point(20, 31);
+            this.label_usbEn.Name = "label_usbEn";
+            this.label_usbEn.Size = new System.Drawing.Size(109, 21);
+            this.label_usbEn.TabIndex = 80;
+            this.label_usbEn.Text = "屏蔽USB通信:";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.label50);
+            this.groupBox6.Controls.Add(this.ucTextBoxEx_unhook);
+            this.groupBox6.Controls.Add(this.label_unhook);
+            this.groupBox6.Location = new System.Drawing.Point(36, 219);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(364, 76);
+            this.groupBox6.TabIndex = 148;
+            this.groupBox6.TabStop = false;
+            // 
+            // ucTextBoxEx_unhook
+            // 
+            this.ucTextBoxEx_unhook.BackColor = System.Drawing.Color.Transparent;
+            this.ucTextBoxEx_unhook.ConerRadius = 5;
+            this.ucTextBoxEx_unhook.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.ucTextBoxEx_unhook.DecLength = 0;
+            this.ucTextBoxEx_unhook.FillColor = System.Drawing.Color.Empty;
+            this.ucTextBoxEx_unhook.FocusBorderColor = System.Drawing.Color.DodgerBlue;
+            this.ucTextBoxEx_unhook.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucTextBoxEx_unhook.InputText = "";
+            this.ucTextBoxEx_unhook.InputType = HZH_Controls.TextInputType.PositiveInteger;
+            this.ucTextBoxEx_unhook.IsFocusColor = false;
+            this.ucTextBoxEx_unhook.IsRadius = true;
+            this.ucTextBoxEx_unhook.IsShowClearBtn = false;
+            this.ucTextBoxEx_unhook.IsShowKeyboard = false;
+            this.ucTextBoxEx_unhook.IsShowRect = true;
+            this.ucTextBoxEx_unhook.IsShowSearchBtn = false;
+            this.ucTextBoxEx_unhook.KeyBoardType = HZH_Controls.Controls.KeyBoardType.UCKeyBorderAll_EN;
+            this.ucTextBoxEx_unhook.Location = new System.Drawing.Point(148, 29);
+            this.ucTextBoxEx_unhook.Margin = new System.Windows.Forms.Padding(0);
+            this.ucTextBoxEx_unhook.MaxValue = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.ucTextBoxEx_unhook.MinValue = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.ucTextBoxEx_unhook.Name = "ucTextBoxEx_unhook";
+            this.ucTextBoxEx_unhook.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
+            this.ucTextBoxEx_unhook.PasswordChar = '\0';
+            this.ucTextBoxEx_unhook.PromptColor = System.Drawing.Color.White;
+            this.ucTextBoxEx_unhook.PromptFont = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.ucTextBoxEx_unhook.PromptText = "";
+            this.ucTextBoxEx_unhook.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.ucTextBoxEx_unhook.RectWidth = 1;
+            this.ucTextBoxEx_unhook.RegexPattern = "";
+            this.ucTextBoxEx_unhook.Size = new System.Drawing.Size(134, 32);
+            this.ucTextBoxEx_unhook.TabIndex = 144;
+            // 
+            // label_unhook
+            // 
+            this.label_unhook.AutoSize = true;
+            this.label_unhook.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_unhook.ForeColor = System.Drawing.Color.Blue;
+            this.label_unhook.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_unhook.Location = new System.Drawing.Point(21, 31);
+            this.label_unhook.Name = "label_unhook";
+            this.label_unhook.Size = new System.Drawing.Size(110, 21);
+            this.label_unhook.TabIndex = 80;
+            this.label_unhook.Text = "脱钩保持时间:";
+            // 
+            // groupBox17
+            // 
+            this.groupBox17.Controls.Add(this.ucCombox_capacity);
+            this.groupBox17.Controls.Add(this.ucCombox_calUnit);
+            this.groupBox17.Controls.Add(this.ucCombox_calType);
+            this.groupBox17.Controls.Add(this.label_calType);
+            this.groupBox17.Controls.Add(this.label_capacity);
+            this.groupBox17.Controls.Add(this.label_calUnit);
+            this.groupBox17.Location = new System.Drawing.Point(36, 19);
+            this.groupBox17.Name = "groupBox17";
+            this.groupBox17.Size = new System.Drawing.Size(364, 194);
+            this.groupBox17.TabIndex = 111;
+            this.groupBox17.TabStop = false;
+            // 
+            // ucCombox_capacity
+            // 
+            this.ucCombox_capacity.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_capacity.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_capacity.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_capacity.ConerRadius = 5;
+            this.ucCombox_capacity.DropPanelHeight = -1;
+            this.ucCombox_capacity.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_capacity.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_capacity.IsRadius = true;
+            this.ucCombox_capacity.IsShowRect = true;
+            this.ucCombox_capacity.ItemWidth = 70;
+            this.ucCombox_capacity.Location = new System.Drawing.Point(148, 149);
+            this.ucCombox_capacity.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_capacity.Name = "ucCombox_capacity";
+            this.ucCombox_capacity.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_capacity.RectWidth = 1;
+            this.ucCombox_capacity.SelectedIndex = -1;
+            this.ucCombox_capacity.SelectedValue = "";
+            this.ucCombox_capacity.Size = new System.Drawing.Size(159, 32);
+            this.ucCombox_capacity.Source = null;
+            this.ucCombox_capacity.TabIndex = 86;
+            this.ucCombox_capacity.TextValue = null;
+            this.ucCombox_capacity.TriangleColor = System.Drawing.Color.Blue;
+            // 
+            // ucCombox_calUnit
+            // 
+            this.ucCombox_calUnit.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_calUnit.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_calUnit.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_calUnit.ConerRadius = 5;
+            this.ucCombox_calUnit.DropPanelHeight = -1;
+            this.ucCombox_calUnit.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_calUnit.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_calUnit.IsRadius = true;
+            this.ucCombox_calUnit.IsShowRect = true;
+            this.ucCombox_calUnit.ItemWidth = 70;
+            this.ucCombox_calUnit.Location = new System.Drawing.Point(148, 25);
+            this.ucCombox_calUnit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_calUnit.Name = "ucCombox_calUnit";
+            this.ucCombox_calUnit.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_calUnit.RectWidth = 1;
+            this.ucCombox_calUnit.SelectedIndex = -1;
+            this.ucCombox_calUnit.SelectedValue = "";
+            this.ucCombox_calUnit.Size = new System.Drawing.Size(159, 32);
+            this.ucCombox_calUnit.Source = null;
+            this.ucCombox_calUnit.TabIndex = 85;
+            this.ucCombox_calUnit.TextValue = null;
+            this.ucCombox_calUnit.TriangleColor = System.Drawing.Color.Blue;
+            // 
+            // ucCombox_calType
+            // 
+            this.ucCombox_calType.BackColor = System.Drawing.Color.Transparent;
+            this.ucCombox_calType.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_calType.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ucCombox_calType.ConerRadius = 5;
+            this.ucCombox_calType.DropPanelHeight = -1;
+            this.ucCombox_calType.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_calType.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ucCombox_calType.IsRadius = true;
+            this.ucCombox_calType.IsShowRect = true;
+            this.ucCombox_calType.ItemWidth = 70;
+            this.ucCombox_calType.Location = new System.Drawing.Point(148, 90);
+            this.ucCombox_calType.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ucCombox_calType.Name = "ucCombox_calType";
+            this.ucCombox_calType.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.ucCombox_calType.RectWidth = 1;
+            this.ucCombox_calType.SelectedIndex = -1;
+            this.ucCombox_calType.SelectedValue = "";
+            this.ucCombox_calType.Size = new System.Drawing.Size(159, 32);
+            this.ucCombox_calType.Source = null;
+            this.ucCombox_calType.TabIndex = 84;
+            this.ucCombox_calType.TextValue = null;
+            this.ucCombox_calType.TriangleColor = System.Drawing.Color.Blue;
+            this.ucCombox_calType.SelectedChangedEvent += new System.EventHandler(this.ucCombox_calType_SelectedChangedEvent);
+            // 
+            // label_calType
+            // 
+            this.label_calType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_calType.AutoSize = true;
+            this.label_calType.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_calType.ForeColor = System.Drawing.Color.Blue;
+            this.label_calType.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_calType.Location = new System.Drawing.Point(20, 94);
+            this.label_calType.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_calType.Name = "label_calType";
+            this.label_calType.Size = new System.Drawing.Size(78, 21);
+            this.label_calType.TabIndex = 20;
+            this.label_calType.Text = "标定方式:";
+            // 
+            // label_capacity
+            // 
+            this.label_capacity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_capacity.AutoSize = true;
+            this.label_capacity.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_capacity.ForeColor = System.Drawing.Color.Blue;
+            this.label_capacity.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_capacity.Location = new System.Drawing.Point(20, 154);
+            this.label_capacity.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_capacity.Name = "label_capacity";
+            this.label_capacity.Size = new System.Drawing.Size(78, 21);
+            this.label_capacity.TabIndex = 19;
+            this.label_capacity.Text = "标定量程:";
+            // 
+            // label_calUnit
+            // 
+            this.label_calUnit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_calUnit.AutoSize = true;
+            this.label_calUnit.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_calUnit.ForeColor = System.Drawing.Color.Blue;
+            this.label_calUnit.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label_calUnit.Location = new System.Drawing.Point(20, 30);
+            this.label_calUnit.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_calUnit.Name = "label_calUnit";
+            this.label_calUnit.Size = new System.Drawing.Size(78, 21);
+            this.label_calUnit.TabIndex = 18;
+            this.label_calUnit.Text = "标定单位:";
             // 
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(264, 66);
+            this.label39.Location = new System.Drawing.Point(736, 43);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(23, 12);
-            this.label39.TabIndex = 93;
+            this.label39.TabIndex = 110;
             this.label39.Text = "<=>";
             // 
             // groupBox20
             // 
             this.groupBox20.Controls.Add(this.label38);
             this.groupBox20.Controls.Add(this.tb_adZeroOutput);
-            this.groupBox20.Location = new System.Drawing.Point(299, 42);
+            this.groupBox20.Location = new System.Drawing.Point(771, 19);
             this.groupBox20.Name = "groupBox20";
             this.groupBox20.Size = new System.Drawing.Size(212, 53);
-            this.groupBox20.TabIndex = 92;
+            this.groupBox20.TabIndex = 109;
             this.groupBox20.TabStop = false;
             // 
             // label38
@@ -2654,10 +3144,10 @@
             // 
             this.groupBox19.Controls.Add(this.label37);
             this.groupBox19.Controls.Add(this.tb_adZero);
-            this.groupBox19.Location = new System.Drawing.Point(38, 42);
+            this.groupBox19.Location = new System.Drawing.Point(510, 19);
             this.groupBox19.Name = "groupBox19";
             this.groupBox19.Size = new System.Drawing.Size(212, 53);
-            this.groupBox19.TabIndex = 91;
+            this.groupBox19.TabIndex = 108;
             this.groupBox19.TabStop = false;
             this.groupBox19.Text = "零点内码";
             // 
@@ -2712,277 +3202,85 @@
             this.tb_adZero.Size = new System.Drawing.Size(100, 30);
             this.tb_adZero.TabIndex = 79;
             // 
-            // groupBox18
-            // 
-            this.groupBox18.Controls.Add(this.dateTimePicker_calremind);
-            this.groupBox18.Controls.Add(this.dateTimePicker_caltime);
-            this.groupBox18.Controls.Add(this.label35);
-            this.groupBox18.Controls.Add(this.label34);
-            this.groupBox18.Location = new System.Drawing.Point(649, 285);
-            this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Size = new System.Drawing.Size(290, 182);
-            this.groupBox18.TabIndex = 90;
-            this.groupBox18.TabStop = false;
-            this.groupBox18.Text = "审计校准";
-            // 
-            // dateTimePicker_calremind
-            // 
-            this.dateTimePicker_calremind.Location = new System.Drawing.Point(113, 115);
-            this.dateTimePicker_calremind.Name = "dateTimePicker_calremind";
-            this.dateTimePicker_calremind.Size = new System.Drawing.Size(149, 21);
-            this.dateTimePicker_calremind.TabIndex = 23;
-            // 
-            // dateTimePicker_caltime
-            // 
-            this.dateTimePicker_caltime.Location = new System.Drawing.Point(113, 35);
-            this.dateTimePicker_caltime.Name = "dateTimePicker_caltime";
-            this.dateTimePicker_caltime.Size = new System.Drawing.Size(149, 21);
-            this.dateTimePicker_caltime.TabIndex = 22;
-            // 
-            // label35
-            // 
-            this.label35.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label35.AutoSize = true;
-            this.label35.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label35.ForeColor = System.Drawing.Color.Blue;
-            this.label35.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label35.Location = new System.Drawing.Point(20, 115);
-            this.label35.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(78, 21);
-            this.label35.TabIndex = 21;
-            this.label35.Text = "复校时间:";
-            // 
-            // label34
-            // 
-            this.label34.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label34.AutoSize = true;
-            this.label34.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label34.ForeColor = System.Drawing.Color.Blue;
-            this.label34.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label34.Location = new System.Drawing.Point(20, 35);
-            this.label34.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(78, 21);
-            this.label34.TabIndex = 20;
-            this.label34.Text = "校准时间:";
-            // 
-            // groupBox17
-            // 
-            this.groupBox17.Controls.Add(this.ucCombox_capacity);
-            this.groupBox17.Controls.Add(this.ucCombox_calUnit);
-            this.groupBox17.Controls.Add(this.ucCombox_calType);
-            this.groupBox17.Controls.Add(this.label36);
-            this.groupBox17.Controls.Add(this.label32);
-            this.groupBox17.Controls.Add(this.label33);
-            this.groupBox17.Location = new System.Drawing.Point(649, 63);
-            this.groupBox17.Name = "groupBox17";
-            this.groupBox17.Size = new System.Drawing.Size(290, 194);
-            this.groupBox17.TabIndex = 89;
-            this.groupBox17.TabStop = false;
-            // 
-            // ucCombox_capacity
-            // 
-            this.ucCombox_capacity.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_capacity.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_capacity.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_capacity.ConerRadius = 5;
-            this.ucCombox_capacity.DropPanelHeight = -1;
-            this.ucCombox_capacity.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_capacity.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_capacity.IsRadius = true;
-            this.ucCombox_capacity.IsShowRect = true;
-            this.ucCombox_capacity.ItemWidth = 70;
-            this.ucCombox_capacity.Location = new System.Drawing.Point(148, 149);
-            this.ucCombox_capacity.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_capacity.Name = "ucCombox_capacity";
-            this.ucCombox_capacity.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_capacity.RectWidth = 1;
-            this.ucCombox_capacity.SelectedIndex = -1;
-            this.ucCombox_capacity.SelectedValue = "";
-            this.ucCombox_capacity.Size = new System.Drawing.Size(124, 32);
-            this.ucCombox_capacity.Source = null;
-            this.ucCombox_capacity.TabIndex = 86;
-            this.ucCombox_capacity.TextValue = null;
-            this.ucCombox_capacity.TriangleColor = System.Drawing.Color.Blue;
-            // 
-            // ucCombox_calUnit
-            // 
-            this.ucCombox_calUnit.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_calUnit.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_calUnit.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_calUnit.ConerRadius = 5;
-            this.ucCombox_calUnit.DropPanelHeight = -1;
-            this.ucCombox_calUnit.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_calUnit.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_calUnit.IsRadius = true;
-            this.ucCombox_calUnit.IsShowRect = true;
-            this.ucCombox_calUnit.ItemWidth = 70;
-            this.ucCombox_calUnit.Location = new System.Drawing.Point(148, 25);
-            this.ucCombox_calUnit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_calUnit.Name = "ucCombox_calUnit";
-            this.ucCombox_calUnit.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_calUnit.RectWidth = 1;
-            this.ucCombox_calUnit.SelectedIndex = -1;
-            this.ucCombox_calUnit.SelectedValue = "";
-            this.ucCombox_calUnit.Size = new System.Drawing.Size(124, 32);
-            this.ucCombox_calUnit.Source = null;
-            this.ucCombox_calUnit.TabIndex = 85;
-            this.ucCombox_calUnit.TextValue = null;
-            this.ucCombox_calUnit.TriangleColor = System.Drawing.Color.Blue;
-            // 
-            // ucCombox_calType
-            // 
-            this.ucCombox_calType.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_calType.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_calType.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_calType.ConerRadius = 5;
-            this.ucCombox_calType.DropPanelHeight = -1;
-            this.ucCombox_calType.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_calType.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_calType.IsRadius = true;
-            this.ucCombox_calType.IsShowRect = true;
-            this.ucCombox_calType.ItemWidth = 70;
-            this.ucCombox_calType.Location = new System.Drawing.Point(148, 90);
-            this.ucCombox_calType.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_calType.Name = "ucCombox_calType";
-            this.ucCombox_calType.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_calType.RectWidth = 1;
-            this.ucCombox_calType.SelectedIndex = -1;
-            this.ucCombox_calType.SelectedValue = "";
-            this.ucCombox_calType.Size = new System.Drawing.Size(124, 32);
-            this.ucCombox_calType.Source = null;
-            this.ucCombox_calType.TabIndex = 84;
-            this.ucCombox_calType.TextValue = null;
-            this.ucCombox_calType.TriangleColor = System.Drawing.Color.Blue;
-            this.ucCombox_calType.SelectedChangedEvent += new System.EventHandler(this.ucCombox_calType_SelectedChangedEvent);
-            // 
-            // label36
-            // 
-            this.label36.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label36.AutoSize = true;
-            this.label36.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label36.ForeColor = System.Drawing.Color.Blue;
-            this.label36.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label36.Location = new System.Drawing.Point(20, 94);
-            this.label36.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(78, 21);
-            this.label36.TabIndex = 20;
-            this.label36.Text = "标定方式:";
-            // 
-            // label32
-            // 
-            this.label32.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label32.AutoSize = true;
-            this.label32.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label32.ForeColor = System.Drawing.Color.Blue;
-            this.label32.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label32.Location = new System.Drawing.Point(20, 154);
-            this.label32.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(78, 21);
-            this.label32.TabIndex = 19;
-            this.label32.Text = "标定量程:";
-            // 
-            // label33
-            // 
-            this.label33.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label33.AutoSize = true;
-            this.label33.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label33.ForeColor = System.Drawing.Color.Blue;
-            this.label33.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label33.Location = new System.Drawing.Point(20, 30);
-            this.label33.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(78, 21);
-            this.label33.TabIndex = 18;
-            this.label33.Text = "标定单位:";
-            // 
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(264, 603);
+            this.label31.Location = new System.Drawing.Point(736, 580);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(23, 12);
-            this.label31.TabIndex = 88;
+            this.label31.TabIndex = 107;
             this.label31.Text = "<=>";
             // 
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(264, 558);
+            this.label30.Location = new System.Drawing.Point(736, 535);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(23, 12);
-            this.label30.TabIndex = 87;
+            this.label30.TabIndex = 106;
             this.label30.Text = "<=>";
             // 
             // label29
             // 
             this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(264, 514);
+            this.label29.Location = new System.Drawing.Point(736, 491);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(23, 12);
-            this.label29.TabIndex = 86;
+            this.label29.TabIndex = 105;
             this.label29.Text = "<=>";
             // 
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(264, 468);
+            this.label28.Location = new System.Drawing.Point(736, 445);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(23, 12);
-            this.label28.TabIndex = 85;
+            this.label28.TabIndex = 104;
             this.label28.Text = "<=>";
             // 
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(264, 423);
+            this.label27.Location = new System.Drawing.Point(736, 400);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(23, 12);
-            this.label27.TabIndex = 84;
+            this.label27.TabIndex = 103;
             this.label27.Text = "<=>";
             // 
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(264, 327);
+            this.label26.Location = new System.Drawing.Point(736, 304);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(23, 12);
-            this.label26.TabIndex = 83;
+            this.label26.TabIndex = 102;
             this.label26.Text = "<=>";
             // 
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(264, 282);
+            this.label25.Location = new System.Drawing.Point(736, 259);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(23, 12);
-            this.label25.TabIndex = 82;
+            this.label25.TabIndex = 101;
             this.label25.Text = "<=>";
             // 
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(264, 238);
+            this.label24.Location = new System.Drawing.Point(736, 215);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(23, 12);
-            this.label24.TabIndex = 81;
+            this.label24.TabIndex = 100;
             this.label24.Text = "<=>";
             // 
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(264, 192);
+            this.label23.Location = new System.Drawing.Point(736, 169);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(23, 12);
-            this.label23.TabIndex = 80;
+            this.label23.TabIndex = 99;
             this.label23.Text = "<=>";
             // 
             // groupBox16
@@ -2997,10 +3295,10 @@
             this.groupBox16.Controls.Add(this.label21);
             this.groupBox16.Controls.Add(this.label22);
             this.groupBox16.Controls.Add(this.tb_adNegOutPut3);
-            this.groupBox16.Location = new System.Drawing.Point(299, 392);
+            this.groupBox16.Location = new System.Drawing.Point(771, 369);
             this.groupBox16.Name = "groupBox16";
             this.groupBox16.Size = new System.Drawing.Size(212, 249);
-            this.groupBox16.TabIndex = 79;
+            this.groupBox16.TabIndex = 98;
             this.groupBox16.TabStop = false;
             // 
             // tb_adNegOutPut5
@@ -3270,10 +3568,10 @@
             this.groupBox15.Controls.Add(this.tb_adPosOutPut2);
             this.groupBox15.Controls.Add(this.label17);
             this.groupBox15.Controls.Add(this.tb_adPosOutPut1);
-            this.groupBox15.Location = new System.Drawing.Point(299, 116);
+            this.groupBox15.Location = new System.Drawing.Point(771, 93);
             this.groupBox15.Name = "groupBox15";
             this.groupBox15.Size = new System.Drawing.Size(212, 249);
-            this.groupBox15.TabIndex = 69;
+            this.groupBox15.TabIndex = 97;
             this.groupBox15.TabStop = false;
             // 
             // label13
@@ -3534,10 +3832,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(264, 147);
+            this.label2.Location = new System.Drawing.Point(736, 124);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(23, 12);
-            this.label2.TabIndex = 59;
+            this.label2.TabIndex = 96;
             this.label2.Text = "<=>";
             // 
             // groupBox14
@@ -3552,10 +3850,10 @@
             this.groupBox14.Controls.Add(this.label11);
             this.groupBox14.Controls.Add(this.label10);
             this.groupBox14.Controls.Add(this.tb_adNeg3);
-            this.groupBox14.Location = new System.Drawing.Point(38, 392);
+            this.groupBox14.Location = new System.Drawing.Point(510, 369);
             this.groupBox14.Name = "groupBox14";
             this.groupBox14.Size = new System.Drawing.Size(212, 249);
-            this.groupBox14.TabIndex = 58;
+            this.groupBox14.TabIndex = 95;
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "反向内码";
             // 
@@ -3826,10 +4124,10 @@
             this.groupBox13.Controls.Add(this.tb_adPos2);
             this.groupBox13.Controls.Add(this.label3);
             this.groupBox13.Controls.Add(this.tb_adPos1);
-            this.groupBox13.Location = new System.Drawing.Point(38, 116);
+            this.groupBox13.Location = new System.Drawing.Point(510, 93);
             this.groupBox13.Name = "groupBox13";
             this.groupBox13.Size = new System.Drawing.Size(212, 249);
-            this.groupBox13.TabIndex = 57;
+            this.groupBox13.TabIndex = 94;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "正向内码";
             // 
@@ -4088,276 +4386,101 @@
             this.tb_adPos1.Size = new System.Drawing.Size(100, 30);
             this.tb_adPos1.TabIndex = 0;
             // 
-            // btn_SuperUpdate
+            // label32
             // 
-            this.btn_SuperUpdate.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btn_SuperUpdate.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btn_SuperUpdate.Location = new System.Drawing.Point(839, 597);
-            this.btn_SuperUpdate.Name = "btn_SuperUpdate";
-            this.btn_SuperUpdate.Size = new System.Drawing.Size(100, 50);
-            this.btn_SuperUpdate.TabIndex = 56;
-            this.btn_SuperUpdate.Text = "更 新";
-            this.btn_SuperUpdate.UseVisualStyleBackColor = true;
-            this.btn_SuperUpdate.Click += new System.EventHandler(this.btn_SuperUpdate_Click);
+            this.label32.AutoSize = true;
+            this.label32.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label32.ForeColor = System.Drawing.Color.Blue;
+            this.label32.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label32.Location = new System.Drawing.Point(341, 75);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(63, 21);
+            this.label32.TabIndex = 144;
+            this.label32.Text = "(1-255)";
             // 
-            // tabPage5
+            // label33
             // 
-            this.tabPage5.Controls.Add(this.btn_UpdateTicket);
-            this.tabPage5.Controls.Add(this.dataGridView2);
-            this.tabPage5.Controls.Add(this.groupBox21);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(1033, 713);
-            this.tabPage5.TabIndex = 3;
-            this.tabPage5.Text = "工单设置";
-            this.tabPage5.UseVisualStyleBackColor = true;
+            this.label33.AutoSize = true;
+            this.label33.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label33.ForeColor = System.Drawing.Color.Blue;
+            this.label33.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label33.Location = new System.Drawing.Point(342, 120);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(90, 21);
+            this.label33.TabIndex = 145;
+            this.label33.Text = "(20-65535)";
             // 
-            // btn_UpdateTicket
+            // label34
             // 
-            this.btn_UpdateTicket.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btn_UpdateTicket.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btn_UpdateTicket.Location = new System.Drawing.Point(925, 631);
-            this.btn_UpdateTicket.Name = "btn_UpdateTicket";
-            this.btn_UpdateTicket.Size = new System.Drawing.Size(100, 50);
-            this.btn_UpdateTicket.TabIndex = 56;
-            this.btn_UpdateTicket.Text = "更 新";
-            this.btn_UpdateTicket.UseVisualStyleBackColor = true;
-            this.btn_UpdateTicket.Click += new System.EventHandler(this.btn_UpdateTicket_Click);
+            this.label34.AutoSize = true;
+            this.label34.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label34.ForeColor = System.Drawing.Color.Blue;
+            this.label34.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label34.Location = new System.Drawing.Point(343, 30);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(63, 21);
+            this.label34.TabIndex = 146;
+            this.label34.Text = "(1-255)";
             // 
-            // dataGridView2
+            // label35
             // 
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column10,
-            this.Column11,
-            this.Column12,
-            this.Column13,
-            this.Column14,
-            this.Column15,
-            this.Column16,
-            this.Column17,
-            this.Column18});
-            this.dataGridView2.Location = new System.Drawing.Point(6, 89);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.RowTemplate.Height = 23;
-            this.dataGridView2.Size = new System.Drawing.Size(888, 592);
-            this.dataGridView2.TabIndex = 1;
-            this.dataGridView2.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellEndEdit);
-            this.dataGridView2.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView2_CellValidating);
-            this.dataGridView2.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView2_EditingControlShowing);
+            this.label35.AutoSize = true;
+            this.label35.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label35.ForeColor = System.Drawing.Color.Blue;
+            this.label35.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label35.Location = new System.Drawing.Point(344, 77);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(72, 21);
+            this.label35.TabIndex = 147;
+            this.label35.Text = "(10-255)";
             // 
-            // Column10
+            // label36
             // 
-            this.Column10.HeaderText = "序号";
-            this.Column10.Name = "Column10";
+            this.label36.AutoSize = true;
+            this.label36.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label36.ForeColor = System.Drawing.Color.Blue;
+            this.label36.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label36.Location = new System.Drawing.Point(345, 123);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(63, 21);
+            this.label36.TabIndex = 148;
+            this.label36.Text = "(0-255)";
             // 
-            // Column11
+            // label48
             // 
-            this.Column11.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
-            this.Column11.HeaderText = "Ax模式";
-            this.Column11.Items.AddRange(new object[] {
-            "SN",
-            "SA",
-            "MN",
-            "MA"});
-            this.Column11.Name = "Column11";
-            this.Column11.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column11.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.label48.AutoSize = true;
+            this.label48.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label48.ForeColor = System.Drawing.Color.Blue;
+            this.label48.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label48.Location = new System.Drawing.Point(363, 24);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(61, 21);
+            this.label48.TabIndex = 149;
+            this.label48.Text = "(大于0)";
             // 
-            // Column12
+            // label49
             // 
-            this.Column12.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
-            this.Column12.HeaderText = "Mx模式";
-            this.Column12.Items.AddRange(new object[] {
-            "M0",
-            "M1",
-            "M2",
-            "M3",
-            "M4",
-            "M5",
-            "M6",
-            "M7",
-            "M8",
-            "M9"});
-            this.Column12.Name = "Column12";
-            this.Column12.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column12.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.label49.AutoSize = true;
+            this.label49.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label49.ForeColor = System.Drawing.Color.Blue;
+            this.label49.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label49.Location = new System.Drawing.Point(365, 73);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(72, 21);
+            this.label49.TabIndex = 150;
+            this.label49.Text = "(0-1000)";
             // 
-            // Column13
+            // label50
             // 
-            this.Column13.HeaderText = "报警值1";
-            this.Column13.Name = "Column13";
-            // 
-            // Column14
-            // 
-            this.Column14.HeaderText = "报警值2";
-            this.Column14.Name = "Column14";
-            // 
-            // Column15
-            // 
-            this.Column15.HeaderText = "报警值3";
-            this.Column15.Name = "Column15";
-            // 
-            // Column16
-            // 
-            this.Column16.HeaderText = "螺栓数量";
-            this.Column16.Name = "Column16";
-            // 
-            // Column17
-            // 
-            this.Column17.HeaderText = "工单号";
-            this.Column17.Name = "Column17";
-            // 
-            // Column18
-            // 
-            this.Column18.HeaderText = "序列号";
-            this.Column18.Name = "Column18";
-            // 
-            // groupBox21
-            // 
-            this.groupBox21.Controls.Add(this.ucCombox_screwMax);
-            this.groupBox21.Controls.Add(this.ucCombox_runMode);
-            this.groupBox21.Controls.Add(this.label41);
-            this.groupBox21.Controls.Add(this.label40);
-            this.groupBox21.Location = new System.Drawing.Point(6, 19);
-            this.groupBox21.Name = "groupBox21";
-            this.groupBox21.Size = new System.Drawing.Size(1021, 64);
-            this.groupBox21.TabIndex = 0;
-            this.groupBox21.TabStop = false;
-            this.groupBox21.Text = "基本配置";
-            // 
-            // ucCombox_screwMax
-            // 
-            this.ucCombox_screwMax.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_screwMax.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_screwMax.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_screwMax.ConerRadius = 5;
-            this.ucCombox_screwMax.DropPanelHeight = -1;
-            this.ucCombox_screwMax.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_screwMax.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_screwMax.IsRadius = true;
-            this.ucCombox_screwMax.IsShowRect = true;
-            this.ucCombox_screwMax.ItemWidth = 70;
-            this.ucCombox_screwMax.Location = new System.Drawing.Point(206, 22);
-            this.ucCombox_screwMax.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_screwMax.Name = "ucCombox_screwMax";
-            this.ucCombox_screwMax.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_screwMax.RectWidth = 1;
-            this.ucCombox_screwMax.SelectedIndex = -1;
-            this.ucCombox_screwMax.SelectedValue = "";
-            this.ucCombox_screwMax.Size = new System.Drawing.Size(124, 32);
-            this.ucCombox_screwMax.Source = null;
-            this.ucCombox_screwMax.TabIndex = 86;
-            this.ucCombox_screwMax.TextValue = null;
-            this.ucCombox_screwMax.TriangleColor = System.Drawing.Color.Blue;
-            this.ucCombox_screwMax.SelectedChangedEvent += new System.EventHandler(this.ucCombox_screwMax_SelectedChangedEvent);
-            // 
-            // ucCombox_runMode
-            // 
-            this.ucCombox_runMode.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_runMode.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_runMode.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_runMode.ConerRadius = 5;
-            this.ucCombox_runMode.DropPanelHeight = -1;
-            this.ucCombox_runMode.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_runMode.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.ucCombox_runMode.IsRadius = true;
-            this.ucCombox_runMode.IsShowRect = true;
-            this.ucCombox_runMode.ItemWidth = 70;
-            this.ucCombox_runMode.Location = new System.Drawing.Point(572, 22);
-            this.ucCombox_runMode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_runMode.Name = "ucCombox_runMode";
-            this.ucCombox_runMode.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_runMode.RectWidth = 1;
-            this.ucCombox_runMode.SelectedIndex = -1;
-            this.ucCombox_runMode.SelectedValue = "";
-            this.ucCombox_runMode.Size = new System.Drawing.Size(141, 32);
-            this.ucCombox_runMode.Source = null;
-            this.ucCombox_runMode.TabIndex = 83;
-            this.ucCombox_runMode.TextValue = null;
-            this.ucCombox_runMode.TriangleColor = System.Drawing.Color.Blue;
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label41.ForeColor = System.Drawing.Color.Blue;
-            this.label41.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label41.Location = new System.Drawing.Point(443, 27);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(122, 22);
-            this.label41.TabIndex = 79;
-            this.label41.Text = "执行工单模式：";
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label40.ForeColor = System.Drawing.Color.Blue;
-            this.label40.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label40.Location = new System.Drawing.Point(19, 27);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(180, 22);
-            this.label40.TabIndex = 78;
-            this.label40.Text = "离线工单数量（1-32）:";
-            // 
-            // graphicalOverlayComponent1
-            // 
-            this.graphicalOverlayComponent1.Owner = null;
-            // 
-            // label_wirelessSelection
-            // 
-            this.label_wirelessSelection.AutoSize = true;
-            this.label_wirelessSelection.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.label_wirelessSelection.ForeColor = System.Drawing.Color.Blue;
-            this.label_wirelessSelection.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_wirelessSelection.Location = new System.Drawing.Point(549, 82);
-            this.label_wirelessSelection.Name = "label_wirelessSelection";
-            this.label_wirelessSelection.Size = new System.Drawing.Size(79, 22);
-            this.label_wirelessSelection.TabIndex = 143;
-            this.label_wirelessSelection.Text = "配置选择:";
-            // 
-            // ucCombox_wirelessSelection
-            // 
-            this.ucCombox_wirelessSelection.BackColor = System.Drawing.Color.Transparent;
-            this.ucCombox_wirelessSelection.BackColorExt = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wirelessSelection.BoxStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ucCombox_wirelessSelection.ConerRadius = 5;
-            this.ucCombox_wirelessSelection.DropPanelHeight = -1;
-            this.ucCombox_wirelessSelection.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wirelessSelection.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ucCombox_wirelessSelection.IsRadius = true;
-            this.ucCombox_wirelessSelection.IsShowRect = true;
-            this.ucCombox_wirelessSelection.ItemWidth = 70;
-            this.ucCombox_wirelessSelection.Location = new System.Drawing.Point(704, 77);
-            this.ucCombox_wirelessSelection.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ucCombox_wirelessSelection.Name = "ucCombox_wirelessSelection";
-            this.ucCombox_wirelessSelection.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ucCombox_wirelessSelection.RectWidth = 1;
-            this.ucCombox_wirelessSelection.SelectedIndex = -1;
-            this.ucCombox_wirelessSelection.SelectedValue = "";
-            this.ucCombox_wirelessSelection.Size = new System.Drawing.Size(173, 32);
-            this.ucCombox_wirelessSelection.Source = null;
-            this.ucCombox_wirelessSelection.TabIndex = 144;
-            this.ucCombox_wirelessSelection.TextValue = null;
-            this.ucCombox_wirelessSelection.TriangleColor = System.Drawing.Color.Blue;
-            this.ucCombox_wirelessSelection.SelectedChangedEvent += new System.EventHandler(this.ucCombox_wirelessSelection_SelectedChangedEvent);
-            // 
-            // label_tip
-            // 
-            this.label_tip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label_tip.AutoSize = true;
-            this.label_tip.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_tip.ForeColor = System.Drawing.Color.Blue;
-            this.label_tip.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label_tip.Location = new System.Drawing.Point(549, 173);
-            this.label_tip.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label_tip.Name = "label_tip";
-            this.label_tip.Size = new System.Drawing.Size(189, 21);
-            this.label_tip.TabIndex = 145;
-            this.label_tip.Text = "请确认本地WIFI密码正确";
-            this.label_tip.Visible = false;
+            this.label50.AutoSize = true;
+            this.label50.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label50.ForeColor = System.Drawing.Color.Blue;
+            this.label50.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label50.Location = new System.Drawing.Point(285, 33);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(81, 21);
+            this.label50.TabIndex = 145;
+            this.label50.Text = "(10-1000)";
             // 
             // MenuDeviceSetForm
             // 
@@ -4380,14 +4503,10 @@
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabPage2.ResumeLayout(false);
-            this.groupBox24.ResumeLayout(false);
-            this.groupBox24.PerformLayout();
+            this.groupBox18.ResumeLayout(false);
+            this.groupBox18.PerformLayout();
             this.groupBox22.ResumeLayout(false);
             this.groupBox22.PerformLayout();
-            this.groupBox10.ResumeLayout(false);
-            this.groupBox10.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -4411,16 +4530,24 @@
             this.groupBox9.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
-            this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            this.groupBox21.ResumeLayout(false);
+            this.groupBox21.PerformLayout();
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            this.groupBox24.ResumeLayout(false);
+            this.groupBox24.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox17.ResumeLayout(false);
+            this.groupBox17.PerformLayout();
             this.groupBox20.ResumeLayout(false);
             this.groupBox20.PerformLayout();
             this.groupBox19.ResumeLayout(false);
             this.groupBox19.PerformLayout();
-            this.groupBox18.ResumeLayout(false);
-            this.groupBox18.PerformLayout();
-            this.groupBox17.ResumeLayout(false);
-            this.groupBox17.PerformLayout();
             this.groupBox16.ResumeLayout(false);
             this.groupBox16.PerformLayout();
             this.groupBox15.ResumeLayout(false);
@@ -4429,10 +4556,6 @@
             this.groupBox14.PerformLayout();
             this.groupBox13.ResumeLayout(false);
             this.groupBox13.PerformLayout();
-            this.tabPage5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
-            this.groupBox21.ResumeLayout(false);
-            this.groupBox21.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -4441,8 +4564,15 @@
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label label1;
+        private HZH_Controls.Controls.UCDataGridView ucDataGridView1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
+        private HZH_Controls.Controls.UCCheckBox ucCheckBox_MA;
+        private HZH_Controls.Controls.UCCheckBox ucCheckBox_MN;
+        private HZH_Controls.Controls.UCCheckBox ucCheckBox_SA;
+        private HZH_Controls.Controls.UCCheckBox ucCheckBox_SN;
+        private HZH_Controls.Controls.UCCombox ucCombox_angleSpeed;
+        private System.Windows.Forms.Label label_angleSpeed;
         private System.Windows.Forms.Button bt_UpdatePara;
         private HZH_Controls.Controls.UCCombox ucCombox_select;
         private System.Windows.Forms.Label label_select;
@@ -4467,40 +4597,73 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
         private System.Windows.Forms.TabPage tabPage2;
-        private HZH_Controls.Controls.UCCombox ucCombox_fifomode;
-        private System.Windows.Forms.Label label_disptheme;
-        private HZH_Controls.Controls.UCCombox ucCombox_fiforec;
-        private HZH_Controls.Controls.UCCombox ucCombox_fifospeed;
-        private HZH_Controls.Controls.UCCombox ucCombox_heart;
-        private HZH_Controls.Controls.UCCombox ucCombox_disptheme;
-        private System.Windows.Forms.Label label_fifospeed;
-        private System.Windows.Forms.Label label_fiforec;
-        private System.Windows.Forms.Label label_heart;
-        private System.Windows.Forms.Label label_fifomode;
-        private HZH_Controls.Controls.UCCombox ucCombox_accmode;
-        private System.Windows.Forms.Label label_timezero;
-        private HZH_Controls.Controls.UCCombox ucCombox_alarmode;
-        private System.Windows.Forms.Label label_alarmode;
-        private System.Windows.Forms.Label label_timeback;
-        private System.Windows.Forms.Label label_timeoff;
-        private System.Windows.Forms.Label label_accmode;
-        private System.Windows.Forms.Button bt_UpdateMode;
-        private HZH_Controls.Controls.UCDataGridView ucDataGridView1;
-        private HZH_Controls.Controls.UCCombox ucCombox_angleSpeed;
-        private System.Windows.Forms.Label label_angleSpeed;
-        private System.Windows.Forms.Label label_displan;
-        private HZH_Controls.Controls.UCCombox ucCombox_displan;
-        private System.Windows.Forms.Label label_disptype;
-        private HZH_Controls.Controls.UCCombox ucCombox_disptype;
-        private System.Windows.Forms.Label label_unhook;
-        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.GroupBox groupBox18;
+        private System.Windows.Forms.DateTimePicker dateTimePicker_calremind;
+        private System.Windows.Forms.DateTimePicker dateTimePicker_caltime;
+        private System.Windows.Forms.Label label_calremind;
+        private System.Windows.Forms.Label label_caltime;
+        private System.Windows.Forms.GroupBox groupBox22;
+        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_torcorr;
+        private System.Windows.Forms.Label label_torcorr;
+        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_angleResist;
+        private System.Windows.Forms.Label label_angleResist;
         private System.Windows.Forms.GroupBox groupBox5;
+        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_timezero;
+        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_timeback;
+        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_timeoff;
+        private System.Windows.Forms.Label label_timeoff;
+        private System.Windows.Forms.Label label_timeback;
+        private System.Windows.Forms.Label label_timezero;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label_disptype;
+        private HZH_Controls.Controls.UCCombox ucCombox_disptheme;
+        private System.Windows.Forms.Label label_disptheme;
+        private HZH_Controls.Controls.UCCombox ucCombox_disptype;
+        private HZH_Controls.Controls.UCCombox ucCombox_displan;
+        private System.Windows.Forms.Label label_displan;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label_accmode;
+        private System.Windows.Forms.Label label_alarmode;
+        private HZH_Controls.Controls.UCCombox ucCombox_alarmode;
+        private HZH_Controls.Controls.UCCombox ucCombox_accmode;
         private System.Windows.Forms.GroupBox groupBox2;
+        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_heartcycle;
+        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_heartcount;
+        private System.Windows.Forms.Label label_heartcycle;
+        private System.Windows.Forms.Label label_heart;
+        private System.Windows.Forms.Label label_heartcount;
+        private HZH_Controls.Controls.UCCombox ucCombox_heart;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label_fifomode;
+        private System.Windows.Forms.Label label_fiforec;
+        private System.Windows.Forms.Label label_fifospeed;
+        private HZH_Controls.Controls.UCCombox ucCombox_fifospeed;
+        private HZH_Controls.Controls.UCCombox ucCombox_fiforec;
+        private HZH_Controls.Controls.UCCombox ucCombox_fifomode;
+        private System.Windows.Forms.Button bt_UpdateMode;
         private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.GroupBox groupBox23;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.Label label_recIP;
+        private System.Windows.Forms.Label label_recPort;
+        private System.Windows.Forms.Label label_recWIFIPwd;
+        private System.Windows.Forms.Label label_recWIFIName;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label_curIP;
+        private System.Windows.Forms.Label label_curWIFIName;
+        private System.Windows.Forms.Button bt_UpdateWLAN;
         private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Label label_tip;
+        private System.Windows.Forms.Label label_wirelessSelection;
+        private HZH_Controls.Controls.UCCombox ucCombox_wirelessSelection;
+        private System.Windows.Forms.Label label_wifimode;
+        private HZH_Controls.Controls.UCCombox ucCombox_wifimode;
         private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_wifiIp;
         private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_port;
         private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_pwd;
@@ -4515,51 +4678,74 @@
         private System.Windows.Forms.GroupBox groupBox7;
         private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_addr;
         private System.Windows.Forms.Label label_addr;
-        private System.Windows.Forms.Button bt_UpdateWLAN;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.Button btn_UpdateTicket;
+        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Column11;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Column12;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column13;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column14;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column15;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column16;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column17;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column18;
+        private System.Windows.Forms.GroupBox groupBox21;
+        private HZH_Controls.Controls.UCCombox ucCombox_screwMax;
+        private HZH_Controls.Controls.UCCombox ucCombox_runMode;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.Button btn_SuperUpdate;
         private System.Windows.Forms.GroupBox groupBox10;
-        private System.Windows.Forms.Label label_angcorr;
         private HZH_Controls.Controls.UCCombox ucCombox_adspeed;
-        private HZH_Controls.Controls.UCCombox ucCombox_angcorr;
         private System.Windows.Forms.Label label_adspeed;
         private System.Windows.Forms.Label label_trackzero;
         private System.Windows.Forms.Label label_autozero;
         private HZH_Controls.Controls.UCCombox ucCombox_autozero;
         private HZH_Controls.Controls.UCCombox ucCombox_trackzero;
-        private System.Windows.Forms.Label label_heartcycle;
-        private System.Windows.Forms.Label label_heartcount;
-        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_heartcycle;
-        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_heartcount;
-        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_timezero;
-        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_timeback;
-        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_timeoff;
+        private System.Windows.Forms.GroupBox groupBox24;
+        private HZH_Controls.Controls.UCCombox ucCombox_wirelessEn;
+        private System.Windows.Forms.Label label_wirelessEn;
+        private HZH_Controls.Controls.UCCombox ucCombox_usbEN;
+        private System.Windows.Forms.Label label_usbEn;
+        private System.Windows.Forms.GroupBox groupBox6;
         private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_unhook;
-        private System.Windows.Forms.Label label_curIP;
-        private System.Windows.Forms.Label label_curWIFIName;
-        private System.Windows.Forms.Label label_recWIFIPwd;
-        private System.Windows.Forms.Label label_recWIFIName;
-        private System.Windows.Forms.Label label_recPort;
-        private System.Windows.Forms.Label label_recIP;
-        private System.Windows.Forms.GroupBox groupBox12;
-        private System.Windows.Forms.GroupBox groupBox11;
-        private HZH_Controls.Controls.UCCheckBox ucCheckBox_MA;
-        private HZH_Controls.Controls.UCCheckBox ucCheckBox_MN;
-        private HZH_Controls.Controls.UCCheckBox ucCheckBox_SA;
-        private HZH_Controls.Controls.UCCheckBox ucCheckBox_SN;
-        private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.Button btn_SuperUpdate;
-        private System.Windows.Forms.GroupBox groupBox14;
-        private System.Windows.Forms.GroupBox groupBox13;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adPos1;
-        private System.Windows.Forms.Label label7;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adPos5;
-        private System.Windows.Forms.Label label6;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adPos4;
-        private System.Windows.Forms.Label label5;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adPos3;
-        private System.Windows.Forms.Label label4;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adPos2;
+        private System.Windows.Forms.Label label_unhook;
+        private System.Windows.Forms.GroupBox groupBox17;
+        private HZH_Controls.Controls.UCCombox ucCombox_capacity;
+        private HZH_Controls.Controls.UCCombox ucCombox_calUnit;
+        private HZH_Controls.Controls.UCCombox ucCombox_calType;
+        private System.Windows.Forms.Label label_calType;
+        private System.Windows.Forms.Label label_capacity;
+        private System.Windows.Forms.Label label_calUnit;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.GroupBox groupBox20;
+        private System.Windows.Forms.Label label38;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adZeroOutput;
+        private System.Windows.Forms.GroupBox groupBox19;
+        private System.Windows.Forms.Label label37;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adZero;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.GroupBox groupBox16;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adNegOutPut5;
+        private System.Windows.Forms.Label label18;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adNegOutPut1;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adNegOutPut2;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adNegOutPut4;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adNegOutPut3;
         private System.Windows.Forms.GroupBox groupBox15;
         private System.Windows.Forms.Label label13;
         private HZH_Controls.Controls.UCTextBoxEx tb_adPosOutPut5;
@@ -4571,6 +4757,8 @@
         private HZH_Controls.Controls.UCTextBoxEx tb_adPosOutPut2;
         private System.Windows.Forms.Label label17;
         private HZH_Controls.Controls.UCTextBoxEx tb_adPosOutPut1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox groupBox14;
         private System.Windows.Forms.Label label8;
         private HZH_Controls.Controls.UCTextBoxEx tb_adNeg1;
         private HZH_Controls.Controls.UCTextBoxEx tb_adNeg5;
@@ -4581,82 +4769,24 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
         private HZH_Controls.Controls.UCTextBoxEx tb_adNeg3;
-        private System.Windows.Forms.GroupBox groupBox16;
-        private System.Windows.Forms.Label label18;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adNegOutPut1;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label label20;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adNegOutPut2;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adNegOutPut4;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.Label label22;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adNegOutPut3;
-        private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.GroupBox groupBox17;
-        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.Label label7;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adPos5;
+        private System.Windows.Forms.Label label6;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adPos4;
+        private System.Windows.Forms.Label label5;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adPos3;
+        private System.Windows.Forms.Label label4;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adPos2;
+        private System.Windows.Forms.Label label3;
+        private HZH_Controls.Controls.UCTextBoxEx tb_adPos1;
         private System.Windows.Forms.Label label32;
-        private System.Windows.Forms.GroupBox groupBox18;
+        private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.DateTimePicker dateTimePicker_caltime;
-        private System.Windows.Forms.DateTimePicker dateTimePicker_calremind;
         private System.Windows.Forms.Label label36;
-        private HZH_Controls.Controls.UCCombox ucCombox_calType;
-        private System.Windows.Forms.GroupBox groupBox20;
-        private System.Windows.Forms.GroupBox groupBox19;
-        private System.Windows.Forms.Label label37;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adZero;
-        private System.Windows.Forms.Label label38;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adZeroOutput;
-        private System.Windows.Forms.Label label39;
-        private HZH_Controls.Controls.UCCombox ucCombox_capacity;
-        private HZH_Controls.Controls.UCCombox ucCombox_calUnit;
-        private HZH_Controls.Controls.UCTextBoxEx tb_adNegOutPut5;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.GroupBox groupBox21;
-        private System.Windows.Forms.Label label41;
-        private System.Windows.Forms.Label label40;
-        private HZH_Controls.Controls.UCCombox ucCombox_runMode;
-        private System.Windows.Forms.Button btn_UpdateTicket;
-        private System.Windows.Forms.DataGridView dataGridView2;
-        private HZH_Controls.Controls.UCCombox ucCombox_screwMax;
-        private HZH_Controls.Controls.GraphicalOverlayComponent graphicalOverlayComponent1;
-        private System.Windows.Forms.GroupBox groupBox22;
-        private HZH_Controls.Controls.UCTextBoxEx ucTextBoxEx_angleResist;
-        private System.Windows.Forms.Label label_angleResist;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Column11;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Column12;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column13;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column14;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column15;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column16;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column17;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column18;
-        private System.Windows.Forms.Label label42;
-        private System.Windows.Forms.GroupBox groupBox23;
-        private System.Windows.Forms.Label label43;
-        private System.Windows.Forms.Label label44;
-        private System.Windows.Forms.Label label45;
-        private System.Windows.Forms.Label label46;
-        private System.Windows.Forms.Label label47;
-        private System.Windows.Forms.Label label_wifimode;
-        private HZH_Controls.Controls.UCCombox ucCombox_wifimode;
-        private System.Windows.Forms.GroupBox groupBox24;
-        private HZH_Controls.Controls.UCCombox ucCombox_usbEN;
-        private System.Windows.Forms.Label label_usbEn;
-        private HZH_Controls.Controls.UCCombox ucCombox_wirelessEn;
-        private System.Windows.Forms.Label label_wirelessEn;
-        private System.Windows.Forms.Label label_wirelessSelection;
-        private HZH_Controls.Controls.UCCombox ucCombox_wirelessSelection;
-        private System.Windows.Forms.Label label_tip;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Label label50;
     }
 }

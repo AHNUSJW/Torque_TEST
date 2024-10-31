@@ -314,6 +314,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MenuDevice\MenuDeviceSetForm.resx">
       <DependentUpon>MenuDeviceSetForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MenuHomework\MenuCreateTicketForm.resx">
       <DependentUpon>MenuCreateTicketForm.cs</DependentUpon>

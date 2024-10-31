@@ -1728,7 +1728,7 @@ namespace Base.UI.MenuDevice
                     Screwmax = actXET.para.screwmax,
                     Runmode = actXET.para.runmode,
                     Auploaden = actXET.para.auploaden,
-                    AngCorr = actXET.para.angcorr.ToString(),
+                    AngCorr = actXET.para.torcorr.ToString(),
                     AngleResist = actXET.para.angle_resist,
                 };
                 DSWrenchWork wrenchWork = new DSWrenchWork

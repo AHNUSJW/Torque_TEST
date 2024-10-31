@@ -49,7 +49,7 @@ namespace Base.UI.MenuHomework
         private int ticketNumLen = 4;         //工单号限定长度
         private int sequenceLen = 6;          //序列号限定长度
         private int ticketEncodeLen = 10;     //工单编码限定长度——工单编码 = 工单号 + 序列号
-        private double angleResit = 0;           //工单绑定的复拧角度（仅扭矩优先模式触发）
+        private double angleResit = 0;        //工单绑定的复拧角度（仅扭矩优先模式触发）
         private DSProductInfo meProductInfo = new DSProductInfo();
         private List<DSProductResults> meProductResults = new List<DSProductResults>();
 

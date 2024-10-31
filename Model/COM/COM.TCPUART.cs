@@ -1249,7 +1249,7 @@ namespace Model
                     meTXD[idx++] = 0xFF;
                     meTXD[idx++] = 0xFF;
 
-                    MyDevice.myUIT.F = MyDevice.mTCP[sAddress].para.angcorr;
+                    MyDevice.myUIT.F = MyDevice.mTCP[sAddress].para.torcorr;
                     meTXD[idx++] = MyDevice.myUIT.B3;
                     meTXD[idx++] = MyDevice.myUIT.B2;
                     meTXD[idx++] = MyDevice.myUIT.B1;
@@ -2129,7 +2129,7 @@ namespace Model
                         MyDevice.mTCP[sAddress].para.usbEn           = mePort_GetByte(62);
                         MyDevice.mTCP[sAddress].para.wirelessEn      = mePort_GetByte(64);
 
-                        MyDevice.mTCP[sAddress].para.angcorr         = mePort_GetFloat(67);
+                        MyDevice.mTCP[sAddress].para.torcorr         = mePort_GetFloat(67);
                         MyDevice.mTCP[sAddress].para.angle_resist    = mePort_GetInt32(71);
 
                         mePort_DataRemove(0x65);

@@ -109,11 +109,11 @@ namespace Model
     public enum TRACKZERO : Byte //零点跟踪
     {
         TKZ0                    = 0,        //无零点跟踪
-        TKZ1                    = 1,        //零点跟踪0.5字
-        TKZ2                    = 2,        //零点跟踪1字
-        TKZ4                    = 4,        //零点跟踪2字
-        TKZ8                    = 8,        //零点跟踪4字
-        TKZ30                   = 30,       //零点跟踪4字
+        TKZ1                    = 1,        //零点跟踪10%
+        TKZ2                    = 2,        //零点跟踪20%
+        TKZ4                    = 3,        //零点跟踪30%
+        TKZ8                    = 4,        //零点跟踪40%
+        TKZ30                   = 5,        //零点跟踪50%
     }
 
     public enum CMD : Byte //功能码

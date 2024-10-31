@@ -320,15 +320,16 @@ namespace Model
                                 //TriggerUpdateUI(CurrentCommand);
 
                                 //读完了清缓存
-                                if (MyDevice.actDev.auto.dataTick * 5 >= MyDevice.actDev.auto.fifoCount && MyDevice.actDev.auto.fifoCount > 0)
-                                {
-                                    MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;
-                                    MyDevice.actDev.auto.fifoCount = 0;//清完之后，扳手状态是读一条dat自动清一条，count永久是0
-                                }
-                                else
-                                {
-                                    MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
-                                }
+                                //if (MyDevice.actDev.auto.dataTick * 5 >= MyDevice.actDev.auto.fifoCount && MyDevice.actDev.auto.fifoCount > 0)
+                                //{
+                                //    MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;
+                                //    MyDevice.actDev.auto.fifoCount = 0;//清完之后，扳手状态是读一条dat自动清一条，count永久是0
+                                //}
+                                //else
+                                //{
+                                //    MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
+                                //}
+                                MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
                             }
                             else
                             {
