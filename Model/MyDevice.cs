@@ -96,6 +96,9 @@ namespace Model
         public static int ConnectDevCnt;               //连接的总设备数
         public static int WorkDevCnt;                  //工作的设备数
 
+        //读数据的下标区间
+        public static uint XH06_HEAD = 0xEA00;          //数据下标头
+        public static uint XH06_TAIL = 0xF7FE;          //数据下标尾
 
         /// <summary>
         /// protocol指向的设备数量

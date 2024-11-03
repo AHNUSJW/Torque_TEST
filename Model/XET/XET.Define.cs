@@ -32,5 +32,7 @@ namespace Model
         public int readDataNum = 0;      //读取data包数
         public int requiredCount = 1;    //需要发送指令次数
         public int sentCount = 0;        //已发送次数
+        public uint oldRead = 0xFFFFFFFF;//旧的读指针，用于比对新读的指针是否偏移再决定是否补发清除指令
+        public string dataPath = "";     //数据未清除成功时临时存储路径
     }
 }

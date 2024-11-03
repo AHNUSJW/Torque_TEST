@@ -364,7 +364,7 @@
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "XhTorqueShow";
-            this.Text = "Xh-Torque analysis-V9.10.24";
+            this.Text = "Xh-Torque analysis-V9.11.01";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Main_Load);
             this.menuStrip1.ResumeLayout(false);

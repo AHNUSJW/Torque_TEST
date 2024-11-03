@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Net;
@@ -226,8 +227,26 @@ namespace Model
                         else
                         {
                             MyDevice.protocol.Protocol_ClearState();
-                            //超时重发
-                            HandleTimeout();
+                            
+                            if (CurrentCommand.TaskState == TASKS.WRITE_FIFOCLEAR)
+                            {
+                                MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK1_FIFO;
+                                string commandType = CurrentCommand.GetType().Name;
+                                if (commandType == "UserCommand")
+                                {
+                                    userCommandQueue.TryDequeue(out _);
+                                }
+                                else if (commandType == "AutoCommand")
+                                {
+                                    autoCommandQueue.TryDequeue(out _);
+                                }
+                                timeoutCounts.Remove(CurrentCommand);
+                            }
+                            else
+                            {
+                                //超时重发
+                                HandleTimeout();
+                            }
                         }
                     }
                     else
@@ -265,31 +284,23 @@ namespace Model
                             MyDevice.actDev.auto.fifoIndex = MyDevice.actDev.fifo.read;
                             MyDevice.actDev.auto.fifoCount = MyDevice.actDev.fifo.count;
 
-                            if (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_07 - 1280 || MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_09 - 1280)
+                            if (MyDevice.actDev.auto.fifoCount != 0)
                             {
-                                if (MyDevice.actDev.auto.fifoCount != 0)
+                                if (MyDevice.actDev.auto.oldRead != MyDevice.actDev.fifo.read)
                                 {
                                     MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
+                                    MyDevice.actDev.auto.oldRead = MyDevice.actDev.fifo.read;//纪录read
+                                    MyDevice.actDev.auto.validDataCnt = 0;
+                                    MyDevice.actDev.auto.dataTick = 0;
                                 }
                                 else
                                 {
-                                    MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK1_FIFO;
+                                    MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;//读指针未移动，清除失败，重新清
                                 }
                             }
-                            else if (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_06 - 1280 || MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_05 - 1280)
+                            else
                             {
-                                MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
-                            }
-                            else if (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_08 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
-                            {
-                                if (MyDevice.actDev.auto.fifoCount != 0)
-                                {
-                                    MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
-                                }
-                                else
-                                {
-                                    MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK1_FIFO;
-                                }
+                                MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK1_FIFO;
                             }
 
                             break;
@@ -301,46 +312,221 @@ namespace Model
                             //Console.WriteLine(MyDevice.actDev.wlan.addr + ": " + MyDevice.actDev.fifo.index + "---正常-----" + MyDevice.actDev.auto.fifoIndex);
 
                             int tempFxNum = 0;//5包中的有效数值数量
+                            
                             for (int i = 0; i < 5; i++)
                             {
-                                if (MyDevice.actDev.data[i].dtype == 0xF1 ||
-                                    MyDevice.actDev.data[i].dtype == 0xF2 ||
-                                    MyDevice.actDev.data[i].dtype == 0xF3 ||
-                                    MyDevice.actDev.data[i].dtype == 0xF4
-                                    )
+                                if (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
                                 {
-                                    tempFxNum++;
+                                    if (MyDevice.actDev.data[i].dtype == 0xF2)
+                                    {
+                                        tempFxNum++;
+                                    }
+                                }
+                                else
+                                {
+                                    if (MyDevice.actDev.data[i].dtype == 0xF1 ||
+                                        MyDevice.actDev.data[i].dtype == 0xF2 ||
+                                        MyDevice.actDev.data[i].dtype == 0xF3 ||
+                                        MyDevice.actDev.data[i].dtype == 0xF4
+                                    )
+                                    {
+                                        tempFxNum++;
+                                    }
                                 }
                             }
                             MyDevice.actDev.auto.validDataCnt += tempFxNum;
 
+                            //if (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
+                            //{
+                            //    //触发UI更新事件
+                            //    //TriggerUpdateUI(CurrentCommand);
+
+                            //    //读完了清缓存
+                            //    if (MyDevice.actDev.auto.dataTick * 5 >= MyDevice.actDev.auto.fifoCount && MyDevice.actDev.auto.fifoCount > 0)
+                            //    {
+                            //        MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;
+                            //        MyDevice.actDev.auto.fifoCount = 0;//清完之后，扳手状态是读一条dat自动清一条，count永久是0
+                            //    }
+                            //    else
+                            //    {
+                            //        MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    if (MyDevice.actDev.fifo.index == MyDevice.actDev.auto.fifoIndex)
+                            //    {
+                            //        if (MyDevice.actDev.auto.fifoCount > 0)
+                            //        {
+                            //            //触发UI更新事件
+                            //            //TriggerUpdateUI(CurrentCommand);
+                            //        }
+
+                            //        if ((int)MyDevice.actDev.auto.fifoCount - 6000 * 5 > 0)
+                            //        {
+                            //            //读6000次dat清一次
+                            //            if (MyDevice.actDev.auto.dataTick < 6000)
+                            //            {
+                            //                MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
+                            //                if ((MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_08 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 11) ||
+                            //                    (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 41))
+                            //                {
+                            //                    MyDevice.actDev.auto.fifoIndex += 5 * 32;
+                            //                }
+                            //                else
+                            //                {
+                            //                    MyDevice.actDev.auto.fifoIndex += 5 * 28;
+                            //                }
+                            //            }
+                            //            else
+                            //            {
+                            //                MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;
+                            //            }
+                            //        }
+                            //        else
+                            //        {
+                            //            if ((int)MyDevice.actDev.auto.fifoCount / 5 > 1)
+                            //            {
+                            //                MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
+                            //                if ((MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_08 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 11) ||
+                            //                    (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_07 - (UInt16)ADDROFFSET.TQ_XH_ADDR && MyDevice.actDev.devc.version >= 41))
+                            //                {
+                            //                    MyDevice.actDev.auto.fifoIndex += 5 * 32;
+                            //                }
+                            //                else
+                            //                {
+                            //                    MyDevice.actDev.auto.fifoIndex += 5 * 28;
+                            //                }
+                            //                MyDevice.actDev.auto.fifoCount -= 5;
+                            //            }
+                            //            else
+                            //            {
+                            //                for (int i = 0; i < 5; i++)
+                            //                {
+                            //                    Console.WriteLine(MyDevice.actDev.data[i].dtype);
+                            //                }
+                            //                MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;
+                            //            }
+                            //        }
+                            //    }
+                            //    //1.收到的index不是连续性，说明数据丢失，重新读该条
+                            //    else
+                            //    {
+                            //        //if (MyDevice.protocol.type == COMP.XF)
+                            //        //{
+                            //        //    if (MyDevice.mXF[1].fifo.index == MyDevice.mXF[2].fifo.index)
+                            //        //    {
+                            //        //        MessageBox.Show("接收器乱码改了index");
+                            //        //    }
+                            //        //    else if (Math.Abs(MyDevice.mXF[1].fifo.index - MyDevice.mXF[2].fifo.index) == 140 ||
+                            //        //             Math.Abs(MyDevice.mXF[2].fifo.index - MyDevice.mXF[1].fifo.index) == 140
+                            //        //            )
+                            //        //    {
+                            //        //        MessageBox.Show("接收器乱码改了index");
+                            //        //    }
+                            //        //}
+                            //        //else if (MyDevice.protocol.type == COMP.TCP)
+                            //        //{
+                            //        //    if (MyDevice.mTCP[2].fifo.index == MyDevice.mTCP[1].fifo.index)
+                            //        //    {
+                            //        //        MessageBox.Show("路由器乱码改了index");
+                            //        //    }
+                            //        //    else if (Math.Abs(MyDevice.mTCP[1].fifo.index - MyDevice.mTCP[2].fifo.index) % 140 == 0 ||
+                            //        //             Math.Abs(MyDevice.mTCP[2].fifo.index - MyDevice.mTCP[1].fifo.index) % 140 == 0
+                            //        //            )
+                            //        //    {
+                            //        //        MessageBox.Show("路由器乱码改了index");
+                            //        //    }
+                            //        //}
+
+                            //        Console.WriteLine(MyDevice.actDev.wlan.addr + ": " + MyDevice.actDev.fifo.index + "---异常--------------" + MyDevice.actDev.auto.fifoIndex);
+                            //        //MyDevice.actDev.auto.fifoIndex -= 5 * 28;//回退到上一条是为了防止丢失的数据是5包中的其一
+                            //        MyDevice.actDev.auto.dataTick--;
+                            //        MyDevice.actDev.auto.validDataCnt -= tempFxNum;
+                            //        MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
+                            //        return;
+                            //    }
+                            //}
+
                             if (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR || MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR)
                             {
-                                //触发UI更新事件
-                                //TriggerUpdateUI(CurrentCommand);
+                                if (MyDevice.actDev.fifo.index == MyDevice.actDev.auto.fifoIndex)
+                                {
+                                    if ((int)MyDevice.actDev.auto.fifoCount - 6000 * 5 > 0)
+                                    {
+                                        //读6000次dat清一次
+                                        if (MyDevice.actDev.auto.dataTick < 6000)
+                                        {
+                                            MyDevice.actDev.auto.fifoIndex += 5 * 6;
+                                            //超过下标区间的上限，从区间下限重新定位
+                                            if (MyDevice.actDev.auto.fifoIndex >= MyDevice.XH06_TAIL)
+                                            {
+                                                MyDevice.actDev.auto.fifoIndex = MyDevice.actDev.auto.fifoIndex - MyDevice.XH06_TAIL + MyDevice.XH06_HEAD;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if ((int)MyDevice.actDev.auto.fifoCount / 5 > 1)
+                                        {
+                                            MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
+                                            MyDevice.actDev.auto.fifoIndex += 5 * 6;
+                                            //超过下标区间的上限，从区间下限重新定位
+                                            if (MyDevice.actDev.auto.fifoIndex >= MyDevice.XH06_TAIL)
+                                            {
+                                                MyDevice.actDev.auto.fifoIndex = MyDevice.actDev.auto.fifoIndex - MyDevice.XH06_TAIL + MyDevice.XH06_HEAD;
+                                            }
+                                            MyDevice.actDev.auto.fifoCount -= 5;
+                                        }
+                                        else
+                                        {
+                                            for (int i = 0; i < 5; i++)
+                                            {
+                                                Console.WriteLine(MyDevice.actDev.data[i].dtype);
+                                            }
+                                            MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;
+                                        }
+                                    }
 
-                                //读完了清缓存
-                                //if (MyDevice.actDev.auto.dataTick * 5 >= MyDevice.actDev.auto.fifoCount && MyDevice.actDev.auto.fifoCount > 0)
-                                //{
-                                //    MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;
-                                //    MyDevice.actDev.auto.fifoCount = 0;//清完之后，扳手状态是读一条dat自动清一条，count永久是0
-                                //}
-                                //else
-                                //{
-                                //    MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
-                                //}
-                                MyDevice.actDev.auto.nextTask = TASKS.REG_BLOCK2_DAT;
+                                }
+                                //1.收到的index不是连续性，说明数据丢失，重新读该条
+                                else
+                                {
+                                    Console.WriteLine(MyDevice.actDev.wlan.addr + ": " + MyDevice.actDev.fifo.index + "---异常--------------" + MyDevice.actDev.auto.fifoIndex);
+                                    //MyDevice.actDev.auto.fifoIndex -= 5 * 28;//回退到上一条是为了防止丢失的数据是5包中的其一
+                                    MyDevice.actDev.auto.dataTick--;
+                                    MyDevice.actDev.auto.validDataCnt -= tempFxNum;
+                                    MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
+
+                                    //获取指令类型
+                                    string commandType1 = CurrentCommand.GetType().Name;
+                                    if (commandType1 == "UserCommand")
+                                    {
+                                        // 移除已处理的指令
+                                        userCommandQueue.TryDequeue(out _);
+                                    }
+                                    else if (commandType1 == "AutoCommand")
+                                    {
+                                        // 移除已处理的指令
+                                        autoCommandQueue.TryDequeue(out _);
+                                    }
+
+                                    // 重置超时计数器
+                                    if (timeoutCounts.ContainsKey(CurrentCommand))
+                                    {
+                                        timeoutCounts[CurrentCommand] = 0;
+                                    }
+                                    return;
+                                }
                             }
                             else
                             {
                                 if (MyDevice.actDev.fifo.index == MyDevice.actDev.auto.fifoIndex)
                                 {
-                                    if (MyDevice.actDev.auto.fifoCount > 0)
-                                    {
-                                        //触发UI更新事件
-                                        //TriggerUpdateUI(CurrentCommand);
-                                    }
-
                                     if ((int)MyDevice.actDev.auto.fifoCount - 6000 * 5 > 0)
                                     {
                                         //读6000次dat清一次
@@ -387,45 +573,308 @@ namespace Model
                                             MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFOCLEAR;
                                         }
                                     }
+
                                 }
                                 //1.收到的index不是连续性，说明数据丢失，重新读该条
                                 else
                                 {
-                                    //if (MyDevice.protocol.type == COMP.XF)
-                                    //{
-                                    //    if (MyDevice.mXF[1].fifo.index == MyDevice.mXF[2].fifo.index)
-                                    //    {
-                                    //        MessageBox.Show("接收器乱码改了index");
-                                    //    }
-                                    //    else if (Math.Abs(MyDevice.mXF[1].fifo.index - MyDevice.mXF[2].fifo.index) == 140 ||
-                                    //             Math.Abs(MyDevice.mXF[2].fifo.index - MyDevice.mXF[1].fifo.index) == 140
-                                    //            )
-                                    //    {
-                                    //        MessageBox.Show("接收器乱码改了index");
-                                    //    }
-                                    //}
-                                    //else if (MyDevice.protocol.type == COMP.TCP)
-                                    //{
-                                    //    if (MyDevice.mTCP[2].fifo.index == MyDevice.mTCP[1].fifo.index)
-                                    //    {
-                                    //        MessageBox.Show("路由器乱码改了index");
-                                    //    }
-                                    //    else if (Math.Abs(MyDevice.mTCP[1].fifo.index - MyDevice.mTCP[2].fifo.index) % 140 == 0 ||
-                                    //             Math.Abs(MyDevice.mTCP[2].fifo.index - MyDevice.mTCP[1].fifo.index) % 140 == 0
-                                    //            )
-                                    //    {
-                                    //        MessageBox.Show("路由器乱码改了index");
-                                    //    }
-                                    //}
-
                                     Console.WriteLine(MyDevice.actDev.wlan.addr + ": " + MyDevice.actDev.fifo.index + "---异常--------------" + MyDevice.actDev.auto.fifoIndex);
                                     //MyDevice.actDev.auto.fifoIndex -= 5 * 28;//回退到上一条是为了防止丢失的数据是5包中的其一
                                     MyDevice.actDev.auto.dataTick--;
                                     MyDevice.actDev.auto.validDataCnt -= tempFxNum;
                                     MyDevice.actDev.auto.nextTask = TASKS.WRITE_FIFO_INDEX;
+
+                                    //获取指令类型
+                                    string commandType1 = CurrentCommand.GetType().Name;
+                                    if (commandType1 == "UserCommand")
+                                    {
+                                        // 移除已处理的指令
+                                        userCommandQueue.TryDequeue(out _);
+                                    }
+                                    else if (commandType1 == "AutoCommand")
+                                    {
+                                        // 移除已处理的指令
+                                        autoCommandQueue.TryDequeue(out _);
+                                    }
+
+                                    // 重置超时计数器
+                                    if (timeoutCounts.ContainsKey(CurrentCommand))
+                                    {
+                                        timeoutCounts[CurrentCommand] = 0;
+                                    }
+                                    return;
                                 }
                             }
 
+                            List<DSData> sqlDataList = new List<DSData>();//存入数据库的数据列表
+
+                            // 遍历数组并将每个元素的拷贝添加到 List 集合中
+                            foreach (DATA data in MyDevice.actDev.data)
+                            {
+                                if (data.dtype == 0xF1 || data.dtype == 0xF2 || data.dtype == 0xF3)      //添加有效数据
+                                {
+                                    if (data.dtype == 0xF1 && data.torque == 0 && data.angle == 0) break;
+                                    MyDevice.actDev.dataList.Add(data);
+
+                                    //结果初始化
+                                    MyDevice.TorqueResult = "";
+                                    MyDevice.AngleResult = "";
+                                    MyDevice.ResistResult = "";
+                                    MyDevice.DataResult = "";
+
+                                    //分析结果
+                                    if (data.dtype == 0xF3)
+                                    {
+                                        //根据模式
+                                        switch (data.mode_ax)
+                                        {
+                                            //EN模式
+                                            case 0:
+                                            //SN模式
+                                            case 2:
+                                                MyDevice.AngleResult = "";
+                                                //峰值扭矩 >= 预设扭矩 && 累加角度 >= 复拧角度
+                                                MyDevice.TorqueResult = (data.torgroup_pk >= data.alarm[0]) ? "pass" : "NG";
+
+                                                if (MyDevice.TorqueResult == "pass")
+                                                {
+                                                    MyDevice.ResistResult = (data.angle_acc >= data.angle_resist) ? "pass" : "NG";
+                                                }
+                                                else
+                                                {
+                                                    MyDevice.ResistResult = "NG";
+                                                }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.ResistResult == "pass") ? "pass" : "NG";
+                                                break;
+                                            //EA模式
+                                            case 1:
+                                            //SA模式
+                                            case 3:
+                                                MyDevice.ResistResult = "";
+                                                //峰值扭矩 >= 预设扭矩 && 峰值角度 >= 预设角度 = 合格
+                                                if (data.torgroup_pk >= data.alarm[0])
+                                                {
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = data.angle_acc >= data.alarm[1] ? "pass" : "NG";
+                                                }
+                                                else
+                                                {
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
+                                                }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
+                                                break;
+                                            //MN模式
+                                            case 4:
+                                                MyDevice.AngleResult = "";
+                                                // 扭矩下限 <= 峰值扭矩 <= 扭矩上限  && 累加角度 >= 复拧角度= 合格
+                                                if (data.alarm[0] <= data.torgroup_pk && data.torgroup_pk <= data.alarm[1])
+                                                {
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.ResistResult = data.angle_acc >= data.angle_resist ? "pass" : "NG";
+                                                }
+                                                else
+                                                {
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.ResistResult = "NG";
+                                                }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.ResistResult == "pass") ? "pass" : "NG";
+                                                break;
+                                            //MA模式
+                                            case 5:
+                                                MyDevice.ResistResult = "";
+                                                //峰值扭矩 >= 预设扭矩 && 角度下限 <= 峰值角度 <= 角度上限 = 合格
+                                                if (data.torgroup_pk >= data.alarm[0])
+                                                {
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = data.alarm[1] <= data.angle_acc && data.angle_acc <= data.alarm[2] ? "pass" : "NG";
+                                                }
+                                                else
+                                                {
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
+                                                }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
+                                                break;
+                                            //AZ模式
+                                            case 6:
+                                                MyDevice.AngleResult = "";
+                                                //峰值扭矩 >= 预设扭矩 && 累加角度 >= 复拧角度= 合格
+                                                if (data.torgroup_pk >= data.alarm[2])
+                                                {
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.ResistResult = data.angle_acc >= data.angle_resist ? "pass" : "NG";
+                                                }
+                                                else
+                                                {
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.ResistResult = "NG";
+                                                }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.ResistResult == "pass") ? "pass" : "NG";
+                                                break;
+                                            default:
+                                                break;
+                                        }
+
+                                        //超量程
+                                        if (data.torgroup_pk > MyDevice.actDev.devc.torque_over[(int)data.torque_unit])
+                                        {
+                                            MyDevice.TorqueResult = "error";
+                                            MyDevice.DataResult = "error";
+                                        }
+                                    }
+                                    else if (data.dtype == 0xF2
+                                        && (MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_06 - (UInt16)ADDROFFSET.TQ_XH_ADDR
+                                        || MyDevice.actDev.devc.type == TYPE.TQ_XH_XL01_05 - (UInt16)ADDROFFSET.TQ_XH_ADDR))
+                                    {
+                                        MyDevice.ResistResult = "";//F2无复拧角度
+                                        //根据模式
+                                        switch (MyDevice.actDev.para.mode_ax)
+                                        {
+                                            //EN模式
+                                            case 0:
+                                            //SN模式
+                                            case 2:
+                                                MyDevice.AngleResult = "";
+                                                //峰值扭矩 >= 预设扭矩 = 合格
+                                                if (data.torseries_pk >= MyDevice.actDev.alam.SN_target[MyDevice.actDev.para.mode_mx, (int)data.torque_unit])
+                                                {
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.DataResult = "pass";
+                                                }
+                                                else
+                                                {
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.DataResult = "NG";
+                                                }
+                                                break;
+                                            //EA模式
+                                            case 1:
+                                            //SA模式
+                                            case 3:
+                                                //峰值扭矩 >= 预设扭矩 && 峰值角度 >= 预设角度 = 合格
+                                                if (data.torseries_pk >= MyDevice.actDev.alam.SA_pre[MyDevice.actDev.para.mode_mx, (int)data.torque_unit])
+                                                {
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = data.angle_acc >= MyDevice.actDev.alam.SA_ang[MyDevice.actDev.para.mode_mx] ? "pass" : "NG";
+                                                }
+                                                else
+                                                {
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
+                                                }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
+                                                break;
+                                            //MN模式
+                                            case 4:
+                                                MyDevice.AngleResult = "";
+                                                // 扭矩下限 <= 峰值扭矩 <= 扭矩上限  = 合格
+                                                if (MyDevice.actDev.alam.MN_low[MyDevice.actDev.para.mode_mx, (int)data.torque_unit] <= data.torseries_pk
+                                                    && data.torseries_pk <= MyDevice.actDev.alam.MN_high[MyDevice.actDev.para.mode_mx, (int)data.torque_unit])
+                                                {
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.DataResult = "pass";
+                                                }
+                                                else
+                                                {
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.DataResult = "NG";
+                                                }
+                                                break;
+                                            //MA模式
+                                            case 5:
+                                                //峰值扭矩 >= 预设扭矩 && 角度下限 <= 峰值角度 <= 角度上限 = 合格
+                                                if (data.torseries_pk >= MyDevice.actDev.alam.MA_pre[MyDevice.actDev.para.mode_mx, (int)data.torque_unit])
+                                                {
+                                                    MyDevice.TorqueResult = "pass";
+                                                    MyDevice.AngleResult = MyDevice.actDev.alam.MA_low[MyDevice.actDev.para.mode_mx] <= data.angle_acc
+                                                                           && data.angle_acc <= MyDevice.actDev.alam.MA_high[MyDevice.actDev.para.mode_mx]
+                                                                           ? "pass" : "NG";
+                                                }
+                                                else
+                                                {
+                                                    MyDevice.TorqueResult = "NG";
+                                                    MyDevice.AngleResult = "NG";
+                                                }
+
+                                                MyDevice.DataResult = (MyDevice.TorqueResult == "pass" && MyDevice.AngleResult == "pass") ? "pass" : "NG";
+                                                break;
+                                            //AZ模式
+                                            case 6:
+                                                break;
+                                            default:
+                                                break;
+                                        }
+
+                                        //是否超量程
+                                        if (data.torseries_pk > MyDevice.actDev.devc.torque_over[(int)data.torque_unit])
+                                        {
+                                            MyDevice.TorqueResult = "error";
+                                            MyDevice.DataResult = "error";
+                                        }
+                                    }
+
+                                    sqlDataList.Add(new DSData()
+                                    {
+                                        DataId = 1,
+                                        DataType = MyDevice.DataType,
+                                        Bohrcode = MyDevice.actDev.devc.bohrcode,
+                                        DevType = MyDevice.actDev.devc.series + "-" + MyDevice.actDev.devc.type,
+                                        WorkId = MyDevice.WorkId,
+                                        WorkNum = (data.dtype == 0xF4) ? data.work_ID.ToString() : MyDevice.WorkNum,
+                                        SequenceId = (data.dtype == 0xF4) ? data.work_psq.ToString() : MyDevice.SequenceId,
+                                        PointNum = MyDevice.PointNum,
+                                        ScrewNum = (byte)((data.dtype == 0xF4) ? data.screwNum : 1),
+                                        ScrewSeq = (byte)((data.dtype == 0xF4) ? data.screwSeq : 0),
+                                        DevAddr = MyDevice.actDev.wlan.addr,
+                                        VinId = MyDevice.Vin,
+                                        DType = data.dtype,
+                                        Stamp = data.stamp,
+                                        Mark = data.mark,
+                                        Torque = data.torque / (double)Math.Pow(10, MyDevice.actDev.devc.torque_decimal),
+                                        TorquePeak = (data.dtype == 0xF2 ? data.torseries_pk : data.torgroup_pk) / (double)Math.Pow(10, MyDevice.actDev.devc.torque_decimal),
+                                        TorqueUnit = data.torque_unit.ToString(),
+                                        AngleDecimal = data.dtype != 0xF1 ? data.angle_decimal : MyDevice.actDev.para.angle_decimal,
+                                        Angle = data.angle / (double)(int)Math.Pow(10, data.dtype != 0xF1 ? data.angle_decimal : MyDevice.actDev.para.angle_decimal),
+                                        AngleAcc = data.angle_acc / (double)(int)Math.Pow(10, data.dtype != 0xF1 ? data.angle_decimal : MyDevice.actDev.para.angle_decimal),
+                                        AngleResist = (data.dtype == 0xF3) ? data.angle_resist / (double)Math.Pow(10, data.angle_decimal) : 0,
+                                        TorqueResult = MyDevice.TorqueResult,
+                                        AngleResult = MyDevice.AngleResult,
+                                        ResistResult = MyDevice.ResistResult,
+                                        DataResult = MyDevice.DataResult,
+                                        ModePt = data.mode_pt,
+                                        ModeAx = (byte)((data.dtype == 0xF4) ? data.mode >> 0x04 : data.mode_ax),
+                                        ModeMx = (byte)((data.dtype == 0xF4) ? data.mode & 0x0F : data.mode_mx),
+                                        Battery = data.battery,
+                                        KeyBuf = data.keybuf,
+                                        KeyLock = data.keylock.ToString(),
+                                        MemAble = data.memable.ToString(),
+                                        Update = data.update.ToString(),
+                                        Error = "",
+                                        Alarm0 = data.dtype == 0xF3 ? $"{data.alarm[0]}" : "",
+                                        Alarm1 = data.dtype == 0xF3 ? $"{data.alarm[1]}" : "",
+                                        Alarm2 = data.dtype == 0xF3 ? $"{data.alarm[2]}" : "",
+                                        CreateTime = new DateTime(),
+                                    });
+                                }
+                            }
+
+                            //线程执行，否则会堵塞主线程，数据库插入耗时
+                            var taskDataList = new List<DSData>(sqlDataList); // 创建一个本地变量，防止当前 sqlDataList 的引用在任务执行时仍然可能被修改，从而导致数据不一致或冲突
+                            if (taskDataList.Count == 0) return;
+                            Task.Run(() =>
+                            {
+                                if (MyDevice.IsMySqlStart)
+                                {
+                                    JDBC.AddDataList(taskDataList);
+                                }
+                            });
 
                             Console.WriteLine("更新UI");
                             TriggerUpdateUI(CurrentCommand);

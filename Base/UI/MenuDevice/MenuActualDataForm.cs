@@ -992,7 +992,7 @@ namespace Base.UI.MenuDevice
                         }
                         else if (actXET.data[i].dtype == 0xF2)
                         {
-                            Console.WriteLine("抓住02");
+                            Console.WriteLine("抓住02——");
                             dataGridView1.Rows[idx].Cells[0].Value = "☆" + (++lines);
 
                             DtAddRow(saveDt, actXET.data[i], actXET, torque, angle);
@@ -1139,7 +1139,7 @@ namespace Base.UI.MenuDevice
                         }
                         else if (tempData_06[i].dtype == 0xF2)
                         {
-                            Console.WriteLine("抓住02");
+                            Console.WriteLine("抓住02--" + actXET.data[i].torseries_pk);
                             dataGridView1.Rows[idx].Cells[0].Value = "☆" + (++lines);
 
                             DtAddRow(saveDt, tempData_06[i], actXET, torque, angle);
